@@ -1,0 +1,8 @@
+{
+    "jscodehints.detectedExclusions": [
+        "C:/Users/a.yakonyuk/Documents/Visual Studio 2012/Projects/whattoread.mobile/src/bower_modules/jquery/src/var/indexOf.js",
+        "C:/whattoread.mobile/src/bower_modules/jquery/src/queue.js",
+        "C:/whattoread.mobile/src/bower_modules/jquery/src/event.js",
+        "D:/whattoread.mobile/src/bower_modules/jquery/src/var/indexOf.js"
+    ]
+}

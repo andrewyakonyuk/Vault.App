@@ -1,0 +1,26 @@
+<div class="inner cover">
+    <form class="form-signin" role="form" method="post" data-bind="submit: submit, validationOptions: { insertMessages: false }">
+        <div data-bind="visible: hasErrors()" class="validation-summary-errors">
+            <ul>
+                <li data-bind="validationMessage: login"></li>
+                <li data-bind="validationMessage: password"></li>
+            </ul>
+        </div>
+
+       <div class="input-group-vertical form-group">
+
+            <input name="login" data-bind="value: login" type="email" class="form-control" placeholder="Email" required/>
+            <input name="password" data-bind="value: password" type="password" class="form-control" placeholder="Password" required min="6"/>
+
+        </div>
+
+        <label class="checkbox">
+            <input type="checkbox" data-bind="value: rememberMe">Remember me</input>
+        </label>
+
+        <button class="btn btn-lg btn-info btn-ghost" type="submit">Sign in</button>
+        <p>
+            Have no account yet? Please <a href="#/account/register">join us</a>
+        </p>
+    </form>
+</div>

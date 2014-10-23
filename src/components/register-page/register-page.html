@@ -1,0 +1,23 @@
+<div class="inner cover">
+    <form class="form-register" role="form" method="post" data-bind="submit: submit, validationOptions: { insertMessages: false }">
+        <div data-bind="visible: hasErrors()" style="display: none">
+            <ul class="validation-summary-errors">
+               <li data-bind="validationMessage: name"></li>
+                <li data-bind="validationMessage: login"></li>
+                <li data-bind="validationMessage: password"></li>
+            </ul>
+        </div>
+
+        <div class="input-group-vertical form-group">
+
+            <input name="login" data-bind="value: name" type="text" class="form-control" placeholder="Name" required/>
+            <input name="login" data-bind="value: login" type="email" class="form-control" placeholder="Email" required/>
+            <input name="password" data-bind="value: password" type="password" class="form-control" placeholder="Password" required min="6"/>
+
+        </div>
+
+       <p>Note: Your email will not be shown publicly. You can change your privacy settings at any time. </p>
+
+        <button class="btn btn-lg btn-info btn-ghost" type="submit" data-bind="disable: hasErrors()">Join us</button>
+    </form>
+</div>
