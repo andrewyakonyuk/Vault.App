@@ -20,10 +20,13 @@ define(['knockout', 'text!./signin.html', 'hasher', 'knockout-validation'], func
         this.hasErrors = ko.computed(function(){
             return !self.isValid() && (self.login.isModified() || self.password.isModified());
         }, this);
+
+        this.title = ko.observable("Sign in");
     };
 
     SignInViewModel.prototype.submit = function(e){
         if (this.errors().length === 0) {
+            //todo: submit login data and check permissions
             hasher.setHash('flow');
         } else {
             this.errors.showAllMessages();

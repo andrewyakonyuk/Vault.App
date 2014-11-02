@@ -1,7 +1,7 @@
 define(['knockout', 'text!./flow-page.html', 'jquery'], function(ko, templateMarkup, $) {
 
   function FlowPage(params) {
-
+      this.title = ko.observable("Flow");
   };
 
 

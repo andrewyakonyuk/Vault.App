@@ -1,6 +1,13 @@
 /* Global define */
 
-define(['jquery', 'knockout', './router', 'bootstrap', 'knockout-projections', 'knockout-validation'], function ($, ko, router) {
+define(['jquery',
+        'knockout',
+        './router',
+        'bootstrap',
+        'knockout-projections',
+        'knockout-validation',
+        './ko.bindinghandlers'],
+       function ($, ko, router) {
     'use strict';
 
     window.ko = ko;
@@ -16,7 +23,6 @@ define(['jquery', 'knockout', './router', 'bootstrap', 'knockout-projections', '
     ko.components.register('about-page', {
         template: { require: 'text!components/about-page/about.html' }
     });
-
 
     // [Scaffolded component registrations will be inserted here. To retain this feature, don't remove this comment.]
 

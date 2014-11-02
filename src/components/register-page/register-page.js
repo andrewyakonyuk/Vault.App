@@ -24,14 +24,15 @@ define(['knockout', 'text!./register-page.html'], function(ko, templateMarkup) {
         this.hasErrors = ko.computed(function(){
             return !self.isValid() && (self.name.isModified() || self.login.isModified() || self.password.isModified());
         }, this);
+
+        this.title = ko.observable('Sign up');
     };
 
     RegisterPage.prototype.submit = function(e){
         if (this.errors().length === 0) {
-            alert('Thank you.');
+            //todo: submit registered data
         } else {
-            alert('Please check your submission.');
-            //this.errors.showAllMessages();
+            this.errors.showAllMessages();
         }
         return false;
     }

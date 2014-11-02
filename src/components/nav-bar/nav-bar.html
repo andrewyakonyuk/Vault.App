@@ -1,13 +1,22 @@
-<ul class="nav masthead-nav">
-    <li data-bind="css: { active: route().page === 'home-page' }">
-      <a href="#">Home</a>
-    </li>
+<div class="inner">
+   <div class="masthead-brand">
+        <a href="#">
+            <i class="glyphicon glyphicon-bookmark"></i>
+            <span>what to read</span>
+        </a>
+    </div>
+    <ul class="nav masthead-nav">
+        <li data-bind="css: { active: route().page === 'home-page' }">
+          <a href="#">Home</a>
+        </li>
 
-    <li data-bind="css: { active: route().page === 'about-page' }">
-      <a href="#about">About</a>
-    </li>
+        <li data-bind="css: { active: route().page === 'about-page' }">
+          <a href="#about">About</a>
+        </li>
 
-    <li data-bind="css: { active: route().page === 'signin-page' }">
-      <a href="#account/signin">Sign in</a>
-    </li>
-</ul>
+        <li data-bind="css: { active: route().page === 'signin-page' }">
+          <a href="#account/signin">Sign in</a>
+        </li>
+    </ul>
+</div>
+

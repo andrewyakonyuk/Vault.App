@@ -1,8 +1,8 @@
 <div class="inner cover">
     <form class="form-register" role="form" method="post" data-bind="submit: submit, validationOptions: { insertMessages: false }">
-        <div data-bind="visible: hasErrors()" style="display: none">
-            <ul class="validation-summary-errors">
-               <li data-bind="validationMessage: name"></li>
+        <div data-bind="visible: hasErrors()" style="display: none" class="validation-summary-errors">
+            <ul>
+                <li data-bind="validationMessage: name"></li>
                 <li data-bind="validationMessage: login"></li>
                 <li data-bind="validationMessage: password"></li>
             </ul>
@@ -18,6 +18,6 @@
 
        <p>Note: Your email will not be shown publicly. You can change your privacy settings at any time. </p>
 
-        <button class="btn btn-lg btn-info btn-ghost" type="submit" data-bind="disable: hasErrors()">Join us</button>
+        <button class="btn btn-lg btn-info btn-ghost" type="submit">Join us</button>
     </form>
 </div>

@@ -34,15 +34,12 @@
     <!-- build:css -->
         <link href="css/normalize.css" rel="stylesheet">
         <link href="bower_modules/components-bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link href="bower_modules/sir-trevor/sir-trevor.css" rel="stylesheet">
-        <link href="bower_modules/sir-trevor/sir-trevor-icons.css" rel="stylesheet">
         <link href="css/styles.css" rel="stylesheet">
         <link href="css/theme.css" rel="stylesheet">
     <!-- endbuild -->
     <!-- build:js -->
       <script src="app/require.config.js"></script>
       <script data-main="app/startup" src="bower_modules/requirejs/require.js"></script>
-
     <!-- endbuild -->
   </head>
   <body>
@@ -51,20 +48,12 @@
         <div class="site-wrapper-inner">
             <div class="cover-container">
                 <div class="masthead clearfix">
-                    <div class="inner">
-                       <div class="masthead-brand">
-                            <a href="#">
-                                <i class="glyphicon glyphicon-bookmark"></i>
-                                <span>what to read</span>
-                            </a>
-                        </div>
-                        <nav-bar params="route: route"></nav-bar>
-                    </div>
+                    <nav-bar params="route: route"></nav-bar>
                 </div>
 
                 <div id="mastbody">
 
-                    <div id="page" data-bind="component: { name: route().page, params: route }"></div>
+                    <div id="page" data-bind="component: { name: route().page, params: route }, pageTitle: route().page || ''"></div>
 
                 </div>
 
@@ -76,13 +65,6 @@
             </div>
         </div>
     </div>
-
-    <script type="text/javascript">
-        require(["knockout"], function (ko) {
-            //manually set the global ko property
-            window.ko = ko;
-        });
-      </script>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
