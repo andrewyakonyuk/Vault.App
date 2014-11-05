@@ -3,7 +3,7 @@ var fs = require('fs'), vm = require('vm'), merge = require('deeply'), chalk = r
 
 // Gulp and plugins
 var gulp = require('gulp'), rjs = require('gulp-requirejs-bundler'), concat = require('gulp-concat'), clean = require('gulp-clean'),
-    replace = require('gulp-replace'), uglify = require('gulp-uglify'), htmlreplace = require('gulp-html-replace');
+    replace = require('gulp-replace'), uglify = require('gulp-uglify'), htmlreplace = require('gulp-html-replace'), minifyCSS = require('gulp-minify-css');
 
 // Config
 var requireJsRuntimeConfig = vm.runInNewContext(fs.readFileSync('src/app/require.config.js') + '; require;');
@@ -21,6 +21,7 @@ var requireJsRuntimeConfig = vm.runInNewContext(fs.readFileSync('src/app/require
             'text!components/about-page/about.html',
             'components/signin-page/signin',
             'components/flow-page/flow-page',
+            'components/flow-item-page/flow-item-page',
             'components/register-page/register-page'
         ],
         insertRequire: ['app/startup'],

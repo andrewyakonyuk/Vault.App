@@ -1,0 +1,11 @@
+<div class="">
+
+    <div class="container-fluid commentable-container" id="commentable-area">
+        <h1 class="title center-text">
+        <span data-bind="text: article.title"></span>
+      </h1>
+       <!-- ko foreach: { data: article.sections, afterRender: initComments } -->
+           <p data-bind='text: content, attr: { "data-section-id": id}' class="commentable-section"></p>
+       <!-- /ko -->
+    </div>
+</div>
