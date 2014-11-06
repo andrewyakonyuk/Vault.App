@@ -4,7 +4,7 @@ var require = {
     paths: {
         "crossroads": "bower_modules/crossroads/dist/crossroads.min",
         "hasher": "bower_modules/hasher/dist/js/hasher.min",
-        "jquery": "bower_modules/zepto/zepto.min",
+        "jquery": "bower_modules/jquery/dist/jquery.min",
         "knockout": "bower_modules/knockout/dist/knockout",
         "knockout-projections": "bower_modules/knockout-projections/dist/knockout-projections.min",
         "knockout-validation": "bower_modules/knockout-validation/Dist/knockout.validation.min",
