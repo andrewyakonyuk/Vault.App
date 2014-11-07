@@ -125,7 +125,7 @@
 .side-comment .action-link.delete:hover {
   color: #46b8da;
 }
-.side-comment .add-comment {
+/*.side-comment .add-comment {
   color: #B3B3B1;
   font-size: 14px;
   line-height: 22px;
@@ -163,7 +163,7 @@
 .side-comment .add-comment:hover:before {
   border-color: #46b8da;
   color: #46b8da;
-}
+}*/
 .side-comment .comment-box {
   outline: none;
   border: 0;

@@ -13,6 +13,7 @@
         "modernizr": "~2.8.3",
         "knockout-validation": "*",
         "underscore": "*",
-        "pace": "~0.5.6"
+        "pace": "~0.5.6",
+        "bootstrap-material-design": "*"
     }
 }

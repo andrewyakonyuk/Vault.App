@@ -11,7 +11,10 @@ var require = {
         "signals": "bower_modules/js-signals/dist/signals.min",
         "text": "bower_modules/requirejs-text/text",
         "underscore": "bower_modules/underscore/underscore-min",
-        "pace": "bower_modules/pace/pace.min"
+        "pace": "bower_modules/pace/pace.min",
+        "bootstrap": "bower_modules/components-bootstrap/js/bootstrap.min",
+        "bootstrap-material-design": "bower_modules/bootstrap-material-design/dist/js/material.min",
+        "ripples": "bower_modules/bootstrap-material-design/dist/js/ripples.min"
     },
     shim: {
         "jquery": {
@@ -19,6 +22,12 @@ var require = {
         },
         "knockout-validation": {
             deps: ["knockout"]
+        },
+        "bootstrap": {
+            deps: ["jquery"]
+        },
+        "bootstrap-material-design": {
+            deps: ["jquery", "bootstrap", "ripples"]
         }
     }
 };

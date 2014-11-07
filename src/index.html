@@ -37,11 +37,13 @@
     <!-- build:css -->
     <link href="css/normalize.css" rel="stylesheet">
     <link href="bower_modules/components-bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/styles.css" rel="stylesheet">
+    <link href="bower_modules/bootstrap-material-design/dist/css/material.min.css" rel="stylesheet">
+    <link href="bower_modules/bootstrap-material-design/dist/css/ripples.min.css" rel="stylesheet">
+    <link href="bower_modules/bootstrap-material-design/dist/css/material-wfont.min.css">
     <link href="css/side-comments.css" rel="stylesheet">
     <link href="css/side-comments.theme.css" rel="stylesheet">
     <link href="css/pace.css" rel="stylesheet">
-    <link href="css/theme.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
     <!-- endbuild -->
     <!-- build:js -->
     <script src="app/require.config.js"></script>
@@ -49,26 +51,10 @@
     <!-- endbuild -->
 </head>
 
-<body class="timeline">
-    <div class="site-wrapper">
-        <div class="site-wrapper-inner">
-            <div class="cover-container">
-                <div class="masthead clearfix">
-                    <nav-bar params="route: route"></nav-bar>
-                </div>
+<body>
+    <nav-bar params="route: route"></nav-bar>
+    <div id="page" data-bind="component: { name: route().page, params: route }, pageTitle: route().page || ''"></div>
 
-                <div id="mastbody">
-
-                    <div id="page" data-bind="component: { name: route().page, params: route }, pageTitle: route().page || ''"></div>
-
-                </div>
-
-                <div class="mastfoot">
-                    <p>Inspiring by <a href="https://twitter.com/martmartius" target="_blank">@martmartius</a>.</p>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>

@@ -6,7 +6,9 @@ define(['pace',
         './router',
         'knockout-projections',
         'knockout-validation',
-        './ko.bindinghandlers'],
+        './ko.bindinghandlers',
+       'bootstrap',
+       'bootstrap-material-design'],
        function (Pace, $, ko, router) {
     'use strict';
 

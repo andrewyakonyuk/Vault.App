@@ -1,23 +1,35 @@
-<div class="inner cover middle">
-    <form class="form-register" role="form" method="post" data-bind="submit: submit, validationOptions: { insertMessages: false }">
-        <div data-bind="visible: hasErrors()" style="display: none" class="validation-summary-errors">
-            <ul>
-                <li data-bind="validationMessage: name"></li>
-                <li data-bind="validationMessage: login"></li>
-                <li data-bind="validationMessage: password"></li>
-            </ul>
+<div class="container">
+    <div class="inner cover middle">
+        <form class="form-register form-horizontal" role="form" method="post" data-bind="submit: submit, validationOptions: { insertMessages: true }">
+            <div class="panel-body">
+
+                <div class="form-group">
+                    <label for="name" class="col-md-3 control-label">Name</label>
+                    <div class="col-md-9 form-control-wrapper">
+                        <input id="name" name="name" data-bind="value: name" type="text" class="form-control" placeholder="Name" required/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="login" class="col-md-3 control-label">Login</label>
+                    <div class="col-md-9 form-control-wrapper">
+                        <input id="login" name="login" data-bind="value: login" type="email" class="form-control" placeholder="Email" required/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="col-md-3 control-label">Password</label>
+                    <div class="col-md-9 form-control-wrapper">
+                        <input name="password" id="password" data-bind="value: password" type="password" class="form-control" placeholder="Password" required min="6" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-9 col-md-offset-3 form-control-wrapper">
+                        <p>Note: Your email will not be shown publicly. You can change your privacy settings at any time.</p>
+                        <button class="btn btn-lg btn-info btn-ghost" type="submit">Join us</button>
+                    </div>
+                </div>
+        </form>
         </div>
-
-        <div class="input-group-vertical form-group">
-
-            <input name="login" data-bind="value: name" type="text" class="form-control" placeholder="Name" required/>
-            <input name="login" data-bind="value: login" type="email" class="form-control" placeholder="Email" required/>
-            <input name="password" data-bind="value: password" type="password" class="form-control" placeholder="Password" required min="6"/>
-
-        </div>
-
-       <p>Note: Your email will not be shown publicly. You can change your privacy settings at any time. </p>
-
-        <button class="btn btn-lg btn-info btn-ghost" type="submit">Join us</button>
-    </form>
-</div>
+    </div>
