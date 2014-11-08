@@ -225,23 +225,45 @@ define(['jquery', 'underscore', './mobile-check', './emitter', 'text!./templates
             this.$el = $el;
             this.comments = comments ? comments.comments : [];
             this.currentUser = currentUser || null;
-            this.clickEventName = mobileCheck() ? 'touchstart' : 'click';
+            this.clickEventName = 'click';
 
             this.id = $el.data('section-id');
 
-            this.$el.on(this.clickEventName, '.side-comment .marker', _.bind(this.markerClick, this));
-            this.$el.on(this.clickEventName, '.side-comment .add-comment', _.bind(this.addCommentClick, this));
-            this.$el.on(this.clickEventName, '.side-comment .post', _.bind(this.postCommentClick, this));
-            this.$el.on(this.clickEventName, '.side-comment .cancel', _.bind(this.cancelCommentClick, this));
-            this.$el.on(this.clickEventName, '.side-comment .delete', _.bind(this.deleteCommentClick, this));
             this.render();
+
+            this.initEventHandlers();
         }
+
+        Section.prototype.initEventHandlers = function(){
+            var self = this;
+
+            _.each(jQuery('.side-comment .marker', self.$el), function(element){
+                new boilerplate.fastButton(element, _.bind(self.markerClick, self));
+            });
+
+            _.each(jQuery('.side-comment .add-comment', self.$el), function(element){
+                new boilerplate.fastButton(element, _.bind(self.addCommentClick, self));
+            });
+
+            _.each(jQuery('.side-comment .post', self.$el), function(element){
+                new boilerplate.fastButton(element, _.bind(self.postCommentClick, self));
+            });
+
+            _.each(jQuery('.side-comment .cancel', self.$el), function(element){
+                new boilerplate.fastButton(element, _.bind(self.cancelCommentClick, self));
+            });
+
+            _.each(jQuery('.side-comment .delete', self.$el), function(element){
+                new boilerplate.fastButton(element, _.bind(self.deleteCommentClick, self));
+            });
+        };
 
         /**
          * Click callback event on markers.
          * @param  {Object} event The event object.
          */
         Section.prototype.markerClick = function (event) {
+            console.log('marker click');
             event.preventDefault();
             this.select();
         };
@@ -331,6 +353,8 @@ define(['jquery', 'underscore', './mobile-check', './emitter', 'text!./templates
         Section.prototype.postComment = function () {
             var $commentBox = this.$el.find('.comment-box');
             var commentBody = $commentBox.val();
+            if(!commentBody)
+                return;
             var comment = {
                 sectionId: this.id,
                 comment: commentBody,
@@ -373,10 +397,7 @@ define(['jquery', 'underscore', './mobile-check', './emitter', 'text!./templates
         Section.prototype.deleteCommentClick = function (event) {
             event.preventDefault();
             var commentId = $(event.target).closest('li').data('comment-id');
-
-            if (window.confirm("Are you sure you want to delete this comment?")) {
-                this.deleteComment(commentId);
-            }
+            this.deleteComment(commentId);
         };
 
         /**

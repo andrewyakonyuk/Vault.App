@@ -1,12 +1,12 @@
-<div class="alert alert-warning alert-dismissible" role="alert" data-bind="visible: false">
-    <button type="button" class="close" data-dismiss="alert">
+<div class="alert alert-warning alert-dismissible" role="alert" data-bind="visible: showRestorePopup">
+    <button type="button" class="close" data-dismiss="alert" data-bind="click: function() {showRestorePopup(false);}">
         <span aria-hidden="true">&times;</span>
         <span class="sr-only">Close</span>
     </button>
-    <a href="javascript:void(0)" class="alert-link">Restore</a> deleted comment
+    <a href="javascript:void(0)" class="alert-link" data-bind="click: restoreComment">Restore</a> deleted comment
 </div>
 <div class="container">
-    <div class="container-fluid commentable-container" id="commentable-area">
+    <div class="commentable-container" id="commentable-area">
         <h1 class="title center-text">
         <span data-bind="text: article.title"></span>
       </h1>

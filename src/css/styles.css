@@ -5,13 +5,29 @@ body{
 
 .navbar{
     margin-bottom: 0px;
+    display: block;
 }
 .navbar-toggle{
     margin-right: 0px;
 }
 
+.navbar-inverse .navbar-toggle .glyphicon{
+    color: #fff;
+}
+
+.navbar-toggle-search{
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
 .container{
-    margin-top: 30px;
+    margin-top: 70px;
+    margin-bottom: 30px;
+}
+
+.alert{
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .alert-dismissible .close{

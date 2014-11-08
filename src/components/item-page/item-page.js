@@ -2,15 +2,17 @@ define(["knockout",
         'jquery',
         "underscore",
         "pace",
-        "text!./flow-item-page.html",
-        'app/ui/side-comments/side-comments'], function (ko, $, _, Pace, flowItemTemplate, sc) {
+        "text!./item-page.html",
+        'app/ui/side-comments/side-comments'], function (ko, $, _, Pace, templateMarkup, sc) {
 
     function FlowItemViewModel(route) {
         var self = this;
 
-    Pace.restart();
+        Pace.restart();
 
         this.title = ko.observable("Item");
+
+        this.showRestorePopup = ko.observable(false);
 
         //todo: load article from api
         this.article = {
@@ -76,7 +78,7 @@ define(["knockout",
                     //TODO: for testing purpose
                     comment.id = self.sideComments.existingComments.length + 1;
                     self.sideComments.insertComment(comment);
-                    $.ajax({
+                   /* $.ajax({
                         url: '/comments',
                         type: 'POST',
                         data: comment,
@@ -84,24 +86,29 @@ define(["knockout",
                             // Once the comment is saved, you can insert the comment into the comment stream with "insertComment(comment)".
                             self.sideComments.insertComment(savedComment);
                         }
-                    });
+                    });*/
                 });
 
                 // Listen to "commentDeleted" and send a request to your backend to delete the comment.
                 // More about this event in the "docs" section.
                 self.sideComments.on('commentDeleted', function (comment) {
-                    $.ajax({
+                    self.showRestorePopup(true);
+                    /*$.ajax({
                         url: '/comments/' + comment.id,
                         type: 'DELETE',
                         success: function (success) {
                             // Do something.
                         }
-                    });
+                    });*/
                 });
             }
             initializedComments++;
         }
     }
+
+    FlowItemViewModel.prototype.restoreComment = function(){
+        this.showRestorePopup(false);
+    };
 
     FlowItemViewModel.prototype.dispose = function () {
         if(this.sideComments){
@@ -112,7 +119,7 @@ define(["knockout",
 
     return {
         viewModel: FlowItemViewModel,
-        template: flowItemTemplate
+        template: templateMarkup
     };
 
 });

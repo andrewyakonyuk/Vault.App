@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta http-equiv="cleartype" content="on">
 
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="img/touch/apple-touch-icon-144x144-precomposed.png">
@@ -54,18 +54,12 @@
 <body>
     <nav-bar params="route: route"></nav-bar>
     <div id="page" data-bind="component: { name: route().page, params: route }, pageTitle: route().page || ''"></div>
-
-
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>
-        var _gaq = [["_setAccount", "UA-XXXXX-X"], ["_trackPageview"]];
-        (function (d, t) {
-            var g = d.createElement(t),
-                s = d.getElementsByTagName(t)[0];
-            g.async = 1;
-            g.src = ("https:" == location.protocol ? "//ssl" : "//www") + ".google-analytics.com/ga.js";
-            s.parentNode.insertBefore(g, s)
-        }(document, "script"));
+        var _gaq=[["_setAccount","UA-XXXXX-X"],["_trackPageview"]];
+        (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.async=1;
+        g.src=("https:"==location.protocol?"//ssl":"//www")+".google-analytics.com/ga.js";
+        s.parentNode.insertBefore(g,s)}(document,"script"));
     </script>
 </body>
 

@@ -27,7 +27,7 @@ define(['knockout', 'text!./signin.html', 'hasher', 'knockout-validation'], func
     SignInViewModel.prototype.submit = function(e){
         if (this.errors().length === 0) {
             //todo: submit login data and check permissions
-            hasher.setHash('flow');
+            hasher.setHash('flow/10');
         } else {
             this.errors.showAllMessages();
         }

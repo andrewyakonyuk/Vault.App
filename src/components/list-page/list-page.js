@@ -1,9 +1,7 @@
-define(['knockout', 'text!./flow-page.html'], function (ko, templateMarkup) {
+define(['knockout', 'text!./list-page.html'], function (ko, templateMarkup) {
 
     function FlowPage(params) {
-        this.title = ko.observable("Flow");
-
-
+        this.pageTitle = ko.observable("Flow");
     };
 
     // This runs when the component is torn down. Put here any logic necessary to clean up,
@@ -14,5 +12,4 @@ define(['knockout', 'text!./flow-page.html'], function (ko, templateMarkup) {
         viewModel: FlowPage,
         template: templateMarkup
     };
-
 });
