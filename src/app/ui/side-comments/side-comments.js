@@ -225,13 +225,12 @@ define(['jquery', 'underscore', './mobile-check', './emitter', 'text!./templates
             this.$el = $el;
             this.comments = comments ? comments.comments : [];
             this.currentUser = currentUser || null;
-            this.clickEventName = 'click';
-
             this.id = $el.data('section-id');
-
             this.render();
-
             this.initEventHandlers();
+
+            //make textarea to grow its height while you are entering more lines of text
+            new boilerplate.autogrow(this.$el.find('.comment-box').get(0), 14);
         }
 
         Section.prototype.initEventHandlers = function(){
