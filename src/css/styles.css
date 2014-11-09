@@ -76,6 +76,9 @@ body{
     letter-spacing: 0;
 }
 
+.validationMessage{
+    color: #f44336;
+}
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
