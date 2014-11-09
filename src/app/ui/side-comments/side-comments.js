@@ -251,10 +251,6 @@ define(['jquery', 'underscore', './mobile-check', './emitter', 'text!./templates
             _.each(jQuery('.side-comment .cancel', self.$el), function(element){
                 new boilerplate.fastButton(element, _.bind(self.cancelCommentClick, self));
             });
-
-            _.each(jQuery('.side-comment .delete', self.$el), function(element){
-                new boilerplate.fastButton(element, _.bind(self.deleteCommentClick, self));
-            });
         };
 
         /**
@@ -378,6 +374,12 @@ define(['jquery', 'underscore', './mobile-check', './emitter', 'text!./templates
             });
             this.$el.find('.comments').append(newCommentHtml);
             this.$el.find('.side-comment').addClass('has-comments');
+
+            var self = this;
+            _.each(jQuery('.side-comment .delete', self.$el), function(element){
+                new boilerplate.fastButton(element, _.bind(self.deleteCommentClick, self));
+            });
+
             this.updateCommentCount();
             this.hideCommentForm();
         };

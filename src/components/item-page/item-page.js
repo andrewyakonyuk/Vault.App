@@ -21,7 +21,7 @@ define(["knockout",
                     id: 1,
                     content: "Each paragraph tag has the \"commentable-section\" class, making it a section which can be commented on after you've initialized a new SideComments object and pointed it at the parent element, which is \"#commentable-container\" for this demo.",
                     comments: [{
-                        id: 1,
+                            id: 1,
                             authorAvatarUrl: "http://f.cl.ly/items/1W303Y360b260u3v1P0T/jon_snow_small.png",
                             authorName: "Jon Sno",
                             comment: "I'm Ned Stark's bastard. Related: I know nothing."
@@ -50,7 +50,6 @@ define(["knockout",
         ]
         };
 
-
         var user = {
             id: 1,
             avatarUrl: "http://f.cl.ly/items/0s1a0q1y2Z2k2I193k1y/default-user.png",
@@ -63,6 +62,8 @@ define(["knockout",
                 "comments": _.toArray(item.comments)
             }
         }));
+
+        this.lastDeletedComment;
 
         var initializedComments = 0;
 
@@ -78,40 +79,64 @@ define(["knockout",
                     //TODO: for testing purpose
                     comment.id = self.sideComments.existingComments.length + 1;
                     self.sideComments.insertComment(comment);
-                   /* $.ajax({
+                    $.ajax({
                         url: '/comments',
                         type: 'POST',
                         data: comment,
                         success: function (savedComment) {
                             // Once the comment is saved, you can insert the comment into the comment stream with "insertComment(comment)".
-                            self.sideComments.insertComment(savedComment);
+                            // self.sideComments.insertComment(savedComment);
                         }
-                    });*/
+                    });
                 });
 
                 // Listen to "commentDeleted" and send a request to your backend to delete the comment.
                 // More about this event in the "docs" section.
                 self.sideComments.on('commentDeleted', function (comment) {
-                    self.showRestorePopup(true);
-                    /*$.ajax({
+                    if (comment) {
+                        self.sideComments.removeComment(comment.sectionId, comment.id);
+                        self.lastDeletedComment = comment;
+                        self.showRestorePopup(true);
+                        setTimeout(function () {
+                            self.showRestorePopup(false);
+                        }, 10000);
+                    }
+                    $.ajax({
                         url: '/comments/' + comment.id,
                         type: 'DELETE',
                         success: function (success) {
                             // Do something.
                         }
-                    });*/
+                    });
                 });
             }
             initializedComments++;
         }
     }
 
-    FlowItemViewModel.prototype.restoreComment = function(){
+    FlowItemViewModel.prototype.initUI = function () {
+        console.log('init ui');
+        $(window).scroll(function () {
+            if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+                // ajax call get data from server and append to the div
+                console.log('load more data');
+            }
+        });
+    };
+
+    FlowItemViewModel.prototype.restoreComment = function () {
+        if (this.lastDeletedComment) {
+            this.sideComments.insertComment(this.lastDeletedComment);
+        }
+        this.showRestorePopup(false);
+    };
+
+    FlowItemViewModel.prototype.closeRestorePopup = function (e) {
         this.showRestorePopup(false);
     };
 
     FlowItemViewModel.prototype.dispose = function () {
-        if(this.sideComments){
+        if (this.sideComments) {
             this.sideComments.destroy();
             this.sideComments = null;
         }

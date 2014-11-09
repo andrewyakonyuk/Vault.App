@@ -36,7 +36,7 @@ var requireJsRuntimeConfig = vm.runInNewContext(fs.readFileSync('src/app/require
 // Discovers all AMD dependencies, concatenates together all required .js files, minifies them
 gulp.task('js', function () {
     return rjs(requireJsOptimizerConfig)
-        .pipe(uglify({ preserveComments: 'some' }))
+       // .pipe(uglify({ preserveComments: 'some' }))
         .pipe(gulp.dest('./dist/'));
 });
 
@@ -44,9 +44,10 @@ gulp.task('js', function () {
 gulp.task('css', function () {
     var bowerCss = gulp.src('src/bower_modules/components-bootstrap/css/bootstrap.min.css')
             .pipe(replace(/url\((')?\.\.\/fonts\//g, 'url($1fonts/')),
+        materialCss = gulp.src('src/bower_modules/bootstrap-material-design/dist/css/material.min.css'),
+        ripplesCss = gulp.src('src/bower_modules/bootstrap-material-design/dist/css/ripples.min.css'),
         appCss = gulp.src('src/css/*.css'),
-        materialDesignCss = gulp.src('src/bower_modules/bootstrap-material-design/dist/css/*'),
-        combinedCss = es.concat(bowerCss, materialDesignCss, appCss).pipe(concat('styles.css')),
+        combinedCss = es.concat(bowerCss, materialCss, ripplesCss, appCss).pipe(concat('styles.css')),
         fontFiles = gulp.src('./src/bower_modules/components-bootstrap/fonts/*', { base: './src/bower_modules/components-bootstrap/' });
     return es.concat(combinedCss, fontFiles)
         .pipe(gulp.dest('./dist/'));

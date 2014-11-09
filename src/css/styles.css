@@ -25,6 +25,10 @@ body{
     margin-bottom: 30px;
 }
 
+.navbar .alert{
+    margin-bottom: 0px;
+}
+
 .alert{
     padding-top: 10px;
     padding-bottom: 10px;
@@ -32,6 +36,18 @@ body{
 
 .alert-dismissible .close{
     color: #000;
+}
+
+.alert-fixed-top{
+    position: fixed;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+    -webkit-transform: translate3d(0,0,0);
+    -o-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+    top: 50px;
+    border-width: 0 0 1px;
 }
 
 .btn-primary{

@@ -44,16 +44,16 @@
     <link href="css/pace.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
     <!-- endbuild -->
-</head>
-
-<body>
-    <nav-bar params="route: route"></nav-bar>
-    <div id="page" data-bind="component: { name: route().page, params: route }, pageTitle: route().page || ''"></div>
 
     <!-- build:js -->
     <script src="app/require.config.js"></script>
     <script data-main="app/startup" src="bower_modules/requirejs/require.js"></script>
     <!-- endbuild -->
+</head>
+
+<body>
+    <nav-bar params="route: route"></nav-bar>
+    <div id="page" data-bind="component: { name: route().page, params: route }, pageTitle: route().page || ''"></div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>
