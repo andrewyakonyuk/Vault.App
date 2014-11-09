@@ -45,26 +45,27 @@ define(['pace',
         ko.components.register('nav-bar', {
             require: 'components/nav-bar/nav-bar'
         });
+
         ko.components.register('home-page', {
-            require: 'components/home-page/home'
+            require: 'pages/home-page/home'
         });
         ko.components.register('signin-page', {
-            require: 'components/signin-page/signin'
+            require: 'pages/signin-page/signin'
         });
         ko.components.register('list-page', {
-            require: 'components/list-page/list-page'
+            require: 'pages/list-page/list-page'
         });
         ko.components.register('item-page', {
-            require: 'components/item-page/item-page'
+            require: 'pages/item-page/item-page'
         });
         ko.components.register('register-page', {
-            require: 'components/register-page/register-page'
+            require: 'pages/register-page/register-page'
         });
 
         // ... or for template-only components, you can just point to a .html file directly:
         ko.components.register('about-page', {
             template: {
-                require: 'text!components/about-page/about.html'
+                require: 'text!pages/about-page/about.html'
             }
         });
 
