@@ -1,14 +1,19 @@
+/*global define */
+/*jslint nomen: true*/
+
 define([], function () {
+    'use strict';
 
     /**
      * Initialize a new `Emitter`.
      *
      * @api public
      */
-
     function Emitter(obj) {
-        if (obj) return mixin(obj);
-    };
+        if (obj) {
+            return mixin(obj);
+        }
+    }
 
     /**
      * Mixin the emitter properties.
@@ -19,7 +24,8 @@ define([], function () {
      */
 
     function mixin(obj) {
-        for (var key in Emitter.prototype) {
+        var key;
+        for (key in Emitter.prototype) {
             obj[key] = Emitter.prototype[key];
         }
         return obj;
@@ -34,12 +40,11 @@ define([], function () {
      * @api public
      */
 
-    Emitter.prototype.on =
-        Emitter.prototype.addEventListener = function (event, fn) {
-            this._callbacks = this._callbacks || {};
-            (this._callbacks[event] = this._callbacks[event] || [])
-                .push(fn);
-            return this;
+    Emitter.prototype.on = Emitter.prototype.addEventListener = function (event, fn) {
+        this._callbacks = this._callbacks || {};
+        (this._callbacks[event] = this._callbacks[event] || [])
+            .push(fn);
+        return this;
     };
 
     /**
@@ -76,38 +81,37 @@ define([], function () {
      * @api public
      */
 
-    Emitter.prototype.off =
-        Emitter.prototype.removeListener =
-        Emitter.prototype.removeAllListeners =
-        Emitter.prototype.removeEventListener = function (event, fn) {
-            this._callbacks = this._callbacks || {};
+    Emitter.prototype.off = Emitter.prototype.removeListener = Emitter.prototype.removeAllListeners = Emitter.prototype.removeEventListener = function (event, fn) {
+        this._callbacks = this._callbacks || {};
 
-            // all
-            if (0 == arguments.length) {
-                this._callbacks = {};
-                return this;
-            }
-
-            // specific event
-            var callbacks = this._callbacks[event];
-            if (!callbacks) return this;
-
-            // remove all handlers
-            if (1 == arguments.length) {
-                delete this._callbacks[event];
-                return this;
-            }
-
-            // remove specific handler
-            var cb;
-            for (var i = 0; i < callbacks.length; i++) {
-                cb = callbacks[i];
-                if (cb === fn || cb.fn === fn) {
-                    callbacks.splice(i, 1);
-                    break;
-                }
-            }
+        // all
+        if (0 === arguments.length) {
+            this._callbacks = {};
             return this;
+        }
+
+        // specific event
+        var callbacks = this._callbacks[event];
+        if (!callbacks) {
+            return this;
+        }
+
+        // remove all handlers
+        if (1 === arguments.length) {
+            delete this._callbacks[event];
+            return this;
+        }
+
+        // remove specific handler
+        var cb, i;
+        for (i = 0; i < callbacks.length; i++) {
+            cb = callbacks[i];
+            if (cb === fn || cb.fn === fn) {
+                callbacks.splice(i, 1);
+                break;
+            }
+        }
+        return this;
     };
 
     /**

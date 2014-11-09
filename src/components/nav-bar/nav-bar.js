@@ -1,4 +1,7 @@
+/*global define, console */
+
 define(['knockout', 'hasher', 'jquery', 'text!./nav-bar.html'], function (ko, hasher, $, template) {
+    'use strict';
 
     function NavBarViewModel(params) {
 
@@ -11,7 +14,6 @@ define(['knockout', 'hasher', 'jquery', 'text!./nav-bar.html'], function (ko, ha
     }
 
     NavBarViewModel.prototype.render = function () {
-        'use strict';
         console.log('navbar render');
     };
 

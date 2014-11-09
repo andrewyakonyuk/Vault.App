@@ -1,4 +1,4 @@
-/* Global define */
+/*global define, boilerplate */
 
 define(['pace',
         'jquery',

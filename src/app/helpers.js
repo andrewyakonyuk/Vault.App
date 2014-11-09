@@ -2,7 +2,8 @@
  * boilerplate - Mobile boilerplate helper functions
  */
 
-(function(document) {
+(function (document) {
+    'use strict';
 
     window.boilerplate = window.boilerplate || {};
 
@@ -14,14 +15,14 @@
     boilerplate.viewportmeta = document.querySelector && document.querySelector('meta[name="viewport"]');
     boilerplate.ua = navigator.userAgent;
 
-    boilerplate.scaleFix = function() {
+    boilerplate.scaleFix = function () {
         if (boilerplate.viewportmeta && /iPhone|iPad|iPod/.test(boilerplate.ua) && !/Opera Mini/.test(boilerplate.ua)) {
             boilerplate.viewportmeta.content = 'width=device-width, minimum-scale=1.0, maximum-scale=1.0';
             document.addEventListener('gesturestart', boilerplate.gestureStart, false);
         }
     };
 
-    boilerplate.gestureStart = function() {
+    boilerplate.gestureStart = function () {
         boilerplate.viewportmeta.content = 'width=device-width, minimum-scale=0.25, maximum-scale=1.6';
     };
 
@@ -40,46 +41,46 @@
 
     // So we don't redefine this function everytime we
     // we call hideUrlBar
-    boilerplate.getScrollTop = function() {
-        var win = window;
-        var doc = document;
+    boilerplate.getScrollTop = function () {
+        var win = window,
+            doc = document;
 
         return win.pageYOffset || doc.compatMode === 'CSS1Compat' && doc.documentElement.scrollTop || doc.body.scrollTop || 0;
     };
 
     // It should be up to the mobile
-    boilerplate.hideUrlBar = function() {
+    boilerplate.hideUrlBar = function () {
         var win = window;
 
         // if there is a hash, or boilerplate.BODY_SCROLL_TOP hasn't been set yet, wait till that happens
         if (!location.hash && boilerplate.BODY_SCROLL_TOP !== false) {
-            win.scrollTo( 0, boilerplate.BODY_SCROLL_TOP === 1 ? 0 : 1 );
+            win.scrollTo(0, boilerplate.BODY_SCROLL_TOP === 1 ? 0 : 1);
         }
     };
 
-    boilerplate.hideUrlBarOnLoad = function() {
-        var win = window;
-        var doc = win.document;
-        var bodycheck;
+    boilerplate.hideUrlBarOnLoad = function () {
+        var win = window,
+            doc = win.document,
+            bodycheck;
 
         // If there's a hash, or addEventListener is undefined, stop here
-        if ( !location.hash && win.addEventListener ) {
+        if (!location.hash && win.addEventListener) {
 
             // scroll to 1
-            window.scrollTo( 0, 1 );
+            window.scrollTo(0, 1);
             boilerplate.BODY_SCROLL_TOP = 1;
 
             // reset to 0 on bodyready, if needed
-            bodycheck = setInterval(function() {
-                if ( doc.body ) {
-                    clearInterval( bodycheck );
+            bodycheck = setInterval(function () {
+                if (doc.body) {
+                    clearInterval(bodycheck);
                     boilerplate.BODY_SCROLL_TOP = boilerplate.getScrollTop();
                     boilerplate.hideUrlBar();
                 }
-            }, 15 );
+            }, 15);
 
-            win.addEventListener('load', function() {
-                setTimeout(function() {
+            win.addEventListener('load', function () {
+                setTimeout(function () {
                     // at load, if user hasn't scrolled more than 20 or so...
                     if (boilerplate.getScrollTop() < 20) {
                         // reset to hide addr bar at onload
@@ -95,7 +96,7 @@
      * https://github.com/h5bp/mobile-boilerplate/wiki/JavaScript-Helper
      */
 
-    boilerplate.fastButton = function(element, handler, pressedClass) {
+    boilerplate.fastButton = function (element, handler, pressedClass) {
         this.handler = handler;
         // styling of .pressed is defined in the project's CSS files
         this.pressedClass = typeof pressedClass === 'undefined' ? 'pressed' : pressedClass;
@@ -109,18 +110,26 @@
         }
     };
 
-    boilerplate.fastButton.prototype.handleEvent = function(event) {
+    boilerplate.fastButton.prototype.handleEvent = function (event) {
         event = event || window.event;
 
         switch (event.type) {
-            case 'touchstart': this.onTouchStart(event); break;
-            case 'touchmove': this.onTouchMove(event); break;
-            case 'touchend': this.onClick(event); break;
-            case 'click': this.onClick(event); break;
+        case 'touchstart':
+            this.onTouchStart(event);
+            break;
+        case 'touchmove':
+            this.onTouchMove(event);
+            break;
+        case 'touchend':
+            this.onClick(event);
+            break;
+        case 'click':
+            this.onClick(event);
+            break;
         }
     };
 
-    boilerplate.fastButton.prototype.onTouchStart = function(event) {
+    boilerplate.fastButton.prototype.onTouchStart = function (event) {
         var element = event.target || event.srcElement;
         event.stopPropagation();
         element.addEventListener('touchend', this, false);
@@ -128,17 +137,17 @@
         this.startX = event.touches[0].clientX;
         this.startY = event.touches[0].clientY;
 
-        element.className+= ' ' + this.pressedClass;
+        element.className += ' ' + this.pressedClass;
     };
 
-    boilerplate.fastButton.prototype.onTouchMove = function(event) {
+    boilerplate.fastButton.prototype.onTouchMove = function (event) {
         if (Math.abs(event.touches[0].clientX - this.startX) > 10 ||
             Math.abs(event.touches[0].clientY - this.startY) > 10) {
             this.reset(event);
         }
     };
 
-    boilerplate.fastButton.prototype.onClick = function(event) {
+    boilerplate.fastButton.prototype.onClick = function (event) {
         event = event || window.event;
         var element = event.target || event.srcElement;
         if (event.stopPropagation) {
@@ -153,7 +162,7 @@
         element.className = element.className.replace(pattern, '');
     };
 
-    boilerplate.fastButton.prototype.reset = function(event) {
+    boilerplate.fastButton.prototype.reset = function (event) {
         var element = event.target || event.srcElement;
         rmEvt(element, 'touchend', this, false);
         rmEvt(document.body, 'touchmove', this, false);
@@ -162,19 +171,19 @@
         element.className = element.className.replace(pattern, '');
     };
 
-    boilerplate.fastButton.prototype.addClickEvent = function(element) {
+    boilerplate.fastButton.prototype.addClickEvent = function (element) {
         addEvt(element, 'touchstart', this, false);
         addEvt(element, 'click', this, false);
     };
 
-    boilerplate.preventGhostClick = function(x, y) {
+    boilerplate.preventGhostClick = function (x, y) {
         boilerplate.coords.push(x, y);
-        window.setTimeout(function() {
+        window.setTimeout(function () {
             boilerplate.coords.splice(0, 2);
         }, 2500);
     };
 
-    boilerplate.ghostClickHandler = function(event) {
+    boilerplate.ghostClickHandler = function (event) {
         if (!boilerplate.hadTouchEvent && boilerplate.dodgyAndroid) {
             // This is a bit of fun for Android 2.3...
             // If you change window.location via fastButton, a click event will fire
@@ -205,7 +214,7 @@
         document.addEventListener('click', boilerplate.ghostClickHandler, true);
     }
 
-    addEvt(document.documentElement, 'touchstart', function() {
+    addEvt(document.documentElement, 'touchstart', function () {
         boilerplate.hadTouchEvent = true;
     }, false);
 
@@ -218,11 +227,11 @@
             // BBOS6 doesn't support handleEvent, catch and polyfill
             try {
                 el.addEventListener(evt, fn, bubble);
-            } catch(e) {
+            } catch (e) {
                 if (typeof fn == 'object' && fn.handleEvent) {
-                    el.addEventListener(evt, function(e){
+                    el.addEventListener(evt, function (e) {
                         // Bind fn as this and set first arg as event object
-                        fn.handleEvent.call(fn,e);
+                        fn.handleEvent.call(fn, e);
                     }, bubble);
                 } else {
                     throw e;
@@ -231,7 +240,7 @@
         } else if ('attachEvent' in el) {
             // check if the callback is an object and contains handleEvent
             if (typeof fn == 'object' && fn.handleEvent) {
-                el.attachEvent('on' + evt, function(){
+                el.attachEvent('on' + evt, function () {
                     // Bind fn as this
                     fn.handleEvent.call(fn);
                 });
@@ -246,11 +255,11 @@
             // BBOS6 doesn't support handleEvent, catch and polyfill
             try {
                 el.removeEventListener(evt, fn, bubble);
-            } catch(e) {
+            } catch (e) {
                 if (typeof fn == 'object' && fn.handleEvent) {
-                    el.removeEventListener(evt, function(e){
+                    el.removeEventListener(evt, function (e) {
                         // Bind fn as this and set first arg as event object
-                        fn.handleEvent.call(fn,e);
+                        fn.handleEvent.call(fn, e);
                     }, bubble);
                 } else {
                     throw e;
@@ -259,7 +268,7 @@
         } else if ('detachEvent' in el) {
             // check if the callback is an object and contains handleEvent
             if (typeof fn == 'object' && fn.handleEvent) {
-                el.detachEvent("on" + evt, function() {
+                el.detachEvent("on" + evt, function () {
                     // Bind fn as this
                     fn.handleEvent.call(fn);
                 });
@@ -274,7 +283,7 @@
      * http://googlecode.blogspot.com/2009/07/gmail-for-mobile-html5-series.html
      */
 
-    boilerplate.autogrow = function(element, lh) {
+    boilerplate.autogrow = function (element, lh) {
         function handler(e) {
             var newHeight = this.scrollHeight;
             var currentHeight = this.clientHeight;
@@ -297,17 +306,19 @@
      * http://alxgbsn.co.uk/2011/10/17/enable-css-active-pseudo-styles-in-mobile-safari/
      */
 
-    boilerplate.enableActive = function() {
-        document.addEventListener('touchstart', function() {}, false);
+    boilerplate.enableActive = function () {
+        document.addEventListener('touchstart', function () {}, false);
     };
 
     /**
      * Prevent default scrolling on document window
      */
 
-    boilerplate.preventScrolling = function() {
-        document.addEventListener('touchmove', function(e) {
-            if (e.target.type === 'range') { return; }
+    boilerplate.preventScrolling = function () {
+        document.addEventListener('touchmove', function (e) {
+            if (e.target.type === 'range') {
+                return;
+            }
             e.preventDefault();
         }, false);
     };
@@ -318,16 +329,16 @@
      * Adapted from original jQuery code here: http://nerd.vasilis.nl/prevent-ios-from-zooming-onfocus/
      */
 
-    boilerplate.preventZoom = function() {
+    boilerplate.preventZoom = function () {
         var formFields = document.querySelectorAll('input, select, textarea');
         var contentString = 'width=device-width,initial-scale=1,maximum-scale=';
         var i = 0;
 
         for (i = 0; i < formFields.length; i++) {
-            formFields[i].onfocus = function() {
+            formFields[i].onfocus = function () {
                 boilerplate.viewportmeta.content = contentString + '1';
             };
-            formFields[i].onblur = function() {
+            formFields[i].onblur = function () {
                 boilerplate.viewportmeta.content = contentString + '10';
             };
         }
@@ -337,7 +348,7 @@
      * iOS Startup Image helper
      */
 
-    boilerplate.startupImage = function() {
+    boilerplate.startupImage = function () {
         var portrait;
         var landscape;
         var pixelRatio;

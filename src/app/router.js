@@ -1,4 +1,7 @@
-define(["knockout", "crossroads", "hasher"], function(ko, crossroads, hasher) {
+/*global define */
+
+define(["knockout", "crossroads", "hasher"], function (ko, crossroads, hasher) {
+    'use strict';
 
     //knockout validation issue: https://github.com/Knockout-Contrib/Knockout-Validation/issues/259
     window.ko = ko;
@@ -12,23 +15,21 @@ define(["knockout", "crossroads", "hasher"], function(ko, crossroads, hasher) {
     // Knockout that requires or even knows about this technique. It's just one of
     // many possible ways of setting up client-side routes.
 
-    return new Router({
-        routes: [
-            { url: '',                  params: { page: 'home-page' } },
-            { url: 'about',             params: { page: 'about-page' } },
-            { url: 'account/signin',    params: { page: 'signin-page' } },
-            { url: 'account/register',  params: { page: 'register-page'} },
-            { url: 'flow',              params: { page: 'list-page'} },
-            { url: 'flow/{id}',         params: { page: 'item-page' } },
-            { url: 'search/{searchText}', params: { page: 'list-page' }}
-        ]
-    });
+    function activateCrossroads() {
+        function parseHash(newHash, oldHash) {
+            crossroads.parse(newHash);
+        }
+        crossroads.normalizeFn = crossroads.NORM_AS_OBJECT;
+        hasher.initialized.add(parseHash);
+        hasher.changed.add(parseHash);
+        hasher.init();
+    }
 
     function Router(config) {
         var currentRoute = this.currentRoute = ko.observable({});
 
-        ko.utils.arrayForEach(config.routes, function(route) {
-            crossroads.addRoute(route.url, function(requestParams) {
+        ko.utils.arrayForEach(config.routes, function (route) {
+            crossroads.addRoute(route.url, function (requestParams) {
                 currentRoute(ko.utils.extend(requestParams, route.params));
             });
         });
@@ -36,11 +37,50 @@ define(["knockout", "crossroads", "hasher"], function(ko, crossroads, hasher) {
         activateCrossroads();
     }
 
-    function activateCrossroads() {
-        function parseHash(newHash, oldHash) { crossroads.parse(newHash); }
-        crossroads.normalizeFn = crossroads.NORM_AS_OBJECT;
-        hasher.initialized.add(parseHash);
-        hasher.changed.add(parseHash);
-        hasher.init();
-    }
+    return new Router({
+        routes: [
+            {
+                url: '',
+                params: {
+                    page: 'home-page'
+                }
+            },
+            {
+                url: 'about',
+                params: {
+                    page: 'about-page'
+                }
+            },
+            {
+                url: 'account/signin',
+                params: {
+                    page: 'signin-page'
+                }
+            },
+            {
+                url: 'account/register',
+                params: {
+                    page: 'register-page'
+                }
+            },
+            {
+                url: 'flow',
+                params: {
+                    page: 'list-page'
+                }
+            },
+            {
+                url: 'flow/{id}',
+                params: {
+                    page: 'item-page'
+                }
+            },
+            {
+                url: 'search/{searchText}',
+                params: {
+                    page: 'list-page'
+                }
+            }
+        ]
+    });
 });

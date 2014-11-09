@@ -1,5 +1,9 @@
-define(['jquery', 'underscore', './mobile-check', './emitter', 'text!./templates/comment.html', 'text!./templates/section.html'],
-    function (jQuery, _, mobileCheck, Emitter, CommentTemplate, SectionTemplate) {
+/*global define, boilerplate */
+/*jslint nomen: true*/
+
+define(['jquery', 'underscore', './emitter', 'text!./templates/comment.html', 'text!./templates/section.html'],
+    function ($, _, Emitter, CommentTemplate, SectionTemplate) {
+        'use strict';
 
         /**
          * Creates a new SideComments instance.
@@ -17,7 +21,7 @@ define(['jquery', 'underscore', './mobile-check', './emitter', 'text!./templates
         function SideComments(el, currentUser, existingComments) {
             this.$el = $(el);
             this.$body = $('body');
-            this.eventPipe = new Emitter;
+            this.eventPipe = new Emitter();
 
             this.currentUser = _.clone(currentUser) || null;
             this.existingComments = _.clone(existingComments) || [];
@@ -44,11 +48,11 @@ define(['jquery', 'underscore', './mobile-check', './emitter', 'text!./templates
          */
         SideComments.prototype.initialize = function (existingComments) {
             _.each(this.$el.find('.commentable-section'), function (section) {
-                var $section = $(section);
-                var sectionId = $section.data('section-id').toString();
-                var sectionComments = _.find(this.existingComments, {
-                    sectionId: sectionId
-                });
+                var $section = $(section),
+                    sectionId = $section.data('section-id').toString(),
+                    sectionComments = _.find(this.existingComments, {
+                        sectionId: sectionId
+                    });
 
                 this.sections.push(new Section(this.eventPipe, $section, this.currentUser, sectionComments));
             }, this);
@@ -233,22 +237,22 @@ define(['jquery', 'underscore', './mobile-check', './emitter', 'text!./templates
             new boilerplate.autogrow(this.$el.find('.comment-box').get(0), 14);
         }
 
-        Section.prototype.initEventHandlers = function(){
+        Section.prototype.initEventHandlers = function () {
             var self = this;
 
-            _.each(jQuery('.side-comment .marker', self.$el), function(element){
+            _.each($('.side-comment .marker', self.$el), function (element) {
                 new boilerplate.fastButton(element, _.bind(self.markerClick, self));
             });
 
-            _.each(jQuery('.side-comment .add-comment', self.$el), function(element){
+            _.each($('.side-comment .add-comment', self.$el), function (element) {
                 new boilerplate.fastButton(element, _.bind(self.addCommentClick, self));
             });
 
-            _.each(jQuery('.side-comment .post', self.$el), function(element){
+            _.each($('.side-comment .post', self.$el), function (element) {
                 new boilerplate.fastButton(element, _.bind(self.postCommentClick, self));
             });
 
-            _.each(jQuery('.side-comment .cancel', self.$el), function(element){
+            _.each($('.side-comment .cancel', self.$el), function (element) {
                 new boilerplate.fastButton(element, _.bind(self.cancelCommentClick, self));
             });
         };
@@ -258,7 +262,6 @@ define(['jquery', 'underscore', './mobile-check', './emitter', 'text!./templates
          * @param  {Object} event The event object.
          */
         Section.prototype.markerClick = function (event) {
-            console.log('marker click');
             event.preventDefault();
             this.select();
         };
@@ -346,10 +349,11 @@ define(['jquery', 'underscore', './mobile-check', './emitter', 'text!./templates
          * Post a comment to this section.
          */
         Section.prototype.postComment = function () {
-            var $commentBox = this.$el.find('.comment-box');
-            var commentBody = $commentBox.val();
-            if(!commentBody)
+            var $commentBox = this.$el.find('.comment-box'),
+                commentBody = $commentBox.val();
+            if (!commentBody) {
                 return;
+            }
             var comment = {
                 sectionId: this.id,
                 comment: commentBody,
@@ -371,12 +375,12 @@ define(['jquery', 'underscore', './mobile-check', './emitter', 'text!./templates
             var newCommentHtml = _.template(CommentTemplate)({
                 comment: comment,
                 currentUser: this.currentUser
-            });
+            }),
+                self = this;
             this.$el.find('.comments').append(newCommentHtml);
             this.$el.find('.side-comment').addClass('has-comments');
 
-            var self = this;
-            _.each(jQuery('.side-comment .delete', self.$el), function(element){
+            _.each($('.side-comment .delete', self.$el), function (element) {
                 new boilerplate.fastButton(element, _.bind(self.deleteCommentClick, self));
             });
 
@@ -408,7 +412,7 @@ define(['jquery', 'underscore', './mobile-check', './emitter', 'text!./templates
             var comment = _.find(this.comments, {
                 id: commentId
             });
-            if(comment){
+            if (comment) {
                 comment.sectionId = this.id;
                 this.eventPipe.emit('commentDeleted', comment);
             }
@@ -470,7 +474,7 @@ define(['jquery', 'underscore', './mobile-check', './emitter', 'text!./templates
                 classes = classes + ' has-comments';
             }
             if (!this.currentUser) {
-                classes = classes + ' no-current-user'
+                classes = classes + ' no-current-user';
             }
 
             return classes;
@@ -494,7 +498,7 @@ define(['jquery', 'underscore', './mobile-check', './emitter', 'text!./templates
          */
         Section.prototype.destroy = function () {
             this.$el.off();
-        }
+        };
 
         return {
             SideComments: SideComments,

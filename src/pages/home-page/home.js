@@ -1,9 +1,15 @@
-define(["knockout", "text!./home.html"], function(ko, homeTemplate) {
+/*global define */
 
-  function HomeViewModel(route) {
-      this.title = ko.observable("Home");
-  }
+define(["knockout", "text!./home.html"], function (ko, homeTemplate) {
+    'use strict';
 
-  return { viewModel: HomeViewModel, template: homeTemplate };
+    function HomeViewModel(route) {
+        this.title = ko.observable("Home");
+    }
+
+    return {
+        viewModel: HomeViewModel,
+        template: homeTemplate
+    };
 
 });
