@@ -1,6 +1,6 @@
 
 body{
-    background: #fff;
+    background: #eee;
 }
 
 .navbar{
@@ -9,6 +9,10 @@ body{
 }
 .navbar-toggle{
     margin-right: 0px;
+}
+
+.navbar-collapse{
+    margin-right: 15px;
 }
 
 .navbar-inverse .navbar-toggle .glyphicon{
@@ -23,6 +27,13 @@ body{
 .container{
     margin-top: 70px;
     margin-bottom: 30px;
+    padding: 0 10px;
+}
+
+@media (min-width: 992px) {
+  .container {
+    margin-top: 80px;
+  }
 }
 
 .navbar .alert{
@@ -78,6 +89,11 @@ body{
 
 .validationMessage{
     color: #f44336;
+}
+
+.media-heading a{
+    text-decoration: none;
+    color: #333;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */

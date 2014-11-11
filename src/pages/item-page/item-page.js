@@ -5,8 +5,9 @@ define(["knockout",
         'jquery',
         "underscore",
         "pace",
+        "hammer",
         "text!./item-page.html",
-        'app/ui/side-comments/side-comments'], function (ko, $, _, Pace, templateMarkup, sc) {
+        'app/ui/side-comments/side-comments'], function (ko, $, _, Pace, Hammer, templateMarkup, sc) {
     'use strict';
 
     function FlowItemViewModel(route) {
@@ -16,15 +17,14 @@ define(["knockout",
                 avatarUrl: "http://f.cl.ly/items/0s1a0q1y2Z2k2I193k1y/default-user.png",
                 name: "You"
             },
-            existingComments = _.toArray(_.map(this.article.sections, function (item) {
-                return {
-                    "sectionId": String(item.id),
-                    "comments": _.toArray(item.comments)
-                };
-            })),
             initializedComments = 0;
 
         Pace.restart();
+
+        this.Hammer = new Hammer(document.getElementById('flowItemContainer'));
+        this.Hammer.on("swipe", function(){
+            history.go(-1);
+        })
 
         this.title = ko.observable("Item");
 
@@ -67,6 +67,13 @@ define(["knockout",
                 }
                 ]
         };
+
+        var existingComments = _.toArray(_.map(this.article.sections, function (item) {
+            return {
+                "sectionId": String(item.id),
+                "comments": _.toArray(item.comments)
+            };
+        }));
 
         this.lastDeletedComment = null;
 
@@ -142,6 +149,10 @@ define(["knockout",
         if (this.sideComments) {
             this.sideComments.destroy();
             this.sideComments = null;
+        }
+        if(this.Hammer)
+        {
+            this.Hammer.destroy();
         }
     };
 

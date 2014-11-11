@@ -78,7 +78,7 @@ define(["knockout", "crossroads", "hasher"], function (ko, crossroads, hasher) {
             {
                 url: 'search/{searchText}',
                 params: {
-                    page: 'list-page'
+                    page: 'search-page'
                 }
             }
         ]

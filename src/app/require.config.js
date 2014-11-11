@@ -14,7 +14,8 @@ var require = {
         "pace": "bower_modules/pace/pace",
         "bootstrap": "bower_modules/components-bootstrap/js/bootstrap",
         "bootstrap-material-design": "bower_modules/bootstrap-material-design/dist/js/material",
-        "ripples": "bower_modules/bootstrap-material-design/dist/js/ripples"
+        "ripples": "bower_modules/bootstrap-material-design/dist/js/ripples",
+        "hammer": "bower_modules/hammerjs/hammer"
     },
     shim: {
         "jquery": {

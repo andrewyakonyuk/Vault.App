@@ -36,7 +36,8 @@
                 'pages/signin-page/signin',
                 'pages/list-page/list-page',
                 'pages/item-page/item-page',
-                'pages/register-page/register-page'
+                'pages/register-page/register-page',
+                'pages/search-page/search-page'
             ],
             insertRequire: ['app/startup'],
             bundles: {
@@ -56,10 +57,10 @@
 
     // Concatenates CSS files, rewrites relative paths to Bootstrap fonts, copies Bootstrap fonts
     gulp.task('css', function () {
-        var bowerCss = gulp.src('src/bower_modules/components-bootstrap/css/bootstrap.min.css')
+        var bowerCss = gulp.src('src/bower_modules/components-bootstrap/css/bootstrap.css')
             .pipe(replace(/url\((')?\.\.\/fonts\//g, 'url($1fonts/')),
-            materialCss = gulp.src('src/bower_modules/bootstrap-material-design/dist/css/material.min.css'),
-            ripplesCss = gulp.src('src/bower_modules/bootstrap-material-design/dist/css/ripples.min.css'),
+            materialCss = gulp.src('src/bower_modules/bootstrap-material-design/dist/css/material.css'),
+            ripplesCss = gulp.src('src/bower_modules/bootstrap-material-design/dist/css/ripples.css'),
             appCss = gulp.src('src/css/*.css'),
             combinedCss = es.concat(bowerCss, materialCss, ripplesCss, appCss).pipe(concat('styles.css')),
             fontFiles = gulp.src('./src/bower_modules/components-bootstrap/fonts/*', {
