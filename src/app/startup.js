@@ -10,6 +10,7 @@ define(['pace',
        'bootstrap',
         'ripples',
        'bootstrap-material-design',
+        'jasny-bootstrap',
        './plugins',
        './helpers'],
     function (Pace, $, ko, router) {

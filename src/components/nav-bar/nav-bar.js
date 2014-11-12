@@ -1,6 +1,6 @@
 /*global define, console */
 
-define(['app/app', 'knockout', 'hasher', 'jquery', 'text!./nav-bar.html'], function (app, ko, hasher, $, template) {
+define(['app/app', 'knockout', 'hasher', 'jquery', 'text!./nav-bar.html','bootstrap', 'jasny-bootstrap'], function (app, ko, hasher, $, template) {
     'use strict';
 
     function NavBarViewModel(params) {
@@ -10,6 +10,8 @@ define(['app/app', 'knockout', 'hasher', 'jquery', 'text!./nav-bar.html'], funct
             console.log(app);
             return app.pageTitle();
         }, this);
+
+        $('.navmenu').offcanvas();
     }
 
     NavBarViewModel.prototype.render = function () {

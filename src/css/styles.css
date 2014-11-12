@@ -1,3 +1,9 @@
+@media (min-width: 992px) {
+  .navbar {
+    padding-right: 15px;
+  }
+}
+
 
 body{
     background: #eee;
