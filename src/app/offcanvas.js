@@ -9,7 +9,7 @@ define(['jquery', './fastbutton'], function ($) {
 
         if (requestAnimationFrame == null) {
             requestAnimationFrame = function (fn) {
-                return setTimeout(fn, 1);
+                return setTimeout(fn, 50);
             };
             cancelAnimationFrame = function (id) {
                 return clearTimeout(id);
@@ -122,6 +122,7 @@ define(['jquery', './fastbutton'], function ($) {
         OffCanvas.prototype.slide = function (elements, offset, callback) {
             // Use jQuery animation if CSS transitions aren't supported
             if (!$.support.transition) {
+                console.log('transitions arent supported');
                 var anim = {}
                 anim[this.placement] = "+=" + offset
                 return elements.animate(anim, 350, callback)
@@ -140,7 +141,8 @@ define(['jquery', './fastbutton'], function ($) {
 
             this.$element
                 .one($.support.transition.end, callback)
-                .emulateTransitionEnd(350)
+            if (!$.support.transition)
+                  this.$element.emulateTransitionEnd(5000)
         }
 
         OffCanvas.prototype.disableScrolling = function () {
@@ -278,8 +280,8 @@ define(['jquery', './fastbutton'], function ($) {
 
                 doAnimate ?
                     this.$backdrop
-                    .one($.support.transition.end, callback)
-                    .emulateTransitionEnd(150) :
+                    .one($.support.transition.end, callback):
+                    //.emulateTransitionEnd(150) :
                     callback()
             } else if (this.state == 'slide-out' && this.$backdrop) {
                 this.$backdrop.removeClass('in');
@@ -292,7 +294,7 @@ define(['jquery', './fastbutton'], function ($) {
                             callback()
                             self.$backdrop = null;
                         })
-                        .emulateTransitionEnd(150);
+                        //.emulateTransitionEnd(150);
                 } else {
                     this.$backdrop.remove();
                     this.$backdrop = null;
@@ -363,8 +365,6 @@ define(['jquery', './fastbutton'], function ($) {
         // =================
 
         $(document).on('click.bs.offcanvas.data-api', '[data-toggle=offcanvas]', function (e) {
-            console.log($(this));
-
             var $this = $(this),
                 href
             var target = $this.attr('data-target') || e.preventDefault() || (href = $this.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '') //strip for ie7

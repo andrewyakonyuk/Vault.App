@@ -21,7 +21,7 @@ body{
     margin-right: 15px;
 }
 
-.navbar-inverse .navbar-toggle .glyphicon{
+.navbar .navbar-toggle .glyphicon{
     color: #fff;
 }
 
@@ -44,6 +44,10 @@ body{
   .container {
     margin-top: 80px;
   }
+}
+
+.navmenu-inverse, .navbar-inverse .navbar-offcanvas{
+    opacity: 0.9;
 }
 
 .navbar .alert{

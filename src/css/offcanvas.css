@@ -305,8 +305,10 @@
     display: block;
 }
 .canvas-sliding {
-    -webkit-transition: top .35s, left .35s, bottom .35s, right .35s;
-    transition: top .35s, left .35s, bottom .35s, right .35s;
+    -webkit-transition: top .35s linear, left .35s linear, bottom .35s linear, right .35s linear;
+    transition: top .35s ease-in, left .35s ease-in, bottom .35s ease-in, right .35s ease-in;
+ /*  -webkit-transition: left 0.35s ease;
+ transition: left .35s ease; */
 }
 .offcanvas-clone {
     position: absolute !important;
