@@ -10,9 +10,9 @@ define(['pace',
        'bootstrap',
         'ripples',
        'bootstrap-material-design',
-        'jasny-bootstrap',
        './plugins',
-       './helpers'],
+       './helpers',
+        './fastbutton'],
     function (Pace, $, ko, router) {
         'use strict';
 

@@ -15,8 +15,7 @@ var require = {
         "bootstrap": "bower_modules/components-bootstrap/js/bootstrap",
         "bootstrap-material-design": "bower_modules/bootstrap-material-design/dist/js/material",
         "ripples": "bower_modules/bootstrap-material-design/dist/js/ripples",
-        "hammer": "bower_modules/hammerjs/hammer",
-        "jasny-bootstrap": "bower_modules/jasny-bootstrap/dist/js/jasny-bootstrap"
+        "hammer": "bower_modules/hammerjs/hammer"
     },
     shim: {
         "jquery": {
@@ -30,9 +29,6 @@ var require = {
         },
         "bootstrap-material-design": {
             deps: ["jquery", "bootstrap", "ripples"]
-        },
-        "jasny-bootstrap": {
-            deps: ["jquery", "bootstrap"]
         }
     }
 };

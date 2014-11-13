@@ -35,8 +35,8 @@
 
     <!-- build:css -->
     <link href="css/normalize.css" rel="stylesheet">
-    <link href="bower_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
-    <link href="bower_modules/jasny-bootstrap/dist/css/jasny-bootstrap.min.css" rel="stylesheet">
+    <link href="bower_modules/components-bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="css/offcanvas.css" rel="stylesheet">
     <link href="bower_modules/bootstrap-material-design/dist/css/material.css" rel="stylesheet">
     <link href="bower_modules/bootstrap-material-design/dist/css/ripples.css" rel="stylesheet">
     <link href="bower_modules/bootstrap-material-design/dist/css/material-wfont.css">
@@ -52,7 +52,7 @@
     <!-- endbuild -->
 </head>
 
-<body>
+<body class='use-fastclick'>
     <nav-bar params="route: route"></nav-bar>
     <div id="page" data-bind="component: { name: route().page, params: route }, pageTitle: route().page || ''"></div>
 

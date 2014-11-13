@@ -1,6 +1,6 @@
 @media (min-width: 992px) {
   .navbar {
-    padding-right: 15px;
+    padding-left: 255px;
   }
 }
 
@@ -28,6 +28,10 @@ body{
 .navbar-toggle-search{
     padding-top: 6px;
     padding-bottom: 6px;
+}
+
+.navmenu, .navbar-offcanvas{
+    width: 80%;
 }
 
 .container{
