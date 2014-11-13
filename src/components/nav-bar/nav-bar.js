@@ -7,13 +7,16 @@ define(['app/app', 'knockout', 'hasher', 'jquery', 'text!./nav-bar.html','bootst
         this.route = params.route;
         this.searchText = ko.observable('');
         this.pageTitle = ko.computed(function () {
-            console.log(app);
             return app.pageTitle();
+        }, this);
+
+        this.authorized = ko.computed(function(){
+            return app.authorized();
         }, this);
     }
 
     NavBarViewModel.prototype.render = function () {
-        console.log('navbar render');
+        //nothing
     };
 
     NavBarViewModel.prototype.search = function () {
@@ -24,6 +27,10 @@ define(['app/app', 'knockout', 'hasher', 'jquery', 'text!./nav-bar.html','bootst
         }
         return false;
     };
+
+    NavBarViewModel.prototype.signout = function(){
+        app.authorized(false);
+    }
 
     return {
         viewModel: NavBarViewModel,

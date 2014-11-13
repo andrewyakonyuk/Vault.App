@@ -184,9 +184,9 @@
 }
 @media (max-width: 768px) {
   .side-comments-open {
-    /* -webkit-transform: translate(-220px, 0); */
+     -webkit-transform: translate(-220px, 0);
     -ms-transform: translate(-220px, 0);
-    /* transform: translate(-220px, 0); */
+     transform: translate(-220px, 0);
   }
   .side-comment .comments-wrapper {
     width: 200px;

@@ -1,6 +1,6 @@
 /*global define */
 
-define(['knockout', 'jquery', 'hasher', 'text!./signin.html', 'knockout-validation'], function (ko, $, hasher, template) {
+define(['knockout', 'jquery', 'hasher', 'app/app', 'text!./signin.html', 'knockout-validation'], function (ko, $, hasher, app, template) {
     'use strict';
 
     function SignInViewModel() {
@@ -35,6 +35,7 @@ define(['knockout', 'jquery', 'hasher', 'text!./signin.html', 'knockout-validati
     SignInViewModel.prototype.submit = function (e) {
         if (this.errors().length === 0) {
             //todo: submit login data and check permissions
+            app.authorized(true);
             hasher.setHash('flow/10');
         } else {
             this.errors.showAllMessages();
