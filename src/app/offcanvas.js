@@ -30,11 +30,6 @@ define(['jquery', './fastbutton'], function ($) {
                 $(window).on('resize', $.proxy(this.recalc, this))
             }
 
-            if (this.options.autohide && !this.options.modal) {
-                $(document).on('click', $.proxy(this.autohide, this));
-                $(document).on('touchstart', $.proxy(this.autohide, this));
-            }
-
             if (this.options.toggle) this.toggle()
 
             if (this.options.disablescrolling) {
@@ -142,7 +137,7 @@ define(['jquery', './fastbutton'], function ($) {
             this.$element
                 .one($.support.transition.end, callback)
             if (!$.support.transition)
-                  this.$element.emulateTransitionEnd(5000)
+                this.$element.emulateTransitionEnd(5000)
         }
 
         OffCanvas.prototype.disableScrolling = function () {
@@ -182,6 +177,11 @@ define(['jquery', './fastbutton'], function ($) {
 
             this.state = 'slide-in'
             this.calcPlacement();
+
+            if (this.options.autohide && !this.options.modal) {
+                $(document).on('click', $.proxy(this.autohide, this));
+                $(document).on('touchstart', $.proxy(this.autohide, this));
+            }
 
             var elements = this.getCanvasElements()
             var placement = this.placement
@@ -223,6 +223,11 @@ define(['jquery', './fastbutton'], function ($) {
 
         OffCanvas.prototype.hide = function (fast) {
             if (this.state !== 'slid') return
+
+            if (this.options.autohide && !this.options.modal) {
+                $(document).off('click', 'document', $.proxy(this.autohide, this));
+                $(document).off('touchstart', 'document', $.proxy(this.autohide, this));
+            }
 
             var startEvent = $.Event('hide.bs.offcanvas')
             this.$element.trigger(startEvent)
@@ -280,9 +285,9 @@ define(['jquery', './fastbutton'], function ($) {
 
                 doAnimate ?
                     this.$backdrop
-                    .one($.support.transition.end, callback):
-                    //.emulateTransitionEnd(150) :
-                    callback()
+                    .one($.support.transition.end, callback) :
+                //.emulateTransitionEnd(150) :
+                callback()
             } else if (this.state == 'slide-out' && this.$backdrop) {
                 this.$backdrop.removeClass('in');
                 $('body').off('touchmove.bs');
@@ -294,7 +299,7 @@ define(['jquery', './fastbutton'], function ($) {
                             callback()
                             self.$backdrop = null;
                         })
-                        //.emulateTransitionEnd(150);
+                    //.emulateTransitionEnd(150);
                 } else {
                     this.$backdrop.remove();
                     this.$backdrop = null;
@@ -330,6 +335,13 @@ define(['jquery', './fastbutton'], function ($) {
         OffCanvas.prototype.autohide = function (e) {
             if ($(e.target).closest(this.$element).length === 0) {
                 this.hide();
+            }
+
+            if (this.state === 'slid') {
+                console.log('slid');
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
             }
         }
 

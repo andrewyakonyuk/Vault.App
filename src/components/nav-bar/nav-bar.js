@@ -1,6 +1,6 @@
 /*global define, console */
 
-define(['app/app', 'knockout', 'hasher', 'jquery', 'text!./nav-bar.html','bootstrap' , 'app/offcanvas'], function (app, ko, hasher, $, template) {
+define(['app/app', 'knockout', 'hasher', 'jquery', 'text!./nav-bar.html', 'app/offcanvas', 'app/transition', 'app/dropdown'], function (app, ko, hasher, $, template) {
     'use strict';
 
     function NavBarViewModel(params) {

@@ -12,9 +12,6 @@ var require = {
         "text": "bower_modules/requirejs-text/text",
         "underscore": "bower_modules/underscore/underscore",
         "pace": "bower_modules/pace/pace",
-        "bootstrap": "bower_modules/components-bootstrap/js/bootstrap",
-        "bootstrap-material-design": "bower_modules/bootstrap-material-design/dist/js/material",
-        "ripples": "bower_modules/bootstrap-material-design/dist/js/ripples",
         "hammer": "bower_modules/hammerjs/hammer"
     },
     shim: {
@@ -23,12 +20,6 @@ var require = {
         },
         "knockout-validation": {
             deps: ["knockout"]
-        },
-        "bootstrap": {
-            deps: ["jquery"]
-        },
-        "bootstrap-material-design": {
-            deps: ["jquery", "bootstrap", "ripples"]
         }
     }
 };

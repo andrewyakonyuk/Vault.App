@@ -305,10 +305,8 @@
     display: block;
 }
 .canvas-sliding {
-    -webkit-transition: top 1.35s linear, left 1.35s linear, bottom 1.35s linear, right 1.35s linear;
-    transition: top 1.35s ease-in, left 1.35s ease-in, bottom 1.35s ease-in, right 1.35s ease-in;
- /*  -webkit-transition: left 0.35s ease;
- transition: left .35s ease; */
+    -webkit-transition: top .25s linear, left .25s linear, bottom .25s linear, right .25s linear;
+    transition: top .25s ease-in, left .25s ease-in, bottom .25s ease-in, right .25s ease-in;
 }
 .offcanvas-clone {
     position: absolute !important;

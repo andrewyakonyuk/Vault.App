@@ -1,6 +1,6 @@
 /*global define */
 
-define(['knockout', 'jquery', 'hasher', 'app/app', 'text!./signin.html', 'knockout-validation'], function (ko, $, hasher, app, template) {
+define(['knockout', 'jquery', 'hasher', 'app/app', 'app/checkbox', 'text!./signin.html', 'knockout-validation'], function (ko, $, hasher, app, checkbox, template) {
     'use strict';
 
     function SignInViewModel() {
@@ -29,7 +29,7 @@ define(['knockout', 'jquery', 'hasher', 'app/app', 'text!./signin.html', 'knocko
 
         this.title = ko.observable("Sign in");
 
-        $.material.checkbox();
+        checkbox();
     }
 
     SignInViewModel.prototype.submit = function (e) {
