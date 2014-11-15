@@ -66,7 +66,9 @@
                 gulp.src('src/css/offcanvas.css'),
                 gulp.src('src/css/side-comments.css'),
                 gulp.src('src/css/pace.css'),
+                gulp.src('src/css/kudos.css'),
                 gulp.src('src/css/styles.css')
+                .pipe(replace(/url\((')?\.\.\/img\//g, 'url($1img/'))
             )
                     .pipe(concat('styles.css')),
             fontFiles = gulp.src('./src/bower_modules/components-bootstrap/fonts/*', {
@@ -95,7 +97,12 @@
             .pipe(clean());
     });
 
-    gulp.task('default', ['html', 'js', 'css'], function (callback) {
+    gulp.task('images', function(){
+        return gulp.src('./src/img/*')
+            .pipe(gulp.dest('./dist/img'));
+    });
+
+    gulp.task('default', ['html', 'js', 'css', 'images'], function (callback) {
         callback();
         console.log('\nPlaced optimized files in ' + chalk.magenta('dist/\n'));
     });

@@ -7,7 +7,8 @@ define(["knockout",
         "pace",
         "hammer",
         "text!./item-page.html",
-        'app/ui/side-comments/side-comments'], function (ko, $, _, Pace, Hammer, templateMarkup, sc) {
+        'app/ui/side-comments/side-comments',
+       'app/kudos'], function (ko, $, _, Pace, Hammer, templateMarkup, sc) {
     'use strict';
 
     function FlowItemViewModel(route) {
@@ -22,7 +23,7 @@ define(["knockout",
         Pace.restart();
 
         this.Hammer = new Hammer(document.getElementById('flowItemContainer'));
-        this.Hammer.on("swipe", function(){
+        this.Hammer.on("swipe", function () {
             history.go(-1);
         })
 
@@ -34,20 +35,20 @@ define(["knockout",
         this.article = {
             title: "SideComments.js in Action",
             sections: [{
-                id: 1,
-                content: "Each paragraph tag has the \"commentable-section\" class, making it a section which can be commented on after you've initialized a new SideComments object and pointed it at the parent element, which is \"#commentable-container\" for this demo.",
-                comments: [
-                    {
-                        id: 1,
-                        authorAvatarUrl: "http://f.cl.ly/items/1W303Y360b260u3v1P0T/jon_snow_small.png",
-                        authorName: "Jon Sno",
-                        comment: "I'm Ned Stark's bastard. Related: I know nothing."
+                    id: 1,
+                    content: "Each paragraph tag has the \"commentable-section\" class, making it a section which can be commented on after you've initialized a new SideComments object and pointed it at the parent element, which is \"#commentable-container\" for this demo.",
+                    comments: [
+                        {
+                            id: 1,
+                            authorAvatarUrl: "http://f.cl.ly/items/1W303Y360b260u3v1P0T/jon_snow_small.png",
+                            authorName: "Jon Sno",
+                            comment: "I'm Ned Stark's bastard. Related: I know nothing."
                     },
-                    {
-                        id: 2,
-                        "authorAvatarUrl": "http://f.cl.ly/items/2o1a3d2f051L0V0q1p19/donald_draper.png",
-                        "authorName": "Donald Draper",
-                        "comment": "I need a scotch."
+                        {
+                            id: 2,
+                            "authorAvatarUrl": "http://f.cl.ly/items/2o1a3d2f051L0V0q1p19/donald_draper.png",
+                            "authorName": "Donald Draper",
+                            "comment": "I need a scotch."
                     }]
             },
                 {
@@ -122,6 +123,34 @@ define(["knockout",
             }
             initializedComments += 1;
         };
+
+        // initialize kudos
+        $("figure.kudoable").kudoable();
+
+
+        // when kudoing
+        $("figure.kudo").bind("kudo:active", function (e) {
+            console.log("kudoing active");
+        });
+
+        // when not kudoing
+        $("figure.kudo").bind("kudo:inactive", function (e) {
+            console.log("kudoing inactive");
+        });
+
+        // after kudo'd
+        $("figure.kudo").bind("kudo:added", function (e) {
+            var element = $(this);
+            // ajax'y stuff or whatever you want
+            console.log("Kodo'd:", element.data('id'), ":)");
+        });
+
+        // after removing a kudo
+        $("figure.kudo").bind("kudo:removed", function (e) {
+            var element = $(this);
+            // ajax'y stuff or whatever you want
+            console.log("Un-Kudo'd:", element.data('id'), ":(");
+        });
     }
 
     FlowItemViewModel.prototype.initUI = function () {
@@ -150,8 +179,7 @@ define(["knockout",
             this.sideComments.destroy();
             this.sideComments = null;
         }
-        if(this.Hammer)
-        {
+        if (this.Hammer) {
             this.Hammer.destroy();
         }
     };
