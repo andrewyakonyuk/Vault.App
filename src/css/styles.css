@@ -23,6 +23,12 @@ textarea {
         line-height: 35px;
     }
 }
+
+@media(min-width: 768px){
+    .container{
+        width: 768px;
+    }
+}
 .navbar {
     margin-bottom: 0px;
     display: block;
