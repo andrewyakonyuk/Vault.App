@@ -51,18 +51,24 @@
     // Discovers all AMD dependencies, concatenates together all required .js files, minifies them
     gulp.task('js', function () {
         return rjs(requireJsOptimizerConfig)
-            .pipe(uglify({ preserveComments: 'some' }))
+            .pipe(uglify({
+                preserveComments: 'some'
+            }))
             .pipe(gulp.dest('./dist/'));
     });
 
     // Concatenates CSS files, rewrites relative paths to Bootstrap fonts, copies Bootstrap fonts
     gulp.task('css', function () {
-        var bowerCss = gulp.src('src/bower_modules/components-bootstrap/css/bootstrap.css')
-            .pipe(replace(/url\((')?\.\.\/fonts\//g, 'url($1fonts/')),
-            materialCss = gulp.src('src/bower_modules/bootstrap-material-design/dist/css/material.css'),
-            ripplesCss = gulp.src('src/bower_modules/bootstrap-material-design/dist/css/ripples.css'),
-            appCss = gulp.src('src/css/*.css'),
-            combinedCss = es.concat(bowerCss, materialCss, ripplesCss, appCss).pipe(concat('styles.css')),
+        var combinedCss = es.concat(
+                gulp.src('src/bower_modules/components-bootstrap/css/bootstrap.css')
+                    .pipe(replace(/url\((')?\.\.\/fonts\//g, 'url($1fonts/')),
+                gulp.src('src/bower_modules/bootstrap-material-design/dist/css/material.css'),
+                gulp.src('src/css/offcanvas.css'),
+                gulp.src('src/css/side-comments.css'),
+                gulp.src('src/css/pace.css'),
+                gulp.src('src/css/styles.css')
+            )
+                    .pipe(concat('styles.css')),
             fontFiles = gulp.src('./src/bower_modules/components-bootstrap/fonts/*', {
                 base: './src/bower_modules/components-bootstrap/'
             });
