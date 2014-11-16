@@ -53,7 +53,7 @@
 
 <body class='use-fastclick'>
     <nav-bar params="route: route"></nav-bar>
-    <div id="page" data-bind="component: { name: route().page, params: route }, pageTitle: route().page || ''"></div>
+    <div id="page" data-bind="controller: { name: route().page, params: route }, pageTitle: route().page || ''"></div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>
