@@ -11,12 +11,12 @@
 }
 
 .pace .pace-progress {
-  background: #fcfffc;
+  background: #e91e63;
   position: fixed;
   z-index: 1050;
   top: 0;
   left: 0;
-  height: 2px;
+  height: 3px;
 }
 
 .pace .pace-progress-inner {
