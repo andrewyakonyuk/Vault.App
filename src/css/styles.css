@@ -45,6 +45,11 @@ textarea {
 .navbar .navbar-nav > li > a {
     color: #222;
 }
+.navbar .navbar-brand{
+    font-family: "freight-sans-pro", sans-serif;
+    text-transform: uppercase;
+    font-weight: 800;
+}
 .form-control::-moz-placeholder {
     color: #222;
     opacity: 1;
