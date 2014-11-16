@@ -61,16 +61,17 @@
     gulp.task('css', function () {
         var combinedCss = es.concat(
                 gulp.src('src/bower_modules/components-bootstrap/css/bootstrap.css')
-                    .pipe(replace(/url\((')?\.\.\/fonts\//g, 'url($1fonts/')),
+                .pipe(replace(/url\((')?\.\.\/fonts\//g, 'url($1fonts/')),
                 gulp.src('src/bower_modules/bootstrap-material-design/dist/css/material.css'),
                 gulp.src('src/css/offcanvas.css'),
                 gulp.src('src/css/side-comments.css'),
                 gulp.src('src/css/pace.css'),
                 gulp.src('src/css/kudos.css'),
+                gulp.src('src/css/waves.css'),
                 gulp.src('src/css/styles.css')
                 .pipe(replace(/url\((')?\.\.\/img\//g, 'url($1img/'))
             )
-                    .pipe(concat('styles.css')),
+            .pipe(concat('styles.css')),
             fontFiles = gulp.src('./src/bower_modules/components-bootstrap/fonts/*', {
                 base: './src/bower_modules/components-bootstrap/'
             });
@@ -92,12 +93,12 @@
     // Removes all files from ./dist/
     gulp.task('clean', function () {
         return gulp.src('./dist/**/*', {
-            read: false
-        })
+                read: false
+            })
             .pipe(clean());
     });
 
-    gulp.task('images', function(){
+    gulp.task('images', function () {
         return gulp.src('./src/img/*')
             .pipe(gulp.dest('./dist/img'));
     });

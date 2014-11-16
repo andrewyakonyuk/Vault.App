@@ -1,6 +1,6 @@
-/*global define, console */
+/*global define, console, Waves */
 
-define(['app/app', 'knockout', 'hasher', 'jquery', 'text!./nav-bar.html', 'app/offcanvas', 'app/transition', 'app/dropdown'], function (app, ko, hasher, $, template) {
+define(['app/app', 'knockout', 'hasher', 'jquery', 'text!./nav-bar.html', 'app/offcanvas', 'app/transition', 'app/dropdown', 'app/waves'], function (app, ko, hasher, $, template) {
     'use strict';
 
     function NavBarViewModel(params) {
@@ -10,13 +10,13 @@ define(['app/app', 'knockout', 'hasher', 'jquery', 'text!./nav-bar.html', 'app/o
             return app.pageTitle();
         }, this);
 
-        this.authorized = ko.computed(function(){
+        this.authorized = ko.computed(function () {
             return app.authorized();
         }, this);
     }
 
     NavBarViewModel.prototype.render = function () {
-        //nothing
+        Waves.displayEffect();
     };
 
     NavBarViewModel.prototype.search = function () {
@@ -28,9 +28,9 @@ define(['app/app', 'knockout', 'hasher', 'jquery', 'text!./nav-bar.html', 'app/o
         return false;
     };
 
-    NavBarViewModel.prototype.signout = function(){
+    NavBarViewModel.prototype.signout = function () {
         app.authorized(false);
-    }
+    };
 
     return {
         viewModel: NavBarViewModel,

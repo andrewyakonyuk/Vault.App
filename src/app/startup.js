@@ -1,4 +1,4 @@
-/*global define, boilerplate */
+/*global define, boilerplate, Waves */
 
 define(['pace',
         'jquery',
@@ -9,7 +9,8 @@ define(['pace',
         './ko.bindinghandlers',
        './plugins',
        './helpers',
-        './fastbutton'],
+        './fastbutton',
+       './waves'],
     function (Pace, $, ko, router) {
         'use strict';
 
@@ -73,6 +74,9 @@ define(['pace',
 
         // Start the application
         ko.applyBindings({
-            route: router.currentRoute
+            route: router.currentRoute,
+            afterRender: function () {
+                Waves.displayEffect();
+            }
         });
     });
