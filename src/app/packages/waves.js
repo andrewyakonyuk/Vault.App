@@ -7,11 +7,12 @@
  * https://github.com/fians/Waves/blob/master/LICENSE
  */
 
-;
-(function (window) {
+/* global define */
+
+define([], function () {
     'use strict';
 
-    var Waves = Waves || {};
+    var Waves = window.Waves || (window.Waves = {});
     var $$ = document.querySelectorAll.bind(document);
 
     // Find exact position of element
@@ -261,6 +262,6 @@
 
     };
 
-    window.Waves = Waves;
+    return Waves;
 
-})(window);
+});

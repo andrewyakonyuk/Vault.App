@@ -12,8 +12,12 @@ var require = {
         "text": "bower_modules/requirejs-text/text",
         "underscore": "bower_modules/underscore/underscore",
         "pace": "bower_modules/pace/pace",
-        "hammer": "bower_modules/hammerjs/hammer"
+        "hammer": "bower_modules/hammerjs/hammer",
+        "bindings": "./app/bindings/",
+        "packages": "./app/packages/",
+        "utils": "./app/utils"
     },
+    waitSeconds: 30,
     shim: {
         "jquery": {
             exports: '$'

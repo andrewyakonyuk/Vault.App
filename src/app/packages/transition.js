@@ -12,7 +12,7 @@ define(['jquery'], function (jQuery) {
      * ======================================================================== */
 
 
-    + function ($) {
+    +function ($) {
 
         // CSS TRANSITION SUPPORT (Shoutout: http://www.modernizr.com/)
         // ============================================================

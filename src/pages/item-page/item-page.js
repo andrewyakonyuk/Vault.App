@@ -7,8 +7,8 @@ define(["knockout",
         "pace",
         "hammer",
         "text!./item-page.html",
-        'app/ui/side-comments/side-comments',
-       'app/kudos'], function (ko, $, _, Pace, Hammer, templateMarkup, sc) {
+        'packages/side-comments/side-comments',
+       'packages/kudos'], function (ko, $, _, Pace, Hammer, templateMarkup, sc) {
     'use strict';
 
     function FlowItemViewModel(route) {

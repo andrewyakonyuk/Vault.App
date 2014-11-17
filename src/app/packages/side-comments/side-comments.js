@@ -1,7 +1,7 @@
 /*global define, boilerplate */
 /*jslint nomen: true*/
 
-define(['jquery', 'underscore', './emitter', 'text!./templates/comment.html', 'text!./templates/section.html'],
+define(['jquery', 'underscore', './emitter', 'text!./templates/comment.html', 'text!./templates/section.html', 'packages/jquery.fastbutton'],
     function ($, _, Emitter, CommentTemplate, SectionTemplate) {
         'use strict';
 
@@ -234,27 +234,23 @@ define(['jquery', 'underscore', './emitter', 'text!./templates/comment.html', 't
             this.initEventHandlers();
 
             //make textarea to grow its height while you are entering more lines of text
-            new boilerplate.autogrow(this.$el.find('.comment-box').get(0), 14);
+            //new boilerplate.autogrow(this.$el.find('.comment-box').get(0), 14);
         }
 
         Section.prototype.initEventHandlers = function () {
             var self = this;
 
-            _.each($('.side-comment .marker', self.$el), function (element) {
-                new boilerplate.fastButton(element, _.bind(self.markerClick, self));
-            });
-
-            _.each($('.side-comment .add-comment', self.$el), function (element) {
-                new boilerplate.fastButton(element, _.bind(self.addCommentClick, self));
-            });
-
-            _.each($('.side-comment .post', self.$el), function (element) {
-                new boilerplate.fastButton(element, _.bind(self.postCommentClick, self));
-            });
-
-            _.each($('.side-comment .cancel', self.$el), function (element) {
-                new boilerplate.fastButton(element, _.bind(self.cancelCommentClick, self));
-            });
+            var event = "click";
+            
+            if('ontouchstart' in window){
+                event = "touchstart";
+            }
+            
+            this.$el.on(event, '.side-comment .marker', _.bind(this.markerClick, this));
++            this.$el.on(event, '.side-comment .add-comment', _.bind(this.addCommentClick, this));
++            this.$el.on(event, '.side-comment .post', _.bind(this.postCommentClick, this));
++            this.$el.on(event, '.side-comment .cancel', _.bind(this.cancelCommentClick, this));
++            this.$el.on(event, '.side-comment .delete', _.bind(this.deleteCommentClick, this));
         };
 
         /**
@@ -380,9 +376,10 @@ define(['jquery', 'underscore', './emitter', 'text!./templates/comment.html', 't
             this.$el.find('.comments').append(newCommentHtml);
             this.$el.find('.side-comment').addClass('has-comments');
 
-            _.each($('.side-comment .delete', self.$el), function (element) {
-                new boilerplate.fastButton(element, _.bind(self.deleteCommentClick, self));
-            });
+            //todo:
+            //_.each($('.side-comment .delete', self.$el), function (element) {
+            //    new boilerplate.fastButton(element, _.bind(self.deleteCommentClick, self));
+            //});
 
             this.updateCommentCount();
             this.hideCommentForm();

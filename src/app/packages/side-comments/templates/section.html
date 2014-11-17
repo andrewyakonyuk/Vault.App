@@ -1,5 +1,5 @@
 <div class="side-comment <%= sectionClasses %>">
-    <a href="javascript:void(0)" class="marker">
+    <a href="javascript:void(0)" class="marker fastClick">
     <span><%= comments.length %></span>
   </a>
 
@@ -10,7 +10,7 @@
                     <% }) %>
         </ul>
 
-        <a href="#" class="add-comment btn btn-primary btn-raised">Leave a comment</a>
+        <a href="#" class="add-comment btn btn-primary btn-raised fastClick">Leave a comment</a>
 
         <% if (currentUser) { %>
             <div class="comment-form">
@@ -22,8 +22,8 @@
                 </p>
                 <textarea class="comment-box right-of-avatar" placeholder="Leave a comment..."></textarea>
                 <div class="actions right-of-avatar">
-                    <a href="#" class="action-link post">Post</a>
-                    <a href="#" class="action-link cancel">Cancel</a>
+                    <a href="#" class="action-link post fastClick">Post</a>
+                    <a href="#" class="action-link cancel fastClick">Cancel</a>
                 </div>
             </div>
             <% } %>

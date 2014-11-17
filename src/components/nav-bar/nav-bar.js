@@ -1,6 +1,7 @@
 /*global define, console, Waves */
 
-define(['app/app', 'knockout', 'hasher', 'jquery', 'text!./nav-bar.html', 'app/offcanvas', 'app/transition', 'app/dropdown', 'app/waves'], function (app, ko, hasher, $, template) {
+define(['app/app', 'knockout', 'hasher', 'jquery', 'text!./nav-bar.html', 'packages/waves', 'packages/transition',
+    'packages/offcanvas', 'packages/dropdown', 'packages/jquery.fastbutton'], function (app, ko, hasher, $, template, Waves) {
     'use strict';
 
     function NavBarViewModel(params) {

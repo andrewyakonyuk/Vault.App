@@ -1,5 +1,7 @@
 // Avoid `console` errors in browsers that lack a console.
-(function () {
+/*global define, window */
+
+define([], function () {
     'use strict';
 
     var method,
@@ -21,6 +23,4 @@
             console[method] = noop;
         }
     }
-}());
-
-// Place any Zepto/helper plugins in here.
+});

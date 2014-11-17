@@ -1,9 +1,9 @@
 /*global define */
 
-define(['jquery', './fastbutton'], function ($) {
+define(['jquery'], function ($) {
     'use strict';
 
-    + function ($) {
+    +function ($) {
 
         var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame,
             cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;

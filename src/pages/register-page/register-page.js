@@ -1,6 +1,6 @@
 /*global define, console */
 
-define(['knockout', 'text!./register-page.html'], function (ko, templateMarkup) {
+define(['knockout', 'text!./register-page.html', 'knockout-validation'], function (ko, templateMarkup) {
     'use strict';
 
     function RegisterPage() {
