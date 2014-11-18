@@ -35,9 +35,8 @@ define(['jquery'], function ($) {
                 if ('ontouchstart' in window) {
                     $(document).on('touchstart', $.proxy(this.autohide, this));
                     $(document).on('touchend', $.proxy(this.autohide, this));
-                } else {
-                    $(document).on('click', $.proxy(this.autohide, this));
                 }
+                $(document).on('click', $.proxy(this.autohide, this));
             }
 
             if (this.options.toggle) {
@@ -61,12 +60,12 @@ define(['jquery'], function ($) {
 
         OffCanvas.prototype.offset = function () {
             switch (this.placement) {
-            case 'left':
-            case 'right':
-                return this.$element.outerWidth();
-            case 'top':
-            case 'bottom':
-                return this.$element.outerHeight();
+                case 'left':
+                case 'right':
+                    return this.$element.outerWidth();
+                case 'top':
+                case 'bottom':
+                    return this.$element.outerHeight();
             }
         };
 
@@ -107,14 +106,14 @@ define(['jquery'], function ($) {
 
         OffCanvas.prototype.opposite = function (placement) {
             switch (placement) {
-            case 'top':
-                return 'bottom';
-            case 'left':
-                return 'right';
-            case 'bottom':
-                return 'top';
-            case 'right':
-                return 'left';
+                case 'top':
+                    return 'bottom';
+                case 'left':
+                    return 'right';
+                case 'bottom':
+                    return 'top';
+                case 'right':
+                    return 'left';
             }
         };
 

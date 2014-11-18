@@ -1,6 +1,6 @@
 /*global define */
 
-define(['jquery', './fastbutton'], function ($, FastButton) {
+define(['jquery'], function ($, FastButton) {
     'use strict';
 
     var Clickbuster, FastButton, clickDistance, clickbusterDistance, clickbusterTimeout, debug, eventHandler;

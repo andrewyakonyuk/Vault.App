@@ -8,14 +8,14 @@ define(function (require, exports, module) {
         restartOnPushState: true
     });
 
-    var scaleFix = require('utils/scaleFix'),
-        hideUrlBarOnLoad = require('utils/hideUrlBar'),
-        enableActive = require('utils/enableActive');
+    //var scaleFix = require('utils/scaleFix'),
+    //    hideUrlBarOnLoad = require('utils/hideUrlBar'),
+    //    enableActive = require('utils/enableActive');
 
-    //config mobile helper functions
-    scaleFix();
-    hideUrlBarOnLoad();
-    enableActive();
+    ////config mobile helper functions
+    //scaleFix();
+    //hideUrlBarOnLoad();
+    //enableActive();
 
     if (window.addEventListener) {
         window.addEventListener('hashchange', function () {
@@ -33,6 +33,7 @@ define(function (require, exports, module) {
 
     var router = require('./router'),
         ko = require('knockout'),
+        validation = require('knockout-validation'),
         Waves = require('packages/waves');
 
     require('bindings/controller');

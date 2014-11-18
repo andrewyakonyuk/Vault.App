@@ -243,7 +243,7 @@ define(['jquery', 'underscore', './emitter', 'text!./templates/comment.html', 't
             var event = "click";
             
             if('ontouchstart' in window){
-                event = "touchstart";
+                event += " touchstart";
             }
             
             this.$el.on(event, '.side-comment .marker', _.bind(this.markerClick, this));
