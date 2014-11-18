@@ -15,7 +15,9 @@ var require = {
         "hammer": "bower_modules/hammerjs/hammer",
         "bindings": "./app/bindings/",
         "packages": "./app/packages/",
-        "utils": "./app/utils"
+        "utils": "./app/utils",
+        "pages": "./app/pages",
+        "components": "./app/components"
     },
     waitSeconds: 30,
     shim: {
