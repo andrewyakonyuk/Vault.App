@@ -37,6 +37,7 @@ define(function (require, exports, module) {
         Waves = require('packages/waves');
 
     require('bindings/controller');
+    require('bindings/i18n');
 
 
     // Components can be packaged as AMD modules, such as the following:

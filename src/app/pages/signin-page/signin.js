@@ -1,6 +1,6 @@
 /*global define */
 
-define(['knockout', 'jquery', 'hasher', 'app/app', 'packages/checkbox', 'text!./signin.html'], function (ko, $, hasher, app, checkbox, template) {
+define(['knockout', 'jquery', 'hasher', 'app/app', 'packages/checkbox', 'packages/i18n!nls/localizedStrings', 'text!./signin.html'], function (ko, $, hasher, app, checkbox, localizedStrings, template) {
     'use strict';
 
     function SignInViewModel() {
@@ -8,15 +8,19 @@ define(['knockout', 'jquery', 'hasher', 'app/app', 'packages/checkbox', 'text!./
         var self = this;
 
         this.login = ko.observable().extend({
-            email: true,
+            email: {
+                message: localizedStrings.validation.emailShouldBeValid
+            },
             required: {
-                message: 'Please supply your email address.'
+                message: localizedStrings.validation.loginRequired
             }
         }).isModified(false);
 
         this.password = ko.observable().extend({
             minLength: 6,
-            required: true
+            required: {
+                message: localizedStrings.validation.fieldisRequired
+            }
         }).isModified(false);
 
         this.rememberMe = ko.observable(false);

@@ -13,11 +13,13 @@ var require = {
         "underscore": "bower_modules/underscore/underscore",
         "pace": "bower_modules/pace/pace",
         "hammer": "bower_modules/hammerjs/hammer",
+        
         "bindings": "./app/bindings/",
         "packages": "./app/packages/",
         "utils": "./app/utils",
         "pages": "./app/pages",
-        "components": "./app/components"
+        "components": "./app/components",
+        "nls": "./app/nls"
     },
     waitSeconds: 30,
     shim: {
@@ -27,5 +29,6 @@ var require = {
         "knockout-validation": {
             deps: ["knockout"]
         }
-    }
+    },
+    locale: "ru-ru"
 };
