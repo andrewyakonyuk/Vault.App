@@ -1,6 +1,6 @@
 /*global define */
 
-define(['knockout', 'jquery', 'hasher', 'app/app', 'packages/checkbox', 'text!./signin.html', 'knockout-validation'], function (ko, $, hasher, app, checkbox, template) {
+define(['knockout', 'jquery', 'hasher', 'app/app', 'packages/checkbox', 'text!./signin.html'], function (ko, $, hasher, app, checkbox, template) {
     'use strict';
 
     function SignInViewModel() {
