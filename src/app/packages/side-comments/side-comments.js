@@ -1,8 +1,8 @@
 /*global define, boilerplate */
 /*jslint nomen: true*/
 
-define(['jquery', 'underscore', './emitter', 'text!./templates/comment.html', 'text!./templates/section.html', 'packages/jquery.fastbutton'],
-    function ($, _, Emitter, CommentTemplate, SectionTemplate) {
+define(['jquery', 'underscore', './emitter', 'text!./templates/comment.html', 'text!./templates/section.html', 'utils/autogrow', 'packages/jquery.fastbutton'],
+    function ($, _, Emitter, CommentTemplate, SectionTemplate, autogrow) {
         'use strict';
 
         /**
@@ -234,7 +234,7 @@ define(['jquery', 'underscore', './emitter', 'text!./templates/comment.html', 't
             this.initEventHandlers();
 
             //make textarea to grow its height while you are entering more lines of text
-            //new boilerplate.autogrow(this.$el.find('.comment-box').get(0), 14);
+            autogrow(this.$el.find('.comment-box').get(0), 14);
         }
 
         Section.prototype.initEventHandlers = function () {
@@ -243,7 +243,7 @@ define(['jquery', 'underscore', './emitter', 'text!./templates/comment.html', 't
             var event = "click";
             
             if('ontouchstart' in window){
-                event += " touchstart";
+                event = " touchstart";
             }
             
             this.$el.on(event, '.side-comment .marker', _.bind(this.markerClick, this));
