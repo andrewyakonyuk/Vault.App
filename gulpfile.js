@@ -63,6 +63,7 @@
                 gulp.src('src/bower_modules/components-bootstrap/css/bootstrap.css')
                 .pipe(replace(/url\((')?\.\.\/fonts\//g, 'url($1fonts/')),
                 gulp.src('src/bower_modules/bootstrap-material-design/dist/css/material.css'),
+                gulp.src('src/bower_modules/bootstrap-material-design/dist/css/material-wfont.cs'),
                 gulp.src('src/css/offcanvas.css'),
                 gulp.src('src/css/side-comments.css'),
                 gulp.src('src/css/pace.css'),
