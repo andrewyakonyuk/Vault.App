@@ -1,6 +1,6 @@
 /*global define */
 
-define(['knockout', 'jquery', 'hasher', 'app/app', 'packages/checkbox', 'packages/i18n!nls/localizedStrings', 'text!./signin.html'], function (ko, $, hasher, app, checkbox, localizedStrings, template) {
+define(['knockout', 'jquery', 'hasher', 'app/app', 'packages/i18n!nls/localizedStrings', 'text!./signin.html'], function (ko, $, hasher, app, localizedStrings, template) {
     'use strict';
 
     function SignInViewModel() {
@@ -32,8 +32,6 @@ define(['knockout', 'jquery', 'hasher', 'app/app', 'packages/checkbox', 'package
         }, this);
 
         this.title = ko.observable("Sign in");
-
-        checkbox();
     }
 
     SignInViewModel.prototype.submit = function (e) {
