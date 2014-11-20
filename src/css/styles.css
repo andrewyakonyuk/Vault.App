@@ -4,7 +4,7 @@
     }
 }
 body {
-    background: #eee;
+    background: #fff;
 }
 textarea {
     background-color: transparent;
@@ -29,10 +29,14 @@ textarea {
         width: 768px;
     }
 }
+
+.navbar-header{
+    background: #fff;
+}
 .navbar {
     margin-bottom: 0px;
     display: block;
-    background: #eee;
+    background: #fff;
 }
 .navbar .navbar-brand,
 .navbar .navbar-brand:focus,
