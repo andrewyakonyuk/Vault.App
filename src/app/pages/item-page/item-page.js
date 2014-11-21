@@ -8,7 +8,7 @@ define(["knockout",
         "hammer",
         "text!./item-page.html",
         'packages/side-comments/side-comments',
-       'packages/kudos'], function (ko, $, _, Pace, Hammer, templateMarkup, sc) {
+       'packages/kudos'], function (ko, $, _, Pace, Hammer, templateMarkup, sc, kudoable) {
     'use strict';
 
     function FlowItemViewModel(route) {
@@ -125,32 +125,38 @@ define(["knockout",
         };
 
         // initialize kudos
-        $("figure.kudoable").kudoable();
-
-
-        // when kudoing
-        $("figure.kudo").bind("kudo:active", function (e) {
-            console.log("kudoing active");
+        
+        Array.prototype.forEach.call(document.querySelectorAll("figure.kudoable"), function (item, i) {
+            new kudoable(item);
         });
 
-        // when not kudoing
-        $("figure.kudo").bind("kudo:inactive", function (e) {
-            console.log("kudoing inactive");
-        });
+        //kudoable(docu)
+        //$("figure.kudoable").kudoable();
 
-        // after kudo'd
-        $("figure.kudo").bind("kudo:added", function (e) {
-            var element = $(this);
-            // ajax'y stuff or whatever you want
-            console.log("Kodo'd:", element.data('id'), ":)");
-        });
 
-        // after removing a kudo
-        $("figure.kudo").bind("kudo:removed", function (e) {
-            var element = $(this);
-            // ajax'y stuff or whatever you want
-            console.log("Un-Kudo'd:", element.data('id'), ":(");
-        });
+        //// when kudoing
+        //$("figure.kudo").bind("kudo:active", function (e) {
+        //    console.log("kudoing active");
+        //});
+
+        //// when not kudoing
+        //$("figure.kudo").bind("kudo:inactive", function (e) {
+        //    console.log("kudoing inactive");
+        //});
+
+        //// after kudo'd
+        //$("figure.kudo").bind("kudo:added", function (e) {
+        //    var element = $(this);
+        //    // ajax'y stuff or whatever you want
+        //    console.log("Kodo'd:", element.data('id'), ":)");
+        //});
+
+        //// after removing a kudo
+        //$("figure.kudo").bind("kudo:removed", function (e) {
+        //    var element = $(this);
+        //    // ajax'y stuff or whatever you want
+        //    console.log("Un-Kudo'd:", element.data('id'), ":(");
+        //});
     }
 
     FlowItemViewModel.prototype.initUI = function () {

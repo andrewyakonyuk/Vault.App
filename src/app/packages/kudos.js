@@ -1,6 +1,6 @@
 /*global define */
 
-define(['jquery'], function ($) {
+define([], function () {
     'use strict';
 
     var Kudoable,
@@ -8,6 +8,38 @@ define(['jquery'], function ($) {
             return function () {
                 return fn.apply(me, arguments);
             };
+        },
+
+        __hasClass = function (el, className) {
+            if (el.classList)
+                return el.classList.contains(className);
+            else
+                return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
+        },
+
+        __addClass = function (el, className) {
+            if (el.classList)
+                el.classList.add(className);
+            else
+                el.className += ' ' + className;
+        },
+
+        __removeClass = function (el, className) {
+            if (el.classList)
+                el.classList.remove(className);
+            else
+                el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+        },
+
+        __customTrigger = function (el, eventName, data) {
+            if (window.CustomEvent) {
+                var event = new CustomEvent(eventName, data);
+            } else {
+                var event = document.createEvent('CustomEvent');
+                event.initCustomEvent(eventName, true, true, data);
+            }
+
+            el.dispatchEvent(event);
         };
 
     Kudoable = (function () {
@@ -18,46 +50,46 @@ define(['jquery'], function ($) {
             this.end = __bind(this.end, this);
             this.start = __bind(this.start, this);
             this.bindEvents();
-            this.counter = $('.count .num', this.element);
-            this.element.data('kudoable', this);
+            this.counter = this.element.querySelector('.count .num');
+            this.element.setAttribute('data-kudoable', this);
         }
 
         Kudoable.prototype.bindEvents = function () {
-            this.element.mouseenter(this.start);
-            this.element.mouseleave(this.end);
-            this.element.click(this.unkudo);
-            $(this.element).on('touchstart', this.element, $.proxy(this.touchstart, this));
-            return $(this.element).on('touchend', this.element, $.proxy(this.end, this));
+            this.element.addEventListener('mouseenter', this.start, true);
+            this.element.addEventListener('mouseleave', this.end, true);
+            this.element.addEventListener('click', this.unkudo, true);
+            this.element.addEventListener('touchstart', __bind(this.touchstart, this), true);
+            this.element.addEventListener('touchend', __bind(this.end, this), true);
         };
 
         Kudoable.prototype.isKudoable = function () {
-            return this.element.hasClass('kudoable');
+            return __hasClass(this.element, 'kudoable');
         };
 
         Kudoable.prototype.isKudod = function () {
-            return this.element.hasClass('complete');
+            return __hasClass(this.element, 'complete');
         };
 
         Kudoable.prototype.touchstart = function (e) {
             if (this.isKudoable() && !this.isKudod()) {
                 this.start(e);
-            } else if (this.isKudod()) {
+            } else if (this.isKudoable() && this.isKudod()) {
                 this.unkudo(e);
             }
         };
 
         Kudoable.prototype.start = function (e) {
             if (this.isKudoable() && !this.isKudod()) {
-                this.element.trigger('kudo:active');
-                this.element.addClass('active');
+                __customTrigger(this.element, 'kudo:active');
+                __addClass(this.element, 'active');
                 return (this.timer = setTimeout(this.complete, 700));
             }
         };
 
         Kudoable.prototype.end = function () {
             if (this.isKudoable() && !this.isKudod()) {
-                this.element.trigger('kudo:inactive');
-                this.element.removeClass('active');
+                __customTrigger(this.element, 'kudo:inactive');
+                __removeClass(this.element, 'active');
                 if (this.timer !== null) {
                     return clearTimeout(this.timer);
                 }
@@ -67,25 +99,25 @@ define(['jquery'], function ($) {
         Kudoable.prototype.complete = function () {
             this.end();
             this.incrementCount();
-            this.element.addClass('complete');
-            return this.element.trigger('kudo:added');
+            __addClass(this.element, 'complete');
+            __customTrigger(this.element, 'kudo:added');
         };
 
         Kudoable.prototype.unkudo = function (event) {
             event.preventDefault();
             if (this.isKudod()) {
                 this.decrementCount();
-                this.element.removeClass('complete');
-                return this.element.trigger('kudo:removed');
+                __removeClass(this.element, 'complete');
+                __customTrigger(this.element, 'kudo:removed');
             }
         };
 
         Kudoable.prototype.setCount = function (count) {
-            return this.counter.html(count);
+            return this.counter.innerHTML = count;
         };
 
         Kudoable.prototype.currentCount = function () {
-            return parseInt(this.counter.html());
+            return parseInt(this.counter.innerHTML);
         };
 
         Kudoable.prototype.incrementCount = function () {
@@ -100,9 +132,5 @@ define(['jquery'], function ($) {
 
     })();
 
-    return ($.fn.kudoable = function () {
-        return this.each(function () {
-            return new Kudoable($(this));
-        });
-    });
+    return Kudoable;
 });
