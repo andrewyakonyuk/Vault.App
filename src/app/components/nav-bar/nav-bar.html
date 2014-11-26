@@ -1,49 +1,51 @@
-<nav class="navbar navbar-fixed-top navbar-inverse" role="navigation" data-bind="template: { afterRender: render}">
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggle pull-left waves-effect" data-toggle="offcanvas" data-target=".navbar-offcanvas" data-canvas="body" data-placement="left">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#" data-bind="text: app.pageTitle()"></a>
-        <button type="button" class="navbar-toggle navbar-toggle-search pull-right waves-effect">
-            <span class="glyphicon glyphicon-search"></span>
-        </button>
-    </div>
-    <div class="navbar-offcanvas offcanvas">
-        <!-- ko if: app.authorized() == true -->
-        <ul class="nav navbar-nav nav navbar-nav navbar-right">
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="glyphicon glyphicon-user" aria-hidden="true"></i> user <span class="caret"></span></a>
-                <ul class="dropdown-menu" role="menu">
-                    <li>
-                        <a href="#">Action</a>
-                    </li>
-                    <li>
-                        <a href="#">Another action</a>
-                    </li>
-                    <li>
-                        <a href="#">Something else here</a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0)" data-bind="click: signout"><i class="glyphicon glyphicon-log-out" aria-hidden="true"></i> Sign out</a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-        <!-- /ko  -->
-        <!-- ko if: !app.authorized() -->
-        <ul class="nav navbar-nav nav navbar-nav navbar-right">
-            <li data-bind="css: { active: route().page === 'about-page' }">
-                <a class="waves-effect" href="#about">About</a>
-            </li>
-            <li data-bind="css: { active: route().page === 'signin-page' }">
-                <a class="waves-effect" href="#account/signin">Sign in</a>
-            </li>
-        </ul>
-        <!-- /ko -->
-        <form class="navbar-form navbar-right" data-bind="submit: search">
-            <input type="text" class="form-control col-lg-10" placeholder="Search" data-bind="value: searchText">
-        </form>
+<nav class="navbar navbar-fixed-top navbar-inverse" role="navigation" data-bind="template: { afterRender: render }">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle pull-left waves-effect" data-toggle="offcanvas" data-target=".navbar-offcanvas" data-canvas=".navbar, .canvas" data-placement="left" data-recalc="true">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#" data-bind="text: app.pageTitle()"></a>
+            <button type="button" class="navbar-toggle navbar-toggle-search pull-right waves-effect">
+                <span class="glyphicon glyphicon-search"></span>
+            </button>
+        </div>
+        <div class="navbar-offcanvas offcanvas">
+            <!-- ko if: app.authorized() == true -->
+            <ul class="nav navbar-nav nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="glyphicon glyphicon-user" aria-hidden="true"></i>user <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="#">Action</a>
+                        </li>
+                        <li>
+                            <a href="#">Another action</a>
+                        </li>
+                        <li>
+                            <a href="#">Something else here</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" data-bind="click: signout"><i class="glyphicon glyphicon-log-out" aria-hidden="true"></i>Sign out</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- /ko  -->
+            <!-- ko if: !app.authorized() -->
+            <ul class="nav navbar-nav nav navbar-nav navbar-right">
+                <li data-bind="css: { active: route().page === 'about-page' }">
+                    <a class="waves-effect" href="#about">About</a>
+                </li>
+                <li data-bind="css: { active: route().page === 'signin-page' }">
+                    <a class="waves-effect" href="#account/signin">Sign in</a>
+                </li>
+            </ul>
+            <!-- /ko -->
+            <form class="navbar-form navbar-right" data-bind="submit: search">
+                <input type="text" class="form-control col-lg-10" placeholder="Search" data-bind="value: searchText">
+            </form>
+        </div>
     </div>
 </nav>

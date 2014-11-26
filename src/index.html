@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <!--[if IEMobile 7 ]>    <html class="no-js iem7"> <![endif]-->
 <!--[if (gt IEMobile 7)|!(IEMobile)]><!-->
 <html class="no-js">
@@ -31,18 +31,10 @@
 
     <!-- This script prevents links from opening in Mobile Safari. https://gist.github.com/1042026 -->
 
-    <script>(function(a,b,c){if(c in b&&b[c]){var d,e=a.location,f=/^(a|html)$/i;a.addEventListener("click",function(a){d=a.target;while(!f.test(d.nodeName))d=d.parentNode;"href"in d&&(d.href.indexOf("http")||~d.href.indexOf(e.host))&&(a.preventDefault(),e.href=d.href)},!1)}})(document,window.navigator,"standalone")</script>
+    <script>(function (a, b, c) { if (c in b && b[c]) { var d, e = a.location, f = /^(a|html)$/i; a.addEventListener("click", function (a) { d = a.target; while (!f.test(d.nodeName)) d = d.parentNode; "href" in d && (d.href.indexOf("http") || ~d.href.indexOf(e.host)) && (a.preventDefault(), e.href = d.href) }, !1) } })(document, window.navigator, "standalone")</script>
 
     <!-- build:css -->
-    <link href="css/normalize.css" rel="stylesheet">
     <link href="bower_modules/components-bootstrap/css/bootstrap.css" rel="stylesheet">
-    <link href="css/offcanvas.css" rel="stylesheet">
-    <link href="bower_modules/bootstrap-material-design/dist/css/material.css" rel="stylesheet">
-    <link href="bower_modules/bootstrap-material-design/dist/css/material-wfont.css">
-    <link href="css/side-comments.css" rel="stylesheet">
-    <link href="css/pace.css" rel="stylesheet">
-    <link href="css/kudos.css" rel="stylesheet">
-    <link href="css/waves.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
     <!-- endbuild -->
 
@@ -54,14 +46,17 @@
 
 <body class='use-fastclick'>
     <nav-bar params="route: route"></nav-bar>
-    <div id="page" data-bind="controller: { name: route().page, params: route, afterRender: afterRender }, pageTitle: route().page || ''"></div>
-
+    <div class="canvas">
+        <div id="page" data-bind="controller: { name: route().page, params: route, afterRender: afterRender }, pageTitle: route().page || ''"></div>
+    </div>
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>
-        var _gaq=[["_setAccount","UA-XXXXX-X"],["_trackPageview"]];
-        (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.async=1;
-        g.src=("https:"==location.protocol?"//ssl":"//www")+".google-analytics.com/ga.js";
-        s.parentNode.insertBefore(g,s)}(document,"script"));
+        var _gaq = [["_setAccount", "UA-XXXXX-X"], ["_trackPageview"]];
+        (function (d, t) {
+            var g = d.createElement(t), s = d.getElementsByTagName(t)[0]; g.async = 1;
+            g.src = ("https:" == location.protocol ? "//ssl" : "//www") + ".google-analytics.com/ga.js";
+            s.parentNode.insertBefore(g, s)
+        }(document, "script"));
     </script>
 </body>
 

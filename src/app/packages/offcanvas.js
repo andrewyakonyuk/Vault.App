@@ -1,6 +1,6 @@
 /*global define */
 
-define(['jquery'], function ($) {
+define(['jquery', 'packages/transition'], function ($) {
     'use strict';
 
     +function ($) {
@@ -138,20 +138,34 @@ define(['jquery'], function ($) {
             var placement = this.placement,
                 opposite = this.opposite(placement);
 
-            elements.each(function () {
-                if ($(this).css(placement) !== 'auto') {
-                    $(this).css(placement, (parseInt($(this).css(placement), 10) || 0) + offset);
-                }
+            var setTransform = function( val, el ) {
+                el.style.WebkitTransform = val;
+                el.style.MozTransform = val;
+                el.style.transform = val;
+            }
 
-                if ($(this).css(opposite) !== 'auto') {
-                    $(this).css(opposite, (parseInt($(this).css(opposite), 10) || 0) - offset);
-                }
-            });
+            //elements.each(function (item, i) {
+            //    if (i === 0)
+            //        return;
+            //    //if ($(this).css(placement) !== 'auto') {
+            //    //    $(this).css(placement, (parseInt($(this).css(placement), 10) || 0) + offset);
+            //    //}
+
+            //    setTransform('translate3d(220px, 0, 0)', this);
+
+            //    //if ($(this).css(opposite) !== 'auto') {
+            //    //    $(this).css(opposite, (parseInt($(this).css(opposite), 10) || 0) - offset);
+            //    //}
+            //});
+
 
             this.$element
                 .one($.support.transition.end, callback);
             if (!$.support.transition) {
                 this.$element.emulateTransitionEnd(5000);
+            }
+            else {
+                callback();
             }
         };
 
@@ -216,11 +230,11 @@ define(['jquery'], function ($) {
                     this.$element.trigger('shown.bs.offcanvas');
                 };
 
-            if (elements.index(this.$element) !== -1) {
-                $(this.$element).data('offcanvas-style', $(this.$element).attr('style') || '');
-                this.$element.css(placement, -1 * offset);
-                this.$element.css(placement); // Workaround: Need to get the CSS property for it to be applied before the next line of code
-            }
+            //if (elements.index(this.$element) !== -1) {
+            //    $(this.$element).data('offcanvas-style', $(this.$element).attr('style') || '');
+            //    this.$element.css(placement, -1 * offset);
+            //    this.$element.css(placement); // Workaround: Need to get the CSS property for it to be applied before the next line of code
+            //}
 
             elements.addClass('canvas-sliding').each(function () {
                 if ($(this).data('offcanvas-style') === undefined) {
@@ -228,10 +242,6 @@ define(['jquery'], function ($) {
                 }
                 if ($(this).css('position') === 'static') {
                     $(this).css('position', 'relative');
-                }
-                if (($(this).css(placement) === 'auto' || $(this).css(placement) === '0px') &&
-                    ($(this).css(opposite) === 'auto' || $(this).css(opposite) === '0px')) {
-                    $(this).css(placement, 0);
                 }
             });
 
@@ -349,9 +359,13 @@ define(['jquery'], function ($) {
             this.$element.removeClass('in');
 
             elements.removeClass('canvas-slid');
+            $('.navbar-offcanvas').removeClass('canvas-slid');
+            $('.offcanvas-cover', document.body).remove();
             elements.add(this.$element).add('body').each(function () {
                 $(this).attr('style', $(this).data('offcanvas-style')).removeData('offcanvas-style');
             });
+
+            this.hide();
         };
 
         OffCanvas.prototype.autohide = function (e) {

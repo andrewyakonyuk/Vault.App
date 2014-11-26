@@ -17,7 +17,8 @@
         replace = require('gulp-replace'),
         uglify = require('gulp-uglify'),
         htmlreplace = require('gulp-html-replace'),
-        minifyCSS = require('gulp-minify-css');
+        minifyCSS = require('gulp-minify-css'),
+        concatCss = require('gulp-concat-css');
 
     // Config
     var requireJsRuntimeConfig = vm.runInNewContext(fs.readFileSync('src/app/require.config.js') + '; require;'),
@@ -59,19 +60,14 @@
 
     // Concatenates CSS files, rewrites relative paths to Bootstrap fonts, copies Bootstrap fonts
     gulp.task('css', function () {
-        var combinedCss = es.concat(
-                gulp.src('src/bower_modules/components-bootstrap/css/bootstrap.css')
-                .pipe(replace(/url\((')?\.\.\/fonts\//g, 'url($1fonts/')),
-                gulp.src('src/bower_modules/bootstrap-material-design/dist/css/material.css'),
-                gulp.src('src/bower_modules/bootstrap-material-design/dist/css/material-wfont.cs'),
-                gulp.src('src/css/offcanvas.css'),
-                gulp.src('src/css/side-comments.css'),
-                gulp.src('src/css/pace.css'),
-                gulp.src('src/css/kudos.css'),
-                gulp.src('src/css/waves.css'),
-                gulp.src('src/css/styles.css')
-                .pipe(replace(/url\((')?\.\.\/img\//g, 'url($1img/'))
-            )
+        var bootstrap = gulp.src('src/bower_modules/components-bootstrap/css/bootstrap.css')
+                .pipe(replace(/url\((')?\.\.\/fonts\//g, 'url($1fonts/'));
+
+        var styles = gulp.src('src/css/styles.css')
+                .pipe(concatCss('styles.css'))
+                .pipe(replace(/url\((')?\.\.\/img\//g, 'url($1img/'));
+
+        var combinedCss = es.concat(bootstrap, styles)
             .pipe(concat('styles.css')),
             fontFiles = gulp.src('./src/bower_modules/components-bootstrap/fonts/*', {
                 base: './src/bower_modules/components-bootstrap/'
@@ -94,8 +90,8 @@
     // Removes all files from ./dist/
     gulp.task('clean', function () {
         return gulp.src('./dist/**/*', {
-                read: false
-            })
+            read: false
+        })
             .pipe(clean());
     });
 
