@@ -350,6 +350,10 @@ define(['jquery', 'packages/transition'], function ($) {
         };
 
         OffCanvas.prototype.recalc = function () {
+
+            var isMobile = window.matchMedia("only screen and (max-width: 768px)");
+            if (isMobile && isMobile.matches) return;
+
             if (this.$calcClone.css('display') === 'none' || (this.state !== 'slid' && this.state !== 'slide-in')) return;
 
             this.state = null;
