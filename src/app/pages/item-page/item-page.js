@@ -4,11 +4,9 @@
 define(["knockout",
         'jquery',
         "underscore",
-        "pace",
-        "hammer",
         "text!./item-page.html",
         'packages/side-comments/side-comments',
-       'packages/kudos'], function (ko, $, _, Pace, Hammer, templateMarkup, sc) {
+       'packages/kudos'], function (ko, $, _, templateMarkup, sc) {
     'use strict';
 
     function FlowItemViewModel(route) {
@@ -19,13 +17,6 @@ define(["knockout",
                 name: "You"
             },
             initializedComments = 0;
-
-        Pace.restart();
-
-        this.Hammer = new Hammer(document.getElementById('flowItemContainer'));
-        this.Hammer.on("swipe", function () {
-            history.go(-1);
-        })
 
         this.title = ko.observable("Item");
 

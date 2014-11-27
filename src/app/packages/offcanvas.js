@@ -1,6 +1,6 @@
 /*global define */
 
-define(['jquery', 'packages/transition'], function ($) {
+define(['jquery', 'hammer', 'packages/transition'], function ($, Hammer) {
     'use strict';
 
     +function ($) {
@@ -420,6 +420,23 @@ define(['jquery', 'packages/transition'], function ($) {
             if (data) data.toggle();
             else $canvas.offcanvas(option);
         })
+
+        var hammer = new Hammer(document.getElementById('page') || document.getElementsByTagName('body')[0]);
+        hammer.on("swiperight", function () {
+            $('[data-toggle=offcanvas]').each(function () {
+                var $this = $(this),
+                    href;
+                if ($this.attr('data-swipe')) {
+                    var target = $this.attr('data-target') || e.preventDefault() || (href = $this.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, ''); //strip for ie7
+                    var $canvas = $(target);
+                    var data = $canvas.data('bs.offcanvas');
+                    var option = data ? 'toggle' : $this.data();
+
+                    if (data) data.toggle();
+                    else $canvas.offcanvas(option);
+                }
+            });
+        });
 
     }($);
 });
