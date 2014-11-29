@@ -1,0 +1,38 @@
+.pace {
+    -webkit-pointer-events: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    pointer-events: none;
+
+    .pace-progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1050;
+        height: 3px;
+        background: #e91e63;
+    }
+
+    .pace-progress-inner {
+        position: absolute;
+        right: 0px;
+        display: block;
+        width: 100px;
+        height: 100%;
+        -moz-box-shadow: 0 0 10px #fcfffc, 0 0 5px #fcfffc;
+        -webkit-box-shadow: 0 0 10px #fcfffc, 0 0 5px #fcfffc;
+        box-shadow: 0 0 10px #fcfffc, 0 0 5px #fcfffc;
+        opacity: 1.0;
+        -moz-transform: rotate(3deg) translate(0px, -4px);
+        -ms-transform: rotate(3deg) translate(0px, -4px);
+        -o-transform: rotate(3deg) translate(0px, -4px);
+        -webkit-transform: rotate(3deg) translate(0px, -4px);
+        transform: rotate(3deg) translate(0px, -4px);
+    }
+}
+
+.pace-inactive {
+    display: none;
+}

@@ -1,10 +1,11 @@
-@import "../bower_modules/bootstrap-material-design/dist/css/material.css";
-@import "../bower_modules/bootstrap-material-design/dist/css/material-wfont.css";
-@import "offcanvas.css";
-@import "side-comments.css";
-@import "pace.css";
-@import "kudos.css";
-@import "waves.css";
+﻿@import "bootstrap.less";
+@import "material.less";
+@import "../bower_modules/font-awesome/less/font-awesome.less";
+@import "offcanvas.less";
+@import "side-comments.less";
+@import "pace.less";
+@import "kudos.less";
+@import "waves.less";
 
 body {
     background: #fff;
@@ -14,14 +15,13 @@ textarea {
     background-color: transparent;
 }
 
-
 /* Overrides */
 @media (max-width: 768px) {
     .navbar-header {
         float: left;
-        text-align: center;
-        width: 100%;
         padding: 8px 0;
+        width: 100%;
+        text-align: center;
     }
 
     .navbar .navbar-brand {
@@ -46,8 +46,8 @@ textarea {
 }
 
 .navbar {
-    margin-bottom: 0px;
     display: block;
+    margin-bottom: 0px;
     background: #fff;
 }
 
@@ -64,9 +64,9 @@ textarea {
     }
 
     .navbar .navbar-brand {
-        font-family: "freight-sans-pro", sans-serif;
         text-transform: uppercase;
         font-weight: 800;
+        font-family: "freight-sans-pro", sans-serif;
     }
 
 .form-control::-moz-placeholder {
@@ -87,8 +87,8 @@ textarea {
 }
 
 .navbar-form {
-    margin-left: 0px;
     margin-right: 0px;
+    margin-left: 0px;
 }
 
 .navbar .navbar-form .form-control-wrapper .form-control,
@@ -98,10 +98,10 @@ textarea {
 }
 
 .navbar-toggle {
-    margin-right: 0px;
-    color: #222;
     margin-top: 0;
+    margin-right: 0px;
     margin-bottom: 0;
+    color: #222;
 }
 
 .navbar-collapse {
@@ -146,16 +146,16 @@ textarea {
 
 .alert-fixed-top {
     position: fixed;
+    top: 50px;
     right: 0;
     left: 0;
     z-index: 1030;
-    -webkit-transform: translate3d(0, 0, 0);
-    -o-transform: translate3d(0, 0, 0);
+    border-width: 0 0 1px;
     -moz-transform: translate3d(0, 0, 0);
     -ms-transform: translate3d(0, 0, 0);
+    -o-transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
-    top: 50px;
-    border-width: 0 0 1px;
 }
 
 .btn-primary {
@@ -166,8 +166,6 @@ textarea {
     .btn-primary:focus {
         color: #000 !important;
     }
-
-/* /Overrides */
 
 @media (max-width: 768px) {
     .navmenu,
@@ -190,12 +188,12 @@ textarea {
 }
 
 .offcanvas-cover {
-    width: 100%;
-    height: 100%;
     position: fixed;
     top: 0;
-    z-index: 100500;
     left: 220px;
+    z-index: 100500;
+    width: 100%;
+    height: 100%;
 }
 
 
@@ -228,6 +226,32 @@ textarea {
 }
 
 .media-heading a {
-    text-decoration: none;
     color: #333;
+    text-decoration: none;
+}
+
+@media (max-width: 768px) {
+
+    .media-list .media-wrapper {
+        padding-right: 0;
+        padding-left: 0;
+    }
+
+    .media-list .media-item {
+        border-width: 0;
+        border-bottom-width: 1px;
+    }
+}
+
+.media-item a {
+    color: #333;
+}
+
+    .media-item a:hover,
+    .media-item a:focus {
+        text-decoration: none;
+    }
+
+.media-item h3 {
+    margin-top: 10px;
 }

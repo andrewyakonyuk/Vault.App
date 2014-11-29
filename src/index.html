@@ -36,8 +36,7 @@
     <script>(function (a, b, c) { if (c in b && b[c]) { var d, e = a.location, f = /^(a|html)$/i; a.addEventListener("click", function (a) { d = a.target; while (!f.test(d.nodeName)) d = d.parentNode; "href" in d && (d.href.indexOf("http") || ~d.href.indexOf(e.host)) && (a.preventDefault(), e.href = d.href) }, !1) } })(document, window.navigator, "standalone")</script>
 
     <!-- build:css -->
-    <link href="bower_modules/components-bootstrap/css/bootstrap.css" rel="stylesheet">
-    <link href="css/styles.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
     <!-- endbuild -->
 
     <!-- build:js -->
@@ -46,20 +45,20 @@
     <!-- endbuild -->
 </head>
 
-<body class='use-fastclick'>
+<body>
     <nav-bar params="route: route"></nav-bar>
     <div class="canvas">
         <div id="page" data-bind="controller: { name: route().page, params: route, afterRender: afterRender }, pageTitle: route().page || ''"></div>
     </div>
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-    <script>
+   <!-- <script>
         var _gaq = [["_setAccount", "UA-XXXXX-X"], ["_trackPageview"]];
         (function (d, t) {
             var g = d.createElement(t), s = d.getElementsByTagName(t)[0]; g.async = 1;
             g.src = ("https:" == location.protocol ? "//ssl" : "//www") + ".google-analytics.com/ga.js";
             s.parentNode.insertBefore(g, s)
         }(document, "script"));
-    </script>
+    </script>-->
 </body>
 
 </html>
