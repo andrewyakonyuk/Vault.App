@@ -13,6 +13,7 @@ var require = {
         "underscore": "bower_modules/underscore/underscore",
         "pace": "bower_modules/pace/pace",
         "hammer": "bower_modules/hammerjs/hammer",
+        "indexedDbShim": "bower_modules/indexedDBShim/dist/indexedDbShim",
         
         "bindings": "./app/bindings/",
         "packages": "./app/packages/",
