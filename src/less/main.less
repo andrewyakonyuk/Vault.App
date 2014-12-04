@@ -1,11 +1,12 @@
-﻿@import "bootstrap.less";
+@import "bootstrap.less";
 @import "material.less";
 @import "../bower_modules/font-awesome/less/font-awesome.less";
-@import "offcanvas.less";
+@import "mpmenu.less";
 @import "side-comments.less";
 @import "pace.less";
 @import "kudos.less";
 @import "waves.less";
+@import url(http://fonts.googleapis.com/css?family=Roboto&subset=cyrillic,latin);
 
 body {
     background: #fff;
@@ -41,34 +42,6 @@ textarea {
     margin-left: 0;
 }
 
-.navbar-header {
-    background: #fff;
-}
-
-.navbar {
-    display: block;
-    margin-bottom: 0px;
-    background: #fff;
-}
-
-    .navbar .navbar-brand,
-    .navbar .navbar-brand:focus,
-    .navbar .navbar-brand:hover,
-    .navbar .navbar-nav > .active > a,
-    .navbar .navbar-nav > .active > a:hover,
-    .navbar .navbar-nav > .active > a:focus,
-    .navbar .navbar-nav > li > a:hover,
-    .navbar .navbar-nav > li > a:focus,
-    .navbar .navbar-nav > li > a {
-        color: #222;
-    }
-
-    .navbar .navbar-brand {
-        text-transform: uppercase;
-        font-weight: 800;
-        font-family: "freight-sans-pro", sans-serif;
-    }
-
 .form-control::-moz-placeholder {
     color: #222;
     opacity: 1;
@@ -82,82 +55,6 @@ textarea {
     color: #222;
 }
 
-.navbar .navbar-toggle .icon-bar {
-    background-color: #222;
-}
-
-.navbar-form {
-    margin-right: 0px;
-    margin-left: 0px;
-}
-
-.navbar .navbar-form .form-control-wrapper .form-control,
-.navbar .navbar-form .form-control {
-    border-color: #222;
-    color: #222;
-}
-
-.navbar-toggle {
-    margin-top: 0;
-    margin-right: 0px;
-    margin-bottom: 0;
-    color: #222;
-}
-
-.navbar-collapse {
-    margin-right: 15px;
-}
-
-.navbar-toggle-search {
-    padding-top: 6px;
-    padding-bottom: 6px;
-}
-
-.container {
-    margin-top: 70px;
-    margin-bottom: 30px;
-    padding: 0 10px;
-}
-
-@media (min-width: 992px) {
-    .container {
-        margin-top: 80px;
-    }
-}
-
-.navbar .container {
-    margin-top: 0;
-    margin-bottom: 0;
-    padding: 0 10px;
-}
-
-.navbar .alert {
-    margin-bottom: 0px;
-}
-
-.alert {
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
-.alert-dismissible .close {
-    color: #000;
-}
-
-.alert-fixed-top {
-    position: fixed;
-    top: 50px;
-    right: 0;
-    left: 0;
-    z-index: 1030;
-    border-width: 0 0 1px;
-    -moz-transform: translate3d(0, 0, 0);
-    -ms-transform: translate3d(0, 0, 0);
-    -o-transform: translate3d(0, 0, 0);
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-}
-
 .btn-primary {
     color: #fff !important;
 }
@@ -166,41 +63,6 @@ textarea {
     .btn-primary:focus {
         color: #000 !important;
     }
-
-@media (max-width: 768px) {
-    .navmenu,
-    .navbar-offcanvas {
-        width: 220px;
-    }
-}
-
-.offcanvas.in .navbar-nav > li > a,
-.offcanvas.in .navbar-nav > .active > a,
-.offcanvas.in .navbar-nav > .active > a:hover,
-.offcanvas.in .navbar-nav > .active > a:focus {
-    color: #fff;
-}
-
-.offcanvas.in .navbar-form .form-control-wrapper .form-control,
-.offcanvas.in .navbar-form .form-control {
-    border-color: #fff;
-    color: #fff;
-}
-
-.offcanvas-cover {
-    position: fixed;
-    top: 0;
-    left: 220px;
-    z-index: 100500;
-    width: 100%;
-    height: 100%;
-}
-
-
-.navmenu-inverse,
-.navbar-inverse .navbar-offcanvas {
-    opacity: 0.9;
-}
 
 .side-comment .marker:hover,
 .side-comment.active .marker {
@@ -254,4 +116,9 @@ textarea {
 
 .media-item h3 {
     margin-top: 10px;
+}
+
+.ui{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
 }

@@ -54,9 +54,9 @@
     // Discovers all AMD dependencies, concatenates together all required .js files, minifies them
     gulp.task('js', function () {
         return rjs(requireJsOptimizerConfig)
-            .pipe(uglify({
+            /*.pipe(uglify({
                 preserveComments: 'some'
-            }))
+            }))*/
             .pipe(gulp.dest('./dist/'));
     });
 
@@ -64,8 +64,8 @@
     gulp.task('css', function () {
         var styles = gulp.src('src/css/main.css')
                 .pipe(replace(/url\((')?\.\.\/img\//g, 'url($1img/'))
-                .pipe(replace(/url\((')?\.\.\/fonts\//g, 'url($1fonts/'))
-                .pipe(minifyCSS({}))
+                .pipe(replace(/url\((')?\.\.\/bower_modules\/font-awesome\/fonts/g, 'url($1fonts/'))
+               // .pipe(minifyCSS({}))
                 .pipe(concat('styles.css'))
                 .pipe(gulp.dest('./dist/'));
     });
@@ -98,6 +98,7 @@
           .pipe(less({
               paths: [path.join(__dirname, 'less', 'includes')]
           }))
+          .pipe(replace(/url\((')?\.\.\/fonts\//g, 'url($1../bower_modules/font-awesome/fonts/'))
           .pipe(gulp.dest('./src/css'));
 
     });

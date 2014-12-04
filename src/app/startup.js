@@ -8,9 +8,6 @@ define(function (require, exports, module) {
         restartOnPushState: true
     });
 
-    var storage = require('packages/storage');
-    storage.open();
-
     var scaleFix = require('utils/scaleFix'),
         hideUrlBarOnLoad = require('utils/hideUrlBar'),
         enableActive = require('utils/enableActive');
