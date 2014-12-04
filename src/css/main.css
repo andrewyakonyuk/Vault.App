@@ -8283,7 +8283,7 @@ fieldset[disabled] .navbar .btn-link:focus {
 }
 .mp-menu .mp-menu-header {
   margin: 0;
-  border-bottom: 2px solid #1d212e;
+  border-bottom: 1px solid #1d212e;
 }
 .mp-menu .mp-menu-header,
 .mp-menu .mp-menu-header a {
@@ -8292,8 +8292,17 @@ fieldset[disabled] .navbar .btn-link:focus {
 .mp-menu .mp-menu-header a {
   padding-left: 18px;
 }
+.mp-menu .mp-menu-header .dropdown-title {
+  width: 195px;
+  float: left;
+}
+.mp-menu .mp-menu-header .dropdown-toggle {
+  float: right;
+  width: 40px;
+  padding: 12px 12px;
+}
 .mp-menu .open .dropdown-menu {
-  position: inherit;
+  position: relative;
   float: none;
   width: auto;
   margin-top: 0;

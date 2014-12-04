@@ -5,8 +5,8 @@
                 <img class="img-circle" src="img/user.png" />
             </div>
             <h4 class="mp-menu-header">
-        <a href="#"><i class="fa fa-home"></i> <span data-bind="i18n: 'PageTitle_Home'"></span></a>
-    </h4>
+                <a href="#"><i class="fa fa-home"></i> <span data-bind="i18n: 'PageTitle_Home'"></span></a>
+            </h4>
             <!-- ko if: !app.authorized() -->
             <ul>
                 <li data-bind="css: { active: route().page === 'signin-page' }">
@@ -26,41 +26,68 @@
                     <a href="#settings"><span data-bind="i18n: 'PageTitle_Settings'"></span></a>
                 </li>
             </ul>
-            <div class="dropdown" id="collections">
-                <h4 class="mp-menu-header">
-            <a href="#collections" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-folder"></i> <span data-bind="i18n: 'PageTitle_Collections'"></span></a>
-        </h4>
+
+            <div class="dropdown" id="collections-dropdown">
+                <h4 class="mp-menu-header clearfix">
+                    <a href="#collections" class="dropdown-title">
+                        <i class="fa fa-folder"></i>
+                        <span data-bind="i18n: 'PageTitle_Collections'"></span>
+                    </a>
+                    <a href="#collections-dropdown" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </a>
+                </h4>
                 <ul class="dropdown-menu" role="menu">
-                    <li><a href="#collections/action">Action</a>
+                    <li>
+                        <a href="#collections/action">Action</a>
                     </li>
-                    <li><a href="#collections/anotheraction">Another action</a>
+                    <li>
+                        <a href="#collections/anotheraction">Another action</a>
                     </li>
-                    <li><a href="#collections/somethingelsehere">Something else here</a>
+                    <li>
+                        <a href="#collections/somethingelsehere">Something else here</a>
                     </li>
-                    <li><a href="#collections/separatedlink">Separated link</a>
+                    <li>
+                        <a href="#collections/separatedlink">Separated link</a>
                     </li>
-                    <li><a href="#">One more separated link</a>
+                    <li>
+                        <a href="#">One more separated link</a>
                     </li>
-                    <li><a href="#">One more separated link</a>
+                    <li>
+                        <a href="#">One more separated link</a>
                     </li>
-                    <li><a href="#">One more separated link</a>
+                    <li>
+                        <a href="#">One more separated link</a>
                     </li>
                 </ul>
             </div>
-            <div class="dropdown" id="labels">
-                <h4 class="mp-menu-header">
-            <a href="#labels" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-tags"></i> <span data-bind="i18n: 'PageTitle_Labels'"></span></a>
-        </h4>
+            <div class="dropdown" id="labels-dropdown">
+                <h4 class="mp-menu-header clearfix">
+                    <a href="#labels" class="dropdown-title">
+                        <i class="fa fa-tags"></i>
+                        <span data-bind="i18n: 'PageTitle_Labels'"></span>
+                    </a>
+                    <a href="#labels-dropdown" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <span class="caret"></span>
+                        <span class="sr-only" data-bind="i18n: 'PageTitle_Labels'"></span>
+                    </a>
+                </h4>
                 <ul class="dropdown-menu" role="menu">
-                    <li><a href="#">Action</a>
+                    <li>
+                        <a href="#">Action</a>
                     </li>
-                    <li><a href="#">Another action</a>
+                    <li>
+                        <a href="#">Another action</a>
                     </li>
-                    <li><a href="#">Something else here</a>
+                    <li>
+                        <a href="#">Something else here</a>
                     </li>
-                    <li><a href="#">Separated link</a>
+                    <li>
+                        <a href="#">Separated link</a>
                     </li>
-                    <li><a href="#">One more separated link</a>
+                    <li>
+                        <a href="#">One more separated link</a>
                     </li>
                 </ul>
             </div>

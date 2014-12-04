@@ -19,12 +19,14 @@
     -webkit-overflow-scrolling: touch;
     /* enables momentum scrolling in iOS overflow elements */
 }
+
 .mp-menu,
 .mp-menu-wrapper,
 .mp-menu-content {
     width: 235px;
     height: 100%;
 }
+
 .mp-menu-wrapper {
     position: absolute;
     left: 0;
@@ -32,37 +34,56 @@
     overflow-x: hidden;
     overflow-y: scroll;
 }
+
 .mp-menu-wrapper::-webkit-scrollbar {
     display: none;
 }
+
 .mp-menu ul {
     margin: 0;
     padding: 0;
 }
+
 .mp-menu a {
     padding: 14px 40px;
     display: block;
     color: #b3b3b1;
     text-decoration: none;
 }
+
 .mp-menu a:hover,
 .mp-menu .active {
     background: #1d212e;
     color: #FFF;
 }
+
 .mp-menu .mp-menu-header {
     margin: 0;
-    border-bottom: 2px solid #1d212e;
+    border-bottom: 1px solid #1d212e;
 }
+
 .mp-menu .mp-menu-header,
 .mp-menu .mp-menu-header a {
     color: #565d64;
 }
+
 .mp-menu .mp-menu-header a {
     padding-left: 18px;
 }
+
+.mp-menu .mp-menu-header .dropdown-title {
+    width: 195px;
+    float: left;
+}
+
+.mp-menu .mp-menu-header .dropdown-toggle {
+    float: right;
+    width: 40px;
+    padding: 12px 12px;
+}
+
 .mp-menu .open .dropdown-menu {
-    position: inherit;
+    position: relative;
     float: none;
     width: auto;
     margin-top: 0;
@@ -72,16 +93,19 @@
     -moz-box-shadow: none;
     box-shadow: none;
 }
+
 .mp-menu .open .dropdown-menu > li > a,
 .mp-menu .open .dropdown-menu .dropdown-header {
     padding: 5px 15px 5px 25px;
     color: #b3b3b1;
 }
+
 .mp-menu .open .dropdown-menu > li > a {
     padding: 14px 40px;
     display: block;
     text-decoration: none;
 }
+
 .mp-menu .open .dropdown-menu > li > a:hover {
     background-image: none;
     background: #1d212e;
@@ -96,6 +120,7 @@
     -o-transform: translate3d(-235px, 0, 0);
     transform: translate3d(-235px, 0, 0);
 }
+
 .mp-menu-open {
     -webkit-transform: translate3d(0, 0, 0);
     -moz-transform: translate3d(0, 0, 0);
@@ -103,6 +128,7 @@
     -o-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
 }
+
 .mp-container-push,
 .push-push {
     -webkit-transform: translate3d(235px, 0, 0);
@@ -111,6 +137,7 @@
     -o-transform: translate3d(235px, 0, 0);
     transform: translate3d(235px, 0, 0);
 }
+
 .mp-menu-btn {
     position: relative;
     float: right;
@@ -125,9 +152,11 @@
     -webkit-border-radius: 4px;
     border-radius: 4px;
 }
+
 .mp-menu-btn:focus {
     outline: 0;
 }
+
 .mp-menu-btn .icon-bar {
     display: block;
     width: 22px;
@@ -136,21 +165,26 @@
     -webkit-border-radius: 1px;
     border-radius: 1px;
 }
+
 .mp-menu-btn .icon-bar + .icon-bar {
     margin-top: 4px;
 }
+
 .mp-menu-user {
     padding: 20px 47px;
 }
+
 .mp-menu-user img {
     width: 140px;
     height: 140px;
 }
+
 @media (min-width: 768px) {
     .mp-menu-btn {
         display: none;
     }
 }
+
 .mp-menu-btn .icon-bar {
     background-color: #333;
 }
@@ -169,6 +203,7 @@
 .mp-site-overlay {
     display: none;
 }
+
 .mp-menu-active .mp-site-overlay {
     display: block;
     position: fixed;
@@ -183,54 +218,67 @@
     -o-animation: fade 500ms;
     animation: fade 500ms;
 }
+
 @-ms-keyframes fade {
     0% {
         opacity: 0;
     }
+
     100% {
         opacity: 1;
     }
 }
+
 @keyframes fade {
     0% {
         opacity: 0;
     }
+
     100% {
         opacity: 1;
     }
 }
+
 @-moz-keyframes fade {
     0% {
         opacity: 0;
     }
+
     100% {
         opacity: 1;
     }
 }
+
 @-webkit-keyframes fade {
     0% {
         opacity: 0;
     }
+
     100% {
         opacity: 1;
     }
 }
+
 @-o-keyframes fade {
     0% {
         opacity: 0;
     }
+
     100% {
         opacity: 1;
     }
 }
+
 @media screen and (max-width: 768px) {
     .mp-menu {
         font-size: 1.0em;
     }
+
     .mp-menu a {
         padding: 12px 40px;
     }
 }
+
 @media (min-width: 768px) {
     .mp-menu-media .mp-menu-left,
     .mp-menu-media .push-push {
@@ -240,9 +288,11 @@
         -o-transform: translate3d(0, 0, 0);
         transform: translate3d(0, 0, 0);
     }
+
     .mp-menu-media .mp-site-overlay {
         display: none;
     }
+
     .mp-container > .container,
     .mp-container > .container-fluid {
         margin-left: 265px;
