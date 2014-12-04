@@ -63,6 +63,9 @@ define(function (require, exports, module) {
     ko.components.register('search-page', {
         require: 'pages/search-page/search-page'
     });
+    ko.components.register('notfound-page', {
+        require: 'pages/notfound-page/notfound'
+    });
 
     // ... or for template-only components, you can just point to a .html file directly:
     ko.components.register('about-page', {

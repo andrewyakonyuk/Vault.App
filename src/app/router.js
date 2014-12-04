@@ -35,6 +35,10 @@ define(["knockout", "crossroads", "hasher"], function (ko, crossroads, hasher) {
         });
 
         activateCrossroads();
+
+        crossroads.bypassed.add(function (request) {
+            currentRoute(request);
+        });
     }
 
     return new Router({

@@ -36,7 +36,8 @@ define(["knockout"], function (ko) {
                 }
 
                 if (!componentName) {
-                    throw new Error('No component name specified');
+                    // throw new Error('No component name specified');
+                    componentName = 'notfound-page';
                 }
 
                 var loadingOperationId = currentLoadingOperationId = ++componentLoadingOperationUniqueId;
