@@ -40,7 +40,8 @@
                 'pages/list-page/list-page',
                 'pages/item-page/item-page',
                 'pages/register-page/register-page',
-                'pages/search-page/search-page'
+                'pages/search-page/search-page',
+                'pages/notfound-page/notfound'
             ],
             insertRequire: ['app/startup'],
             bundles: {
