@@ -17,29 +17,11 @@ textarea {
 }
 
 /* Overrides */
-@media (max-width: 768px) {
-    .navbar-header {
-        float: left;
-        padding: 8px 0;
-        width: 100%;
-        text-align: center;
-    }
-
-    .navbar .navbar-brand {
-        float: none;
-        line-height: 35px;
-    }
-}
 
 @media (min-width: 768px) {
     .container {
         width: 768px;
     }
-}
-
-.container > .navbar-header, .container-fluid > .navbar-header, .container > .navbar-collapse, .container-fluid > .navbar-collapse {
-    margin-right: 0;
-    margin-left: 0;
 }
 
 .form-control::-moz-placeholder {
@@ -118,7 +100,21 @@ textarea {
     margin-top: 10px;
 }
 
-.ui{
+.ui {
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
+}
+
+.pg-container {
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    max-width: 768px;
+}
+
+@media (min-width: 992px) {
+    .pg-container {
+        max-width: 992px;
+    }
 }

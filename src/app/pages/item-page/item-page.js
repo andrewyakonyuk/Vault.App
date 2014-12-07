@@ -144,7 +144,7 @@ define(["knockout",
         });
     }
 
-    FlowItemViewModel.prototype.initUI = function () {
+    FlowItemViewModel.prototype.afterRender = function () {
         console.log('init ui');
         $(window).scroll(function () {
             if ($(window).scrollTop() === $(document).height() - $(window).height()) {

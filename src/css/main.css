@@ -8397,10 +8397,10 @@ fieldset[disabled] .navbar .btn-link:focus {
 .mp-menu,
 .mp-container,
 .push {
-  -webkit-transition: -webkit-transform 0.2s cubic-bezier(0.16, 0.68, 0.43, 0.99);
-  -moz-transition: -moz-transform 0.2s cubic-bezier(0.16, 0.68, 0.43, 0.99);
-  -o-transition: -o-transform 0.2s cubic-bezier(0.16, 0.68, 0.43, 0.99);
-  transition: transform 0.2s cubic-bezier(0.16, 0.68, 0.43, 0.99);
+  -moz-transition: -moz-transform 0.25s ease-out;
+  -o-transition: -o-transform 0.25s ease-out;
+  -webkit-transition: -webkit-transform 0.25s ease-out;
+  transition: transform 0.25s ease-out;
 }
 /* Site Overlay */
 .mp-site-overlay {
@@ -9194,29 +9194,10 @@ textarea {
   background-color: transparent;
 }
 /* Overrides */
-@media (max-width: 768px) {
-  .navbar-header {
-    float: left;
-    padding: 8px 0;
-    width: 100%;
-    text-align: center;
-  }
-  .navbar .navbar-brand {
-    float: none;
-    line-height: 35px;
-  }
-}
 @media (min-width: 768px) {
   .container {
     width: 768px;
   }
-}
-.container > .navbar-header,
-.container-fluid > .navbar-header,
-.container > .navbar-collapse,
-.container-fluid > .navbar-collapse {
-  margin-right: 0;
-  margin-left: 0;
 }
 .form-control::-moz-placeholder {
   color: #222;
@@ -9280,4 +9261,16 @@ textarea {
 .ui {
   font-family: 'Roboto', sans-serif;
   font-weight: 500;
+}
+.pg-container {
+  margin-right: auto;
+  margin-left: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+  max-width: 768px;
+}
+@media (min-width: 992px) {
+  .pg-container {
+    max-width: 992px;
+  }
 }
