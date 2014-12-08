@@ -8231,10 +8231,44 @@ fieldset[disabled] .navbar .btn-link:focus {
 .fa-meanpath:before {
   content: "\f20c";
 }
+/* == Colors */
+/* == Width */
 /*! Pushy - v0.9.2 - 2014-9-13
 * Pushy is a responsive off-canvas navigation menu using CSS transforms & transitions.
 * https://github.com/christophery/pushy/
 * by Christopher Yee */
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-moz-keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-o-keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 /* Menu Appearance */
 .mp-menu {
   position: fixed;
@@ -8243,28 +8277,10 @@ fieldset[disabled] .navbar .btn-link:focus {
   background-color: #252a3a;
   font-size: 0.9em;
   font-weight: bold;
-  -webkit-box-shadow: inset -10px 0 6px -9px rgba(0, 0, 0, 0.7);
-  -moz-box-shadow: inset -10px 0 6px -9px rgba(0, 0, 0, 0.7);
   box-shadow: inset -10px 0 6px -9px rgba(0, 0, 0, 0.7);
   overflow: hidden;
   -webkit-overflow-scrolling: touch;
   /* enables momentum scrolling in iOS overflow elements */
-}
-.mp-menu,
-.mp-menu-wrapper,
-.mp-menu-content {
-  width: 235px;
-  height: 100%;
-}
-.mp-menu-wrapper {
-  position: absolute;
-  left: 0;
-  width: 255px;
-  overflow-x: hidden;
-  overflow-y: scroll;
-}
-.mp-menu-wrapper::-webkit-scrollbar {
-  display: none;
 }
 .mp-menu ul {
   margin: 0;
@@ -8308,8 +8324,6 @@ fieldset[disabled] .navbar .btn-link:focus {
   margin-top: 0;
   background-color: transparent;
   border: 0;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
   box-shadow: none;
 }
 .mp-menu .open .dropdown-menu > li > a,
@@ -8327,6 +8341,30 @@ fieldset[disabled] .navbar .btn-link:focus {
   background: #1d212e;
   color: #FFF;
 }
+@media screen and (max-width: 991px) {
+  .mp-menu {
+    font-size: 1.0em;
+  }
+  .mp-menu a {
+    padding: 12px 40px;
+  }
+}
+.mp-menu,
+.mp-menu-wrapper,
+.mp-menu-content {
+  width: 235px;
+  height: 100%;
+}
+.mp-menu-wrapper {
+  position: absolute;
+  left: 0;
+  width: 255px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+.mp-menu-wrapper::-webkit-scrollbar {
+  display: none;
+}
 /* Menu Movement */
 .mp-menu-left {
   -webkit-transform: translate3d(-235px, 0, 0);
@@ -8335,13 +8373,6 @@ fieldset[disabled] .navbar .btn-link:focus {
   -o-transform: translate3d(-235px, 0, 0);
   transform: translate3d(-235px, 0, 0);
 }
-.mp-menu-open {
-  -webkit-transform: translate3d(0, 0, 0);
-  -moz-transform: translate3d(0, 0, 0);
-  -ms-transform: translate3d(0, 0, 0);
-  -o-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0);
-}
 .mp-container-push,
 .push-push {
   -webkit-transform: translate3d(235px, 0, 0);
@@ -8349,6 +8380,13 @@ fieldset[disabled] .navbar .btn-link:focus {
   -ms-transform: translate3d(235px, 0, 0);
   -o-transform: translate3d(235px, 0, 0);
   transform: translate3d(235px, 0, 0);
+}
+.mp-menu-open {
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
 }
 .mp-menu-btn {
   position: relative;
@@ -8360,8 +8398,6 @@ fieldset[disabled] .navbar .btn-link:focus {
   background-color: transparent;
   background-image: none;
   border: 1px solid transparent;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
   border-radius: 4px;
 }
 .mp-menu-btn:focus {
@@ -8371,9 +8407,8 @@ fieldset[disabled] .navbar .btn-link:focus {
   display: block;
   width: 22px;
   height: 2px;
-  -moz-border-radius: 1px;
-  -webkit-border-radius: 1px;
   border-radius: 1px;
+  background-color: #252a3a;
 }
 .mp-menu-btn .icon-bar + .icon-bar {
   margin-top: 4px;
@@ -8389,9 +8424,6 @@ fieldset[disabled] .navbar .btn-link:focus {
   .mp-menu-btn {
     display: none;
   }
-}
-.mp-menu-btn .icon-bar {
-  background-color: #333;
 }
 /* Menu Transitions */
 .mp-menu,
@@ -8420,54 +8452,6 @@ fieldset[disabled] .navbar .btn-link:focus {
   -o-animation: fade 500ms;
   animation: fade 500ms;
 }
-@-ms-keyframes fade {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-@keyframes fade {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-@-moz-keyframes fade {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-@-webkit-keyframes fade {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-@-o-keyframes fade {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-@media screen and (max-width: 768px) {
-  .mp-menu {
-    font-size: 1.0em;
-  }
-  .mp-menu a {
-    padding: 12px 40px;
-  }
-}
 @media (min-width: 768px) {
   .mp-menu-media .mp-menu-left,
   .mp-menu-media .push-push {
@@ -8487,6 +8471,14 @@ fieldset[disabled] .navbar .btn-link:focus {
   }
 }
 @-webkit-keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-moz-keyframes fadein {
   from {
     opacity: 0;
   }
@@ -8541,6 +8533,7 @@ fieldset[disabled] .navbar .btn-link:focus {
 }
 .side-comment .add-comment {
   display: none;
+  letter-spacing: 0;
 }
 .side-comment.has-comments .add-comment,
 .side-comment.no-current-user .add-comment {
@@ -8665,11 +8658,11 @@ fieldset[disabled] .navbar .btn-link:focus {
 }
 .side-comment .marker:hover,
 .side-comment.active .marker {
-  background: #46b8da;
+  background: #252a3a;
 }
 .side-comment .marker:hover:after,
 .side-comment.active .marker:after {
-  border-color: #46b8da transparent;
+  border-color: #252a3a transparent;
 }
 .side-comment .comments-wrapper {
   top: -22px;
@@ -8739,7 +8732,7 @@ fieldset[disabled] .navbar .btn-link:focus {
 }
 .side-comment .action-link.cancel:hover,
 .side-comment .action-link.delete:hover {
-  color: #46b8da;
+  color: #252a3a;
 }
 .side-comment .comment-box {
   padding: 0;
@@ -8778,6 +8771,20 @@ fieldset[disabled] .navbar .btn-link:focus {
     display: block;
   }
 }
+/*.side-comment .marker:hover,
+.side-comment.active .marker {
+    background: #333;
+}
+
+    .side-comment .marker:hover:after,
+    .side-comment.active .marker:after {
+        border-color: #333 transparent;
+    }
+
+.side-comment .action-link:focus,
+.side-comment .action-link:hover {
+    color: #333 !important;
+}*/
 .pace {
   -webkit-pointer-events: none;
   -moz-user-select: none;
@@ -8796,7 +8803,7 @@ fieldset[disabled] .navbar .btn-link:focus {
 }
 .pace .pace-progress-inner {
   position: absolute;
-  right: 0px;
+  right: 0;
   display: block;
   width: 100px;
   height: 100%;
@@ -8804,19 +8811,47 @@ fieldset[disabled] .navbar .btn-link:focus {
   -webkit-box-shadow: 0 0 10px #fcfffc, 0 0 5px #fcfffc;
   box-shadow: 0 0 10px #fcfffc, 0 0 5px #fcfffc;
   opacity: 1.0;
-  -moz-transform: rotate(3deg) translate(0px, -4px);
-  -ms-transform: rotate(3deg) translate(0px, -4px);
-  -o-transform: rotate(3deg) translate(0px, -4px);
-  -webkit-transform: rotate(3deg) translate(0px, -4px);
-  transform: rotate(3deg) translate(0px, -4px);
+  -moz-transform: rotate(3deg) translate(0, -4px);
+  -ms-transform: rotate(3deg) translate(0, -4px);
+  -o-transform: rotate(3deg) translate(0, -4px);
+  -webkit-transform: rotate(3deg) translate(0, -4px);
+  transform: rotate(3deg) translate(0, -4px);
 }
 .pace-inactive {
   display: none;
 }
-p.count {
+.kudos p.count {
   display: block;
 }
-div.opening {
+.kudos a.count {
+  text-decoration: none;
+}
+.kudos a.count span {
+  display: block;
+  margin-top: 5px;
+  width: auto;
+  color: #000;
+  text-transform: uppercase;
+  font-weight: 800;
+  font-family: "freight-sans-pro", sans-serif;
+  line-height: 13px;
+}
+.kudos a.count span.num {
+  font-size: 18px;
+}
+.kudos a.count span.txt {
+  font-size: 11px;
+}
+.kudos a.count p span.dont-move {
+  margin-top: 8px;
+  margin-left: -50px;
+  width: 200px;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 18px;
+  line-height: 22px;
+}
+.kudos .opening {
   position: relative;
   margin: 0 auto;
   width: 30px;
@@ -8827,10 +8862,9 @@ div.opening {
   border-radius: 50%;
   background-color: #fff;
 }
-div.opening div.circle {
+.kudos .opening .circle {
   -moz-backface-visibility: visible;
   transition-style: preserve-3d;
-  transform-style: preserve-3d;
   -webkit-backface-visibility: visible;
   backface-visibility: visible;
   position: absolute;
@@ -8844,27 +8878,28 @@ div.opening div.circle {
   -webkit-border-radius: 50%;
   border-radius: 50%;
   background-color: #000;
-  transition-timing-function: ease-out;
-  transition-duration: 1s;
-  transition-property: transform, background-color;
   -moz-transform: scale(0.3);
   -ms-transform: scale(0.3);
   -o-transform: scale(0.3);
   -webkit-transform: scale(0.3);
   -moz-transform-style: preserve-3d;
   -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
   -moz-transition-duration: 1s;
   -o-transition-duration: 1s;
   -webkit-transition-duration: 1s;
+  transition-duration: 1s;
   -moz-transition-property: -moz-transform, color;
   -o-transition-property: transform, background-color;
   -webkit-transition-property: -webkit-transform, background-color;
+  transition-property: transform, background-color;
   -moz-transition-timing-function: ease-out;
   -o-transition-timing-function: ease-out;
   -webkit-transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
   transform: scale(0.3);
 }
-figure {
+.kudos figure {
   position: relative;
   top: auto;
   left: auto;
@@ -8872,59 +8907,11 @@ figure {
   margin: 0 auto;
   margin-top: 20px;
 }
-figure.kudo {
+.kudos .kudo {
   width: 50px;
   text-align: center;
 }
-.kudo.complete a.kudobject div.opening div.circle {
-  background-color: #000;
-  background-position: center;
-  -moz-background-size: 80%;
-  background-size: 80%;
-  background-repeat: no-repeat;
-}
-.kudo.complete a.kudobject div.opening div.circle:before {
-  position: relative;
-  top: 1px;
-  left: 1px;
-  color: #e91e63;
-  content: "\e005";
-  font-size: 20px;
-  font-family: Glyphicons Halflings;
-}
-a.count {
-  text-decoration: none;
-}
-a.count span {
-  display: block;
-  margin-top: 5px;
-  width: auto;
-  color: #000;
-  text-transform: uppercase;
-  font-weight: 800;
-  font-family: "freight-sans-pro", sans-serif;
-  line-height: 13px;
-}
-a.count span.num {
-  font-size: 18px;
-}
-a.count span.txt {
-  font-size: 11px;
-}
-a.count p span.dont-move {
-  margin-top: 8px;
-  margin-left: -50px;
-  width: 200px;
-  text-transform: none;
-  letter-spacing: 0;
-  font-size: 18px;
-  line-height: 22px;
-}
-a.kudobject {
-  display: block;
-  cursor: pointer;
-}
-.kudo.active a.kudobject div.opening div.circle {
+.kudos .kudo.active a.kudobject .opening .circle {
   background: rgba(0, 0, 0, 0.7);
   -moz-transform: scale(1.1);
   -ms-transform: scale(1.1);
@@ -8932,7 +8919,12 @@ a.kudobject {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
-.kudo.complete a.kudobject div.opening div.circle {
+.kudos .kudo.complete a.kudobject .opening .circle {
+  background-color: #000;
+  background-position: center;
+  -moz-background-size: 80%;
+  background-size: 80%;
+  background-repeat: no-repeat;
   -moz-transform: scale(0.85);
   -ms-transform: scale(0.85);
   -o-transform: scale(0.85);
@@ -8950,6 +8942,19 @@ a.kudobject {
   -o-animation-iteration-count: 1;
   -webkit-animation-iteration-count: 1;
   animation-iteration-count: 1;
+}
+.kudos .kudo.complete a.kudobject .opening .circle:before {
+  position: relative;
+  top: 1px;
+  left: 1px;
+  color: #e91e63;
+  content: "\e005";
+  font-size: 20px;
+  font-family: Glyphicons Halflings;
+}
+.kudos a.kudobject {
+  display: block;
+  cursor: pointer;
 }
 @keyframes bounce {
   0% {
@@ -9194,51 +9199,21 @@ textarea {
   background-color: transparent;
 }
 /* Overrides */
-@media (min-width: 768px) {
-  .container {
-    width: 768px;
-  }
-}
-.form-control::-moz-placeholder {
-  color: #222;
-  opacity: 1;
-}
-.form-control:-ms-input-placeholder {
-  color: #333;
-}
-.form-control::-webkit-input-placeholder {
-  color: #222;
-}
 .btn-primary {
   color: #fff !important;
 }
 .btn-primary:hover,
 .btn-primary:focus {
-  color: #000 !important;
-}
-.side-comment .marker:hover,
-.side-comment.active .marker {
-  background: #333;
-}
-.side-comment .marker:hover:after,
-.side-comment.active .marker:after {
-  border-color: #333 transparent;
-}
-.side-comment .action-link:focus,
-.side-comment .action-link:hover {
-  color: #333 !important;
-}
-.side-comment .add-comment {
-  letter-spacing: 0;
+  color: #333333 !important;
 }
 .validationMessage {
   color: #f44336;
 }
 .media-heading a {
-  color: #333;
+  color: #333333;
   text-decoration: none;
 }
-@media (max-width: 768px) {
+@media (max-width: 991px) {
   .media-list .media-wrapper {
     padding-right: 0;
     padding-left: 0;
@@ -9249,7 +9224,7 @@ textarea {
   }
 }
 .media-item a {
-  color: #333;
+  color: #333333;
 }
 .media-item a:hover,
 .media-item a:focus {
@@ -9272,5 +9247,8 @@ textarea {
 @media (min-width: 992px) {
   .pg-container {
     max-width: 992px;
+  }
+  .container {
+    width: 768px;
   }
 }

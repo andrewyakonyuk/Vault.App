@@ -1,154 +1,153 @@
-p.count {
-    display: block;
-}
+.kudos {
+    p.count {
+        display: block;
+    }
 
-div.opening {
-    position: relative;
-    margin: 0 auto;
-    width: 30px;
-    height: 30px;
-    border: 5px solid #000;
-    -moz-border-radius: 50%;
-    -webkit-border-radius: 50%;
-    border-radius: 50%;
-    background-color: #fff;
-}
+    a.count {
+        text-decoration: none;
 
-    div.opening div.circle {
-        -moz-backface-visibility: visible;
-        transition-style: preserve-3d;
-        transform-style: preserve-3d;
-        -webkit-backface-visibility: visible;
-        backface-visibility: visible;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin-top: -15px;
-        margin-left: -15px;
+        span {
+            display: block;
+            margin-top: 5px;
+            width: auto;
+            color: #000;
+            text-transform: uppercase;
+            font-weight: 800;
+            font-family: "freight-sans-pro", sans-serif;
+            line-height: 13px;
+        }
+
+            span.num {
+                font-size: 18px;
+            }
+
+            span.txt {
+                font-size: 11px;
+            }
+
+        p span.dont-move {
+            margin-top: 8px;
+            margin-left: -50px;
+            width: 200px;
+            text-transform: none;
+            letter-spacing: 0;
+            font-size: 18px;
+            line-height: 22px;
+        }
+    }
+
+    .opening {
+        position: relative;
+        margin: 0 auto;
         width: 30px;
         height: 30px;
+        border: 5px solid #000;
         -moz-border-radius: 50%;
         -webkit-border-radius: 50%;
         border-radius: 50%;
-        background-color: #000;
-        transition-timing-function: ease-out;
-        transition-duration: 1s;
-        transition-property: transform, background-color;
-        -moz-transform: scale(0.3);
-        -ms-transform: scale(0.3);
-        -o-transform: scale(0.3);
-        -webkit-transform: scale(0.3);
-        -moz-transform-style: preserve-3d;
-        -webkit-transform-style: preserve-3d;
-        -moz-transition-duration: 1s;
-        -o-transition-duration: 1s;
-        -webkit-transition-duration: 1s;
-        -moz-transition-property: -moz-transform, color;
-        -o-transition-property: transform, background-color;
-        -webkit-transition-property: -webkit-transform, background-color;
-        -moz-transition-timing-function: ease-out;
-        -o-transition-timing-function: ease-out;
-        -webkit-transition-timing-function: ease-out;
-        transform: scale(0.3);
+        background-color: #fff;
+
+        .circle {
+            -moz-backface-visibility: visible;
+            transition-style: preserve-3d;
+            -webkit-backface-visibility: visible;
+            backface-visibility: visible;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -15px;
+            margin-left: -15px;
+            width: 30px;
+            height: 30px;
+            -moz-border-radius: 50%;
+            -webkit-border-radius: 50%;
+            border-radius: 50%;
+            background-color: #000;
+            -moz-transform: scale(0.3);
+            -ms-transform: scale(0.3);
+            -o-transform: scale(0.3);
+            -webkit-transform: scale(0.3);
+            -moz-transform-style: preserve-3d;
+            -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+            -moz-transition-duration: 1s;
+            -o-transition-duration: 1s;
+            -webkit-transition-duration: 1s;
+            transition-duration: 1s;
+            -moz-transition-property: -moz-transform, color;
+            -o-transition-property: transform, background-color;
+            -webkit-transition-property: -webkit-transform, background-color;
+            transition-property: transform, background-color;
+            -moz-transition-timing-function: ease-out;
+            -o-transition-timing-function: ease-out;
+            -webkit-transition-timing-function: ease-out;
+            transition-timing-function: ease-out;
+            transform: scale(0.3);
+        }
     }
 
-figure {
-    position: relative;
-    top: auto;
-    left: auto;
-    display: block;
-    margin: 0 auto;
-    margin-top: 20px;
-}
+    figure {
+        position: relative;
+        top: auto;
+        left: auto;
+        display: block;
+        margin: 0 auto;
+        margin-top: 20px;
+    }
 
-    figure.kudo {
+    .kudo {
         width: 50px;
         text-align: center;
+
+        &.active a.kudobject .opening .circle {
+            background: rgba(0, 0, 0, 0.7);
+            -moz-transform: scale(1.1);
+            -ms-transform: scale(1.1);
+            -o-transform: scale(1.1);
+            -webkit-transform: scale(1.1);
+            transform: scale(1.1);
+        }
+
+        &.complete a.kudobject .opening .circle {
+            background-color: #000;
+            background-position: center;
+            -moz-background-size: 80%;
+            background-size: 80%;
+            background-repeat: no-repeat;
+            -moz-transform: scale(0.85);
+            -ms-transform: scale(0.85);
+            -o-transform: scale(0.85);
+            -webkit-transform: scale(0.85);
+            -moz-transition-property: none;
+            -o-transition-property: none;
+            -webkit-transition-property: none;
+            transition-property: none;
+            transform: scale(0.85);
+            -moz-animation: bounce 1s;
+            -o-animation: bounce 1s;
+            -webkit-animation: bounce 1s;
+            animation: bounce 1s;
+            -moz-animation-iteration-count: 1;
+            -o-animation-iteration-count: 1;
+            -webkit-animation-iteration-count: 1;
+            animation-iteration-count: 1;
+        }
+
+            &.complete a.kudobject .opening .circle:before {
+                position: relative;
+                top: 1px;
+                left: 1px;
+                color: #e91e63;
+                content: "\e005";
+                font-size: 20px;
+                font-family: Glyphicons Halflings;
+            }
     }
 
-.kudo.complete a.kudobject div.opening div.circle {
-    background-color: #000;
-    background-position: center;
-    -moz-background-size: 80%;
-    background-size: 80%;
-    background-repeat: no-repeat;
-}
-
-    .kudo.complete a.kudobject div.opening div.circle:before {
-        position: relative;
-        top: 1px;
-        left: 1px;
-        color: #e91e63;
-        content: "\e005";
-        font-size: 20px;
-        font-family: Glyphicons Halflings;
-    }
-
-a.count {
-    text-decoration: none;
-}
-
-    a.count span {
+    a.kudobject {
         display: block;
-        margin-top: 5px;
-        width: auto;
-        color: #000;
-        text-transform: uppercase;
-        font-weight: 800;
-        font-family: "freight-sans-pro", sans-serif;
-        line-height: 13px;
+        cursor: pointer;
     }
-
-        a.count span.num {
-            font-size: 18px;
-        }
-
-        a.count span.txt {
-            font-size: 11px;
-        }
-
-    a.count p span.dont-move {
-        margin-top: 8px;
-        margin-left: -50px;
-        width: 200px;
-        text-transform: none;
-        letter-spacing: 0;
-        font-size: 18px;
-        line-height: 22px;
-    }
-
-a.kudobject {
-    display: block;
-    cursor: pointer;
-}
-
-.kudo.active a.kudobject div.opening div.circle {
-    background: rgba(0, 0, 0, 0.7);
-    -moz-transform: scale(1.1);
-    -ms-transform: scale(1.1);
-    -o-transform: scale(1.1);
-    -webkit-transform: scale(1.1);
-    transform: scale(1.1);
-}
-
-.kudo.complete a.kudobject div.opening div.circle {
-    -moz-transform: scale(0.85);
-    -ms-transform: scale(0.85);
-    -o-transform: scale(0.85);
-    -webkit-transform: scale(0.85);
-    -moz-transition-property: none;
-    -o-transition-property: none;
-    -webkit-transition-property: none;
-    transition-property: none;
-    transform: scale(0.85);
-    -moz-animation: bounce 1s;
-    -o-animation: bounce 1s;
-    -webkit-animation: bounce 1s;
-    animation: bounce 1s;
-    -moz-animation-iteration-count: 1;
-    -o-animation-iteration-count: 1;
-    -webkit-animation-iteration-count: 1;
-    animation-iteration-count: 1;
 }
 
 @keyframes bounce {

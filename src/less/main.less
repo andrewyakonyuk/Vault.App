@@ -1,6 +1,7 @@
 @import "bootstrap.less";
 @import "material.less";
 @import "../bower_modules/font-awesome/less/font-awesome.less";
+@import "variables.less";
 @import "mpmenu.less";
 @import "side-comments.less";
 @import "pace.less";
@@ -18,63 +19,21 @@ textarea {
 
 /* Overrides */
 
-@media (min-width: 768px) {
-    .container {
-        width: 768px;
-    }
-}
-
-.form-control::-moz-placeholder {
-    color: #222;
-    opacity: 1;
-}
-
-.form-control:-ms-input-placeholder {
-    color: #333;
-}
-
-.form-control::-webkit-input-placeholder {
-    color: #222;
-}
-
 .btn-primary {
     color: #fff !important;
 }
 
     .btn-primary:hover,
     .btn-primary:focus {
-        color: #000 !important;
+        color: @font-color !important;
     }
-
-.side-comment .marker:hover,
-.side-comment.active .marker {
-    background: #333;
-}
-
-    .side-comment .marker:hover:after,
-    .side-comment.active .marker:after {
-        border-color: #333 transparent;
-    }
-
-.side-comment .action-link:focus,
-.side-comment .action-link:hover {
-    color: #333 !important;
-}
-
-.side-comment .add-comment {
-    letter-spacing: 0;
-}
-
-.validationMessage {
-    color: #f44336;
-}
 
 .media-heading a {
-    color: #333;
+    color: @font-color;
     text-decoration: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: @screen-sm-max) {
 
     .media-list .media-wrapper {
         padding-right: 0;
@@ -88,7 +47,7 @@ textarea {
 }
 
 .media-item a {
-    color: #333;
+    color: @font-color;
 }
 
     .media-item a:hover,
@@ -113,8 +72,11 @@ textarea {
     max-width: 768px;
 }
 
-@media (min-width: 992px) {
+@media (min-width: @screen-md-min) {
     .pg-container {
         max-width: 992px;
+    }
+    .container {
+        width: 768px;
     }
 }

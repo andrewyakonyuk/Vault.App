@@ -1,3 +1,5 @@
+@import "variables.less";
+
 .pace {
     -webkit-pointer-events: none;
     -moz-user-select: none;
@@ -12,12 +14,12 @@
         left: 0;
         z-index: 1050;
         height: 3px;
-        background: #e91e63;
+        background: @loader-progress-color;
     }
 
     .pace-progress-inner {
         position: absolute;
-        right: 0px;
+        right: 0;
         display: block;
         width: 100px;
         height: 100%;
@@ -25,11 +27,11 @@
         -webkit-box-shadow: 0 0 10px #fcfffc, 0 0 5px #fcfffc;
         box-shadow: 0 0 10px #fcfffc, 0 0 5px #fcfffc;
         opacity: 1.0;
-        -moz-transform: rotate(3deg) translate(0px, -4px);
-        -ms-transform: rotate(3deg) translate(0px, -4px);
-        -o-transform: rotate(3deg) translate(0px, -4px);
-        -webkit-transform: rotate(3deg) translate(0px, -4px);
-        transform: rotate(3deg) translate(0px, -4px);
+        -moz-transform: rotate(3deg) translate(0, -4px);
+        -ms-transform: rotate(3deg) translate(0, -4px);
+        -o-transform: rotate(3deg) translate(0, -4px);
+        -webkit-transform: rotate(3deg) translate(0, -4px);
+        transform: rotate(3deg) translate(0, -4px);
     }
 }
 
