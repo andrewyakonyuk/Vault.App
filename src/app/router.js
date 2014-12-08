@@ -26,6 +26,7 @@ define(["knockout", "crossroads", "hasher"], function (ko, crossroads, hasher) {
     }
 
     function Router(config) {
+        var self = this;
         var currentRoute = this.currentRoute = ko.observable({});
 
         ko.utils.arrayForEach(config.routes, function (route) {
@@ -37,7 +38,7 @@ define(["knockout", "crossroads", "hasher"], function (ko, crossroads, hasher) {
         activateCrossroads();
 
         crossroads.bypassed.add(function (request) {
-            currentRoute(request);
+            self.currentRoute(request);
         });
     }
 

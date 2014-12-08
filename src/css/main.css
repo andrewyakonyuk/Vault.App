@@ -9206,9 +9206,6 @@ textarea {
 .btn-primary:focus {
   color: #333333 !important;
 }
-.validationMessage {
-  color: #f44336;
-}
 .media-heading a {
   color: #333333;
   text-decoration: none;

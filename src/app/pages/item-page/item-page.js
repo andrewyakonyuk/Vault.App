@@ -5,8 +5,7 @@ define(["knockout",
         'jquery',
         "underscore",
         "text!./item-page.html",
-        'packages/side-comments/side-comments',
-       'packages/kudos'], function (ko, $, _, templateMarkup, sc) {
+        'packages/side-comments/side-comments'], function (ko, $, _, templateMarkup, sc) {
     'use strict';
 
     function FlowItemViewModel(route) {
@@ -114,34 +113,6 @@ define(["knockout",
             }
             initializedComments += 1;
         };
-
-        // initialize kudos
-        $("figure.kudoable").kudoable();
-
-
-        // when kudoing
-        $("figure.kudo").bind("kudo:active", function (e) {
-            console.log("kudoing active");
-        });
-
-        // when not kudoing
-        $("figure.kudo").bind("kudo:inactive", function (e) {
-            console.log("kudoing inactive");
-        });
-
-        // after kudo'd
-        $("figure.kudo").bind("kudo:added", function (e) {
-            var element = $(this);
-            // ajax'y stuff or whatever you want
-            console.log("Kodo'd:", element.data('id'), ":)");
-        });
-
-        // after removing a kudo
-        $("figure.kudo").bind("kudo:removed", function (e) {
-            var element = $(this);
-            // ajax'y stuff or whatever you want
-            console.log("Un-Kudo'd:", element.data('id'), ":(");
-        });
     }
 
     FlowItemViewModel.prototype.afterRender = function () {

@@ -45,6 +45,10 @@ define(function (require, exports, module) {
         require: 'components/nav-bar/nav-bar'
     });
 
+    ko.components.register('kudos', {
+        require: 'components/kudos/kudos'
+    });
+
     ko.components.register('home-page', {
         require: 'pages/home-page/home'
     });

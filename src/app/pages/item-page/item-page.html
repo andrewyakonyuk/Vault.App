@@ -6,19 +6,8 @@
         <!-- ko foreach: { data: article.sections, afterRender: initComments } -->
         <p data-bind='text: content, attr: { "data-section-id": id}' class="commentable-section text-justify"></p>
         <!-- /ko -->
-        <div class="kudos">
-            <figure class="kudo kudoable" data-id="1">
-                <a href="javascript:void(0)" class="kudobject">
-                    <div class="opening">
-                        <div class="circle">&nbsp;</div>
-                    </div>
-                </a>
-                <a href="javascript:void(0)" class="count">
-                    <span class="num">0</span>
-                    <span class="txt">Kudos</span>
-                </a>
-            </figure>
-        </div>
+
+        <kudos params="id: 1"></kudos>
     </div>
 </div>
 <!-- /.container -->

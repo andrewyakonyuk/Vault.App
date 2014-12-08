@@ -14,7 +14,8 @@ define({
         "PageTitle_Dashboard": "Dashboard",
         "PageTitle_Settings": "Settings",
         "PageTitle_Collections": "Collections",
-        "PageTitle_Labels": "Labels"
+        "PageTitle_Labels": "Labels",
+        "Kudos": "Kudos"
     },
     "ru-ru": true
 });
