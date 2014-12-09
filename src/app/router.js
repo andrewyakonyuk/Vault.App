@@ -85,6 +85,12 @@ define(["knockout", "crossroads", "hasher"], function (ko, crossroads, hasher) {
                 params: {
                     page: 'search-page'
                 }
+            },
+            {
+                url: 'collections/:id:',
+                params: {
+                    page: 'collection-page'
+                }
             }
         ]
     });

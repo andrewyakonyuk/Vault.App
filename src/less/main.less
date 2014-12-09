@@ -1,16 +1,24 @@
+// Variables
+@import "../bower_modules/bootstrap/less/variables.less";
+@import "../bower_modules/bootstrap-material-design/less/_variables.less";
+@import "variables.less";
+
 @import "bootstrap.less";
 @import "material.less";
 @import "../bower_modules/font-awesome/less/font-awesome.less";
-@import "variables.less";
+
 @import "mpmenu.less";
 @import "side-comments.less";
 @import "pace.less";
 @import "kudos.less";
 @import "waves.less";
+@import "breadcrumbs.less";
 @import url(http://fonts.googleapis.com/css?family=Roboto&subset=cyrillic,latin);
 
 body {
     background: #fff;
+    font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 500;
 }
 
 textarea {
@@ -59,11 +67,6 @@ textarea {
     margin-top: 10px;
 }
 
-.ui {
-    font-family: 'Roboto', sans-serif;
-    font-weight: 500;
-}
-
 .pg-container {
     margin-right: auto;
     margin-left: auto;
@@ -76,6 +79,7 @@ textarea {
     .pg-container {
         max-width: 992px;
     }
+
     .container {
         width: 768px;
     }

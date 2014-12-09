@@ -10,6 +10,7 @@ define({
         "email": "Email",
         "PageTitle_Home": "Home",
         "PageTitle_SignIn": "Sign in",
+        "PageTitle_Register": "Join us",
         "PageTitle_About": "About",
         "PageTitle_Dashboard": "Dashboard",
         "PageTitle_Settings": "Settings",

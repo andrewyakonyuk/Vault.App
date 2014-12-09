@@ -44,9 +44,11 @@ define(function (require, exports, module) {
     ko.components.register('nav-bar', {
         require: 'components/nav-bar/nav-bar'
     });
-
     ko.components.register('kudos', {
         require: 'components/kudos/kudos'
+    });
+    ko.components.register('breadcrumbs', {
+        require: 'components/breadcrumbs/breadcrumbs'
     });
 
     ko.components.register('home-page', {
@@ -69,6 +71,9 @@ define(function (require, exports, module) {
     });
     ko.components.register('notfound-page', {
         require: 'pages/notfound-page/notfound'
+    });
+    ko.components.register('collection-page', {
+        require: 'pages/collection-page/collection'
     });
 
     // ... or for template-only components, you can just point to a .html file directly:
