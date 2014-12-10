@@ -5,7 +5,7 @@ define(["knockout",
         'jquery',
         "underscore",
         "text!./item-page.html",
-        'packages/side-comments/side-comments'], function (ko, $, _, templateMarkup, sc) {
+        'components/side-comments/side-comments'], function (ko, $, _, templateMarkup, sc) {
     'use strict';
 
     function FlowItemViewModel(route) {
