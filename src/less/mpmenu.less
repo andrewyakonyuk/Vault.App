@@ -194,10 +194,7 @@
 .mp-menu-btn {
     position: relative;
     float: right;
-    margin-right: 15px;
-    padding: 9px 10px;
-    margin-top: 8px;
-    margin-bottom: 8px;
+    padding: 6px 15px;
     background-color: transparent;
     background-image: none;
     border: 1px solid transparent;
@@ -205,6 +202,14 @@
 
     &:focus {
         outline: 0;
+    }
+
+    .fa-plus-square-o {
+        font-size: 31px;
+    }
+
+    .fa-bars{
+        font-size: 28px;
     }
 
     .icon-bar {
@@ -266,6 +271,11 @@
     animation: fade 500ms;
 }
 
+.mp-container > .container,
+.mp-container > .container-fluid {
+    margin-top: 50px;
+}
+
 @media (min-width: @screen-sm) {
     .mp-menu-media .mp-menu-left,
     .mp-menu-media .push-push {
@@ -284,5 +294,21 @@
     .mp-container > .container-fluid {
         margin-left: 265px;
         margin-right: 30px;
+        margin-top: 0;
+    }
+}
+
+.mp-navbar {
+    display: block;
+    position: fixed;
+    z-index: 10050;
+    background-color: @background-color;
+    width: 100%;
+}
+
+@media (min-width: @screen-sm) {
+
+    .mp-navbar {
+        display: none;
     }
 }

@@ -16,7 +16,7 @@
 @import url(http://fonts.googleapis.com/css?family=Roboto&subset=cyrillic,latin);
 
 body {
-    background: #fff;
+    background-color: @background-color;
     font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-weight: 500;
 }
@@ -70,8 +70,6 @@ textarea {
 .pg-container {
     margin-right: auto;
     margin-left: auto;
-    padding-left: 15px;
-    padding-right: 15px;
     max-width: 768px;
 }
 
@@ -83,4 +81,9 @@ textarea {
     .container {
         width: 768px;
     }
+}
+
+.form-horizontal .panel-body,
+.form-vertical .panel-body{
+    padding: 0;
 }

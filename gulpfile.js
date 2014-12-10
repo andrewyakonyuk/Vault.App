@@ -34,6 +34,8 @@
             include: [
                 'requireLib',
                 'components/nav-bar/nav-bar',
+                'components/breadcrumbs/breadcrumbs',
+                'components/kudos/kudos',
                 'pages/home-page/home',
                 'text!pages/about-page/about.html',
                 'pages/signin-page/signin',

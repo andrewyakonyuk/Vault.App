@@ -19,7 +19,7 @@ define(['jquery'], function ($) {
             pushyActiveClass = "mp-menu-active", //css class to toggle site overlay
             containerClass = "mp-container-push", //container open class
             pushClass = "push-push", //css class to add pushy capability
-            menuBtn = $('.mp-menu-btn, .mp-menu a'), //css classes to toggle the menu
+            menuBtn = $('.mp-menu-toggle-btn'), //css classes to toggle the menu
             menuSpeed = 200, //jQuery fallback menu speed
             menuWidth = pushy.width() + "px"; //jQuery fallback menu width
 
