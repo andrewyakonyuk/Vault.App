@@ -38,7 +38,7 @@ define(['knockout', 'jquery', 'hasher', 'app/app', 'packages/i18n!nls/localizedS
         if (this.errors().length === 0) {
             //todo: submit login data and check permissions
             app.authorized(true);
-            hasher.setHash('flow/10');
+            hasher.setHash('article/10');
         } else {
             this.errors.showAllMessages();
         }

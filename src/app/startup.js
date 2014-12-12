@@ -60,8 +60,8 @@ define(function (require, exports, module) {
     ko.components.register('list-page', {
         require: 'pages/list-page/list-page'
     });
-    ko.components.register('item-page', {
-        require: 'pages/item-page/item-page'
+    ko.components.register('article-page', {
+        require: 'pages/article-page/article'
     });
     ko.components.register('register-page', {
         require: 'pages/register-page/register-page'

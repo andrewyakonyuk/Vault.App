@@ -40,7 +40,7 @@
                 'text!pages/about-page/about.html',
                 'pages/signin-page/signin',
                 'pages/list-page/list-page',
-                'pages/item-page/item-page',
+                'pages/article-page/article',
                 'pages/register-page/register-page',
                 'pages/search-page/search-page',
                 'pages/notfound-page/notfound',

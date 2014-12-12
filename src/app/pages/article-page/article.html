@@ -1,13 +1,13 @@
 <div class="pg-section">
-    <div class="commentable-container" id="commentable-area">
+    <article class="commentable-container" id="commentable-area">
         <h2 class="title center-text">
             <span data-bind="text: article.title"></span>
         </h2>
         <!-- ko foreach: { data: article.sections, afterRender: initComments } -->
-        <p data-bind='text: content, attr: { "data-section-id": id}' class="commentable-section text-justify"></p>
+        <p data-bind='text: content, attr: { "data-section-id": id}' class="commentable-section"></p>
         <!-- /ko -->
 
         <kudos params="id: 1"></kudos>
-    </div>
+    </article>
 </div>
 <!-- /.container -->

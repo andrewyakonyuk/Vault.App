@@ -4,7 +4,7 @@
 define(["knockout",
         'jquery',
         "underscore",
-        "text!./item-page.html",
+        "text!./article.html",
         'components/side-comments/side-comments'], function (ko, $, _, templateMarkup, sc) {
     'use strict';
 
