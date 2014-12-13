@@ -23,11 +23,11 @@
         path = require('path');
 
     // Config
-    var requireJsRuntimeConfig = vm.runInNewContext(fs.readFileSync('src/app/require.config.js') + '; require;'),
+    var requireJsRuntimeConfig = vm.runInNewContext(fs.readFileSync('src/scripts/require.config.js') + '; require;'),
         requireJsOptimizerConfig = merge(requireJsRuntimeConfig, {
             out: 'scripts.js',
             baseUrl: './src',
-            name: 'app/startup',
+            name: 'scripts/startup',
             paths: {
                 requireLib: 'bower_modules/requirejs/require'
             },
@@ -46,7 +46,7 @@
                 'pages/notfound-page/notfound',
                 'pages/collection-page/collection'
             ],
-            insertRequire: ['app/startup'],
+            insertRequire: ['scripts/startup'],
             bundles: {
                 // If you want parts of the site to load on demand, remove them from the 'include' list
                 // above, and group them into bundles here.
@@ -66,7 +66,7 @@
 
     // Concatenates CSS files, rewrites relative paths to Font Awesome, copies Font Awesome fonts
     gulp.task('css', function () {
-        var styles = gulp.src('src/css/main.css')
+        var styles = gulp.src('src/styles/main.css')
                 .pipe(replace(/url\((')?\.\.\/img\//g, 'url($1img/'))
                 .pipe(replace(/url\((')?\.\.\/bower_modules\/font-awesome\/fonts/g, 'url($1fonts/'))
                // .pipe(minifyCSS({}))
@@ -98,12 +98,12 @@
     });
 
     gulp.task('less', function () {
-        var compiledCss = gulp.src('./src/less/main.less')
+        var compiledCss = gulp.src('./src/styles/main.less')
           .pipe(less({
               paths: [path.join(__dirname, 'less', 'includes')]
           }))
           .pipe(replace(/url\((')?\.\.\/fonts\//g, 'url($1../bower_modules/font-awesome/fonts/'))
-          .pipe(gulp.dest('./src/css'));
+          .pipe(gulp.dest('./src/styles'));
 
     });
 

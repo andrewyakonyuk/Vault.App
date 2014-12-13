@@ -1,0 +1,97 @@
+<nav class="mp-menu mp-menu-left mp-menu-media ui" role="navigation" data-bind="template: { afterRender: render }">
+    <div class="mp-menu-wrapper">
+        <div class="mp-menu-content">
+            <div class="mp-menu-user">
+                <img class="img-circle" src="img/user.png" />
+            </div>
+            <h4 class="mp-menu-header">
+                <a href="#"><i class="fa fa-home"></i> <span data-bind="i18n: 'PageTitle_Home'"></span></a>
+            </h4>
+            <!-- ko if: !authorized() -->
+            <ul>
+                <li data-bind="css: { active: route().page === 'signin-page' }">
+                    <a href="#account/signin"><span data-bind="i18n: 'PageTitle_SignIn'"></span></a>
+                </li>
+                <li data-bind="css: { active: route().page === 'about-page' }">
+                    <a href="#about"><span data-bind="i18n: 'PageTitle_About'"></span></a>
+                </li>
+            </ul>
+            <!-- /ko -->
+            <!-- ko if: authorized() -->
+            <ul>
+                <li data-bind="css: { active: route().page === 'dashboard-page' }">
+                    <a href="#dashboard"><span data-bind="i18n: 'PageTitle_Dashboard'"></span></a>
+                </li>
+                <li data-bind="css: { active: route().page === 'settings-page' }">
+                    <a href="#settings"><span data-bind="i18n: 'PageTitle_Settings'"></span></a>
+                </li>
+            </ul>
+
+            <div class="dropdown" id="collections-dropdown">
+                <h4 class="mp-menu-header clearfix">
+                    <a href="#collections" class="dropdown-title">
+                        <i class="fa fa-folder"></i>
+                        <span data-bind="i18n: 'PageTitle_Collections'"></span>
+                    </a>
+                    <a href="#collections-dropdown" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </a>
+                </h4>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a href="#collections/action">Action</a>
+                    </li>
+                    <li>
+                        <a href="#collections/anotheraction">Another action</a>
+                    </li>
+                    <li>
+                        <a href="#collections/somethingelsehere">Something else here</a>
+                    </li>
+                    <li>
+                        <a href="#collections/separatedlink">Separated link</a>
+                    </li>
+                    <li>
+                        <a href="#">One more separated link</a>
+                    </li>
+                    <li>
+                        <a href="#">One more separated link</a>
+                    </li>
+                    <li>
+                        <a href="#">One more separated link</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="dropdown" id="labels-dropdown">
+                <h4 class="mp-menu-header clearfix">
+                    <a href="#labels" class="dropdown-title">
+                        <i class="fa fa-tags"></i>
+                        <span data-bind="i18n: 'PageTitle_Labels'"></span>
+                    </a>
+                    <a href="#labels-dropdown" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <span class="caret"></span>
+                        <span class="sr-only" data-bind="i18n: 'PageTitle_Labels'"></span>
+                    </a>
+                </h4>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a href="#">Action</a>
+                    </li>
+                    <li>
+                        <a href="#">Another action</a>
+                    </li>
+                    <li>
+                        <a href="#">Something else here</a>
+                    </li>
+                    <li>
+                        <a href="#">Separated link</a>
+                    </li>
+                    <li>
+                        <a href="#">One more separated link</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /ko -->
+        </div>
+    </div>
+</nav>

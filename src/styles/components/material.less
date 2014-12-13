@@ -1,0 +1,80 @@
+@import "../../bower_modules/bootstrap-material-design/less/_mixins.less";
+@import "../../bower_modules/bootstrap-material-design/less/_shadows.less";
+
+body {
+    background-color: #EEEEEE;
+    &.inverse {
+        background: #333333;
+        &, .form-control {
+            color: @darkbg-text;
+        }
+    }
+}
+
+// Well and Jumbotrons
+@import "../../bower_modules/bootstrap-material-design/less/_welljumbo.less";
+
+// Buttons
+@import "../../bower_modules/bootstrap-material-design/less/_buttons.less";
+
+// Checkboxes
+@import "../../bower_modules/bootstrap-material-design/less/_checkboxes.less";
+
+// Radios
+@import "../../bower_modules/bootstrap-material-design/less/_radios.less";
+
+// Text inputs
+@import "../../bower_modules/bootstrap-material-design/less/_inputs.less";
+
+legend {
+    border-bottom: 0;
+}
+
+// Lists
+@import "../../bower_modules/bootstrap-material-design/less/_lists.less";
+
+// Navbar
+@import "../../bower_modules/bootstrap-material-design/less/_navbar.less";
+
+.dropdown-menu {
+    border: 0;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+    .divider {
+        background-color: rgba(229, 229, 229, 0.12);
+    }
+    li {
+        overflow: hidden;
+        position: relative;
+        a:hover {
+            background-color: transparent;
+            color: @primary;
+        }
+    }
+    .variations(~" li a:hover", color, @primary);
+}
+
+// Alerts
+@import "../../bower_modules/bootstrap-material-design/less/_alerts.less";
+
+// Typography
+.text-warning {
+    color: @btn-warning;
+}
+.text-primary {
+    color: @btn-primary;
+}
+.text-danger {
+    color: @btn-danger;
+}
+.text-success {
+    color: @btn-success;
+}
+.text-info {
+    color: @btn-info;
+}
+
+@import "../../bower_modules/bootstrap-material-design/less/_cards.less";
+
+@import "../../bower_modules/bootstrap-material-design/less/_labels.less";
+
+@import "../../bower_modules/bootstrap-material-design/less/_panels.less";
