@@ -69,12 +69,6 @@ define(["knockout", "crossroads", "hasher"], function (ko, crossroads, hasher) {
                 }
             },
             {
-                url: 'flow',
-                params: {
-                    page: 'list-page'
-                }
-            },
-            {
                 url: 'article/{id}',
                 params: {
                     page: 'article-page'
