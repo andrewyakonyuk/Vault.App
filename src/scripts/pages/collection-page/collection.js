@@ -1,4 +1,4 @@
-/*global define*/
+/*global define, console*/
 
 define(['knockout', 'text!./collection.html'], function (ko, template) {
     'use strict';
@@ -7,16 +7,18 @@ define(['knockout', 'text!./collection.html'], function (ko, template) {
         console.log(params.id);
     }
 
-    CollectionViewModel.prototype.afterRender = function () {
+    CollectionViewModel.prototype = {
+        afterRender: function () {
 
-    };
+        },
 
-    CollectionViewModel.prototype.dispose = function () {
+        dispose: function () {
 
+        }
     };
 
     return {
         viewModel: CollectionViewModel,
         template: template
     };
-})
+});

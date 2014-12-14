@@ -43,7 +43,10 @@
                 'pages/register-page/register-page',
                 'pages/search-page/search-page',
                 'pages/notfound-page/notfound',
-                'pages/collection-page/collection'
+                'pages/collection-page/collection',
+                'pages/dashboard-page/dashboard',
+                'pages/settings-page/settings',
+                'pages/labels-page/labels'
             ],
             insertRequire: ['scripts/startup'],
             bundles: {
