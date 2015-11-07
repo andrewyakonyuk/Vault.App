@@ -4,7 +4,7 @@
             <div class="mp-menu-user">
                 <img class="img-circle" src="img/user.png" />
             </div>
-            <h4 class="mp-menu-header">
+            <h4 class="mp-menu-header" data-bind="css: { active: route().page === 'home-page' }">
                 <a href="#"><i class="fa fa-home"></i> <span data-bind="i18n: 'PageTitle_Home'"></span></a>
             </h4>
             <!-- ko if: !authorized() -->
@@ -28,7 +28,7 @@
             </ul>
 
             <div class="dropdown" id="collections-dropdown">
-                <h4 class="mp-menu-header clearfix">
+                <h4 class="mp-menu-header clearfix" data-bind="css: { active: route().page === 'collection-page' }">
                     <a href="#collections" class="dropdown-title">
                         <i class="fa fa-folder"></i>
                         <span data-bind="i18n: 'PageTitle_Collections'"></span>
@@ -63,7 +63,7 @@
                 </ul>
             </div>
             <div class="dropdown" id="labels-dropdown">
-                <h4 class="mp-menu-header clearfix">
+                <h4 class="mp-menu-header clearfix" data-bind="css: { active: route().page === 'labels-page' }">
                     <a href="#labels" class="dropdown-title">
                         <i class="fa fa-tags"></i>
                         <span data-bind="i18n: 'PageTitle_Labels'"></span>

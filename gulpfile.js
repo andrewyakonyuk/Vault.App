@@ -60,9 +60,9 @@
     // Discovers all AMD dependencies, concatenates together all required .js files, minifies them
     gulp.task('js', function () {
         return rjs(requireJsOptimizerConfig)
-            /*.pipe(uglify({
+            .pipe(uglify({
                 preserveComments: 'some'
-            }))*/
+            }))
             .pipe(gulp.dest('./dist/'));
     });
 
@@ -71,7 +71,7 @@
         var styles = gulp.src('src/styles/main.css')
                 .pipe(replace(/url\((')?\.\.\/img\//g, 'url($1img/'))
                 .pipe(replace(/url\((')?\.\.\/bower_modules\/font-awesome\/fonts/g, 'url($1fonts/'))
-               // .pipe(minifyCSS({}))
+                .pipe(minifyCSS({}))
                 .pipe(concat('styles.css'))
                 .pipe(gulp.dest('./dist/'));
     });
@@ -126,7 +126,7 @@
          .pipe(gulp.dest('./dist'));
     });
 
-    gulp.task('default', ['html', 'js', 'less', 'css', 'images', 'fonts'], function (callback) {
+    gulp.task('default', ['html', 'js', 'css', 'images', 'fonts'], function (callback) {
         callback();
         console.log('\nPlaced optimized files in ' + chalk.magenta('dist/\n'));
     });

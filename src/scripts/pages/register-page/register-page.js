@@ -29,7 +29,7 @@ define(['knockout', 'text!./register-page.html', 'knockout-validation'], functio
         this.errors = ko.validation.group(self);
 
         this.hasErrors = ko.computed(function () {
-            return !self.isValid() && (self.name.isModified() || self.login.isModified() || self.password.isModified());
+            return self.errors().length && (self.name.isModified() || self.login.isModified() || self.password.isModified());
         }, this);
 
         this.title = ko.observable('Sign up');

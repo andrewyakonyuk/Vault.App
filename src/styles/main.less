@@ -13,6 +13,10 @@ textarea {
 
 /* Overrides */
 
+.btn{
+    border-radius: 0;
+}
+
 .btn-primary {
     color: #fff !important;
 }
@@ -21,6 +25,13 @@ textarea {
     .btn-primary:focus {
         color: @font-color !important;
     }
+
+.form-control {
+    border-radius: 0;
+    -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.075) inset;
+    -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.075) inset;
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.075) inset;
+}
 
 .media-heading a {
     color: @font-color;

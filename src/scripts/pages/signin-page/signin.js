@@ -28,7 +28,7 @@ define(['knockout', 'jquery', 'hasher', 'packages/i18n!nls/localizedStrings', 't
         this.errors = ko.validation.group(self);
 
         this.hasErrors = ko.computed(function () {
-            return !self.isValid() && (self.login.isModified() || self.password.isModified());
+            return self.errors().length && (self.login.isModified() || self.password.isModified());
         }, this);
 
         this.title = ko.observable("Sign in");
