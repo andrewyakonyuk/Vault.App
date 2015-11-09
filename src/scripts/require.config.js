@@ -32,5 +32,5 @@ var require = {
             deps: ["jquery"]
         }
     },
-    locale: "ru-ru"
+    locale: "en-us"
 };

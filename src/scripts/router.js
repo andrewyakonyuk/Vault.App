@@ -1,6 +1,6 @@
 /*global define */
 
-define(["knockout", "crossroads", "hasher"], function (ko, crossroads, hasher) {
+define(["knockout", "crossroads", "hasher", "packages/auth"], function (ko, crossroads, hasher, auth) {
     'use strict';
 
     //knockout validation issue: https://github.com/Knockout-Contrib/Knockout-Validation/issues/259
@@ -29,9 +29,26 @@ define(["knockout", "crossroads", "hasher"], function (ko, crossroads, hasher) {
         var self = this,
             currentRoute = this.currentRoute = ko.observable({});
 
+        this.navigate = function(page){
+            var route = {};
+            ko.utils.arrayForEach(config.routes, function(item){
+               if(item.params.page == page) {
+                   route = item;
+                   return true;
+               }
+            });
+            hasher.setHash(route.url);
+        };
+
         ko.utils.arrayForEach(config.routes, function (route) {
             crossroads.addRoute(route.url, function (requestParams) {
-                currentRoute(ko.utils.extend(requestParams, route.params));
+                console.log(route);
+                if(route.params.authorizedOnly && !auth.isAuthorized()) {
+                    self.navigate('signin-page');
+                }
+                else{
+                    currentRoute(ko.utils.extend(requestParams, route.params));
+                }
             });
         });
 
@@ -47,61 +64,92 @@ define(["knockout", "crossroads", "hasher"], function (ko, crossroads, hasher) {
             {
                 url: '',
                 params: {
-                    page: 'home-page'
+                    page: 'home-page',
+                    authorizedOnly: false
                 }
             },
             {
                 url: 'about',
                 params: {
-                    page: 'about-page'
+                    page: 'about-page',
+                    authorizedOnly: false
                 }
             },
             {
-                url: 'account/signin',
+                url: 'signin',
                 params: {
-                    page: 'signin-page'
+                    page: 'signin-page',
+                    authorizedOnly: false
                 }
             },
             {
-                url: 'account/register',
+                url: 'join',
                 params: {
-                    page: 'register-page'
+                    page: 'register-page',
+                    authorizedOnly: false
                 }
             },
             {
                 url: 'article/{id}',
                 params: {
-                    page: 'article-page'
+                    page: 'article-page',
+                    authorizedOnly: true
                 }
             },
             {
                 url: 'search/{searchText}',
                 params: {
-                    page: 'search-page'
+                    page: 'search-page',
+                    authorizedOnly: true
                 }
             },
             {
                 url: 'collections/:id:',
                 params: {
-                    page: 'collection-page'
+                    page: 'collection-page',
+                    authorizedOnly: true
                 }
             },
             {
                 url: 'dashboard',
                 params: {
-                    page: 'dashboard-page'
+                    page: 'dashboard-page',
+                    authorizedOnly: true
                 }
             },
             {
                 url: 'settings',
                 params: {
-                    page: 'settings-page'
+                    page: 'settings-page',
+                    authorizedOnly: true
                 }
             },
             {
                 url: 'labels/:id:',
                 params: {
-                    page: 'labels-page'
+                    page: 'labels-page',
+                    authorizedOnly: true
+                }
+            },
+            {
+                url: 'maps',
+                params: {
+                    page: 'maps-page',
+                    authorizedOnly: true
+                }
+            },
+            {
+                url: 'musics',
+                params: {
+                    page: 'musics-page',
+                    authorizedOnly: true
+                }
+            },
+            {
+                url: 'calendar',
+                params: {
+                    page: 'calendar-page',
+                    authorizedOnly: true
                 }
             }
         ]

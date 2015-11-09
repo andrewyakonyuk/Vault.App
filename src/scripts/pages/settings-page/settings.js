@@ -1,5 +1,5 @@
 /*global define, console */
-define(['jquery', 'text!./settings.html'], function (ko, template) {
+define(['knockout', 'text!./settings.html'], function (ko, template) {
     'use strict';
 
     function SettingsViewModel() {

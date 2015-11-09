@@ -1,6 +1,6 @@
 /*global define, console, Waves */
 
-define(['knockout', 'hasher', 'jquery', 'text!./nav-bar.html', 'packages/mpmenu', 'bootstrap/dropdown'], function (ko, hasher, $, template, mpmenu) {
+define(['knockout','jquery', 'text!./nav-bar.html', 'packages/mpmenu', 'packages/auth', 'bootstrap/dropdown'], function (ko, $, template, mpmenu, auth) {
     'use strict';
 
     function NavBarViewModel(params) {
@@ -8,7 +8,7 @@ define(['knockout', 'hasher', 'jquery', 'text!./nav-bar.html', 'packages/mpmenu'
         this.searchText = ko.observable('');
 
         this.authorized = ko.computed(function () {
-            return true;
+            return auth.isAuthorized();
         }, this);
     }
 
@@ -16,17 +16,8 @@ define(['knockout', 'hasher', 'jquery', 'text!./nav-bar.html', 'packages/mpmenu'
         mpmenu();
     };
 
-    NavBarViewModel.prototype.search = function () {
-        if (this.searchText()) {
-            var value = this.searchText();
-            this.searchText('');
-            hasher.setHash('search/' + value);
-        }
-        return false;
-    };
-
     NavBarViewModel.prototype.signout = function () {
-        app.authorized(false);
+        auth.signOut();
     };
 
     return {

@@ -12,7 +12,7 @@ define(['knockout', 'packages/i18n!nls/localizedStrings', 'text!./breadcrumbs.ht
         if (params.root) {
             this.root = ko.observable({
                 title: localizedStrings[params.root.title],
-                url: params.root.url
+                url: '#' + params.root.url
             });
         }
     }

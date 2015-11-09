@@ -1,12 +1,12 @@
 /*global define, console */
-define(['knockout', 'text!./dashboard.html'], function (ko, template) {
+define(['knockout', 'text!./maps.html'], function (ko, template) {
     'use strict';
 
-    function DashboardViewModel() {
+    function MapViewModel() {
 
     }
 
-    DashboardViewModel.prototype = {
+    MapViewModel.prototype = {
         dispose: function () {
 
         },
@@ -17,7 +17,7 @@ define(['knockout', 'text!./dashboard.html'], function (ko, template) {
     };
 
     return {
-        viewModel: DashboardViewModel,
+        viewModel: MapViewModel,
         template: template
     };
 });

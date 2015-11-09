@@ -16,7 +16,11 @@ define({
         "PageTitle_Settings": "Settings",
         "PageTitle_Collections": "Collections",
         "PageTitle_Labels": "Labels",
-        "Kudos": "Kudos"
+        "PageTitle_Musics": "Music",
+        "PageTitle_Calendar": "Calendar",
+        "PageTitle_Maps": "Maps",
+        "Kudos": "Kudos",
+        "SignOut": "Sign out"
     },
     "ru-ru": true
 });

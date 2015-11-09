@@ -46,7 +46,10 @@
                 'pages/collection-page/collection',
                 'pages/dashboard-page/dashboard',
                 'pages/settings-page/settings',
-                'pages/labels-page/labels'
+                'pages/labels-page/labels',
+                'pages/maps-page/maps',
+                'pages/musics-page/musics',
+                'pages/calendar-page/calendar'
             ],
             insertRequire: ['scripts/startup'],
             bundles: {

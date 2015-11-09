@@ -1,6 +1,8 @@
 <ol class="breadcrumb">
     <!-- ko if: root -->
-    <li><a href="#" data-bind="text: root().title, attr: {'href': root().url}"></a></li>
+    <li>
+        <a href="#" data-bind="text: root().title, attr: {'href': root().url}"></a>
+    </li>
     <!-- /ko -->
     <!-- ko if: active -->
     <li class="active" data-bind="text: active().title"></li>

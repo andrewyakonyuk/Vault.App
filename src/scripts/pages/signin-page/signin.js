@@ -1,6 +1,6 @@
 /*global define */
 
-define(['knockout', 'jquery', 'hasher', 'packages/i18n!nls/localizedStrings', 'text!./signin.html'], function (ko, $, hasher, localizedStrings, template) {
+define(['knockout', 'scripts/router', 'packages/auth', 'packages/i18n!nls/localizedStrings', 'text!./signin.html'], function (ko, router, auth, localizedStrings, template) {
     'use strict';
 
     function SignInViewModel() {
@@ -35,10 +35,13 @@ define(['knockout', 'jquery', 'hasher', 'packages/i18n!nls/localizedStrings', 't
     }
 
     SignInViewModel.prototype.submit = function (e) {
-        if (this.errors().length === 0) {
-            //todo: submit login data and check permissions
-            app.authorized(true);
-            hasher.setHash('article/10');
+        if (!this.hasErrors()) {
+            auth.signIn(this.login(), this.password(), this.rememberMe())
+                .done(function(){
+                router.navigate('dashboard-page');
+                }).fail(function(){
+                    this.errors.showAllMessages();
+            });
         } else {
             this.errors.showAllMessages();
         }

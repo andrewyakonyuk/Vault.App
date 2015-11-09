@@ -1,5 +1,5 @@
 /*global define, console */
-define(['jquery', 'text!./labels.html'], function (ko, template) {
+define(['knockout', 'text!./labels.html'], function (ko, template) {
     'use strict';
 
     function LabelsViewModel(params) {

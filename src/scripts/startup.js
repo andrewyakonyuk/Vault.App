@@ -38,7 +38,6 @@ define(function (require, exports, module) {
     require('bindings/controller');
     require('bindings/i18n');
 
-
     // Components can be packaged as AMD modules, such as the following:
     ko.components.register('nav-bar', {
         require: 'components/nav-bar/nav-bar'
@@ -79,6 +78,15 @@ define(function (require, exports, module) {
     });
     ko.components.register('labels-page', {
         require: 'pages/labels-page/labels'
+    });
+    ko.components.register('maps-page', {
+       require: 'pages/maps-page/maps'
+    });
+    ko.components.register('musics-page', {
+        require: 'pages/musics-page/musics'
+    });
+    ko.components.register('calendar-page', {
+        require: 'pages/calendar-page/calendar'
     });
 
     // ... or for template-only components, you can just point to a .html file directly:

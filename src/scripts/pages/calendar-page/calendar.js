@@ -1,12 +1,12 @@
 /*global define, console */
-define(['knockout', 'text!./dashboard.html'], function (ko, template) {
+define(['knockout', 'text!./calendar.html'], function (ko, template) {
     'use strict';
 
-    function DashboardViewModel() {
+    function CalendarViewModel() {
 
     }
 
-    DashboardViewModel.prototype = {
+    CalendarViewModel.prototype = {
         dispose: function () {
 
         },
@@ -17,7 +17,7 @@ define(['knockout', 'text!./dashboard.html'], function (ko, template) {
     };
 
     return {
-        viewModel: DashboardViewModel,
+        viewModel: CalendarViewModel,
         template: template
     };
 });
