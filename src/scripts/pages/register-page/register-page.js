@@ -1,6 +1,6 @@
 /*global define, console */
 
-define(['knockout', 'text!./register-page.html', 'knockout-validation'], function (ko, templateMarkup) {
+define(['knockout', 'packages/auth', 'packages/router', 'text!./register-page.html'], function (ko, auth, router, templateMarkup) {
     'use strict';
 
     function RegisterPage() {
@@ -36,9 +36,10 @@ define(['knockout', 'text!./register-page.html', 'knockout-validation'], functio
     }
 
     RegisterPage.prototype.submit = function (e) {
-        if (this.errors().length === 0) {
-            //todo: submit registered data
-            console.log('register submit');
+        if (!this.hasErrors()) {
+            auth.signUp(this.login(), this.password(), this.name()).done(function(){
+                router.navigate('dashboard-page');
+            });
         } else {
             this.errors.showAllMessages();
         }

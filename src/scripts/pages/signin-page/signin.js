@@ -1,6 +1,6 @@
 /*global define */
 
-define(['knockout', 'scripts/router', 'packages/auth', 'packages/i18n!nls/localizedStrings', 'text!./signin.html'], function (ko, router, auth, localizedStrings, template) {
+define(['knockout', 'packages/router', 'packages/auth', 'packages/i18n!nls/localizedStrings', 'text!./signin.html'], function (ko, router, auth, localizedStrings, template) {
     'use strict';
 
     function SignInViewModel() {
@@ -38,7 +38,7 @@ define(['knockout', 'scripts/router', 'packages/auth', 'packages/i18n!nls/locali
         if (!this.hasErrors()) {
             auth.signIn(this.login(), this.password(), this.rememberMe())
                 .done(function(){
-                router.navigate('dashboard-page');
+                    router.navigate('dashboard-page');
                 }).fail(function(){
                     this.errors.showAllMessages();
             });

@@ -5,54 +5,63 @@
                 <img class="img-circle" src="img/user.png" />
             </div>
             <h4 class="mp-menu-header" data-bind="css: { active: route().page === 'home-page' }">
-                <a href="#"><i class="fa fa-home"></i> <span data-bind="i18n: 'PageTitle_Home'"></span></a>
+                <a data-bind="route: 'home-page'">
+                    <i class="fa fa-home"></i>
+                    <span data-bind="i18n: 'PageTitle_Home'"></span>
+                </a>
             </h4>
             <!-- ko if: !authorized() -->
             <ul>
                 <li data-bind="css: { active: route().page === 'signin-page' }">
-                    <a href="#/signin"><span data-bind="i18n: 'PageTitle_SignIn'"></span></a>
+                    <a data-bind="route: 'signin-page'">
+                        <span data-bind="i18n: 'PageTitle_SignIn'"></span>
+                    </a>
                 </li>
                 <li data-bind="css: { active: route().page === 'about-page' }">
-                    <a href="#about"><span data-bind="i18n: 'PageTitle_About'"></span></a>
+                    <a data-bind="route: 'about-page'">
+                        <span data-bind="i18n: 'PageTitle_About'"></span>
+                    </a>
                 </li>
             </ul>
             <!-- /ko -->
             <!-- ko if: authorized() -->
             <ul>
                 <li data-bind="css: { active: route().page === 'dashboard-page' }">
-                    <a href="#dashboard"><span data-bind="i18n: 'PageTitle_Dashboard'"></span><span class="badge">14</span></a>
+                    <a data-bind="route: 'dashboard-page'"><span data-bind="i18n: 'PageTitle_Dashboard'"></span><span class="badge">14</span></a>
                 </li>
                 <li data-bind="css: { active: route().page === 'settings-page' }">
-                    <a href="#settings"><span data-bind="i18n: 'PageTitle_Settings'"></span></a>
+                    <a data-bind="route: 'settings-page'">
+                        <span data-bind="i18n: 'PageTitle_Settings'"></span>
+                    </a>
                 </li>
             </ul>
             <h4 class="mp-menu-header clearfix" data-bind="css: { active: route().page === 'musics-page' }">
-                <a href="#musics">
+                <a data-bind="route: 'musics-page'">
                     <i class="fa fa-music"></i>
                     <span data-bind="i18n: 'PageTitle_Musics'"></span>
                 </a>
             </h4>
             <h4 class="mp-menu-header clearfix" data-bind="css: { active: route().page === 'collection-page' }">
-                <a href="#collections">
+                <a data-bind="route: 'collection-page'">
                     <i class="fa fa-folder"></i>
                     <span data-bind="i18n: 'PageTitle_Collections'"></span>
                 </a>
             </h4>
             <h4 class="mp-menu-header clearfix" data-bind="css: { active: route().page === 'calendar-page' }">
-                <a href="#calendar">
+                <a data-bind="route: 'calendar-page'">
                     <i class="fa fa-calendar-o"></i>
                     <span data-bind="i18n: 'PageTitle_Calendar'"></span>
                 </a>
             </h4>
             <h4 class="mp-menu-header clearfix" data-bind="css: { active: route().page === 'maps-page' }">
-                <a href="#maps">
+                <a data-bind="route: 'maps-page'">
                     <i class="fa fa-map-o"></i>
                     <span data-bind="i18n: 'PageTitle_Maps'"></span>
                 </a>
             </h4>
             <div class="dropdown" id="labels-dropdown">
                 <h4 class="mp-menu-header clearfix" data-bind="css: { active: route().page === 'labels-page' }">
-                    <a href="#labels" class="dropdown-title">
+                    <a data-bind="route: 'labels-page'" class="dropdown-title">
                         <i class="fa fa-tags"></i>
                         <span data-bind="i18n: 'PageTitle_Labels'"></span>
                     </a>

@@ -31,12 +31,13 @@ define(function (require, exports, module) {
         });
     }
 
-    var router = require('./router'),
+    var router = require('packages/router'),
         ko = require('knockout'),
         validation = require('knockout-validation');
 
     require('bindings/controller');
     require('bindings/i18n');
+    require('bindings/route')
 
     // Components can be packaged as AMD modules, such as the following:
     ko.components.register('nav-bar', {

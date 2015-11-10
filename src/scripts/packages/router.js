@@ -29,16 +29,29 @@ define(["knockout", "crossroads", "hasher", "packages/auth"], function (ko, cros
         var self = this,
             currentRoute = this.currentRoute = ko.observable({});
 
-        this.navigate = function(page){
-            var route = {};
+        this.navigate = function(routeName){
+            var routeDefinition = {};
             ko.utils.arrayForEach(config.routes, function(item){
-               if(item.params.page == page) {
-                   route = item;
+               if(item.params.page == routeName) {
+                   routeDefinition = item;
                    return true;
                }
             });
-            hasher.setHash(route.url);
+            hasher.setHash(routeDefinition.url);
         };
+
+        this.urlForRoute = function(routeName){
+             var routeDefinition = {
+                 url: ''
+             };
+            ko.utils.arrayForEach(config.routes, function(item){
+               if(item.params.page == routeName) {
+                   routeDefinition = item;
+                   return true;
+               }
+            });
+            return routeDefinition.url;
+        }
 
         ko.utils.arrayForEach(config.routes, function (route) {
             crossroads.addRoute(route.url, function (requestParams) {

@@ -1,4 +1,4 @@
-define(["jquery", "knockout"], function($, ko){
+define(["jquery", "knockout", "packages/cookie"], function($, ko, cookie){
     'use strict';
 
     var auth = {
@@ -14,9 +14,21 @@ define(["jquery", "knockout"], function($, ko){
                 .resolve()
                 .promise();
         },
-        isAuthorized: ko.observable(false)
+        signUp: function(login, password, name){
+             $.Deferred()
+                .resolve()
+                .promise();
+        },
+        isAuthorized: ko.observable(cookie.hasItem('auth'))
     };
 
+    auth.isAuthorized.subscribe(function (newValue) {
+        if (newValue) {
+            cookie.setItem('auth', false)
+        } else {
+            cookie.removeItem('auth')
+        }
+    });
 
     return auth;
 });

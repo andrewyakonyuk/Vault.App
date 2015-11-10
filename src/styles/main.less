@@ -51,6 +51,25 @@ textarea {
     }
 }
 
+.media-item {
+    margin-bottom: 20px;
+    width: 315px;
+    background-color: #FFF;
+    float: left;
+    margin-right: 10px;
+    padding: 10px;
+    border: 0;
+    height: 310px;
+
+    @media(max-width: 991px){
+        &{
+            float: none;
+            width: 100%;
+            height: auto;
+        }
+    }
+}
+
 .media-item a {
     color: @font-color;
 }
@@ -70,9 +89,15 @@ textarea {
     max-width: 768px;
 }
 
+@media (max-width: @screen-sm-max) {
+    .page-section {
+        margin: 0 12px;
+    }
+}
+
 @media (min-width: @screen-md-min) {
     .page-container {
-        max-width: 992px;
+        max-width: @screen-md-min;
     }
 
     .container {
