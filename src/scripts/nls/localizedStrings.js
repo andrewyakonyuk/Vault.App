@@ -19,6 +19,7 @@ define({
         "PageTitle_Musics": "Music",
         "PageTitle_Calendar": "Calendar",
         "PageTitle_Maps": "Maps",
+        "PageTitle_Search": "Search",
         "Kudos": "Kudos",
         "SignOut": "Sign out"
     },

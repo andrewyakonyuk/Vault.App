@@ -10,25 +10,31 @@ define(['jquery'], function ($) {
 
     var PushMenu = function () {
 
-        var pushy = $('.mp-menu'), //menu css class
+        var pushy = $('.mp-menu-left'), //menu css class
             body = $('body'),
             container = $('.mp-container'), //container css class
             push = $('.push'), //css class to add pushy capability
             siteOverlay = $('.mp-site-overlay'), //site overlay
             pushyClass = "mp-menu-left mp-menu-open", //menu position & menu open class
             pushyActiveClass = "mp-menu-active", //css class to toggle site overlay
-            containerClass = "mp-container-push", //container open class
-            pushClass = "push-push", //css class to add pushy capability
-            menuBtn = $('.mp-menu-toggle-btn'), //css classes to toggle the menu
+            containerClass = "mp-container-push-left", //container open class
+            menuLeftBtn = $('.mp-menu-toggle-left-btn'), //css classes to toggle the menu
+            menuRightBtn = $('.mp-menu-toggle-right-btn'),
             menuSpeed = 200, //jQuery fallback menu speed
             menuWidth = pushy.width() + "px"; //jQuery fallback menu width
 
-        function togglePushy() {
+        function toggleMenuPushy() {
             body.toggleClass(pushyActiveClass); //toggle site overlay
             pushy.toggleClass(pushyClass);
             container.toggleClass(containerClass);
-            push.toggleClass(pushClass); //css class to add pushy capability
         }
+
+        function toggleSearchPushy(){
+            body.toggleClass(pushyActiveClass);
+            $('.mp-menu-right').toggleClass('mp-menu-open');
+            container.toggleClass("mp-container-push-right");
+        }
+
 
         function openPushyFallback() {
             body.addClass(pushyActiveClass);
@@ -85,12 +91,20 @@ define(['jquery'], function ($) {
 
         if (cssTransforms3d) {
             //toggle menu
-            menuBtn.click(function () {
-                togglePushy();
+            menuLeftBtn.click(function () {
+                toggleMenuPushy();
             });
             //close menu when clicking site overlay
             siteOverlay.click(function () {
-                togglePushy();
+                if(container.hasClass('mp-container-push-right')){
+                     toggleSearchPushy();
+                }
+                else if(container.hasClass('mp-container-push-left')){
+                    toggleMenuPushy();
+                }
+            });
+            menuRightBtn.click(function(){
+                toggleSearchPushy();
             });
         } else {
             //jQuery fallback
@@ -105,7 +119,7 @@ define(['jquery'], function ($) {
             var state = true;
 
             //toggle menu
-            menuBtn.click(function () {
+            menuLeftBtn.click(function () {
                 if (state) {
                     openPushyFallback();
                     state = false;
@@ -126,6 +140,17 @@ define(['jquery'], function ($) {
                 }
             });
         }
+
+         $(window).scroll(function () {
+            if ($(window).scrollTop() > $('.mp-navbar').height() - 7) {
+                if(!$('.mp-navbar').hasClass('mp-navbar-scrolled')){
+                    $('.mp-navbar').addClass('mp-navbar-scrolled');
+                }
+            }
+             else{
+                  $('.mp-navbar').removeClass('mp-navbar-scrolled')
+             }
+        });
     }
 
     return PushMenu;

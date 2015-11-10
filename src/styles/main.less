@@ -54,11 +54,12 @@ textarea {
 .media-item {
     margin-bottom: 20px;
     width: 315px;
-    background-color: #FFF;
     float: left;
     margin-right: 10px;
     padding: 10px;
-    border: 0;
+    border-color: #ccc;
+    border-style: solid;
+    border-width: 0;
     height: 310px;
 
     @media(max-width: 991px){
@@ -66,6 +67,8 @@ textarea {
             float: none;
             width: 100%;
             height: auto;
+            padding-left: 0;
+            padding-right: 0;
         }
     }
 }
@@ -83,25 +86,22 @@ textarea {
     margin-top: 10px;
 }
 
-.page-container {
+.page-container{
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.page-container-inner {
     margin-right: auto;
     margin-left: auto;
     max-width: 768px;
 }
 
-@media (max-width: @screen-sm-max) {
-    .page-section {
-        margin: 0 12px;
-    }
-}
-
 @media (min-width: @screen-md-min) {
-    .page-container {
+    .page-container-inner {
         max-width: @screen-md-min;
-    }
-
-    .container {
-        width: 768px;
     }
 }
 

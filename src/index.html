@@ -56,19 +56,22 @@
     <nav-bar params="route: route"></nav-bar>
     <!-- Site Overlay -->
     <div class="mp-site-overlay"></div>
-    <div class="mp-container push">
+    <div class="mp-container">
         <div class="mp-navbar">
-            <button type="button" class="navbar-toggle mp-menu-toggle-btn pull-left mp-menu-btn">
+            <button type="button" class="navbar-toggle mp-menu-toggle-left-btn pull-left mp-menu-btn">
                 <span class="fa fa-bars"></span>
             </button>
-            <button type="button" class="navbar-toggle pull-right mp-menu-btn">
-                <span class="fa  fa-search"></span>
+            <button type="button" class="navbar-toggle mp-menu-toggle-right-btn pull-right mp-menu-btn">
+                <span class="fa fa-search"></span>
             </button>
         </div>
         <div class="clearfix"></div>
-        <div class="container-fluid">
-            <div id="page" class="page-container" data-bind="controller: { name: route().page, params: route, afterRender: afterRender }"></div>
+        <div class="page-container">
+            <div id="page" class="page-container-inner" data-bind="controller: { name: route().page, params: route, afterRender: afterRender }"></div>
         </div>
+    </div>
+    <div class="mp-menu mp-menu-right mp-search-form">
+        <input class="form-control" />
     </div>
     <!-- build:js -->
     <script src="scripts/require.config.js"></script>

@@ -65,6 +65,7 @@
 
         .side-comment .marker span {
             display: none;
+            width: 100%;
         }
 
     .side-comment.active .marker,
@@ -136,6 +137,7 @@
 
     .side-comment .add-comment.active {
         display: block;
+        text-align: center;
     }
 
     .side-comment .comment-form {
@@ -190,8 +192,15 @@
         -moz-border-radius: 2px;
         -webkit-border-radius: 2px;
         border-radius: 2px;
-        background: #DEDEDC;
+        background: #cEcEcC;
         text-decoration: none;
+
+        @media(max-width: @screen-sm-max){
+            &{
+                width: 23px;
+                height: 23px;
+            }
+        }
     }
 
         .side-comment .marker:before,
@@ -204,11 +213,25 @@
             text-align: center;
             font-size: 14px;
             line-height: 16px;
+
+             @media(max-width: @screen-sm-max){
+                 &{
+                     width: 23px;
+                     height: 23px;
+                 }
+            }
         }
 
         .side-comment .marker span {
             font-size: 12px;
             line-height: 20px;
+            width: 100%;
+
+             @media(max-width: @screen-sm-max){
+                 &{
+                     font-size: 14px;
+                 }
+            }
         }
 
         .side-comment .marker:after {
@@ -219,7 +242,7 @@
             width: 0;
             border-width: 7px 8px 0 0;
             border-style: solid;
-            border-color: #DEDEDC transparent;
+            border-color: #cEcEcC transparent;
             content: "";
         }
 
