@@ -105,6 +105,22 @@ textarea {
     }
 }
 
+@media (min-width: 1919px){
+    .page-container-inner {
+        max-width: 1378px;
+    }
+}
+
+.page-section article{
+    max-width: 768px;
+
+    @media (min-width: @screen-md-min) {
+        & {
+            max-width: @screen-md-min;
+        }
+    }
+}
+
 .form-horizontal .panel-body,
 .form-vertical .panel-body{
     padding: 0;
