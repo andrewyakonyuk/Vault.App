@@ -10,7 +10,7 @@ define(['jquery'], function ($) {
 
     var PushMenu = function () {
 
-        var pushy = $('.mp-menu-left'), //menu css class
+        var pushy = $('.mp-menu-left-sidebar'), //menu css class
             body = $('body'),
             container = $('.mp-container'), //container css class
             push = $('.push'), //css class to add pushy capability
@@ -31,10 +31,9 @@ define(['jquery'], function ($) {
 
         function toggleSearchPushy(){
             body.toggleClass(pushyActiveClass);
-            $('.mp-menu-right').toggleClass('mp-menu-open');
+            $('.mp-menu-right-sidebar').toggleClass('mp-menu-open');
             container.toggleClass("mp-container-push-right");
         }
-
 
         function openPushyFallback() {
             body.addClass(pushyActiveClass);
@@ -103,7 +102,7 @@ define(['jquery'], function ($) {
                     toggleMenuPushy();
                 }
             });
-            menuRightBtn.click(function(){
+            menuRightBtn.on('click', function(){
                 toggleSearchPushy();
             });
         } else {
@@ -142,13 +141,13 @@ define(['jquery'], function ($) {
         }
 
          $(window).scroll(function () {
-            if ($(window).scrollTop() > $('.mp-navbar').height() - 7) {
-                if(!$('.mp-navbar').hasClass('mp-navbar-scrolled')){
-                    $('.mp-navbar').addClass('mp-navbar-scrolled');
+            if ($(window).scrollTop() > 10) {
+                if(!$('.mp-menu-navbar').hasClass('mp-menu-navbar-scrolled')){
+                    $('.mp-menu-navbar').addClass('mp-menu-navbar-scrolled');
                 }
             }
              else{
-                  $('.mp-navbar').removeClass('mp-navbar-scrolled')
+                  $('.mp-menu-navbar').removeClass('mp-menu-navbar-scrolled')
              }
         });
     }

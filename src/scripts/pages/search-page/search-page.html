@@ -1,6 +1,12 @@
 <div class="page-section">
-    <breadcrumbs params="active: {title: 'PageTitle_Search'}, root: {title: 'PageTitle_Home', url: '/'}"></breadcrumbs>
-    <div class="media-list clearfix">
+    <header class="page-header clearfix">
+        <breadcrumbs params="active: {title: 'PageTitle_Search'}, root: {title: 'PageTitle_Home', url: '/'}"></breadcrumbs>
+        <div class="page-search-form">
+            <form action="index.html#/search" method="get">
+                <input class="form-control" name="q" placeholder="Search" />
+            </form>
+        </div>
+    </header><div class="media-list clearfix">
         <div class="media-item">
             <a href="#flow/10">
                 <img alt="100%x200" src="img/1.jpg" class="media-image" style="width: 100%; display: block;">

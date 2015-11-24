@@ -21,6 +21,21 @@ textarea {
     color: #fff !important;
 }
 
+.btn-info{
+    border-color: #12b4b1;
+    border-width: 3px;
+    color: #12b4b1;
+    background-color: transparent;
+
+    &:hover,
+    &:focus{
+        border-color: #F3B43D;
+        border-width: 3px;
+        color: #F3B43D;
+        background-color: transparent;
+    }
+}
+
     .btn-primary:hover,
     .btn-primary:focus {
         color: @font-color !important;
@@ -31,6 +46,12 @@ textarea {
     -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.075) inset;
     -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.075) inset;
     box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.075) inset;
+
+    &:focus{
+        box-shadow: none;
+        border-color: #ccc;
+        border-bottom: 3px solid #12b4b1;
+    }
 }
 
 .media-heading a {
@@ -113,10 +134,37 @@ textarea {
 
 .page-section article{
     max-width: 768px;
+    margin: 0 auto;
 
     @media (min-width: @screen-md-min) {
         & {
             max-width: @screen-md-min;
+        }
+    }
+}
+.page-header{
+    border-bottom: 0;
+    margin-top: 0;
+}
+
+breadcrumbs{
+    display: block;
+    width: 69%;
+    float: left;
+
+    @media screen and (max-width: @screen-sm-max) {
+        width: 100%;
+    }
+}
+
+.page-search-form{
+    float: right;
+    padding: 8px 0;
+    width: 30%;
+
+    @media screen and (max-width: @screen-sm-max) {
+        &{
+            display: none;
         }
     }
 }

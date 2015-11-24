@@ -1,6 +1,12 @@
 <div class="page-section">
-    <breadcrumbs params="active: {title: 'PageTitle_Dashboard'}, root: {title: 'PageTitle_Home', url: '/'}"></breadcrumbs>
-
+    <header class="page-header clearfix">
+        <breadcrumbs params="active: {title: 'PageTitle_Dashboard'}, root: {title: 'PageTitle_Home', url: '/'}"></breadcrumbs>
+        <div class="page-search-form">
+            <form action="index.html#/search" method="get">
+                <input class="form-control" name="q" placeholder="Search" />
+            </form>
+        </div>
+    </header>
     <table class="table table-hover">
       <caption>Optional table caption.</caption>
       <thead>

@@ -99,13 +99,12 @@ define(function (require, exports, module) {
 
     // [Scaffolded component registrations will be inserted here. To retain this feature, don't remove this comment.]
 
+    var auth = require('packages/auth');
     // Start the application
     ko.applyBindings({
         route: router.currentRoute,
-        afterRender: onModerRender
+        authorized: ko.computed(function(){
+            return auth.isAuthorized();
+        },this)
     });
-
-    function onModerRender() {
-
-    }
 });

@@ -1,94 +1,73 @@
-<nav class="mp-menu mp-menu-left mp-menu-media ui" role="navigation" data-bind="template: { afterRender: render }">
+<nav class="mp-menu mp-menu-sidebar mp-menu-left-sidebar" role="navigation" data-bind="template: { afterRender: render }">
     <div class="mp-menu-wrapper">
         <div class="mp-menu-content">
-            <div class="mp-menu-user">
-                <img class="img-circle" src="img/user.png" />
-            </div>
-            <h4 class="mp-menu-header" data-bind="css: { active: route().page === 'home-page' }">
-                <a data-bind="route: 'home-page'">
-                    <i class="fa fa-home"></i>
-                    <span data-bind="i18n: 'PageTitle_Home'"></span>
-                </a>
-            </h4>
-            <!-- ko if: !authorized() -->
-            <ul>
-                <li data-bind="css: { active: route().page === 'signin-page' }">
-                    <a data-bind="route: 'signin-page'">
-                        <span data-bind="i18n: 'PageTitle_SignIn'"></span>
+            <header class="mp-menu-header">
+                <div class="mp-menu-user">
+                    <a data-bind="route: 'dashboard-page', i18n: { title: 'PageTitle_Dashboard'}">
+                        <img class="img-circle" src="img/user.png" />
                     </a>
-                </li>
-                <li data-bind="css: { active: route().page === 'about-page' }">
-                    <a data-bind="route: 'about-page'">
-                        <span data-bind="i18n: 'PageTitle_About'"></span>
-                    </a>
-                </li>
-            </ul>
-            <!-- /ko -->
-            <!-- ko if: authorized() -->
-            <ul>
-                <li data-bind="css: { active: route().page === 'dashboard-page' }">
-                    <a data-bind="route: 'dashboard-page'"><span data-bind="i18n: 'PageTitle_Dashboard'"></span><span class="badge">14</span></a>
-                </li>
-                <li data-bind="css: { active: route().page === 'settings-page' }">
-                    <a data-bind="route: 'settings-page'">
-                        <span data-bind="i18n: 'PageTitle_Settings'"></span>
-                    </a>
-                </li>
-            </ul>
-            <h4 class="mp-menu-header clearfix" data-bind="css: { active: route().page === 'musics-page' }">
-                <a data-bind="route: 'musics-page'">
-                    <i class="fa fa-music"></i>
-                    <span data-bind="i18n: 'PageTitle_Musics'"></span>
-                </a>
-            </h4>
-            <h4 class="mp-menu-header clearfix" data-bind="css: { active: route().page === 'collection-page' }">
-                <a data-bind="route: 'collection-page'">
-                    <i class="fa fa-folder"></i>
-                    <span data-bind="i18n: 'PageTitle_Collections'"></span>
-                </a>
-            </h4>
-            <h4 class="mp-menu-header clearfix" data-bind="css: { active: route().page === 'calendar-page' }">
-                <a data-bind="route: 'calendar-page'">
-                    <i class="fa fa-calendar-o"></i>
-                    <span data-bind="i18n: 'PageTitle_Calendar'"></span>
-                </a>
-            </h4>
-            <h4 class="mp-menu-header clearfix" data-bind="css: { active: route().page === 'maps-page' }">
-                <a data-bind="route: 'maps-page'">
-                    <i class="fa fa-map-o"></i>
-                    <span data-bind="i18n: 'PageTitle_Maps'"></span>
-                </a>
-            </h4>
-            <div class="dropdown" id="labels-dropdown">
-                <h4 class="mp-menu-header clearfix" data-bind="css: { active: route().page === 'labels-page' }">
-                    <a data-bind="route: 'labels-page'" class="dropdown-title">
-                        <i class="fa fa-tags"></i>
-                        <span data-bind="i18n: 'PageTitle_Labels'"></span>
-                    </a>
-                    <a href="#labels-dropdown" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                        <span class="caret"></span>
-                        <span class="sr-only" data-bind="i18n: 'PageTitle_Labels'"></span>
-                    </a>
-                </h4>
-                <ul class="dropdown-menu" role="menu">
-                    <li>
-                        <a href="#/labels/1">Action</a>
+                </div>
+            </header>
+            <section class="mp-menu-section">
+                <ul class="mp-menu-list">
+                    <li data-bind="css: { active: route().page === 'home-page' }">
+                        <a data-bind="route: 'home-page'">
+                            <i class="fa fa-home"></i>
+                            <span data-bind="i18n: 'PageTitle_Home'"></span>
+                        </a>
                     </li>
-                    <li>
-                        <a href="#/labels/2">Another action</a>
+                    <!-- ko if: !authorized() -->
+                    <li data-bind="css: { active: route().page === 'signin-page' }">
+                        <a data-bind="route: 'signin-page'" class="no-icon">
+                            <span data-bind="i18n: 'PageTitle_SignIn'"></span>
+                        </a>
                     </li>
-                    <li>
-                        <a href="#/labels/3">Something else here</a>
+                    <li data-bind="css: { active: route().page === 'about-page' }">
+                        <a data-bind="route: 'about-page'" class="no-icon">
+                            <span data-bind="i18n: 'PageTitle_About'"></span>
+                        </a>
                     </li>
-                    <li>
-                        <a href="#/labels/4">Separated link</a>
+                    <!-- /ko -->
+                     <!-- ko if: authorized() -->
+                    <li data-bind="css: { active: route().page === 'collection-page' }">
+                        <a data-bind="route: 'collection-page'">
+                            <i class="fa fa-folder"></i>
+                            <span data-bind="i18n: 'PageTitle_Collections'"></span>
+                        </a>
                     </li>
-                    <li>
-                        <a href="#/labels/5">One more separated link</a>
+                    <li data-bind="css: { active: route().page === 'musics-page' }">
+                        <a data-bind="route: 'musics-page'">
+                            <i class="fa fa-music"></i>
+                            <span data-bind="i18n: 'PageTitle_Musics'"></span>
+                        </a>
                     </li>
+                    <li data-bind="css: { active: route().page === 'calendar-page' }">
+                        <a data-bind="route: 'calendar-page'">
+                            <i class="fa fa-calendar-o"></i>
+                            <span data-bind="i18n: 'PageTitle_Calendar'"></span>
+                        </a>
+                    </li>
+                    <li data-bind="css: { active: route().page === 'maps-page' }">
+                        <a data-bind="route: 'maps-page'">
+                            <i class="fa fa-map-marker"></i>
+                            <span data-bind="i18n: 'PageTitle_Maps'"></span>
+                        </a>
+                    </li>
+                    <!-- /ko -->
                 </ul>
-            </div>
-            <!-- /ko -->
+            </section>
+            <footer class="mp-menu-footer">
+                <ul class="mp-menu-list">
+                     <!-- ko if: authorized() -->
+                    <li>
+                        <a class="action" data-bind="click: signout" href="#">
+                            <i class="fa fa-sign-out"></i>
+                            <span>Signout</span>
+                        </a>
+                    </li>
+                    <!-- /ko -->
+                </ul>
+            </footer>
         </div>
     </div>
 </nav>

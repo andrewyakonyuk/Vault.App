@@ -1,7 +1,7 @@
 /*global define, boilerplate */
 /*jslint nomen: true*/
 
-define(['jquery', 'underscore', 'utils/emitter', 'text!./comment.html', 'text!./section.html', 'utils/autogrow', 'packages/jquery.fastbutton'],
+define(['jquery', 'underscore', 'utils/emitter', 'text!./comment.html', 'text!./section.html', 'utils/autogrow'],
     function ($, _, Emitter, CommentTemplate, SectionTemplate, autogrow) {
         'use strict';
 

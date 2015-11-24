@@ -18,6 +18,7 @@ define(['knockout','jquery', 'text!./nav-bar.html', 'packages/mpmenu', 'packages
 
     NavBarViewModel.prototype.signout = function () {
         auth.signOut();
+        return false;
     };
 
     return {
