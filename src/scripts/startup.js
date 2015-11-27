@@ -35,6 +35,9 @@ define(function (require, exports, module) {
         ko = require('knockout'),
         validation = require('knockout-validation');
 
+    //knockout validation issue: https://github.com/Knockout-Contrib/Knockout-Validation/issues/259
+    window.ko = ko;
+
     require('bindings/controller');
     require('bindings/i18n');
     require('bindings/route')
@@ -60,10 +63,10 @@ define(function (require, exports, module) {
         require: 'pages/article-page/article'
     });
     ko.components.register('register-page', {
-        require: 'pages/register-page/register-page'
+        require: 'pages/register-page/register'
     });
     ko.components.register('search-page', {
-        require: 'pages/search-page/search-page'
+        require: 'pages/search-page/search'
     });
     ko.components.register('notfound-page', {
         require: 'pages/notfound-page/notfound'

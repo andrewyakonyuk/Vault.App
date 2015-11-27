@@ -36,6 +36,25 @@
         }
     }
 
+    .circle{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: -15px;
+        margin-left: -15px;
+        width: 30px;
+        height: 30px;
+
+        &:before{
+            position: relative;
+            top: 5px;
+            font-size: 20px;
+            color: #e91e63;
+            display: none;
+            content: " ";
+        }
+    }
+
     .opening {
         position: relative;
         margin: 0 auto;
@@ -52,13 +71,6 @@
             transition-style: preserve-3d;
             -webkit-backface-visibility: visible;
             backface-visibility: visible;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            margin-top: -15px;
-            margin-left: -15px;
-            width: 30px;
-            height: 30px;
             -moz-border-radius: 50%;
             -webkit-border-radius: 50%;
             border-radius: 50%;
@@ -84,6 +96,10 @@
             transition-timing-function: ease-out;
             transform: scale(0.3);
         }
+
+        .circle:before{
+            content: "\f004";
+        }
     }
 
     figure {
@@ -99,7 +115,7 @@
         width: 50px;
         text-align: center;
 
-        &.active a.kudobject .opening .circle {
+        &.active .kudobject .opening .circle {
             background: rgba(0, 0, 0, 0.7);
             -moz-transform: scale(1.1);
             -ms-transform: scale(1.1);
@@ -108,7 +124,7 @@
             transform: scale(1.1);
         }
 
-        &.complete a.kudobject .opening .circle {
+        &.complete .kudobject .opening .circle {
             background-color: #000;
             background-position: center;
             -moz-background-size: 80%;
@@ -132,21 +148,20 @@
             -webkit-animation-iteration-count: 1;
             animation-iteration-count: 1;
         }
-
-            &.complete a.kudobject .opening .circle:before {
-                position: relative;
-                top: 1px;
-                left: 1px;
-                color: #e91e63;
-                content: "\e005";
-                font-size: 20px;
-                font-family: Glyphicons Halflings;
-            }
     }
 
-    a.kudobject {
+    .kudobject {
         display: block;
         cursor: pointer;
+        border: 0;
+        background: none;
+        margin: 0 auto;
+
+        &:hover,
+        &:focus,
+        &:active{
+            outline: none;
+        }
     }
 }
 

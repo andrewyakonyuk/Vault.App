@@ -1,6 +1,6 @@
 /*global define, console */
 
-define(['knockout', 'packages/auth', 'packages/router', 'text!./register-page.html'], function (ko, auth, router, templateMarkup) {
+define(['knockout', 'packages/auth', 'packages/router', 'text!./register.html'], function (ko, auth, router, templateMarkup) {
     'use strict';
 
     function RegisterPage() {

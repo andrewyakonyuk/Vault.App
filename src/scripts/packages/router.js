@@ -1,10 +1,7 @@
 /*global define */
 
-define(["knockout", "crossroads", "hasher", "packages/auth"], function (ko, crossroads, hasher, auth) {
+define(["knockout", "crossroads", "hasher", "underscore", "packages/auth"], function (ko, crossroads, hasher, _, auth) {
     'use strict';
-
-    //knockout validation issue: https://github.com/Knockout-Contrib/Knockout-Validation/issues/259
-    window.ko = ko;
 
     // This module configures crossroads.js, a routing library. If you prefer, you
     // can use any other routing library (or none at all) as Knockout is designed to
@@ -29,37 +26,38 @@ define(["knockout", "crossroads", "hasher", "packages/auth"], function (ko, cros
         var self = this,
             currentRoute = this.currentRoute = ko.observable({});
 
-        this.navigate = function(routeName){
-            var routeDefinition = {};
-            ko.utils.arrayForEach(config.routes, function(item){
-               if(item.params.page == routeName) {
-                   routeDefinition = item;
-                   return true;
-               }
+        var findRouteByName = function (name) {
+            var route = _.find(config.routes, function (item) {
+                return item.params.page == name;
             });
-            hasher.setHash(routeDefinition.url);
+
+            if (route)
+                return route.compiled;
+            return undefined;
         };
 
-        this.urlForRoute = function(routeName){
-             var routeDefinition = {
-                 url: ''
-             };
-            ko.utils.arrayForEach(config.routes, function(item){
-               if(item.params.page == routeName) {
-                   routeDefinition = item;
-                   return true;
-               }
-            });
-            return routeDefinition.url;
+        this.navigate = function (routeName, params) {
+            var route = findRouteByName(routeName);
+            if (route) {
+                hasher.setHash(route.interpolate(params || {}));
+                return true;
+            }
+            return false;
+        };
+
+        this.urlForRoute = function (routeName, params) {
+            var route = findRouteByName(routeName);
+            if (route) {
+                return route.interpolate(params || {});
+            }
+            return undefined;
         }
 
         ko.utils.arrayForEach(config.routes, function (route) {
-            crossroads.addRoute(route.url, function (requestParams) {
-                console.log(route);
-                if(route.params.authorizedOnly && !auth.isAuthorized()) {
+            route.compiled = crossroads.addRoute(route.url, function (requestParams) {
+                if (route.params.authorizedOnly && !auth.isAuthorized()) {
                     self.navigate('signin-page');
-                }
-                else{
+                } else {
                     currentRoute(ko.utils.extend(requestParams, route.params));
                 }
             });
@@ -69,6 +67,12 @@ define(["knockout", "crossroads", "hasher", "packages/auth"], function (ko, cros
 
         crossroads.bypassed.add(function (request) {
             self.currentRoute(request);
+        });
+
+        auth.isAuthorized.subscribe(function (value) {
+            if (!value) {
+                self.navigate('signin-page');
+            }
         });
     }
 

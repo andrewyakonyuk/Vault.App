@@ -35,15 +35,16 @@ define(['knockout', 'packages/router', 'packages/auth', 'packages/i18n!nls/local
     }
 
     SignInViewModel.prototype.submit = function (e) {
-        if (!this.hasErrors()) {
-            auth.signIn(this.login(), this.password(), this.rememberMe())
+        var self = this;
+        if (!self.hasErrors()) {
+            auth.signIn(self.login(), self.password(), self.rememberMe())
                 .done(function(){
                     router.navigate('dashboard-page');
                 }).fail(function(){
-                    this.errors.showAllMessages();
+                    self.errors.showAllMessages();
             });
         } else {
-            this.errors.showAllMessages();
+            self.errors.showAllMessages();
         }
         return false;
     };

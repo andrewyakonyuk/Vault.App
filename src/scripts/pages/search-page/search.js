@@ -1,6 +1,6 @@
 /*global define */
 
-define(['knockout', 'text!./search-page.html'], function (ko, templateMarkup) {
+define(['knockout', 'text!./search.html'], function (ko, templateMarkup) {
     'use strict';
 
     function SearchPage(params) {

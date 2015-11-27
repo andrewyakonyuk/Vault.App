@@ -1,15 +1,18 @@
-define(["jquery", "knockout", "packages/cookie"], function($, ko, cookie){
+define(["jquery", "knockout", "packages/cookie", "packages/webapi"], function($, ko, cookie, webapi){
     'use strict';
 
     var auth = {
         signIn: function(login, password, rememberMe){
-            this.isAuthorized(true);
-            return $.Deferred()
-                .resolve({login: login})
-                .promise();
+            return webapi.callService('login', 'put', {login: login, password: password})
+                .done(function(data){
+                    auth.ticket(data.ticket);
+                })
+                .fail(function(jqXHR, textStatus){
+                    console.log(textStatus);
+                });
         },
         signOut: function(){
-            this.isAuthorized(false);
+            auth.ticket('');
             $.Deferred()
                 .resolve()
                 .promise();
@@ -19,15 +22,18 @@ define(["jquery", "knockout", "packages/cookie"], function($, ko, cookie){
                 .resolve()
                 .promise();
         },
-        isAuthorized: ko.observable(cookie.hasItem('auth'))
+        isAuthorized: ko.observable(cookie.hasItem('auth')),
+        ticket: ko.observable(cookie.getItem('auth') || '')
     };
 
-    auth.isAuthorized.subscribe(function (newValue) {
+    auth.ticket.subscribe(function (newValue) {
         if (newValue) {
-            cookie.setItem('auth', false)
+            cookie.setItem('auth', newValue)
         } else {
             cookie.removeItem('auth')
         }
+
+        auth.isAuthorized(!!auth.ticket());
     });
 
     return auth;
