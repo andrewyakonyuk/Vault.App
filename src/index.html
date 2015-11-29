@@ -58,7 +58,8 @@
     <div class="mp-menu-sidebar mp-menu-right-sidebar">
         <header class="mp-menu-header">
             <form class="mp-search-form">
-                <input class="form-control" placeholder="Type to search">
+                <input class="form-control awesomplete"
+       data-list="Ada, Java, JavaScript, Brainfuck, LOLCODE, Node.js, Ruby on Rails" type="search" placeholder="Type to search">
             </form>
         </header>
         <section class="mp-menu-section">
@@ -79,14 +80,15 @@
 
     <div class="mp-container">
         <div class="mp-menu-navbar">
-            <button type="button" class="navbar-toggle mp-menu-toggle-left-btn pull-left mp-menu-btn">
+            <div class="mp-menu-navbar-scrolled-inner"></div>
+            <button type="button" class="mp-menu-toggle-left-btn pull-left mp-menu-btn">
                 <span class="fa fa-bars"></span>
             </button>
             <!-- ko if:authorized() -->
-            <button type="button" class="navbar-toggle mp-menu-toggle-right-btn pull-right mp-menu-btn">
+            <button type="button" class="mp-menu-toggle-right-btn pull-right mp-menu-btn">
                 <span class="fa fa-search"></span>
             </button>
-            <button type="button" class="navbar-toggle pull-right mp-menu-btn">
+            <button type="button" class="pull-right mp-menu-btn">
                 <span class="fa fa-edit"></span>
             </button>
             <!-- /ko -->

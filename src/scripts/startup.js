@@ -100,6 +100,8 @@ define(function (require, exports, module) {
         }
     });
 
+    var awesomplete = require('packages/awesomplete');
+
     // [Scaffolded component registrations will be inserted here. To retain this feature, don't remove this comment.]
 
     var auth = require('packages/auth');

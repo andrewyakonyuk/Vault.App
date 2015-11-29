@@ -23,4 +23,6 @@ define([], function () {
             console[method] = noop;
         }
     }
+
+    return console;
 });

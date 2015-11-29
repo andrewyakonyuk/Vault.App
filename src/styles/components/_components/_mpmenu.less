@@ -417,9 +417,20 @@
      transform: translate3d(0px, 0px, 0px);
 }
 
+.mp-menu-navbar-scrolled-inner{
+    height: 42px;
+    position: absolute;
+    width: 100%;
+    background-color: #f1f1f1;
+}
+
 .mp-menu-navbar-scrolled {
     box-shadow: 0px 0.0625em 0.3125em rgba(0, 0, 0, 0.7);
-    opacity: .9;
+    background-color: transparent;
+
+    .mp-menu-navbar-scrolled-inner{
+        opacity: .8;
+    }
 }
 
 @media (min-width: @screen-sm) {

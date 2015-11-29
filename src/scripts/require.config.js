@@ -11,7 +11,7 @@ var require = {
         "text": "bower_modules/requirejs-text/text",
         "underscore": "bower_modules/underscore/underscore",
         "pace": "bower_modules/pace/pace",
-        "bootstrap": "bower_modules/bootstrap/js",
+        "jquery.nicescroll": "bower_modules/jquery.nicescroll/dist/jquery.nicescroll.min",
 
         "bindings": "./scripts/bindings/",
         "packages": "./scripts/packages/",
@@ -24,9 +24,6 @@ var require = {
     shim: {
         "knockout-validation": {
             deps: ["knockout"]
-        },
-        "bootstrap/dropdown": {
-            deps: ["jquery"]
         }
     },
     locale: "en-us"

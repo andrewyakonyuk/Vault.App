@@ -1,11 +1,10 @@
 /*global define, console, Waves */
 
-define(['knockout','jquery', 'text!./nav-bar.html', 'packages/mpmenu', 'packages/auth', 'bootstrap/dropdown'], function (ko, $, template, mpmenu, auth) {
+define(['knockout', 'jquery', 'text!./nav-bar.html', 'packages/mpmenu', 'packages/auth', 'jquery.nicescroll'], function (ko, $, template, mpmenu, auth) {
     'use strict';
 
     function NavBarViewModel(params) {
         this.route = params.route;
-        this.searchText = ko.observable('');
 
         this.authorized = ko.computed(function () {
             return auth.isAuthorized();
@@ -14,6 +13,7 @@ define(['knockout','jquery', 'text!./nav-bar.html', 'packages/mpmenu', 'packages
 
     NavBarViewModel.prototype.render = function () {
         mpmenu();
+        $('.mp-menu-content').niceScroll();
     };
 
     NavBarViewModel.prototype.signout = function () {

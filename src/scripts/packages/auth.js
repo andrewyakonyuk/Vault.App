@@ -1,24 +1,25 @@
-define(["jquery", "knockout", "packages/cookie", "packages/webapi"], function($, ko, cookie, webapi){
+/*global define, console */
+define(["jquery", "knockout", "packages/cookie", "packages/http"], function ($, ko, cookie, http) {
     'use strict';
 
     var auth = {
-        signIn: function(login, password, rememberMe){
-            return webapi.callService('login', 'put', {login: login, password: password})
-                .done(function(data){
+        signIn: function (login, password, rememberMe) {
+            return http.callService('login', 'put', {login: login, password: password})
+                .done(function (data) {
                     auth.ticket(data.ticket);
                 })
-                .fail(function(jqXHR, textStatus){
+                .fail(function (jqXHR, textStatus) {
                     console.log(textStatus);
                 });
         },
-        signOut: function(){
+        signOut: function () {
             auth.ticket('');
             $.Deferred()
                 .resolve()
                 .promise();
         },
-        signUp: function(login, password, name){
-             $.Deferred()
+        signUp: function (login, password, name) {
+            $.Deferred()
                 .resolve()
                 .promise();
         },
@@ -28,9 +29,9 @@ define(["jquery", "knockout", "packages/cookie", "packages/webapi"], function($,
 
     auth.ticket.subscribe(function (newValue) {
         if (newValue) {
-            cookie.setItem('auth', newValue)
+            cookie.setItem('auth', newValue);
         } else {
-            cookie.removeItem('auth')
+            cookie.removeItem('auth');
         }
 
         auth.isAuthorized(!!auth.ticket());

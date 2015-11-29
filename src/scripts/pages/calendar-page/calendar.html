@@ -1,4 +1,4 @@
-<div class="page-section">
+<div class="page-section" data-bind="template: { afterRender: afterRender }">
     <header class="page-header clearfix">
         <breadcrumbs params="active: {title: 'PageTitle_Calendar'}, root: {title: 'PageTitle_Home', url: '/'}"></breadcrumbs>
         <div class="page-search-form">
@@ -7,8 +7,32 @@
             </form>
         </div>
     </header>
-     <h2 class="cover-heading">Calendar</h2>
+    <section id="cd-timeline" class="cd-container" data-bind="foreach: events">
+		<div class="cd-timeline-block">
+            <!-- ko if: type == 'picture' -->
+			<div class="cd-timeline-img cd-picture">
+				<img src="img/cd-icon-picture.svg" alt="Picture">
+			</div> <!-- cd-timeline-img -->
+            <!-- /ko -->
 
-    <p class="lead">Calendar content</p>
+            <!-- ko if: type == 'location' -->
+            <div class="cd-timeline-img cd-location">
+				<img src="img/cd-icon-location.svg" alt="Location">
+			</div> <!-- cd-timeline-img -->
+            <!-- /ko -->
+
+            <!-- ko if: type == 'movie' -->
+            <div class="cd-timeline-img cd-movie">
+				<img src="img/cd-icon-movie.svg" alt="Movie">
+			</div> <!-- cd-timeline-img -->
+            <!-- /ko -->
+
+			<div class="cd-timeline-content">
+				<h2 data-bind="text: title"></h2>
+				<p data-bind="text: description"></p>
+				<span class="cd-date" data-bind="text: datetime"></span>
+			</div> <!-- cd-timeline-content -->
+		</div> <!-- cd-timeline-block -->
+	</section> <!-- cd-timeline -->
 
 </div>
