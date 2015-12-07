@@ -149,12 +149,7 @@
         }
     }
 
-    .mp-menu-section{
-        margin-bottom: 45px;
-    }
-
     .mp-menu-footer {
-        position: fixed;
         bottom: 0px;
         left: 0px;
         clear: both;
@@ -223,11 +218,7 @@
 }
 
 .mp-container-push-right {
-    -moz-transform: translate(-@mp-menu-width, 0);
-    -ms-transform: translate(-@mp-menu-width, 0);
-    -o-transform: translate(-@mp-menu-width, 0);
-    -webkit-transform: translate(-@mp-menu-width, 0);
-    transform: translate(-@mp-menu-width, 0);
+    transform: translate3d(-@mp-menu-width, 0, 0);
 }
 
 .mp-menu-open {

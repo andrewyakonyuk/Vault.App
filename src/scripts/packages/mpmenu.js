@@ -9,54 +9,52 @@ define(['jquery'], function ($) {
     'use strict';
 
     var PushMenu = function () {
-        var pushy = $('.mp-menu-left-sidebar'), //menu css class
-            body = $('body'),
-            container = $('.mp-container'), //container css class
-            pushyClass = "mp-menu-left mp-menu-open", //menu position & menu open class
-            pushyActiveClass = "mp-menu-active"; //css class to toggle site overlay
+        var $pushyLeft = $('.mp-menu-left-sidebar'),
+            $pushyRight = $('.mp-menu-right-sidebar'),
+            $body = $('body'),
+            $container = $('.mp-container'), //container css class,
+            $window = $(window),
+            $navbar = $('.mp-menu-navbar'),
+            pushyClass = "mp-menu-open", //menu position & menu open class
+            pushyActiveClass = "mp-menu-active", //css class to toggle site overlay
+            overlayClass = "mp-site-overlay";
 
-        function toggleMenuPushy() {
-            body.toggleClass(pushyActiveClass); //toggle site overlay
-            pushy.toggleClass(pushyClass);
-            container.toggleClass("mp-container-push-left");
-        }
+        $(document).on('click', '[data-target-bar="left"]', function(){
+            requestAnimationFrame(function(){
+                $body.addClass(pushyActiveClass); //toggle site overlay
+                $pushyLeft.addClass(pushyClass);
+                $container.addClass("mp-container-push-left");
+            });
+        });
 
-        function toggleSearchPushy(){
-            body.toggleClass(pushyActiveClass);
-            $('.mp-menu-right-sidebar').toggleClass('mp-menu-open');
-            container.toggleClass("mp-container-push-right");
-        }
-
-        //toggle menu
-        $(document).on('click', '.mp-menu-toggle-left-btn', function(){
-           toggleMenuPushy();
+        $(document).on('click', '[data-target-bar="right"]', function(){
+            requestAnimationFrame(function(){
+                $body.addClass(pushyActiveClass);
+                $pushyRight.addClass(pushyClass);
+                $container.addClass("mp-container-push-right");
+            });
         });
 
         //close menu when clicking site overlay
-        $(document).on('click', '.mp-site-overlay', function () {
-            if(container.hasClass('mp-container-push-right')){
-                 toggleSearchPushy();
-            }
-            else if(container.hasClass('mp-container-push-left')){
-                toggleMenuPushy();
-            }
+        $(document).on('click', '.' + overlayClass, function () {
+            requestAnimationFrame(function(){
+                $body.removeClass(pushyActiveClass);
+                $pushyLeft.removeClass(pushyClass);
+                $pushyRight.removeClass(pushyClass);
+                $container.removeClass('mp-container-push-left');
+                $container.removeClass('mp-container-push-right');
+            });
         });
 
-        $(document).on('click', '.mp-menu-toggle-right-btn', function(){
-            toggleSearchPushy();
-        });
-
-         $(window).scroll(function () {
-            if ($(window).scrollTop() > 10) {
-                if(!$('.mp-menu-navbar').hasClass('mp-menu-navbar-scrolled')){
-                    $('.mp-menu-navbar').addClass('mp-menu-navbar-scrolled');
-                }
+         $window.scroll(function () {
+            if ($window.scrollTop() > 10) {
+                $navbar.addClass('mp-menu-navbar-scrolled');
             }
              else{
-                  $('.mp-menu-navbar').removeClass('mp-menu-navbar-scrolled')
+                $navbar.removeClass('mp-menu-navbar-scrolled');
              }
         });
-    }
+    };
 
     return PushMenu;
 });

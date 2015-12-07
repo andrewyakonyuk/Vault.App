@@ -51,7 +51,7 @@ define(["knockout", "crossroads", "hasher", "underscore", "packages/auth"], func
                 return route.interpolate(params || {});
             }
             return undefined;
-        }
+        };
 
         ko.utils.arrayForEach(config.routes, function (route) {
             route.compiled = crossroads.addRoute(route.url, function (requestParams) {
@@ -78,97 +78,19 @@ define(["knockout", "crossroads", "hasher", "underscore", "packages/auth"], func
 
     return new Router({
         routes: [
-            {
-                url: '',
-                params: {
-                    page: 'home-page',
-                    authorizedOnly: false
-                }
-            },
-            {
-                url: 'about',
-                params: {
-                    page: 'about-page',
-                    authorizedOnly: false
-                }
-            },
-            {
-                url: 'signin',
-                params: {
-                    page: 'signin-page',
-                    authorizedOnly: false
-                }
-            },
-            {
-                url: 'join',
-                params: {
-                    page: 'register-page',
-                    authorizedOnly: false
-                }
-            },
-            {
-                url: 'article/{id}',
-                params: {
-                    page: 'article-page',
-                    authorizedOnly: true
-                }
-            },
-            {
-                url: 'search/{searchText}',
-                params: {
-                    page: 'search-page',
-                    authorizedOnly: true
-                }
-            },
-            {
-                url: 'collections/:id:',
-                params: {
-                    page: 'collection-page',
-                    authorizedOnly: true
-                }
-            },
-            {
-                url: 'dashboard',
-                params: {
-                    page: 'dashboard-page',
-                    authorizedOnly: true
-                }
-            },
-            {
-                url: 'settings',
-                params: {
-                    page: 'settings-page',
-                    authorizedOnly: true
-                }
-            },
-            {
-                url: 'labels/:id:',
-                params: {
-                    page: 'labels-page',
-                    authorizedOnly: true
-                }
-            },
-            {
-                url: 'maps',
-                params: {
-                    page: 'maps-page',
-                    authorizedOnly: true
-                }
-            },
-            {
-                url: 'musics',
-                params: {
-                    page: 'musics-page',
-                    authorizedOnly: true
-                }
-            },
-            {
-                url: 'calendar',
-                params: {
-                    page: 'calendar-page',
-                    authorizedOnly: true
-                }
-            }
+            { url: '', params: { page: 'home-page', authorizedOnly: false } },
+            { url: 'about', params: { page: 'about-page', authorizedOnly: false } },
+            { url: 'signin', params: { page: 'signin-page', authorizedOnly: false } },
+            { url: 'join', params: { page: 'register-page', authorizedOnly: false } },
+            { url: 'article/{id}', params: { page: 'article-page', authorizedOnly: true } },
+            { url: 'search/{searchText}', params: { page: 'search-page', authorizedOnly: true } },
+            { url: 'collections/:id:', params: { page: 'collection-page', authorizedOnly: true } },
+            { url: 'dashboard', params: { page: 'dashboard-page', authorizedOnly: true } },
+            { url: 'settings', params: { page: 'settings-page', authorizedOnly: true } },
+            { url: 'labels/:id:', params: { page: 'labels-page', authorizedOnly: true } },
+            { url: 'maps', params: { page: 'maps-page', authorizedOnly: true } },
+            { url: 'musics', params: { page: 'musics-page', authorizedOnly: true } },
+            { url: 'calendar', params: { page: 'calendar-page', authorizedOnly: true } }
         ]
     });
 });

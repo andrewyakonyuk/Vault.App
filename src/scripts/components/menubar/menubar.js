@@ -1,6 +1,6 @@
-/*global define, console, Waves */
+/*global define, console */
 
-define(['knockout', 'jquery', 'text!./nav-bar.html', 'packages/mpmenu', 'packages/auth', 'jquery.nicescroll'], function (ko, $, template, mpmenu, auth) {
+define(['knockout', 'jquery', 'text!./menubar.html', 'packages/mpmenu', 'packages/auth'], function (ko, $, template, mpmenu, auth) {
     'use strict';
 
     function NavBarViewModel(params) {
@@ -13,12 +13,14 @@ define(['knockout', 'jquery', 'text!./nav-bar.html', 'packages/mpmenu', 'package
 
     NavBarViewModel.prototype.render = function () {
         mpmenu();
-        $('.mp-menu-content').niceScroll();
     };
 
     NavBarViewModel.prototype.signout = function () {
         auth.signOut();
         return false;
+    };
+
+    NavBarViewModel.prototype.dispose = function() {
     };
 
     return {

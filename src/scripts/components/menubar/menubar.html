@@ -1,0 +1,69 @@
+<nav class="mp-menu-sidebar mp-menu-left-sidebar" role="navigation" data-sidebar="left" data-bind="template: { afterRender: render }">
+    <header class="mp-menu-header">
+        <div class="mp-menu-user">
+            <a data-bind="route: 'dashboard-page', i18n: { title: 'PageTitle_Dashboard'}">
+                <img class="img-circle" src="img/user.png" />
+            </a>
+        </div>
+    </header>
+    <section class="mp-menu-section">
+        <ul class="mp-menu-list">
+            <li data-bind="css: { active: route().page === 'home-page' }">
+                <a data-bind="route: 'home-page'">
+                    <i class="fa fa-home"></i>
+                    <span data-bind="i18n: 'PageTitle_Home'"></span>
+                </a>
+            </li>
+            <!-- ko if: !authorized() -->
+            <li data-bind="css: { active: route().page === 'signin-page' }">
+                <a data-bind="route: 'signin-page'" class="no-icon">
+                    <span data-bind="i18n: 'PageTitle_SignIn'"></span>
+                </a>
+            </li>
+            <li data-bind="css: { active: route().page === 'about-page' }">
+                <a data-bind="route: 'about-page'" class="no-icon">
+                    <span data-bind="i18n: 'PageTitle_About'"></span>
+                </a>
+            </li>
+            <!-- /ko -->
+             <!-- ko if: authorized() -->
+            <li data-bind="css: { active: route().page === 'collection-page' }">
+                <a data-bind="route: 'collection-page'">
+                    <i class="fa fa-folder"></i>
+                    <span data-bind="i18n: 'PageTitle_Collections'"></span>
+                </a>
+            </li>
+            <li data-bind="css: { active: route().page === 'musics-page' }">
+                <a data-bind="route: 'musics-page'">
+                    <i class="fa fa-music"></i>
+                    <span data-bind="i18n: 'PageTitle_Musics'"></span>
+                </a>
+            </li>
+            <li data-bind="css: { active: route().page === 'calendar-page' }">
+                <a data-bind="route: 'calendar-page'">
+                    <i class="fa fa-calendar-o"></i>
+                    <span data-bind="i18n: 'PageTitle_Calendar'"></span>
+                </a>
+            </li>
+            <li data-bind="css: { active: route().page === 'maps-page' }">
+                <a data-bind="route: 'maps-page'">
+                    <i class="fa fa-map-marker"></i>
+                    <span data-bind="i18n: 'PageTitle_Maps'"></span>
+                </a>
+            </li>
+            <!-- /ko -->
+        </ul>
+    </section>
+    <footer class="mp-menu-footer">
+        <ul class="mp-menu-list">
+             <!-- ko if: authorized() -->
+            <li>
+                <a class="action" data-bind="click: signout" href="#">
+                    <i class="fa fa-sign-out"></i>
+                    <span>Signout</span>
+                </a>
+            </li>
+            <!-- /ko -->
+        </ul>
+    </footer>
+</nav>

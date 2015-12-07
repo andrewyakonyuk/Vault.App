@@ -1,0 +1,22 @@
+<div class="mp-menu-sidebar mp-menu-right-sidebar" role="search" data-sidebar="right" data-bind="template: { afterRender: render}">
+    <header class="mp-menu-header">
+        <form class="mp-search-form">
+            <input class="form-control awesomplete"
+   data-list="Ada, Java, JavaScript, Brainfuck, LOLCODE, Node.js, Ruby on Rails" type="search" placeholder="Type to search">
+        </form>
+    </header>
+    <section class="mp-menu-section">
+        <ul class="mp-menu-list">
+            <li data-bind="css: { active: route().page === 'signin-page' }">
+                <a data-bind="route: 'signin-page'" class="no-icon">
+                    <span data-bind="i18n: 'PageTitle_SignIn'"></span>
+                </a>
+            </li>
+            <li data-bind="css: { active: route().page === 'about-page' }">
+                <a data-bind="route: 'about-page'" class="no-icon">
+                    <span data-bind="i18n: 'PageTitle_About'"></span>
+                </a>
+            </li>
+        </ul>
+    </section>
+</div>

@@ -22,7 +22,8 @@ define(["jquery", "packages/cookie"], function ($, cookie) {
 
                 crossDomain: true,
                 contentType: "application/json",
-                dataType: "json"
+                dataType: "json",
+                cache: true
             };
 
             return $.ajax(webserviceUrl, ajaxSettings);

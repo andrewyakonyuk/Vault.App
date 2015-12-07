@@ -53,39 +53,18 @@
 </head>
 
 <body class="mp-menu-media">
-    <nav-bar params="route: route"></nav-bar>
+    <menubar params="route: route"></menubar>
+    <searchbar params="route: route"></searchbar>
     <div class="mp-site-overlay"></div>
-    <div class="mp-menu-sidebar mp-menu-right-sidebar">
-        <header class="mp-menu-header">
-            <form class="mp-search-form">
-                <input class="form-control awesomplete"
-       data-list="Ada, Java, JavaScript, Brainfuck, LOLCODE, Node.js, Ruby on Rails" type="search" placeholder="Type to search">
-            </form>
-        </header>
-        <section class="mp-menu-section">
-            <ul class="mp-menu-list">
-                <li data-bind="css: { active: route().page === 'signin-page' }">
-                    <a data-bind="route: 'signin-page'" class="no-icon">
-                        <span data-bind="i18n: 'PageTitle_SignIn'"></span>
-                    </a>
-                </li>
-                <li data-bind="css: { active: route().page === 'about-page' }">
-                    <a data-bind="route: 'about-page'" class="no-icon">
-                        <span data-bind="i18n: 'PageTitle_About'"></span>
-                    </a>
-                </li>
-            </ul>
-        </section>
-    </div>
 
     <div class="mp-container">
         <div class="mp-menu-navbar">
             <div class="mp-menu-navbar-scrolled-inner"></div>
-            <button type="button" class="mp-menu-toggle-left-btn pull-left mp-menu-btn">
+            <button type="button" data-target-bar="left" class="mp-menu-btn pull-left">
                 <span class="fa fa-bars"></span>
             </button>
             <!-- ko if:authorized() -->
-            <button type="button" class="mp-menu-toggle-right-btn pull-right mp-menu-btn">
+            <button type="button" data-target-bar="right" class="mp-menu-btn pull-right">
                 <span class="fa fa-search"></span>
             </button>
             <button type="button" class="pull-right mp-menu-btn">

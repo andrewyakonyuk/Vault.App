@@ -298,10 +298,10 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="search"] {
   -webkit-appearance: textfield;
   /* 1 */
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
   /* 2 */
-  box-sizing: content-box;
+  box-sizing: border-box;
 }
 /**
  * Remove inner padding and search cancel button in Safari and Chrome on OS X.
@@ -3106,11 +3106,7 @@ dd {
 .mp-menu-sidebar .mp-menu-list .active a {
   border-color: #12b4b1;
 }
-.mp-menu-sidebar .mp-menu-section {
-  margin-bottom: 45px;
-}
 .mp-menu-sidebar .mp-menu-footer {
-  position: fixed;
   bottom: 0px;
   left: 0px;
   clear: both;
@@ -3160,11 +3156,7 @@ dd {
   transform: translate3d(235px, 0, 0);
 }
 .mp-container-push-right {
-  -moz-transform: translate(-235px, 0);
-  -ms-transform: translate(-235px, 0);
-  -o-transform: translate(-235px, 0);
-  -webkit-transform: translate(-235px, 0);
-  transform: translate(-235px, 0);
+  transform: translate3d(-235px, 0, 0);
 }
 .mp-menu-open {
   -webkit-transform: translate3d(0, 0, 0);
@@ -4325,7 +4317,6 @@ table th[class*="col-"] {
   clip: rect(0, 0, 0, 0);
 }
 div.awesomplete {
-  display: inline-block;
   position: relative;
 }
 div.awesomplete > input {
@@ -4428,12 +4419,6 @@ div.awesomplete li[aria-selected="true"] mark {
   width: 4px;
   background: #d7e4ed;
 }
-@media only screen and (min-width: 1170px) {
-  #cd-timeline::before {
-    left: 50%;
-    margin-left: -2px;
-  }
-}
 .cd-timeline-block {
   position: relative;
   margin: 2em 0;
@@ -4451,7 +4436,7 @@ div.awesomplete li[aria-selected="true"] mark {
 }
 @media only screen and (min-width: 1170px) {
   .cd-timeline-block {
-    margin: 4em 0;
+    margin: 2em 0;
   }
   .cd-timeline-block:first-child {
     margin-top: 0;
@@ -4508,7 +4493,6 @@ div.awesomplete li[aria-selected="true"] mark {
 .cd-timeline-content {
   position: relative;
   background: white;
-  border-radius: 0.25em;
   padding: 1em;
   box-shadow: 0 3px 0 #d7e4ed;
 }

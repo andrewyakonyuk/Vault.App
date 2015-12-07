@@ -11,7 +11,6 @@ var require = {
         "text": "bower_modules/requirejs-text/text",
         "underscore": "bower_modules/underscore/underscore",
         "pace": "bower_modules/pace/pace",
-        "jquery.nicescroll": "bower_modules/jquery.nicescroll/dist/jquery.nicescroll.min",
 
         "bindings": "./scripts/bindings/",
         "packages": "./scripts/packages/",

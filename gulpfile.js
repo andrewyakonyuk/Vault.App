@@ -33,7 +33,8 @@
             },
             include: [
                 'requireLib',
-                'components/nav-bar/nav-bar',
+                'components/menubar/menubar',
+                'components/searchbar/searchbar',
                 'components/breadcrumbs/breadcrumbs',
                 'components/kudos/kudos',
                 'pages/home-page/home',
@@ -110,6 +111,10 @@
           .pipe(replace(/url\((')?\.\.\/fonts\//g, 'url($1../bower_modules/font-awesome/fonts/'))
           .pipe(gulp.dest('./src/styles'));
 
+    });
+
+    gulp.task('watch', function() {
+        gulp.watch('./src/styles/**/*.less', ['less']);  // Watch all the .less files, then run the less task
     });
 
     gulp.task('dev-fonts', function () {

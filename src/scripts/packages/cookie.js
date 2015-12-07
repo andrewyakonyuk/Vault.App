@@ -66,4 +66,4 @@ var cookie = {
 };
 
     return cookie;
-})
+});

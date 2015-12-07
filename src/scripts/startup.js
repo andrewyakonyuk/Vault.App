@@ -40,11 +40,14 @@ define(function (require, exports, module) {
 
     require('bindings/controller');
     require('bindings/i18n');
-    require('bindings/route')
+    require('bindings/route');
 
     // Components can be packaged as AMD modules, such as the following:
-    ko.components.register('nav-bar', {
-        require: 'components/nav-bar/nav-bar'
+    ko.components.register('menubar', {
+        require: 'components/menubar/menubar'
+    });
+    ko.components.register('searchbar', {
+        require: 'components/searchbar/searchbar'
     });
     ko.components.register('kudos', {
         require: 'components/kudos/kudos'
@@ -99,8 +102,6 @@ define(function (require, exports, module) {
             require: 'text!pages/about-page/about.html'
         }
     });
-
-    var awesomplete = require('packages/awesomplete');
 
     // [Scaffolded component registrations will be inserted here. To retain this feature, don't remove this comment.]
 
