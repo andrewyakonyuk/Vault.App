@@ -7,8 +7,82 @@
             </form>
         </div>
     </header>
-     <h2 class="cover-heading">Music</h2>
 
-    <p class="lead">Music content</p>
+    <section class="media-list">
+      <!-- ko foreach: medias -->
+      <div class="media-player paused">
+         <div class="progress-bar">
+             <div class="runner"></div>
+         </div>
+         <div class="album-art">
+             <img src="img/cd-icon-picture.svg" class="cover">
+         </div>
+         <div class="description">
+             <div class="title" data-bind="text: title"></div>
+             <div class="sub-title" data-bind="text: subtitle"></div>
+             <div class="time-indicator">
+                 <i class="fa fa-clock-o"></i>
+                 <span class="time" data-bind="text: time"></span>
+             </div>
+         </div>
+         <div class="visualizer">
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+           <div></div>
+         </div>
+
+         <div class="play-button">
+             <div class="lp-background"></div>
+             <i class="fa fa-play"></i>
+             <i class="fa fa-pause"></i>
+         </div>
+
+       </div>
+       <!-- /ko -->
+    </section>
 
 </div>

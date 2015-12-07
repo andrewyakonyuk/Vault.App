@@ -1,0 +1,212 @@
+
+.media-player {
+  margin-top: 3px;
+  height: 75px;
+  background: white;
+  border-bottom: 4px #ccc solid;
+  position: relative;
+  color: black;
+  text-align: left;
+  text-shadow: none;
+
+  .album-art {
+    display: none;
+    position: absolute;
+    left: 0;
+    width: 75px;
+    height: 100%;
+    padding: 5px;
+    transition: all 0.5s ease;
+    @media(min-width: @screen-xs){
+      &{
+          display: block;
+      }
+    }
+
+    .cover{
+      width: 100%;
+      height: 100%;
+      background-color: @background-color;
+    }
+  }
+
+  .description{
+    position: relative;
+    margin: 5px;
+    transition: all 0.5s ease;
+
+    @media(min-width: @screen-xs){
+      &{
+        margin-left: 85px;
+      }
+    }
+
+    .title{
+      color: black;
+      font-size: 24px;
+      font-weight: 100;
+    }
+
+    .sub-title{
+      font-size: 13px;
+      font-weight: 100;
+      color: #999;
+    }
+
+    .title,
+    .sub-title{
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .play-button{
+    position: absolute;
+    width: 55px;
+    height: 55px;
+    right: 1em;
+    border-radius: 50%;
+    top: -25px;
+    background: white;
+    box-shadow: 0 3px 20px 0 rgba(0, 0, 0, 0.2);
+    text-align: center;
+    line-height: 57px;
+    font-size: 26px;
+    color: #e91e63;
+    cursor: pointer;
+
+    &:hover{
+      box-shadow: 0 3px 20px 0 rgba(0, 0, 0, 0.35);
+    }
+
+    .lp-background{
+      transition: all 0.35s ease;
+      background: url("http://i65.tinypic.com/v5wy3b.png");
+      background-size: cover;
+      animation: spin 1s infinite linear;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      position: absolute;
+    }
+
+    i{
+      z-index: 100;
+    }
+
+    .fa-pause{
+      z-index: 100;
+      position: absolute;
+      right: 21px;
+      top: 21px;
+      color: white;
+      font-size: 14px;
+    }
+
+    .fa-play{
+      position: absolute;
+      right: 17px;
+      top: 17px;
+      font-size: 20px;
+    }
+  }
+
+  .time-indicator{
+    /*position: absolute;
+    right: 11%;
+    top: 60%;*/
+    font-size: 13px;
+    font-weight: 100;
+
+    i{
+      color: #e91e63;
+    }
+  }
+
+  .progress-bar{
+    width: 100%;
+    top: 100%;
+    opacity: 0;
+    height: 0;
+    position: absolute;
+    cursor: pointer;
+
+    .runner{
+      height: 4px;
+      background: #e91e63;
+    }
+  }
+
+  .visualizer{
+    position: absolute;
+    top: 25%;
+    left: 37.5%;
+    width: 0%;
+    height: 50%;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    transition: all 0.5s ease;
+
+    div{
+      width: 2px;
+      background: #e91e63;
+      float: left;
+      height: 0%;
+      margin-right: 5px;
+      transition: all 0.1s ease;
+    }
+  }
+
+  &.paused{
+    border-bottom: none;
+
+    .visualizer,
+    .lp-background,
+    .fa-pause{
+      opacity: 0;
+    }
+  }
+
+  &.playing{
+    .description,
+    .album-art{
+      opacity: 0;
+      opacity: 0;
+    }
+    .album-art{
+      width: 0px;
+    }
+
+    .visualizer{
+      left: 5%;
+      width: 85%;
+    }
+
+    .progress-bar{
+      height: 4px;
+      margin: 0;
+      opacity: 1;
+    }
+    .description{
+      margin-left: 5px;
+    }
+    .play-button{
+      background: transparent;
+
+      .fa-play{
+        opacity: 0;
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
