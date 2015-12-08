@@ -39,7 +39,7 @@ define([], function(){
       }
     });
 
-    $(document).on('click', '.progress-bar', function(e) {
+    $('.progress-bar', $player).on('click', function(e) {
       var posY = $(this).offset().left;
       var clickY = e.pageX - posY;
       var width = $(this).width();

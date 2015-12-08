@@ -11,6 +11,7 @@ var require = {
         "text": "bower_modules/requirejs-text/text",
         "underscore": "bower_modules/underscore/underscore",
         "pace": "bower_modules/pace/pace",
+        "hammerjs": "bower_modules/hammerjs/hammer",
 
         "bindings": "./scripts/bindings/",
         "packages": "./scripts/packages/",

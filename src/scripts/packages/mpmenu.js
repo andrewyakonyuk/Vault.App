@@ -5,7 +5,7 @@
  * https://github.com/christophery/pushy/
  * by Christopher Yee */
 
-define(['jquery'], function ($) {
+define(['jquery', 'hammerjs'], function ($, Hammer) {
     'use strict';
 
     var PushMenu = function () {
@@ -19,20 +19,24 @@ define(['jquery'], function ($) {
             pushyActiveClass = "mp-menu-active", //css class to toggle site overlay
             overlayClass = "mp-site-overlay";
 
+        var pushLeft = function(){
+            $body.addClass(pushyActiveClass); //toggle site overlay
+            $pushyLeft.addClass(pushyClass);
+            $container.addClass("mp-container-push-left");
+        };
+
+        var pushRight = function(){
+            $body.addClass(pushyActiveClass);
+            $pushyRight.addClass(pushyClass);
+            $container.addClass("mp-container-push-right");
+        };
+
         $(document).on('click', '[data-target-bar="left"]', function(){
-            requestAnimationFrame(function(){
-                $body.addClass(pushyActiveClass); //toggle site overlay
-                $pushyLeft.addClass(pushyClass);
-                $container.addClass("mp-container-push-left");
-            });
+            requestAnimationFrame(pushLeft);
         });
 
         $(document).on('click', '[data-target-bar="right"]', function(){
-            requestAnimationFrame(function(){
-                $body.addClass(pushyActiveClass);
-                $pushyRight.addClass(pushyClass);
-                $container.addClass("mp-container-push-right");
-            });
+            requestAnimationFrame(pushRight);
         });
 
         //close menu when clicking site overlay
@@ -46,14 +50,23 @@ define(['jquery'], function ($) {
             });
         });
 
-         $window.scroll(function () {
-            if ($window.scrollTop() > 10) {
-                $navbar.addClass('mp-menu-navbar-scrolled');
-            }
-             else{
-                $navbar.removeClass('mp-menu-navbar-scrolled');
-             }
+        var hammer = new Hammer(document.getElementById('page') || document.getElementsByTagName('body')[0]);
+        hammer.on("swiperight", function () {
+            pushLeft();
         });
+
+        hammer.on("swipeleft", function () {
+            pushRight();
+        });
+
+       $window.scroll(function () {
+          if ($window.scrollTop() > 10) {
+              $navbar.addClass('mp-menu-navbar-scrolled');
+          }
+           else{
+              $navbar.removeClass('mp-menu-navbar-scrolled');
+           }
+      });
     };
 
     return PushMenu;
