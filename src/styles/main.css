@@ -4608,6 +4608,7 @@ div.awesomplete li[aria-selected="true"] mark {
   color: black;
   text-align: left;
   text-shadow: none;
+  overflow: hidden;
 }
 .media-player .album-art {
   display: none;
@@ -4632,6 +4633,7 @@ div.awesomplete li[aria-selected="true"] mark {
 .media-player .description {
   position: relative;
   margin-left: 75px;
+  margin-right: 5px;
 }
 .media-player .description .title {
   color: #1A1A1A;
@@ -4763,38 +4765,33 @@ div.awesomplete li[aria-selected="true"] mark {
     transform: rotate(360deg);
   }
 }
-@-ms-viewport {
-  width: device-width;
-}
-* {
-  box-sizing: border-box;
-}
-*:before,
-*:after {
-  box-sizing: border-box;
-}
-body {
-  background-color: #f1f1f1;
-  font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-weight: 500;
-  font-size: 14px;
-}
-a {
-  text-decoration: none;
-}
-input,
-button,
-select,
-textarea {
-  font-family: inherit;
-  font-size: inherit;
-  line-height: inherit;
-}
-textarea {
-  background-color: transparent;
-}
 /* Overrides */
-.media-heading a {
+.media-container {
+  /*position: fixed;
+  height: 100%;*/
+}
+.media-viewport {
+  display: none;
+}
+.viewport-open .media-list {
+  display: none;
+}
+.viewport-open .media-viewport {
+  display: block;
+}
+@media (min-width: 1170px) {
+  .media-list {
+    display: block;
+    width: 40%;
+    float: left;
+    overflow-y: scroll;
+  }
+  .media-viewport {
+    margin-left: 41%;
+    display: block;
+  }
+}
+/*.media-heading a {
   color: #333333;
   text-decoration: none;
 }
@@ -4837,6 +4834,36 @@ textarea {
 }
 .media-item h3 {
   margin-top: 10px;
+}*/
+@-ms-viewport {
+  width: device-width;
+}
+* {
+  box-sizing: border-box;
+}
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+body {
+  background-color: #f1f1f1;
+  font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+}
+a {
+  text-decoration: none;
+}
+input,
+button,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+textarea {
+  background-color: transparent;
 }
 .page-container {
   margin-right: auto;

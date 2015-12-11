@@ -1,2 +1,44 @@
 <div class="page-section">
+  <div class="media-container" data-bind="css: { 'viewport-open': isViewportOpen }">
+  <div class="media-list">
+    <!-- ko foreach: items -->
+    <div class="media-item" data-bind="click: $root.openViewport">
+      <a data-bind="click: $root.openViewport">
+      <div class="media-content">
+        <h2>Title of section 1</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio,
+           dolorum provident rerum aut hic quasi placeat iure tempora laudantium
+            ipsa ad debitis unde? Iste voluptatibus minus veritatis qui ut.</p>
+      </div>
+    </a>
+    </div>
+    <!-- /ko -->
+  </div>
+  <div class="media-viewport" data-bind="click: closeViewport">
+    <header class="viewport-header">
+      <div class="viewport-toolbar"></div>
+    </header>
+    <section class="viewport-content">
+      <article>
+        <h2>Design for health project</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto,
+          optio, dolorum provident rerum aut hic quasi placeat iure tempora
+          laudantium ipsa ad debitis unde? Iste voluptatibus minus veritatis qui ut.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio,
+          dolorum provident rerum aut hic quasi placeat iure tempora laudantium
+          ipsa ad debitis unde?</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepturi,
+          obcaecati, quisquam id molestias eaque asperiores voluptatibus cupiditate
+          error assumenda delectus odit similique earum voluptatem doloremque
+          dolorem ipsam quae rerum quis. Odit, itaque, deserunt corporis vero
+          ipsum nisi eius odio natus ullam provident pariatur temporibus quia
+          eos repellat consequuntur perferendis enim amet quae quasi repudiandae
+          sed quod veniam dolore possimus rem voluptatum eveniet eligendi quis
+          fugiat aliquam sunt similique aut adipisci.</p>
+        <p>This is the content of the last section</p>
+      </article>
+    </section>
+    <footer class="viewport-footer"></footer>
+  </div>
+</div>
 </div>

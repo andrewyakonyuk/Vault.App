@@ -8,31 +8,31 @@
         </div>
     </header>
     <section id="cd-timeline" class="cd-container" data-bind="foreach: events">
-		<div class="cd-timeline-block">
-            <!-- ko if: type == 'picture' -->
-			<div class="cd-timeline-img cd-picture">
-				<img src="img/cd-icon-picture.svg" alt="Picture">
-			</div> <!-- cd-timeline-img -->
-            <!-- /ko -->
+  		<div class="cd-timeline-block">
+              <!-- ko if: type == 'picture' -->
+  			<div class="cd-timeline-img cd-picture">
+  				<img src="img/cd-icon-picture.svg" alt="Picture">
+  			</div> <!-- cd-timeline-img -->
+              <!-- /ko -->
 
-            <!-- ko if: type == 'location' -->
-            <div class="cd-timeline-img cd-location">
-				<img src="img/cd-icon-location.svg" alt="Location">
-			</div> <!-- cd-timeline-img -->
-            <!-- /ko -->
+              <!-- ko if: type == 'location' -->
+              <div class="cd-timeline-img cd-location">
+  				<img src="img/cd-icon-location.svg" alt="Location">
+  			</div> <!-- cd-timeline-img -->
+              <!-- /ko -->
 
-            <!-- ko if: type == 'movie' -->
-            <div class="cd-timeline-img cd-movie">
-				<img src="img/cd-icon-movie.svg" alt="Movie">
-			</div> <!-- cd-timeline-img -->
-            <!-- /ko -->
+              <!-- ko if: type == 'movie' -->
+              <div class="cd-timeline-img cd-movie">
+  				<img src="img/cd-icon-movie.svg" alt="Movie">
+  			</div> <!-- cd-timeline-img -->
+              <!-- /ko -->
 
-			<div class="cd-timeline-content">
-				<h2 data-bind="text: title"></h2>
-				<p data-bind="text: description"></p>
-				<span class="cd-date" data-bind="text: datetime"></span>
-			</div> <!-- cd-timeline-content -->
-		</div> <!-- cd-timeline-block -->
+  			<div class="cd-timeline-content">
+  				<h2 data-bind="text: title"></h2>
+  				<p data-bind="text: description"></p>
+  				<span class="cd-date" data-bind="text: datetime"></span>
+  			</div> <!-- cd-timeline-content -->
+  		</div> <!-- cd-timeline-block -->
 	</section> <!-- cd-timeline -->
 
 </div>
