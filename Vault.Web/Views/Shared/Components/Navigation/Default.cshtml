@@ -1,0 +1,102 @@
+﻿@model Vault.Web.Models.Navigation.NavigationModel
+<nav class="draw-menu-sidebar js-draw-menu-sidebar sidebar" role="navigation" id="sidebar">
+    <div class="draw-menu-holder sidebar-holder">
+        <section class="sidebar-section">
+            <div class="sidebar-user">
+                @if (Context.User.Identity.IsAuthenticated)
+                {
+                    <a asp-controller="Dashboard" asp-action="Index">
+                        <img class="img-circle pull-left" width="36" height="36" src="@Url.Content("~/img/user.png")" />
+                        <span class="username u-truncate">
+                            @@@Context.User.Identity.Name
+                        </span>
+                    </a>
+                    <form asp-controller="Account" asp-action="SignOut" method="post">
+                        <button type="submit" class="btn btn-link btn-action btn-signout">Signout</button>
+                    </form>
+                }
+                else
+                {
+                    <img class="img-circle" src="@Url.Content("~/img/user.png")" />
+                }
+            </div>
+        </section>
+        @if (Context.User.Identity.IsAuthenticated)
+        {
+            <section class="sidebar-section">
+                <ul class="js-sidebar-list">
+                    <li>
+                        <a asp-controller="Dialy" asp-action="Index">
+                            <svg class="icon"><use xlink:href="#icon-calendar"></use></svg><span>Today</span>
+                        </a>
+                    </li>
+
+                    <li class="js-expand">
+                        <a asp-controller="Boards" asp-action="Index" class="@WhenCurrent("Index", "Board")">
+                            <svg class="icon"><use xlink:href="#icon-table"></use></svg><span>Boards</span>
+                        </a>
+                        <ul>
+                            @foreach (var item in Model.Boards.OrderBy(t => t.Position))
+                            {
+                                <li>
+                                    <a href="@item.Url" data-id="@item.Id">@item.Text</a>
+                                </li>
+                            }
+                            <li>
+                                <button class="btn btn-link" type="submit" onclick="$(this).next().show(); $(this).hide(); $(this).next().find('.input-group input').focus();">
+                                    <svg class="icon"><use xlink:href="#icon-plus"></use></svg><span>New board</span>
+                                </button>
+                                <form method="post" asp-controller="Boards" asp-action="CreateBoard" style="display:none;margin-top: -5px">
+                                    <div class="input-group input-group-line sidebar-input-group">
+                                        <input type="text" name="Name" class="form-control pull-left" placeholder="New board" autocomplete="off" onblur="$(this).closest('form').hide(); $(this).closest('form').prev().show();" />
+                                        <div class="input-group-addon">
+                                        <button class="btn btn-link " type="submit" title="New board" onfocus="$(this).closest('form').show(); $(this).closest('form').prev().hide();">
+                                            <svg class="icon"><use xlink:href="#icon-plus"></use></svg>
+                                        </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+            <section class="sidebar-section">
+                <ul class="js-sidebar-list" style="font-size: .9em">
+                    <li>
+                        <a href="/terms-of-usage">Terms of usage</a>
+                    </li>
+                    <li>
+                        <a href="/privacy">Privacy</a>
+                    </li>
+                    <li>
+                        <a href="/cookies">Cookies</a>
+                    </li>
+                </ul>
+            </section>
+        }
+    </div>
+</nav>
+
+@functions {
+    bool IsCurrentPage(string action, string controller)
+    {
+        if (ViewContext.ActionDescriptor.Name == action && string.Equals((string)ViewContext.RouteData.Values["controller"], controller, StringComparison.InvariantCultureIgnoreCase))
+            return true;
+
+        return false;
+    }
+
+    HtmlString When(bool condition, string result)
+    {
+        if (condition)
+            return new HtmlString(result);
+
+        return HtmlString.Empty;
+    }
+
+    HtmlString WhenCurrent(string action, string controller)
+    {
+        return When(IsCurrentPage(action, controller), "active");
+    }
+}

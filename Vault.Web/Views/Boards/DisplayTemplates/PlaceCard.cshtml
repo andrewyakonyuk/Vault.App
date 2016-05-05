@@ -1,0 +1,13 @@
+﻿@model Vault.Framework.Api.Boards.PlaceCard
+<h3 class="card-title u-truncate">
+    @Model.Name
+</h3>
+@if (!string.IsNullOrEmpty(Model.Thumbnail))
+{
+    <div class="card-image">
+        <img src="@Model.Thumbnail" alt="@Model.Name" />
+    </div>
+}
+<div class="card-summary">
+    @Model.Description
+</div>

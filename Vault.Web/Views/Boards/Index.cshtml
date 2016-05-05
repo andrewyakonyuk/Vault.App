@@ -1,0 +1,134 @@
+﻿@using Vault.Framework.Api.Boards
+@model Board
+@{
+    ViewBag.Title = Model.Name;
+}
+
+<header class="app-header">
+    <div class="app-main-section-wrapper draw-pusher">
+        <div class="app-main-section">
+            <div class="app-header-row">
+                <div class="aside-column">
+
+                    <ul class="menu dropdown-menu pull-right hide">
+                        <li>
+                            <button class="btn btn-icon" type="submit">
+                                <svg style="width: 22px; height: 22px;" class="icon-dashed"><use xlink:href="#icon-settings"></use></svg>
+                            </button>
+                            <ul>
+                                <li>
+                                    <button class="btn btn-icon" type="submit">
+                                        <svg style="width: 22px; height: 22px;" class="icon"><use xlink:href="#icon-share"></use></svg>
+                                        Share board
+                                    </button>
+                                </li>
+                                <li>
+                                    <form method="post" asp-controller="Boards" asp-action="Delete">
+                                        <input type="hidden" name="boardId" value="@Model.Id" />
+                                        <button class="btn btn-icon" type="submit">
+                                            <svg style="width: 22px; height: 22px;" class="icon"><use xlink:href="#icon-trash"></use></svg>
+                                            Delete board
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="main-column">
+                    <ol class="breadcrumb">
+                        <li>
+                            <a asp-controller="Boards" asp-action="Index">/b</a>
+                        </li>
+                        <li class="active">@Model.Name</li>
+                    </ol>
+                </div>
+            </div>
+            <div>
+                <div class="search-form js-search-form">
+                    <form method="post" asp-controller="Boards" asp-action="Search" data-url="@Url.Action("Suggestions", "Boards")">
+                        <div class="input-group input-group-line">
+                            <input class="form-control" type="search" name="q" placeholder="Search" autocomplete="off" value="@Model.RawQuery" />
+                            <input type="hidden" value="@Model.Id" name="boardId" />
+                            <input type="hidden" value="@Model.Name" name="boardName" />
+                            <div class="input-group-addon">
+                                <button class="btn btn-icon" type="submit" title="Search">
+                                    <svg style="width: 22px; height: 22px; fill: #268A89"><use xlink:href="#icon-search"></use></svg>
+                                </button>
+                            </div>
+                            <div class="input-group-addon">
+                                <button class="btn btn-icon" type="submit" formaction="@Url.Action("Update", "Boards")" title="Save board">
+                                    <svg style="width: 22px; height: 22px; fill: #F3B43D"><use xlink:href="#icon-floppy-disk"></use></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="app-header-row">
+                <button class="btn btn-default pull-right btn-icon" onclick="$('.snackbar').toggleClass('snackbar-open')">
+                    <svg style="width: 22px; height: 22px;"><use xlink:href="#icon-sorting"></use></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+<div class="app-main-section-wrapper draw-pusher">
+    <div class="app-main-section">
+        @if (Model.Cards.Any())
+            {
+            <section class="board" data-totalcount="@Model.Cards.TotalCount">
+                @Html.Partial("_List", Model)
+            </section>
+        }
+        else
+        {
+            @Html.Partial("_Empty")
+        }
+    </div>
+</div>
+
+<script type="text/template" id="audio-card-template">
+    <div class="card audio-card">
+        <div class="media-player">
+            <div class="album-art">
+                <img src="@Url.Content("~/img/cd-icon-picture.svg")" class="cover">
+            </div>
+            <div class="description">
+                <div class="title">{{name}}</div>
+                <div class="sub-title">by {{byArtist}}</div>
+                <div class="time-indicator">
+                    <span>
+                        <svg class="icon icon-time"><use xlink:href="#icon-time"></use></svg>
+                        <span class="time">{{duration}}</span>
+                    </span>
+                </div>
+            </div>
+            <div class="play-button">
+                <div class="lp-background"></div>
+                <svg class="icon icon-play"><use xlink:href="#icon-play"></use></svg>
+                <svg class="icon icon-pause"><use xlink:href="#icon-pause"></use></svg>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="event-card-template">
+</script>
+
+<script type="text/template" id="article-card-template">
+    <div class="card article-card">
+        <h3 class="card-title u-truncate">
+            {{name}}
+        </h3>
+        <div class="card-image">
+            <img src="/img/cd-icon-picture.svg">
+        </div>
+        <div class="card-summary">
+            {{summary}}
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="place-card-template">
+</script>

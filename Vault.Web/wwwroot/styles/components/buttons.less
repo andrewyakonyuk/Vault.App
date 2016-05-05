@@ -1,0 +1,120 @@
+//
+// Buttons
+// --------------------------------------------------
+
+.btn {
+    outline: none;
+    border-radius: 0 !important;
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: normal;
+    text-align: center;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    padding: 10px 16px;
+    font-size: 18px;
+    line-height: 1.3333333;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    background-color: transparent;
+}
+
+a.btn {
+    text-decoration: none;
+}
+
+.btn-primary {
+    color: #fff !important;
+}
+
+.btn-info {
+    border-color: #12b4b1;
+    border-width: 3px;
+    color: #12b4b1;
+    background-color: transparent;
+
+    &:hover,
+    &:focus {
+        border-color: #B61F56;
+        border-width: 3px;
+        color: #B61F56;
+        background-color: transparent;
+    }
+
+    &:active:hover {
+        border-color: #e91e63;
+        border-width: 3px;
+        color: #e91e63;
+        background-color: transparent;
+        box-shadow: none;
+        background-image: none;
+        outline: none;
+        cursor: pointer;
+    }
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    color: @font-color !important;
+}
+
+.btn-link {
+    font-weight: 400;
+    color: #337ab7;
+    border-radius: 0;
+}
+
+.btn-link,
+.btn-link.active,
+.btn-link:active,
+.btn-link[disabled],
+fieldset[disabled] .btn-link {
+    background-color: transparent;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.btn-link,
+.btn-link:active,
+.btn-link:focus,
+.btn-link:hover {
+    border-color: transparent;
+}
+
+.btn-action {
+    color: #B61F56;
+}
+
+.btn-favorite {
+    cursor: pointer;
+    
+    .icon {
+        cursor: pointer;
+        stroke: #303e49;
+        stroke-width: 2px;
+        fill: none;
+    }
+
+    &.btn-inverse {
+        .icon {
+            stroke: none;
+            fill: #fff;
+        }
+    }
+
+    &.selected {
+        .icon {
+            stroke: #ffab40;
+            fill: #ffab40;
+            
+            transition: fill ease-in 75ms;
+        }
+    }
+}

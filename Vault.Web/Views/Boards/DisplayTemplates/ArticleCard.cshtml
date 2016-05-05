@@ -1,0 +1,12 @@
+﻿@model Vault.Framework.Api.Boards.ArticleCard
+
+<h3 class="card-title u-truncate">
+    @Model.Name
+</h3>
+<div class="card-image">
+    @*<img src="/img/cd-icon-picture.svg">*@
+    <img src="https://img.readitlater.com/i/i.kinja-img.com/gawker-media/image/upload/s--9Fts58Z5--/c_scale,fl_progressive,q_80,w_800/qedlevry0izqfixedidl/RS/w400-nc.png?f=t">
+</div>
+<div class="card-summary">
+    @Html.Raw(Model.Summary)
+</div>

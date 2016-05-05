@@ -1,0 +1,53 @@
+﻿@model Vault.Web.Models.Account.SignInModel
+@{ 
+    ViewBag.Title = "Sign in | Vault.app";
+}
+<form asp-controller="Account" asp-action="SignIn" asp-route-returnurl="@ViewData["ReturnUrl"]" class="form-signin form-horizontal" role="form" method="post">
+    <div class="panel-body">
+        <h2>Please sign-in</h2>
+        <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Email" class="col-md-3 control-label">Email</label>
+            <div class="col-md-9 form-control-wrapper">
+                <input asp-for="Email" type="email" class="form-control" />
+                <span asp-validation-for="Email"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Password" class="col-md-3 control-label">Password</label>
+            <div class="col-md-9 form-control-wrapper">
+                <input asp-for="Password" type="password" class="form-control" min="6" />
+                <span asp-validation-for="Password"></span>
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            <div class="checkbox col-md-9 col-md-offset-3 form-control-wrapper">
+                <label>
+                    <input type="checkbox" asp-for="RememberMe">
+                    Remember me
+                </label>
+            </div>
+        </div>*@
+        <div class="form-group">
+            <div class="checkbox form-control-wrapper">
+                <label>
+                    <input type="checkbox" asp-for="RememberMe">
+                    Remember me
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-control-wrapper">
+                <button class="btn btn-lg btn-default" type="submit">Sign in</button>
+            </div>
+        </div>
+        <div class="form-group">
+            <p>
+                Have no account yet? Please <a href="@Url.Action("SignUp", "Account")">join us</a>
+            </p>
+        </div>
+    </div>
+</form>

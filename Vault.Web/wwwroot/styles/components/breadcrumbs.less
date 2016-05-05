@@ -1,0 +1,52 @@
+//
+// Breadcrumbs
+// --------------------------------------------------
+
+.breadcrumb {
+    padding: 0;
+    margin-bottom: 0;
+    list-style: none;
+    font-size: 18px;
+
+    @media (min-width: @screen-sm-min) {
+        padding: 8px 15px;
+        padding-left: 0;
+    }
+
+    > li {
+        display: inline-block;
+        width: 24%;
+
+        @media screen and (min-width: 992px) {
+            & {
+                width: auto;
+            }
+
+            + li:before {
+                content: "@{breadcrumb-separator}\00a0"; // Unicode space added since inline-block means non-collapsing white-space
+                padding: 0 5px;
+            }
+        }
+
+        a {
+            color: #777;
+        }
+
+        a:focus,
+        a:hover {
+            text-decoration: none;
+        }
+    }
+
+    > .active {
+        font-weight: 500;
+        font-size: 1.5em;
+
+        @media screen and (max-width: @screen-sm-max) {
+            & {
+                width: 50%;
+                text-align: center;
+            }
+        }
+    }
+}

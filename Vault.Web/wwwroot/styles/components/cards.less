@@ -1,0 +1,91 @@
+﻿//
+// Cards
+// --------------------------------------------------
+
+.card {
+    position: relative;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.card-section {
+    .card {
+        border: 1px solid rgba(160, 160, 160, 0.4);
+    }
+
+    .card ~ .card {
+        border-top: none;
+    }
+
+    .card:first-child {
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .card:last-child {
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
+}
+
+.card-section ~ .card-section {
+    margin-top: 10px;
+}
+
+.card-title {
+    color: #292f33;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.card-image {
+    overflow-y: hidden;
+    position: relative;
+    background-color: rgba(160, 160, 160, 0.4);
+    margin: 0 -15px 10px -15px;
+
+    img {
+        display: block;
+        margin: 0 auto;
+        width: 100%;
+    }
+}
+
+.card-content {
+    padding: 10px 15px;
+    padding-bottom: 0;
+
+    p {
+        margin: 0;
+        color: inherit;
+        -webkit-font-smoothing: antialiased;
+    }
+}
+
+.card-action {
+    padding: 0 7px;
+
+    a {
+        color: #ffab40;
+    }
+
+    .icon {
+        font-size: 18px;
+    }
+
+    .card-action-block {
+        border: 0;
+        padding: 3px 8px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .selected {
+        color: #ffab40;
+    }
+
+    .timestamp {
+        color: #8899a6;
+        font-size: 13px;
+    }
+}

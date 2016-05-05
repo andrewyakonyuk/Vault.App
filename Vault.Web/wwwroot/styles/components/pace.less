@@ -1,0 +1,30 @@
+//
+// Pace
+// --------------------------------------------------
+
+.pace {
+
+    .pace-progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1050;
+        height: 3px;
+        background: @loader-progress-color;
+    }
+
+    .pace-progress-inner {
+        position: absolute;
+        right: 0;
+        display: block;
+        width: 100px;
+        height: 100%;
+        box-shadow: 0 0 10px #fcfffc, 0 0 5px #fcfffc;
+        opacity: 1.0;
+        transform: rotate(3deg) translate(0, -4px);
+    }
+}
+
+.pace-inactive {
+    display: none;
+}

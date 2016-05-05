@@ -1,0 +1,22 @@
+﻿@model Vault.Framework.Api.Boards.AudioCard
+
+<div class="media-player">
+    <div class="album-art">
+        <img src="@Url.Content("~/img/cd-icon-picture.svg")" alt="@string.Join(" - ", Model.ByArtist, Model.InAlbum)" class="cover">
+    </div>
+    <div class="description">
+        <div class="title">@Model.Name</div>
+        <div class="sub-title">by @Model.ByArtist</div>
+        <div class="time-indicator">
+            <span>
+                <svg class="icon icon-time"><use xlink:href="#icon-time"></use></svg>
+                <span class="time">@Model.Duration</span>
+            </span>
+        </div>
+    </div>
+    <div class="play-button">
+        <div class="lp-background"></div>
+        <svg class="icon icon-play"><use xlink:href="#icon-play"></use></svg>
+        <svg class="icon icon-pause"><use xlink:href="#icon-pause"></use></svg>
+    </div>
+</div>

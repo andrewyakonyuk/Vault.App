@@ -1,0 +1,175 @@
+//
+// Drawmenu
+// --------------------------------------------------
+
+@menu-highlight: #12B4B1;
+
+@keyframes fade {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@-moz-keyframes fade {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fade {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@-o-keyframes fade {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Menu Appearance */
+
+.draw-menu-sidebar {
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    background-color: @draw-menu-background;
+    overflow: hidden;
+    /* enables momentum scrolling in iOS overflow elements */
+    -webkit-overflow-scrolling: touch;
+    height: 100%;
+    width: @draw-menu-width;
+    transform: translate3d(-@draw-menu-width, 0, 0);
+
+    .draw-menu-holder {
+        overflow-y: auto;
+    }
+}
+
+.draw-menu-open {
+    transform: translate3d(0, 0, 0);
+}
+
+/* Menu Transitions */
+.draw-menu-sidebar,
+.draw-container {
+    transition: transform .25s ease-out;
+}
+
+/* draw overlay */
+.draw-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 999;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    animation: fade 500ms;
+}
+
+.draw-menu-active .draw-overlay {
+    display: block;
+}
+
+.draw-menu-navbar {
+    display: block;
+    position: fixed;
+    top: 0;
+    z-index: 10;
+    width: 100%;
+    background-color: transparent;
+}
+
+.draw-menu-btn {
+    position: relative;
+    padding: 10px 15px;
+    background-color: transparent;
+    background-image: none;
+    border: none;
+
+    &:focus {
+        outline: 0;
+    }
+
+    .icon {
+        width: 25px; 
+        height: 25px; 
+        margin: 0 auto; 
+        stroke: rgb(38, 138, 137); 
+        fill: rgba(38, 138, 137, 0.7);
+    }
+}
+
+@media (min-width: @screen-sm) {
+    .draw-menu-btn {
+        display: none;
+    }
+
+    .draw-menu-navbar {
+        display: none;
+    }
+
+    .draw-menu-media .draw-menu-sidebar,
+    .draw-menu-media .draw-container-push {
+        transform: translate3d(0, 0, 0);
+    }
+
+    .draw-menu-media .draw-overlay {
+        display: none;
+    }
+
+    .draw-container .app-main-section-wrapper {
+        margin-left: @draw-menu-width + 30px;
+        margin-right: 30px;
+        margin-top: 0;
+    }
+}
+
+@media (max-width: @screen-sm) {
+    .draw-menu-active {
+        overflow: hidden;
+    }
+}
+
+@media (min-width: 1920px) {
+    .draw-menu-sidebar {
+        width: @draw-menu-width-large;
+    }
+
+    .draw-menu-sidebar {
+        transform: translate3d(-@draw-menu-width-large, 0, 0);
+    }
+
+    .draw-container-push {
+        transform: translate3d(@draw-menu-width-large, 0, 0);
+    }
+}
+
+.draw-pusher{
+    transition: transform 0.25s ease-out;
+}
+    
+.draw-container-push{
+    .draw-pusher{
+        transform: translate3d(@draw-menu-width, 0, 0);
+    }
+}

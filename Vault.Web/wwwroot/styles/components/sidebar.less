@@ -1,0 +1,144 @@
+﻿//
+// Sidebar
+// --------------------------------------------------
+
+@import url("utilities.less");
+@import url("variables.less");
+
+.sidebar {
+    background-color: @draw-menu-background;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #A7A9AF;
+    box-shadow: -10px 0 6px -9px rgba(0, 0, 0, 0.7) inset;
+
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        color: #A7A9AF;
+        font-weight: 500;
+    }
+
+    a, .btn-link {
+        display: block;
+        text-decoration: none;
+        font-weight: 500;
+        color: #a7a9af;
+        text-overflow: ellipsis;
+        overflow: hidden;
+
+        &:hover,
+        &:focus {
+            color: #fff;
+            outline: none;
+        }
+    }
+
+    .btn-link {
+        padding: 0;
+        font-size: inherit;
+        line-height: inherit;
+        color: #F3B43D;
+
+        &:focus,
+        &:hover {
+            color: #CF9A39;
+        }
+    }
+
+    .icon {
+        margin-right: 12px;
+        width: 15px;
+        text-align: center;
+    }
+
+    .active {
+        color: #FFF;
+
+        a {
+            color: #fff;
+        }
+
+        .icon {
+            color: @menu-highlight;
+        }
+    }
+}
+
+.sidebar-input-group {
+    border: 2px dotted #12b4b1;
+
+    .input-group-addon {
+        .btn {
+            padding: 0;
+            margin: 0 auto;
+            background-color: transparent;
+        }
+
+        .icon {
+            color: #F3B43D;
+            margin-right: 5px;
+            margin-left: 5px;
+        }
+    }
+
+    .form-control {
+        background-color: transparent;
+        color: #fff;
+        border: none;
+        padding: 2px 12px;
+        height: 30px;
+    }
+}
+
+.sidebar-user {
+    .clearfix();
+    padding: 5px 17px;
+
+    img {
+        width: 36px;
+        height: 36px;
+        margin-top: 5px;
+        margin-right: 10px;
+    }
+
+    .username {
+        line-height: 15px;
+        font-size: 14px;
+        max-width: 179px;
+        display: inline-block;
+    }
+
+    .btn-signout {
+        padding: 0;
+        font-size: 12px;
+        line-height: 15px;
+        display: inline-block;
+        margin-top: -7px;
+    }
+
+    a {
+        display: inline;
+    }
+}
+
+.sidebar-section {
+    font-size: 1.1em;
+
+    &:first-child {
+        margin-top: 15px;
+    }
+
+    &:not(.section-hidden) {
+        margin-bottom: 15px;
+    }
+
+    li {
+        padding: 4px 28px;
+
+        li {
+            padding-right: 0;
+        }
+    }
+}

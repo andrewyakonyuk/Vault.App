@@ -1,0 +1,17 @@
+{
+  "version": "1.0.0-*",
+  "description": "Vault.Shared",
+  "authors": [ "Mechanicals animals" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+
+  "frameworks": {
+    "net451": {
+      "frameworkAssemblies": {
+        "System.Data": "4.0.0.0",
+        "System.Runtime.Serialization": "4.0.0.0"
+      }
+    }
+  }
+}

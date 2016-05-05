@@ -1,0 +1,14 @@
+{
+  "name": "Vault.app",
+  "description": "",
+  "repository": "https://github.com/andrewyakonyuk/Vault.App.git",
+  "keywords": ["aspnet5", "vnext"],
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-nodejs"
+    },
+    {
+      "url": "https://github.com/jincod/dotnet-buildpack"
+    }
+  ]
+}

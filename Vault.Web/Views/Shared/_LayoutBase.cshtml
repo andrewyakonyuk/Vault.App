@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]>    <html class="no-js iem7"> <![endif]-->
+<!--[if (gt IEMobile 7)|!(IEMobile)]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <title>@ViewBag.Title</title>
+    <meta name="description" content="">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <meta http-equiv="cleartype" content="on">
+
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- build:css -->
+    <environment names="Development">
+        <link href="@Url.Content("~/styles/main.css")" rel="stylesheet">
+    </environment>
+    <environment names="Staging,Production">
+        <link href="@Url.Content("~/styles/main.min.css")" rel="stylesheet">
+    </environment>
+    <!-- endbuild -->
+</head>
+
+<body class="draw-menu-media @ViewBag.BodyClass">
+    @RenderBody()
+    <!-- build:js -->
+    <environment names="Development">
+        <script src="@Url.Content("~/require.config.js")" async></script>
+        <script data-main="@Url.Content("~/app/startup.js")" src="@Url.Content("~/bower_modules/requirejs/require.js")" async></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="@Url.Content("~/app/app-bundle.min.js")" async></script>
+    </environment>
+    <!-- endbuild -->
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+    <!-- <script>
+        var _gaq = [["_setAccount", "UA-XXXXX-X"], ["_trackPageview"]];
+        (function (d, t) {
+            var g = d.createElement(t), s = d.getElementsByTagName(t)[0]; g.async = 1;
+            g.src = ("https:" == location.protocol ? "//ssl" : "//www") + ".google-analytics.com/ga.js";
+            s.parentNode.insertBefore(g, s)
+        }(document, "script"));
+    </script>-->
+</body>
+</html>

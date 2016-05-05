@@ -1,0 +1,33 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "Vault.Framework",
+  "authors": [ "mechanical animals" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+
+  "dependencies": {
+    "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
+    "Microsoft.AspNet.Mvc.Core": "6.0.0-rc1-final",
+    "Microsoft.AspNet.Mvc.ViewFeatures": "6.0.0-rc1-final",
+    "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Authentication.Cookies": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Identity": "3.0.0-rc1-final",
+    "Microsoft.AspNet.Mvc.TagHelpers": "6.0.0-rc1-final",
+    "System.ComponentModel.Annotations": "4.0.11-beta-23516",
+    "Microsoft.AspNet.Mvc.Abstractions": "6.0.0-rc1-final",
+    "Microsoft.Extensions.OptionsModel": "1.0.0-rc1-final",
+    "NHibernate": "4.0.3.4000",
+    "FluentNHibernate": "2.0.1.0",
+    "NEventStore": "5.2.0",
+    "FluentValidation": "5.4.0.0",
+    "Lucene.Net": "3.0.3",
+    "Vault.Shared": "1.0.0-*",
+    "Vault.Shared.Lucene": "1.0.0-*",
+    "Vault.Shared.NHibernate": "1.0.0-*"
+  },
+
+  "frameworks": {
+    "net451": { }
+  }
+}

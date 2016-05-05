@@ -1,0 +1,31 @@
+@using Vault.Framework.Api.Boards
+@model Board
+
+@{
+    var regex = new System.Text.RegularExpressions.Regex("(?<=.)([A-Z])",
+                      System.Text.RegularExpressions.RegexOptions.Compiled);
+
+    var convertToJsonStyle = new Func<string, string>(input => regex.Replace(input, "-$0").ToLowerInvariant());
+}
+
+<div class="card-section">
+    @foreach (var card in Model.Cards)
+    {
+        var templateName = card.GetType().Name;
+        <div data-card-id="@card.Id" class="card @convertToJsonStyle(templateName)">
+            <div class="card-content">
+                @Html.DisplayFor(t => card, templateName)
+            </div>
+            <div class="card-action">
+                <a href="#" class="card-action-block timestamp">
+                    <time datetime="@card.Published.ToLongDateString()">
+                        @card.Published.ToString("dd MMM")
+                    </time>
+                </a>
+                <button title="mark as favorite" class="card-action-block btn btn-favorite" onclick="$(this).toggleClass('selected');$(this).find('.icon').toggleClass('hide');">
+                    <svg class="icon icon-star"><use xlink:href="#icon-star"></use></svg>
+                </button>
+            </div>
+        </div>
+    }
+</div>

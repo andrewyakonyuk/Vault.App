@@ -1,0 +1,65 @@
+{
+  "version": "1.0.0-*",
+  "compilationOptions": {
+    "emitEntryPoint": true
+  },
+
+  "dependencies": {
+    "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
+    "Microsoft.AspNet.Mvc.Core": "6.0.0-rc1-final",
+    "Microsoft.AspNet.Mvc.ViewFeatures": "6.0.0-rc1-final",
+    "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
+    "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Authentication.Cookies": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Identity": "3.0.0-rc1-final",
+    "Microsoft.AspNet.Mvc.TagHelpers": "6.0.0-rc1-final",
+    "Microsoft.AspNet.Diagnostics": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Configuration.FileProviderExtensions": "1.0.0-rc1-final",
+    "System.ComponentModel.Annotations": "4.0.11-beta-23516",
+    "Microsoft.AspNet.Mvc.Abstractions": "6.0.0-rc1-final",
+    "Microsoft.Extensions.OptionsModel": "1.0.0-rc1-final",
+    "NHibernate": "4.0.3.4000",
+    "Npgsql": "3.0.5",
+    "FluentNHibernate": "2.0.1.0",
+    "Lucene.Net": "3.0.3",
+    "system.data.sqlite.core": "1.0.99",
+    "Vault.Framework": "1.0.0-*",
+    "Vault.Shared": "1.0.0-*",
+    "Vault.Shared.NHibernate": "1.0.0-*",
+    "Vault.Shared.NEventStore": "1.0.0-*"
+  },
+
+  "commands": {
+    "web": "Microsoft.AspNet.Server.Kestrel ASPNET_ENV=Production",
+    "dev": "Microsoft.AspNet.Server.Kestrel ASPNET_ENV=Development DNX_IIS_RUNTIME_FRAMEWORK=DNX451 --watch web"
+  },
+
+  "frameworks": {
+    "dnx451": {
+      "dependencies": {
+      },
+      "frameworkAssemblies": {
+        "System.Data": "4.0.0.0"
+      }
+    }
+  },
+
+  "exclude": [
+    "wwwroot",
+    "node_modules"
+  ],
+  "publishExclude": [
+    "**.user",
+    "**.vspscc"
+  ],
+
+  "packExclude": [
+    "**.xproj",
+    "**.user",
+    "**.vspscc"
+  ],
+}
