@@ -187,19 +187,24 @@ textarea {
             }
         }
     }
+
+    .settings-dropdown {
+    }
 }
 
 .app-header-row {
     .clearfix();
     padding: 4px 0;
+    display: table;
+    width: 100%;
 
     .breadcrumb {
         padding: 0;
     }
 
     .aside-column {
-        float: right;
         width: 30%;
+        display: table-cell;
 
         @media screen and (max-width: @screen-sm-max) {
             & {
@@ -209,8 +214,8 @@ textarea {
     }
 
     .main-column {
-        display: block;
-        margin-right: 31%;
+        display: table-cell;
+        width: 70%;
 
         @media screen and (max-width: @screen-sm-max) {
             width: 100%;

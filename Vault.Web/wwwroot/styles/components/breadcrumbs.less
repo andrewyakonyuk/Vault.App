@@ -20,11 +20,13 @@
         @media screen and (min-width: 992px) {
             & {
                 width: auto;
+                display: table-cell;
+                vertical-align: bottom;
+                padding: 3px;
             }
 
             + li:before {
                 content: "@{breadcrumb-separator}\00a0"; // Unicode space added since inline-block means non-collapsing white-space
-                padding: 0 5px;
             }
         }
 
@@ -41,11 +43,15 @@
     > .active {
         font-weight: 500;
         font-size: 1.5em;
+        padding: 0;
 
         @media screen and (max-width: @screen-sm-max) {
             & {
                 width: 50%;
                 text-align: center;
+                .btn{
+                    .u-truncate();
+                }
             }
         }
     }

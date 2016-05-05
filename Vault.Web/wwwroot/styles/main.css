@@ -1357,10 +1357,12 @@ dd {
 @media screen and (min-width: 992px) {
   .breadcrumb > li {
     width: auto;
+    display: table-cell;
+    vertical-align: bottom;
+    padding: 3px;
   }
   .breadcrumb > li + li:before {
     content: "\00a0";
-    padding: 0 5px;
   }
 }
 .breadcrumb > li a {
@@ -1373,11 +1375,18 @@ dd {
 .breadcrumb > .active {
   font-weight: 500;
   font-size: 1.5em;
+  padding: 0;
 }
 @media screen and (max-width: 991px) {
   .breadcrumb > .active {
     width: 50%;
     text-align: center;
+  }
+  .breadcrumb > .active .btn {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 .btn {
@@ -1842,7 +1851,7 @@ table th[class*="col-"] {
   position: fixed;
   top: 0;
   z-index: 10;
-  width: 100%;
+  width: 55px;
   background-color: transparent;
 }
 .draw-menu-btn {
@@ -2628,6 +2637,21 @@ body.cover-page::before {
 .ui-state-highlight {
   border: 2px dotted #12b4b1;
 }
+.breadcrumb .btn {
+  font-size: inherit;
+  color: inherit;
+  padding: 0;
+  vertical-align: bottom;
+}
+.breadcrumb form {
+  display: inline-block;
+  vertical-align: bottom;
+}
+.breadcrumb .form-control {
+  border: 2px dotted #12b4b1;
+  font-size: 20px;
+  padding: 3px 12px;
+}
 @-ms-viewport {
   width: device-width;
 }
@@ -2737,6 +2761,8 @@ textarea {
 }
 .app-header-row {
   padding: 4px 0;
+  display: table;
+  width: 100%;
 }
 .app-header-row:before,
 .app-header-row:after {
@@ -2758,8 +2784,8 @@ textarea {
   padding: 0;
 }
 .app-header-row .aside-column {
-  float: right;
   width: 30%;
+  display: table-cell;
 }
 @media screen and (max-width: 991px) {
   .app-header-row .aside-column {
@@ -2767,8 +2793,8 @@ textarea {
   }
 }
 .app-header-row .main-column {
-  display: block;
-  margin-right: 31%;
+  display: table-cell;
+  width: 70%;
 }
 @media screen and (max-width: 991px) {
   .app-header-row .main-column {

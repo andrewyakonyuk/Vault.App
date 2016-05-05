@@ -8,9 +8,25 @@
     <div class="app-main-section-wrapper draw-pusher">
         <div class="app-main-section">
             <div class="app-header-row">
+                <div class="main-column">
+                    <ol class="breadcrumb">
+                        <li>
+                            <a asp-controller="Boards" asp-action="Index">/b</a>
+                        </li>
+                        <li class="active">
+                            <button class="btn btn-link" type="submit" onclick="$(this).next().show(); $(this).hide(); $(this).next().find('input[name=boardName]').focus();">
+                                @Model.Name
+                            </button>
+                            <form asp-controller="Boards" asp-action="Update" method="post" style="display:none;">
+                                <input type="hidden" value="@Model.Id" name="boardId" />
+                                <input type="hidden" value="@Model.RawQuery" name="query" />
+                                <input type="text" class="form-control" name="boardName" value="@Model.Name" placeholder="@Model.Name" autocomplete="off" onblur="$(this).closest('form').hide(); $(this).closest('form').prev().show();" />
+                            </form>
+                        </li>
+                    </ol>
+                </div>
                 <div class="aside-column">
-
-                    <ul class="menu dropdown-menu pull-right hide">
+                    <ul class="menu dropdown-menu settings-dropdown pull-right hide">
                         <li>
                             <button class="btn btn-icon" type="submit">
                                 <svg style="width: 22px; height: 22px;" class="icon-dashed"><use xlink:href="#icon-settings"></use></svg>
@@ -34,14 +50,6 @@
                             </ul>
                         </li>
                     </ul>
-                </div>
-                <div class="main-column">
-                    <ol class="breadcrumb">
-                        <li>
-                            <a asp-controller="Boards" asp-action="Index">/b</a>
-                        </li>
-                        <li class="active">@Model.Name</li>
-                    </ol>
                 </div>
             </div>
             <div>
