@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vault.Framework.Search;
 using Vault.Framework.Search.Criteria;
+using Vault.Framework.Search.Parsing;
 using Vault.Framework.Security;
 using Vault.Shared;
 using Vault.Shared.Domain;
@@ -24,6 +25,21 @@ namespace Vault.Framework.Api.Boards
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IWorkContextAccessor _workContextAccessor;
         private readonly IQueryBuilder _queryBuilder;
+
+        readonly static IDictionary<string, string> DefaultFieldsMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "type", "_documentType" },
+            { "published", "_published" },
+            { "startDate", "startDate" },
+            { "endDate", "endDate" },
+            { "title", "name" },
+            { "description", "description" },
+            { "desc", "description" },
+            { "duration", "duration" },
+            { "artist", "byArtist" },
+            { "album", "inAlbum" },
+            { "keywords" , "keywords" }
+        };
 
         public BoardsApi(
             IWorkContextAccessor workContextAccessor,
@@ -53,7 +69,7 @@ namespace Vault.Framework.Api.Boards
             if (!_authorizer.Authorize(Permissions.CreateBoard))
                 throw new SecurityException(string.Format("The user '{0}' does not has permission to create a new board", _workContextAccessor.WorkContext.User.UserName));
 
-            Hook();
+            //  Hook();
 
             using (var unitOfWork = _unitOfWorkFactory.Create())
             {
@@ -232,7 +248,7 @@ namespace Vault.Framework.Api.Boards
                     placeImageUrl.Append("&size=600x200");
                     placeImageUrl.Append("&maptype=roadmap");
                     placeImageUrl.AppendFormat("&center={0},{1}", placeCard.Latitude, placeCard.Longitude);
-                    placeImageUrl.AppendFormat("&markers=color:red%7Clabel:C%7C{0},{1}" ,placeCard.Latitude,placeCard.Longitude);
+                    placeImageUrl.AppendFormat("&markers=color:red%7Clabel:C%7C{0},{1}", placeCard.Latitude, placeCard.Longitude);
                     placeCard.Thumbnail = placeImageUrl.ToString();
 
                     result.Add(placeCard);
@@ -344,90 +360,12 @@ namespace Vault.Framework.Api.Boards
             }
         }
 
-        private List<ISearchCriteria> ParseSearchQuery(string query)
+        private IList<ISearchCriteria> ParseSearchQuery(string query)
         {
-            var parseResult = _searchQueryParser.Parse(query);
-
-            var searchCriteria = new List<ISearchCriteria>();
-
-            foreach (var parseGroup in parseResult.Groups)
-            {
-                switch (parseGroup.Type.ToLowerInvariant())
-                {
-                    case ">":
-                        searchCriteria.Add(new GreaterCriteria
-                        {
-                            FieldName = parseGroup.Field,
-                            Value = parseGroup.Value
-                        });
-                        break;
-
-                    case ">=":
-                        searchCriteria.Add(new GreaterCriteria
-                        {
-                            FieldName = parseGroup.Field,
-                            Value = parseGroup.Value,
-                            Strict = true
-                        });
-                        break;
-
-                    case "<":
-                        searchCriteria.Add(new LessCriteria
-                        {
-                            FieldName = parseGroup.Field,
-                            Value = parseGroup.Value
-                        });
-                        break;
-
-                    case "<=":
-                        searchCriteria.Add(new LessCriteria
-                        {
-                            FieldName = parseGroup.Field,
-                            Value = parseGroup.Value,
-                            Strict = true
-                        });
-                        break;
-
-                    case "=":
-                        searchCriteria.Add(new EqualCriteria
-                        {
-                            FieldName = parseGroup.Field,
-                            Value = parseGroup.Value
-                        });
-                        break;
-
-                    case "!=":
-                        searchCriteria.Add(new EqualCriteria
-                        {
-                            FieldName = parseGroup.Field,
-                            Value = parseGroup.Value,
-                            Not = true
-                        });
-                        break;
-
-                    case "in":
-                        searchCriteria.Add(new ContainsCriteria
-                        {
-                            FieldName = parseGroup.Field,
-                            Value = parseGroup.Value
-                        });
-                        break;
-
-                    case "nin":
-                        searchCriteria.Add(new ContainsCriteria
-                        {
-                            FieldName = parseGroup.Field,
-                            Value = parseGroup.Value,
-                            Not = true
-                        });
-                        break;
-
-                    default:
-                        throw new IndexOutOfRangeException(string.Format("Operator '{0}' is not supported in the search queries", parseGroup.Type));
-                }
-            }
-
-            return searchCriteria;
+            return _searchQueryParser.Parse(query)
+                .RewriteWith(DefaultFieldsMap)
+                .AsCriteria()
+                .ToList();
         }
     }
 }

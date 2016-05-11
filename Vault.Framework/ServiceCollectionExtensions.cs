@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Vault.Framework.Api.Boards;
 using Vault.Framework.Search;
+using Vault.Framework.Search.Parsing;
 using Vault.Framework.Security;
 using Vault.Shared.Commands;
 using Vault.Shared.Events;
