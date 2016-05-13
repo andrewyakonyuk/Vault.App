@@ -30,14 +30,14 @@ namespace Vault.Framework.Api.Boards
         {
             { "type", "_documentType" },
             { "published", "_published" },
-            { "startDate", "startDate" },
-            { "endDate", "endDate" },
+            { "startDate", "startdate" },
+            { "endDate", "enddate" },
             { "title", "name" },
             { "description", "description" },
             { "desc", "description" },
             { "duration", "duration" },
-            { "artist", "byArtist" },
-            { "album", "inAlbum" },
+            { "artist", "byartist" },
+            { "album", "inalbum" },
             { "keywords" , "keywords" }
         };
 
@@ -123,7 +123,8 @@ namespace Vault.Framework.Api.Boards
                 Criteria = ParseSearchQuery(board.RawQuery),
                 OwnerId = board.OwnerId,
                 Offset = offset,
-                Count = count
+                Count = count,
+                SortBy = new[] { new SortField("_published", false) }
             };
             var searchResults = _searchProvider.Search(request);
 
@@ -139,7 +140,8 @@ namespace Vault.Framework.Api.Boards
                 Offset = offset,
                 Count = count,
                 OwnerId = _workContextAccessor.WorkContext.Owner.Id,
-                Criteria = ParseSearchQuery(query)
+                Criteria = ParseSearchQuery(query),
+                SortBy = new[] { new SortField("_published", false) }
             };
 
             var searchResults = _searchProvider.Search(request);
@@ -317,7 +319,7 @@ namespace Vault.Framework.Api.Boards
 
                     searchDocument.Id = i;
                     searchDocument.OwnerId = _workContextAccessor.WorkContext.Owner.Id;
-                    searchDocument.Published = DateTime.UtcNow;
+                    searchDocument.Published = DateTime.UtcNow.AddDays(i);
                     searchDocument.DocumentType = actualType;
 
                     if (actualType == "Event")

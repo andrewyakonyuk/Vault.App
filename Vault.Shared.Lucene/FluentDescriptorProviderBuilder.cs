@@ -46,7 +46,7 @@ namespace Vault.Shared.Lucene
                 },
                 new DocumentFieldDescriptor("Published", "_published") {
                     IsAnalysed = false,
-                    IsIndexed = false,
+                    IsIndexed = true,
                     IsStored = true,
                     IsSorted = true,
                     Converter = new Converters.LuceneDateTimeConverter()

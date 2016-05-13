@@ -33,7 +33,7 @@ namespace Vault.Framework.Search
 
             var numHits = request.Offset + request.Count;
             var query = new MatchAllDocsQuery();
-            var sort = new Sort();
+            var sort = CreateSort(request);
             var collector = TopFieldCollector.Create(sort, Math.Max(numHits, 1), false, false, false, false);
             var filter = CreateFilter(request);
 
@@ -67,7 +67,7 @@ namespace Vault.Framework.Search
             }
         }
 
-        protected virtual Filter CreateFilter(SearchRequest request)
+        Filter CreateFilter(SearchRequest request)
         {
             ISearchFilterBuilder criteriaBuilder = new LuceneFilterBuilder();
             criteriaBuilder.AddEqual("_ownerId", request.OwnerId, false);
@@ -76,6 +76,19 @@ namespace Vault.Framework.Search
                 request.Criteria[i].Apply(criteriaBuilder);
             }
             return (Filter)criteriaBuilder.Build();
+        }
+
+        Sort CreateSort(SearchRequest request)
+        {
+            if (request.SortBy == null || request.SortBy.Count == 0)
+                return new Sort();
+
+            var sortFields = new List<Lucene.Net.Search.SortField>(request.SortBy.Count);
+            foreach (var item in request.SortBy)
+            {
+                sortFields.Add(new Lucene.Net.Search.SortField(item.FieldName, Lucene.Net.Search.SortField.STRING, !item.Ascending));
+            }
+            return new Sort(sortFields.ToArray());
         }
     }
 }

@@ -58,7 +58,8 @@ namespace Vault.Framework.Search.Criteria
 
         public object Build()
         {
-            return new QueryWrapperFilter(_filterQuery);
+            var wrappedQuery = new QueryWrapperFilter(_filterQuery);
+            return FilterManager.Instance.GetFilter(wrappedQuery);
         }
     }
 }
