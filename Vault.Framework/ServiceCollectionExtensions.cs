@@ -193,7 +193,7 @@ namespace Vault.Framework
         public LuceneIndexWriter Create()
         {
             var directory = FSDirectory.Open(Path.Combine(Environment.CurrentDirectory, "index"));
-            var shouldCreate = !directory.ListAll().Any();
+            var shouldCreate = !directory.Directory.Exists || !directory.ListAll().Any();
             var writer = new LuceneIndexWriter(directory, new LowerCaseAnalyzer(Lucene.Net.Util.Version.LUCENE_30), shouldCreate, IndexWriter.MaxFieldLength.UNLIMITED);
 
             writer.Commit();
