@@ -4,6 +4,6 @@ namespace Vault.Framework.Search
 {
     public interface ISearchValuesProvider
     {
-        IEnumerable<string> GetValues(string key);
+        IReadOnlyList<string> GetValues(string key);
     }
 }

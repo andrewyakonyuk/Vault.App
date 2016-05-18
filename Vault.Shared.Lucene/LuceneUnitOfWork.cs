@@ -1,4 +1,5 @@
 ﻿using Lucene.Net.Index;
+using Lucene.Net.Search;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,6 +71,7 @@ namespace Vault.Shared.Lucene
             catch (OutOfMemoryException)
             {
                 _indexWriter.Dispose();
+                throw;
             }
         }
 
@@ -78,20 +80,30 @@ namespace Vault.Shared.Lucene
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
 
-            var metadata = _metadataProvider.GetMetadataForType(entity);
+            var metadata = _metadataProvider.GetMetadata();
             var document = ObjectDictionary.Create(entity);
-            var termsToDelete = metadata.Keys
-                .Select(t => new Term(t.FieldName, t.Converter.ConvertToString(document[t.Name])))
-                .ToArray();
+
+            if (!metadata.Keys.Any())
+                throw new InvalidOperationException("Any document keys are not specified");
+
+            var conditionForDelete = new BooleanQuery();
+            foreach (var descriptor in metadata.Keys)
+            {
+                var convertedValue = descriptor.Converter.ConvertToString(document[descriptor.Name]).ToLower();
+                var term = new Term(descriptor.FieldName, convertedValue);
+                conditionForDelete.Add(new TermQuery(term), Occur.MUST);
+                break;
+            }
 
             try
             {
-                _indexWriter.DeleteDocuments(termsToDelete);
+                _indexWriter.DeleteDocuments(conditionForDelete);
                 _uncommitedCount++;
             }
             catch (OutOfMemoryException)
             {
                 _indexWriter.Dispose();
+                throw;
             }
         }
 

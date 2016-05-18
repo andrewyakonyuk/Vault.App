@@ -28,7 +28,7 @@ namespace Vault.Shared.Lucene
                 //ensure the index writer still valid
                 if (!_indexWriter.Value.IsOpen())
                 {
-                    lock (_indexWriter)
+                    lock (this)
                     {
                         if (!_indexWriter.Value.IsOpen())
                         {

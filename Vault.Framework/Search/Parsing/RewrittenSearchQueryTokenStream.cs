@@ -7,8 +7,6 @@ namespace Vault.Framework.Search.Parsing
 {
     public class RewrittenSearchQueryTokenStream : SearchQueryTokenStream
     {
-        readonly SearchQueryTokenStream _tokenStream;
-
         public RewrittenSearchQueryTokenStream(SearchQueryTokenStream tokenStream, IDictionary<string, string> fieldsMap)
             : base(tokenStream.RawQuery, RewriteTokenStream(tokenStream, fieldsMap))
         {

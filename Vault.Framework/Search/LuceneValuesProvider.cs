@@ -16,15 +16,18 @@ namespace Vault.Framework.Search
             _document = document;
         }
 
-        public IEnumerable<string> GetValues(string key)
+        public IReadOnlyList<string> GetValues(string key)
         {
             var values = _document.GetFieldables(key);
+            var result = new List<string>(values.Length);
             for (int i = 0; i < values.Length; i++)
             {
                 var field = values[i];
                 if (field.IsStored && !field.IsBinary)
-                    yield return field.StringValue;
+                    result.Add(field.StringValue);
             }
+
+            return result.AsReadOnly();
         }
     }
 }

@@ -12,18 +12,23 @@ namespace Vault.Framework.Search
     {
         private readonly IIndexWriterAccessor _writerAccessor;
         private readonly ISearchResultTransformer _defaultResultTransformer;
+        private readonly IIndexDocumentMetadataProvider _metadataProvider;
 
         public LuceneSearchProvider(
             IIndexWriterAccessor writerAccessor,
-            ISearchResultTransformer resultTransformer)
+            ISearchResultTransformer resultTransformer,
+            IIndexDocumentMetadataProvider metadataProvider)
         {
             if (writerAccessor == null)
                 throw new ArgumentNullException(nameof(writerAccessor));
             if (resultTransformer == null)
                 throw new ArgumentNullException(nameof(resultTransformer));
+            if (metadataProvider == null)
+                throw new ArgumentNullException(nameof(metadataProvider));
 
             _writerAccessor = writerAccessor;
             _defaultResultTransformer = resultTransformer;
+            _metadataProvider = metadataProvider;
         }
 
         public IPagedEnumerable<SearchDocument> Search(SearchRequest request)
@@ -34,8 +39,8 @@ namespace Vault.Framework.Search
             var numHits = request.Offset + request.Count;
             var query = new MatchAllDocsQuery();
             var sort = CreateSort(request);
-            var collector = TopFieldCollector.Create(sort, Math.Max(numHits, 1), false, false, false, false);
             var filter = CreateFilter(request);
+            var collector = TopFieldCollector.Create(sort, Math.Max(numHits, 1), false, false, false, false);
 
             using (var indexReader = _writerAccessor.Writer.GetReader())
             using (var indexSearcher = new IndexSearcher(indexReader))
@@ -69,13 +74,14 @@ namespace Vault.Framework.Search
 
         Filter CreateFilter(SearchRequest request)
         {
-            ISearchFilterBuilder criteriaBuilder = new LuceneFilterBuilder();
-            criteriaBuilder.AddEqual("_ownerId", request.OwnerId, false);
+            var metadata = _metadataProvider.GetMetadata();
+            var filterBuilder = new LuceneFilterBuilder(metadata);
+            filterBuilder.AddEqual("OwnerId", request.OwnerId, false);
             for (var i = 0; i < request.Criteria.Count; i++)
             {
-                request.Criteria[i].Apply(criteriaBuilder);
+                request.Criteria[i].Apply(filterBuilder);
             }
-            return (Filter)criteriaBuilder.Build();
+            return filterBuilder;
         }
 
         Sort CreateSort(SearchRequest request)
@@ -83,10 +89,13 @@ namespace Vault.Framework.Search
             if (request.SortBy == null || request.SortBy.Count == 0)
                 return new Sort();
 
+            var metadata = _metadataProvider.GetMetadata();
             var sortFields = new List<Lucene.Net.Search.SortField>(request.SortBy.Count);
             foreach (var item in request.SortBy)
             {
-                sortFields.Add(new Lucene.Net.Search.SortField(item.FieldName, Lucene.Net.Search.SortField.STRING, !item.Ascending));
+                var fieldName = metadata.RewriteToFieldName(item.FieldName);
+                var sortField = new Lucene.Net.Search.SortField(fieldName, Lucene.Net.Search.SortField.STRING, !item.Ascending);
+                sortFields.Add(sortField);
             }
             return new Sort(sortFields.ToArray());
         }

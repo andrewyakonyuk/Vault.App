@@ -16,21 +16,17 @@ namespace Vault.Framework.Search
 
         public SearchDocument Transform(ISearchValuesProvider valueProvider)
         {
-            var documentType = valueProvider.GetValues("_documentType").FirstOrDefault();
-            if (string.IsNullOrEmpty(documentType))
-                throw new InvalidOperationException(string.Format("There are no any types specified for document '{0}'", valueProvider.GetValues("_id").FirstOrDefault()));
-
-            var metadata = _documentMetadataProvider.GetMetadataForType(documentType);
+            var metadata = _documentMetadataProvider.GetMetadata();
             var searchDocument = new SearchDocument();
 
             foreach (var fieldDescriptor in metadata.Fields)
             {
-                var rawValues = valueProvider.GetValues(fieldDescriptor.FieldName).ToArray();
+                var rawValues = valueProvider.GetValues(fieldDescriptor.FieldName);
 
                 //0: check if field have a multiple values. if so, convert raw values to list
-                if (rawValues.Length > 1)
+                if (rawValues.Count > 1)
                 {
-                    var convertedValues = new List<object>(rawValues.Length);
+                    var convertedValues = new List<object>(rawValues.Count);
                     foreach (var value in rawValues)
                     {
                         convertedValues.Add(fieldDescriptor.Converter.ConvertFromString(value));
@@ -38,7 +34,7 @@ namespace Vault.Framework.Search
                     searchDocument[fieldDescriptor.Name] = convertedValues;
                 }
                 //1: check the field have at least one value
-                else if (rawValues.Length > 0)
+                else if (rawValues.Count > 0)
                 {
                     var convertedValue = fieldDescriptor.Converter.ConvertFromString(rawValues[0]);
                     switch (fieldDescriptor.Name.ToLowerInvariant())

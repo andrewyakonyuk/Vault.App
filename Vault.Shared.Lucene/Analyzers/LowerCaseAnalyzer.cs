@@ -20,5 +20,10 @@ namespace Vault.Shared.Lucene.Analyzers
         {
             return new LowerCaseFilter(base.ReusableTokenStream(fieldName, reader));
         }
+
+        public override TokenStream TokenStream(string fieldName, TextReader reader)
+        {
+            return new LowerCaseFilter(base.TokenStream(fieldName, reader));
+        }
     }
 }

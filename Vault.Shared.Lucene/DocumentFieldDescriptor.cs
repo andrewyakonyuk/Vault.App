@@ -31,11 +31,6 @@ namespace Vault.Shared.Lucene
         /// </summary>
         public string Name { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the search results can be sorted by this field
-        /// </summary>
-        public bool IsSorted { get; set; }
-
         public bool IsIndexed { get; set; }
 
         public bool IsAnalysed { get; set; }

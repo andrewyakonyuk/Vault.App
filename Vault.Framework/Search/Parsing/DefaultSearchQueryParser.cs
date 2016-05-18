@@ -6,7 +6,7 @@ namespace Vault.Framework.Search.Parsing
     public class DefaultSearchQueryParser : ISearchQueryParser
     {
         static readonly Regex WhitespaceRegex = new Regex(@"\s+", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        static readonly Regex SearchTermsRegex = new Regex(@"(\S+:'(?:[^'\\]|\\.)*')|(\S+:""(?:[^ ""\\]|\\.)*"") |\S+|\S+:\S+", RegexOptions.Compiled);
+        static readonly Regex SearchTermsRegex = new Regex(@"(\S+:'(?:[^'\\]|\\.)*')|(\S+:""(?:[^""\\]|\\.)*"")|\S+|\S+:\S+", RegexOptions.Compiled);
         static readonly Regex StripSurroundingQuotes = new Regex(@"^\""|\""$|^\'|\'$", RegexOptions.Compiled);
 
         static readonly Dictionary<string, string> InvertedGroupTypes = new Dictionary<string, string>
@@ -59,7 +59,7 @@ namespace Vault.Framework.Search.Parsing
 
                         // Strip surrounding quotes
                         value = StripSurroundingQuotes.Replace(value, string.Empty);
-                        value = value.Trim();
+                        value = value.Trim().ToLower();
                         terms.Add(string.Join(FieldDelimenter, key, value));
                     }
                     else terms.Add(match.Value);

@@ -3,10 +3,9 @@
     public interface IIndexDocumentMetadataProvider
     {
         /// <summary>
-        /// Provide the metadata for the specific document type.
+        /// Provide the metadata for the all search fields
         /// </summary>
-        /// <param name="documentType">Document type</param>
         /// <returns></returns>
-        IndexDocumentMetadata GetMetadataForType(string documentType);
+        IndexDocumentMetadata GetMetadata();
     }
 }

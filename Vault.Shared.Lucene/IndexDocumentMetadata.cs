@@ -10,19 +10,46 @@ namespace Vault.Shared.Lucene
     /// </summary>
     public class IndexDocumentMetadata
     {
-        /// <summary>
-        /// The document metadata type
-        /// </summary>
-        public string DocumentType { get; set; }
+        readonly IReadOnlyList<DocumentFieldDescriptor> _fields;
+        readonly IReadOnlyList<DocumentFieldDescriptor> _keys;
+        readonly IDictionary<string, string> _fieldNamesMap;
+        readonly IDictionary<string, DocumentFieldDescriptor> _fieldDescriptorMap;
+
+        public const string KeywordsFieldName = "keywords";
+
+        public IndexDocumentMetadata(List<DocumentFieldDescriptor> fields)
+        {
+            _fields = fields.AsReadOnly();
+            _keys = fields.Where(t => t.IsKey).ToArray();
+            _fieldNamesMap = fields.ToDictionary(t => t.Name, t => t.FieldName, StringComparer.OrdinalIgnoreCase);
+            _fieldDescriptorMap = fields.ToDictionary(t => t.Name, t => t, StringComparer.OrdinalIgnoreCase);
+        }
 
         /// <summary>
         /// The list of descriptors, which describe process of storing each field in indexes.
         /// </summary>
-        public IList<DocumentFieldDescriptor> Fields { get; set; }
+        public IReadOnlyList<DocumentFieldDescriptor> Fields { get { return _fields; } }
 
-        public IList<DocumentFieldDescriptor> Keys
+        public IReadOnlyList<DocumentFieldDescriptor> Keys { get { return _keys; } }
+
+        public string RewriteToFieldName(string name)
         {
-            get { return Fields.Where(t => t.IsKey).ToArray(); }
+            if (string.Equals(name, KeywordsFieldName, StringComparison.OrdinalIgnoreCase))
+                return KeywordsFieldName;
+
+            return _fieldNamesMap[name];
+        }
+
+        public bool TryGetDescriptor(string name, out DocumentFieldDescriptor descriptor)
+        {
+            if (_fieldDescriptorMap.ContainsKey(name))
+            {
+                descriptor = _fieldDescriptorMap[name];
+                return true;
+            }
+
+            descriptor = null;
+            return false;
         }
     }
 }

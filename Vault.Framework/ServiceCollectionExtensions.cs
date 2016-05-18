@@ -1,6 +1,4 @@
-﻿using Lucene.Net.Analysis;
-using Lucene.Net.Analysis.Standard;
-using Lucene.Net.Index;
+﻿using Lucene.Net.Index;
 using Lucene.Net.Store;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
@@ -124,30 +122,22 @@ namespace Vault.Framework
             services.AddSingleton<IIndexWriterAccessor, DefaultIndexWriterAccessor>();
 
             var builder = new FluentDescriptorProviderBuilder()
-                .Document("Event", s => s
-                    .Field("StartDate", converter: new LuceneDateTimeConverter())
-                    .Field("EndDate", converter: new LuceneDateTimeConverter())
-                    .Field("Duration", converter: new TimeSpanConverter())
-                    .Field("Name", isKeyword: true)
-                    .Field("Description", isKeyword: true))
-                .Document("Place", s => s
-                    .Field("Elevation", converter: new DecimalConverter())
-                    .Field("Latitude", converter: new DecimalConverter())
-                    .Field("Longitude", converter: new DecimalConverter())
-                    .Field("Name", isKeyword: true)
-                    .Field("Description", isKeyword: true))
-                .Document("Audio", s => s
-                    .Field("Duration", converter: new TimeSpanConverter())
-                    .Field("ByArtist", isKeyword: true)
-                    .Field("InAlbum", isKeyword: true)
-                    .Field("Name", isKeyword: true)
-                    .Field("Description", isKeyword: true))
-                .Document("Article", s => s
-                    .Field("Name", isKeyword: true)
-                    .Field("Description", isKeyword: true)
-                    .Field("Body")
-                    .Field("Summary")
-                );
+                .Field("Id", "_id", isKey: true, converter: new Int32Converter())
+                .Field("OwnerId", "_ownerId", isKey: true, converter: new Int32Converter())
+                .Field("Published", "_published", converter: new LuceneDateTimeConverter())
+                .Field("DocumentType", "_documentType", isKey: true, isAnalysed: true)
+                .Field("StartDate", converter: new LuceneDateTimeConverter())
+                .Field("EndDate", converter: new LuceneDateTimeConverter())
+                .Field("Duration", converter: new TimeSpanConverter())
+                .Field("Name", isKeyword: true, isAnalysed: true)
+                .Field("Description", isKeyword: true, isAnalysed: true)
+                .Field("Elevation", converter: new DecimalConverter())
+                .Field("Latitude", converter: new DecimalConverter())
+                .Field("Longitude", converter: new DecimalConverter())
+                .Field("ByArtist", isKeyword: true, isAnalysed: true)
+                .Field("InAlbum", isKeyword: true, isAnalysed: true)
+                .Field("Body", isAnalysed: true)
+                .Field("Summary", isAnalysed: true);
 
             services.AddSingleton<IIndexDocumentMetadataProvider>(s => builder.Build());
             services.AddTransient<ISearchQueryParser, DefaultSearchQueryParser>();
@@ -193,7 +183,7 @@ namespace Vault.Framework
         public LuceneIndexWriter Create()
         {
             var directory = FSDirectory.Open(Path.Combine(Environment.CurrentDirectory, "index"));
-            var shouldCreate = !directory.ListAll().Any();
+            var shouldCreate = !directory.Directory.Exists || !directory.ListAll().Any();
             var writer = new LuceneIndexWriter(directory, new LowerCaseAnalyzer(Lucene.Net.Util.Version.LUCENE_30), shouldCreate, IndexWriter.MaxFieldLength.UNLIMITED);
 
             writer.Commit();
@@ -220,6 +210,98 @@ namespace Vault.Framework
                 {
                     handler.Handle(@event);
                 }
+            }
+        }
+    }
+
+    internal class SearchDocumentGenerator : IHandle<EntityCreated<Board>>
+    {
+        readonly IWorkContextAccessor _workContextAccessor;
+        readonly IReportUnitOfWorkFactory _reportUnitOfWorkFactory;
+
+        public SearchDocumentGenerator(
+            IWorkContextAccessor workContextAccessor,
+            IReportUnitOfWorkFactory reportUnitOfWorkFactory)
+        {
+            _workContextAccessor = workContextAccessor;
+            _reportUnitOfWorkFactory = reportUnitOfWorkFactory;
+        }
+
+        public void Handle(EntityCreated<Board> @event)
+        {
+            Hook();
+        }
+
+        private void Hook()
+        {
+            var random = new Random();
+
+            var types = new[] { "Event", "Place", "Article", "Audio" };
+            var mapPoints = new[] {
+                new {
+                    Latitude = 40.714728, Longitude = -73.998672
+                },
+                 new {
+                    Latitude = 49.24195, Longitude = 8.5491213
+                },
+                  new {
+                    Latitude = 50.4496346, Longitude = 30.5231952
+                },
+                   new {
+                    Latitude = 50.2481061, Longitude = 28.6802412
+                },
+            };
+
+            using (var unitOfWork = _reportUnitOfWorkFactory.Create())
+            {
+                for (int i = _workContextAccessor.WorkContext.Owner.Id * 1001; i < _workContextAccessor.WorkContext.Owner.Id * 1001 + 10000; i++)
+                {
+                    var actualType = types[Math.Min((int)(random.Next(0, 40) / 10), 3)];
+
+                    dynamic searchDocument = new SearchDocument();
+
+                    searchDocument.Id = i;
+                    searchDocument.OwnerId = _workContextAccessor.WorkContext.Owner.Id;
+                    searchDocument.Published = DateTime.UtcNow.AddDays(i);
+                    searchDocument.DocumentType = actualType;
+
+                    if (actualType == "Event")
+                    {
+                        searchDocument.Name = "Event" + i;
+                        searchDocument.Description = "EventDescription" + i;
+                        searchDocument.Duration = new TimeSpan(1, 30, 0);
+                        searchDocument.StartDate = DateTime.UtcNow;
+                        searchDocument.EndDate = DateTime.UtcNow.AddHours(1.5);
+                    }
+                    else if (actualType == "Place")
+                    {
+                        searchDocument.Name = "Place" + i;
+                        searchDocument.Description = "Place description" + i;
+                        searchDocument.Elevation = random.NextDouble();
+                        var point = mapPoints[Math.Min((int)(random.Next(0, 40) / 10), 3)];
+                        searchDocument.Latitude = point.Latitude;
+                        searchDocument.Longitude = point.Longitude;
+                    }
+                    else if (actualType == "Audio")
+                    {
+                        searchDocument.Name = "Audio" + i;
+                        searchDocument.Description = "Audio description" + i;
+                        searchDocument.ByArtist = "By artist" + i;
+                        searchDocument.InAlbum = "In album" + i;
+                        searchDocument.Duration = new TimeSpan(0, 3, 33);
+                    }
+                    else if (actualType == "Article")
+                    {
+                        searchDocument.Name = "Article" + i;
+                        searchDocument.Description = "Article description" + i;
+                        searchDocument.Body = "Article body" + i;
+                        searchDocument.Summary = "Article summary" + i;
+                    }
+
+                    unitOfWork.Save(searchDocument);
+                }
+
+                unitOfWork.Commit();
             }
         }
     }

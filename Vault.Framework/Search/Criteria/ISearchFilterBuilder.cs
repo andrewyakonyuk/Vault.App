@@ -7,7 +7,5 @@ namespace Vault.Framework.Search.Criteria
         ISearchFilterBuilder AddContains(string fieldName, object value, bool not);
 
         ISearchFilterBuilder AddBetween(string fieldName, object lowValue, object highValue, bool strict);
-
-        object Build();
     }
 }

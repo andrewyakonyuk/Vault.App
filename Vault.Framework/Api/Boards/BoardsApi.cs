@@ -19,8 +19,6 @@ namespace Vault.Framework.Api.Boards
     {
         private readonly IAuthorizer _authorizer;
         private readonly IEventPublisher _eventPublisher;
-        private readonly IReportUnitOfWorkFactory _reportUnitOfWorkFactory;
-        private readonly ISearchProvider _searchProvider;
         private readonly ISearchQueryParser _searchQueryParser;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IWorkContextAccessor _workContextAccessor;
@@ -28,8 +26,8 @@ namespace Vault.Framework.Api.Boards
 
         readonly static IDictionary<string, string> DefaultFieldsMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
-            { "type", "_documentType" },
-            { "published", "_published" },
+            { "type", "documentType" },
+            { "published", "published" },
             { "startDate", "startdate" },
             { "endDate", "enddate" },
             { "title", "name" },
@@ -44,7 +42,6 @@ namespace Vault.Framework.Api.Boards
         public BoardsApi(
             IWorkContextAccessor workContextAccessor,
             IUnitOfWorkFactory unitOfWorkFactory,
-            ISearchProvider searchProvider,
             IAuthorizer authorizer,
             IEventPublisher eventPublisher,
             ISearchQueryParser searchQueryParser,
@@ -53,11 +50,9 @@ namespace Vault.Framework.Api.Boards
         {
             _workContextAccessor = workContextAccessor;
             _unitOfWorkFactory = unitOfWorkFactory;
-            _searchProvider = searchProvider;
             _authorizer = authorizer;
             _eventPublisher = eventPublisher;
             _searchQueryParser = searchQueryParser;
-            _reportUnitOfWorkFactory = reportUnitOfWorkFactory;
             _queryBuilder = queryBuilder;
         }
 
@@ -68,8 +63,6 @@ namespace Vault.Framework.Api.Boards
 
             if (!_authorizer.Authorize(Permissions.CreateBoard))
                 throw new SecurityException(string.Format("The user '{0}' does not has permission to create a new board", _workContextAccessor.WorkContext.User.UserName));
-
-            //  Hook();
 
             using (var unitOfWork = _unitOfWorkFactory.Create())
             {
@@ -124,38 +117,42 @@ namespace Vault.Framework.Api.Boards
                 OwnerId = board.OwnerId,
                 Offset = offset,
                 Count = count,
-                SortBy = new[] { new SortField("_published", false) }
+                SortBy = new[] { new SortField("Published", false) }
             };
-            var searchResults = _searchProvider.Search(request);
+            var searchResults = await _queryBuilder.For<IPagedEnumerable<SearchDocument>>().With(request);
 
             board.Cards = CreateCards(searchResults);
 
             return board;
         }
 
-        public Task<Board> GetBoardByQueryAsync(string query, int offset, int count)
+        public async Task<Board> GetBoardByQueryAsync(string query, int offset, int count)
         {
+            var board = new Board
+            {
+                Published = DateTime.UtcNow,
+                OwnerId = _workContextAccessor.WorkContext.Owner.Id,
+                Name = string.Empty,
+                RawQuery = query
+            };
+
+            if (!_authorizer.Authorize(Permissions.ViewBoard, board))
+                return null;
+
             var request = new SearchRequest
             {
                 Offset = offset,
                 Count = count,
-                OwnerId = _workContextAccessor.WorkContext.Owner.Id,
+                OwnerId = board.OwnerId,
                 Criteria = ParseSearchQuery(query),
-                SortBy = new[] { new SortField("_published", false) }
+                SortBy = new[] { new SortField("Published", false) }
             };
 
-            var searchResults = _searchProvider.Search(request);
+            var searchResults = await _queryBuilder.For<IPagedEnumerable<SearchDocument>>().With(request);
 
-            var board = new Board
-            {
-                Published = DateTime.UtcNow,
-                OwnerId = request.OwnerId,
-                Name = string.Empty,
-                RawQuery = query,
-                Cards = CreateCards(searchResults)
-            };
+            board.Cards = CreateCards(searchResults);
 
-            return Task.FromResult(board);
+            return board;
         }
 
         public async Task<IEnumerable<Board>> GetBoardsAsync()
@@ -287,79 +284,6 @@ namespace Vault.Framework.Api.Boards
             }
 
             return PagedEnumerable.Create(result, searchResults.TotalCount);
-        }
-
-        private void Hook()
-        {
-            var random = new Random();
-
-            var types = new[] { "Event", "Place", "Article", "Audio" };
-            var mapPoints = new[] {
-                new {
-                    Latitude = 40.714728, Longitude = -73.998672
-                },
-                 new {
-                    Latitude = 49.24195, Longitude = 8.5491213
-                },
-                  new {
-                    Latitude = 50.4496346, Longitude = 30.5231952
-                },
-                   new {
-                    Latitude = 50.2481061, Longitude = 28.6802412
-                },
-            };
-
-            using (var unitOfWork = _reportUnitOfWorkFactory.Create())
-            {
-                for (int i = _workContextAccessor.WorkContext.Owner.Id * 1001; i < _workContextAccessor.WorkContext.Owner.Id * 1001 + 10000; i++)
-                {
-                    var actualType = types[Math.Min((int)(random.Next(0, 40) / 10), 3)];
-
-                    dynamic searchDocument = new SearchDocument();
-
-                    searchDocument.Id = i;
-                    searchDocument.OwnerId = _workContextAccessor.WorkContext.Owner.Id;
-                    searchDocument.Published = DateTime.UtcNow.AddDays(i);
-                    searchDocument.DocumentType = actualType;
-
-                    if (actualType == "Event")
-                    {
-                        searchDocument.Name = "Event" + i;
-                        searchDocument.Description = "EventDescription" + i;
-                        searchDocument.Duration = new TimeSpan(1, 30, 0);
-                        searchDocument.StartDate = DateTime.UtcNow;
-                        searchDocument.EndDate = DateTime.UtcNow.AddHours(1.5);
-                    }
-                    else if (actualType == "Place")
-                    {
-                        searchDocument.Name = "Place" + i;
-                        searchDocument.Description = "Place description" + i;
-                        searchDocument.Elevation = random.NextDouble();
-                        var point = mapPoints[Math.Min((int)(random.Next(0, 40) / 10), 3)];
-                        searchDocument.Latitude = point.Latitude;
-                        searchDocument.Longitude = point.Longitude;
-                    }
-                    else if (actualType == "Audio")
-                    {
-                        searchDocument.Name = "Audio" + i;
-                        searchDocument.Description = "Audio description" + i;
-                        searchDocument.ByArtist = "By artist" + i;
-                        searchDocument.InAlbum = "In album" + i;
-                        searchDocument.Duration = new TimeSpan(0, 3, 33);
-                    }
-                    else if (actualType == "Article")
-                    {
-                        searchDocument.Name = "Article" + i;
-                        searchDocument.Description = "Article description" + i;
-                        searchDocument.Body = "Article body" + i;
-                        searchDocument.Summary = "Article summary" + i;
-                    }
-
-                    unitOfWork.Save(searchDocument);
-                }
-
-                unitOfWork.Commit();
-            }
         }
 
         private IList<ISearchCriteria> ParseSearchQuery(string query)
