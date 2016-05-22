@@ -7,6 +7,7 @@ namespace Vault.Shared
 {
     public interface IPagedEnumerable<T> : IEnumerable<T>
     {
+        int Count { get; }
         int TotalCount { get; }
     }
 
@@ -16,16 +17,20 @@ namespace Vault.Shared
     {
         private readonly IEnumerable<T> _inner;
 
-        public static PagedEnumerable<T> Empty = new PagedEnumerable<T>(new T[0], 0);
+        public static PagedEnumerable<T> Empty = new PagedEnumerable<T>(new T[0], 0, 0);
 
-        public PagedEnumerable(IEnumerable<T> enumerable, int totalCount)
+        public PagedEnumerable(IEnumerable<T> enumerable, int count, int totalCount)
         {
             _inner = enumerable;
             TotalCount = totalCount;
+            Count = count;
         }
 
         [DataMember]
         public int TotalCount { get; private set; }
+
+        [DataMember]
+        public int Count { get; private set; }
 
         public IEnumerator<T> GetEnumerator()
         {
@@ -40,9 +45,14 @@ namespace Vault.Shared
 
     public abstract class PagedEnumerable
     {
-        public static IPagedEnumerable<T> Create<T>(IEnumerable<T> enumerable, int totalCount)
+        public static IPagedEnumerable<T> Create<T>(IEnumerable<T> enumerable, int count, int totalCount)
         {
-            return new PagedEnumerable<T>(enumerable, totalCount);
-        }   
+            return new PagedEnumerable<T>(enumerable, count, totalCount);
+        }
+
+        public static IPagedEnumerable<T> Empty<T>()
+        {
+            return PagedEnumerable<T>.Empty;
+        }
     }
 }

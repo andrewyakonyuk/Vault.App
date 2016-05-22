@@ -209,7 +209,7 @@ namespace Vault.Framework.Api.Boards
 
         private IPagedEnumerable<Card> CreateCards(IPagedEnumerable<SearchDocument> searchResults)
         {
-            var result = new List<Card>(searchResults.Count());
+            var result = new List<Card>(searchResults.Count);
 
             foreach (dynamic item in searchResults)
             {
@@ -283,7 +283,7 @@ namespace Vault.Framework.Api.Boards
                 }
             }
 
-            return PagedEnumerable.Create(result, searchResults.TotalCount);
+            return PagedEnumerable.Create(result, searchResults.Count, searchResults.TotalCount);
         }
 
         private IList<ISearchCriteria> ParseSearchQuery(string query)

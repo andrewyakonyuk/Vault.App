@@ -12,7 +12,7 @@ namespace Vault.Framework.Api.Boards
     {
         public Board()
         {
-            Cards = PagedEnumerable.Create(new Card[0], 0);
+            Cards = PagedEnumerable.Empty<Card>();
             RawQuery = string.Empty;
         }
 

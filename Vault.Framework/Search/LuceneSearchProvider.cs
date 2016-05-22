@@ -50,12 +50,12 @@ namespace Vault.Framework.Search
                 indexSearcher.Search(query, filter, collector);
                 var topDocs = collector.TopDocs();
                 if (numHits <= 0)
-                    return PagedEnumerable.Create(new SearchDocument[0], topDocs.TotalHits);
+                    return PagedEnumerable.Create(new SearchDocument[0], 0, topDocs.TotalHits);
 
                 var scoreDocs = topDocs.ScoreDocs;
                 var requestedCount = scoreDocs.Length - request.Offset;
                 if (requestedCount <= 0)
-                    return PagedEnumerable.Create(new SearchDocument[0], topDocs.TotalHits);
+                    return PagedEnumerable.Create(new SearchDocument[0], 0, topDocs.TotalHits);
 
                 var result = new List<SearchDocument>(requestedCount);
                 var resultTransformer = request.ResultTransformer ?? _defaultResultTransformer;
@@ -68,7 +68,7 @@ namespace Vault.Framework.Search
                     result.Add(document);
                 }
 
-                return PagedEnumerable.Create(result, topDocs.TotalHits);
+                return PagedEnumerable.Create(result, result.Count, topDocs.TotalHits);
             }
         }
 
