@@ -43,7 +43,7 @@ namespace Vault.Framework.Mvc
             if (context.RouteData.Values.ContainsKey("username"))
             {
                 var username = (string)context.RouteData.Values["username"];
-                _workContextAccessor.WorkContext.Owner = await _queryBuilder.For<IdentityUser>().With(new Username(context.HttpContext.User.Identity.Name));
+                _workContextAccessor.WorkContext.Owner = await _queryBuilder.For<IdentityUser>().With(new Username(username));
             }
         }
     }
