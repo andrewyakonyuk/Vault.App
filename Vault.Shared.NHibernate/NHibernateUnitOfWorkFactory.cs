@@ -6,16 +6,16 @@ namespace Vault.Shared.NHibernate
 {
     public class NHibernateUnitOfWorkFactory : IUnitOfWorkFactory
     {
-        private readonly ISessionFactory _sessionSessionFactory;
+        private readonly ISessionProvider _sessionProvider;
 
-        public NHibernateUnitOfWorkFactory(ISessionFactory sessionFactory)
+        public NHibernateUnitOfWorkFactory(ISessionProvider secctionProvider)
         {
-            _sessionSessionFactory = sessionFactory;
+            _sessionProvider = secctionProvider;
         }
 
         public IUnitOfWork Create(IsolationLevel isolationLevel)
         {
-            return new NHibernateUnitOfWork(_sessionSessionFactory.OpenSession(), isolationLevel);
+            return new NHibernateUnitOfWork(_sessionProvider.CurrentSession, isolationLevel);
         }
 
         public IUnitOfWork Create()

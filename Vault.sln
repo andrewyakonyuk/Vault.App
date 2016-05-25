@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Vault.Shared", "Vault.Shared\Vault.Shared.xproj", "{AC32727D-A876-4D06-84F2-35E2B39F0325}"
 EndProject
@@ -16,6 +16,10 @@ EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Vault.Shared.NEventStore", "Vault.Shared.NEventStore\Vault.Shared.NEventStore.xproj", "{7ACC7AD1-BEF6-49F7-9BDC-2DB23C7D1FD1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{0E0BF6ED-0950-4028-8CA8-18E882F4641A}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Vault.Shared.Authentication.Pocket", "Vault.Shared.Authentication.Pocket\Vault.Shared.Authentication.Pocket.xproj", "{142BE9B6-1B9B-4844-B47A-46A977242A98}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Auth", "Auth", "{425544EF-B295-42B6-968F-E83B90766AFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +51,10 @@ Global
 		{7ACC7AD1-BEF6-49F7-9BDC-2DB23C7D1FD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7ACC7AD1-BEF6-49F7-9BDC-2DB23C7D1FD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7ACC7AD1-BEF6-49F7-9BDC-2DB23C7D1FD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{142BE9B6-1B9B-4844-B47A-46A977242A98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{142BE9B6-1B9B-4844-B47A-46A977242A98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{142BE9B6-1B9B-4844-B47A-46A977242A98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{142BE9B6-1B9B-4844-B47A-46A977242A98}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,5 +64,6 @@ Global
 		{7A6E2FED-0E91-422C-A7AE-15B78882F857} = {0E0BF6ED-0950-4028-8CA8-18E882F4641A}
 		{E46A86EC-F8D5-42C6-B67B-D2D6AB410E6F} = {0E0BF6ED-0950-4028-8CA8-18E882F4641A}
 		{7ACC7AD1-BEF6-49F7-9BDC-2DB23C7D1FD1} = {0E0BF6ED-0950-4028-8CA8-18E882F4641A}
+		{142BE9B6-1B9B-4844-B47A-46A977242A98} = {425544EF-B295-42B6-968F-E83B90766AFD}
 	EndGlobalSection
 EndGlobal

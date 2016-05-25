@@ -5,7 +5,7 @@
             <div class="sidebar-user">
                 @if (Context.User.Identity.IsAuthenticated)
                 {
-                    <a asp-controller="Dashboard" asp-action="Index">
+                    <a asp-controller="Account" asp-action="Index">
                         <img class="img-circle pull-left" width="36" height="36" src="@Url.Content("~/img/user.png")" />
                         <span class="username u-truncate">
                             @@@Context.User.Identity.Name

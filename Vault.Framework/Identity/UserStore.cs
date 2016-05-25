@@ -5,10 +5,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Vault.Shared.Domain;
 using Vault.Shared.NHibernate;
+using System.Collections.Generic;
 
 namespace Vault.Framework.Identity
 {
-    public class UserStore : IUserStore<IdentityUser>, IUserPasswordStore<IdentityUser>, IUserEmailStore<IdentityUser>
+    public class UserStore : IUserStore<IdentityUser>, IUserPasswordStore<IdentityUser>, IUserEmailStore<IdentityUser>, IUserLoginStore<IdentityUser>
     {
         private readonly IUnitOfWorkFactory _uowFactory;
         private readonly ILinqProvider _linqProvider;
@@ -216,6 +217,51 @@ namespace Vault.Framework.Identity
 
             user.UserName = userName;
             return Task.FromResult(true);
+        }
+
+        public Task AddLoginAsync(IdentityUser user, UserLoginInfo login, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            user.Logins.Add(new IdentityUserLogin
+            {
+                LoginProvider = login.LoginProvider,
+                ProviderDisplayName = login.ProviderDisplayName,
+                ProviderKey = login.ProviderKey
+            });
+
+            return Task.FromResult(true);
+        }
+
+        public Task RemoveLoginAsync(IdentityUser user, string loginProvider, string providerKey, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var login = user.Logins.SingleOrDefault(t => t.LoginProvider == loginProvider && t.ProviderKey == providerKey);
+            if (login != null)
+            {
+                user.Logins.Remove(login);
+            }
+
+            return Task.FromResult(true);
+        }
+
+        public async Task<IList<UserLoginInfo>> GetLoginsAsync(IdentityUser user, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            return user.Logins.Select(t => new UserLoginInfo(t.LoginProvider, t.ProviderKey, t.ProviderDisplayName)).ToArray();
+        }
+
+        public Task<IdentityUser> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
+        {
+            var login = _linqProvider.Query<IdentityUserLogin>()
+                .Where(t => t.LoginProvider == loginProvider && t.ProviderKey == providerKey)
+                .FirstOrDefault();
+
+            if (login == null)
+                return Task.FromResult<IdentityUser>(null);
+
+            return Task.FromResult(login.User);
         }
     }
 }

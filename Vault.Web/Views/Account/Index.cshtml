@@ -1,0 +1,44 @@
+﻿@{
+    Layout = "_Layout";
+    ViewBag.Title = Context.User.Identity.Name;
+}
+
+<header class="app-header">
+    <div class="app-main-section-wrapper draw-pusher">
+        <div class="app-main-section">
+            <div class="app-header-row">
+                <div class="main-column">
+                    <ol class="breadcrumb">
+                        <li>
+                            <a asp-controller="Account" asp-action="Index">/a</a>
+                        </li>
+                        <li class="active">
+                            @@@Context.User.Identity.Name
+                        </li>
+                    </ol>
+                </div>
+                <div class="aside-column">
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<div class="app-main-section-wrapper draw-pusher">
+    <div class="app-main-section">
+        <div class="card-section">
+            <div class="board">
+                <h4>Add a login to your account.</h4>
+                <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" role="form">
+                    <ul>
+                        @foreach (var provider in Context.Authentication.GetAuthenticationSchemes().ToList())
+                        {
+                            <li>
+                                <button type="submit" class="btn btn-default" name="provider" value="@provider.AuthenticationScheme" title="Connect your @provider.DisplayName account">@provider.AuthenticationScheme</button>
+                            </li>
+                        }
+                    </ul>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

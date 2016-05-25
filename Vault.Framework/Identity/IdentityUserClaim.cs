@@ -33,10 +33,8 @@ namespace Vault.Framework.Identity
         }
 
         /// <summary>
-        /// Gets or sets the of the primary key of the user associated with this claim.
+        /// Gets or sets the user associated with this claim.
         /// </summary>
-        public virtual int UserId { get; set; }
-
         public virtual IdentityUser User { get; set; }
     }
 }
