@@ -1,0 +1,15 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "Vault.Shared.Search",
+  "authors": [ "mechanical animals" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+
+  "frameworks": {
+    "net451": { }
+  },
+  "dependencies": {
+    "Vault.Shared": "1.0.0-*"
+  }
+}

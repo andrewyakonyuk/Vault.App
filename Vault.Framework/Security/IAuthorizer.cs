@@ -1,4 +1,6 @@
-﻿namespace Vault.Framework.Security
+﻿using Vault.Shared;
+
+namespace Vault.Framework.Security
 {
     /// <summary>
     /// Authorization services for the current user

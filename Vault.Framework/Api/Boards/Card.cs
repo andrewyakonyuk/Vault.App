@@ -1,4 +1,5 @@
 ﻿using System;
+using Vault.Shared;
 
 namespace Vault.Framework.Api.Boards
 {

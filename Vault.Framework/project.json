@@ -23,8 +23,9 @@
     "FluentValidation": "5.4.0.0",
     "Lucene.Net": "3.0.3",
     "Vault.Shared": "1.0.0-*",
-    "Vault.Shared.Lucene": "1.0.0-*",
-    "Vault.Shared.NHibernate": "1.0.0-*"
+    "Vault.Shared.NHibernate": "1.0.0-*",
+    "Vault.Shared.Search": "1.0.0-*",
+    "Vault.Shared.Search.Lucene": "1.0.0-*"
   },
 
   "frameworks": {

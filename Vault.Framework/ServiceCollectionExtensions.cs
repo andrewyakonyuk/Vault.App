@@ -15,10 +15,11 @@ using Vault.Framework.Search.Parsing;
 using Vault.Framework.Security;
 using Vault.Shared.Commands;
 using Vault.Shared.Events;
-using Vault.Shared.Lucene;
-using Vault.Shared.Lucene.Analyzers;
-using Vault.Shared.Lucene.Converters;
 using Vault.Shared.Queries;
+using Vault.Shared.Search;
+using Vault.Shared.Search.Lucene;
+using Vault.Shared.Search.Lucene.Analyzers;
+using Vault.Shared.Search.Lucene.Converters;
 
 namespace Vault.Framework
 {
@@ -26,19 +27,17 @@ namespace Vault.Framework
     {
         public static void AddVaultFramework(this IServiceCollection services)
         {
-            services.AddQueries();
-            services.AddCommands();
-            services.AddHandles();
-
             services.AddSingleton<IAuthorizationService, DefaultAuthorizationService>();
             services.AddScoped<IAuthorizer, DefaultAuthorizer>();
             services.AddScoped<WorkContext, WorkContext>();
             services.AddSingleton<IWorkContextAccessor, DefaultWorkContextAccessor>();
             services.AddSingleton<IEventPublisher, ImMemoryEventPublisher>();
-
+            services.AddScoped<IBoardsApi, BoardsApi>();
             services.AddSearch();
 
-            services.AddScoped<IBoardsApi, BoardsApi>();
+            services.AddQueries();
+            services.AddCommands();
+            services.AddHandles();
         }
 
         public static void AddQueries(this IServiceCollection services, Func<Assembly, bool> ignoredAssemblies = null)

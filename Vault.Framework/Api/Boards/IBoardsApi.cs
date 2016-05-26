@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Vault.Framework.Search.Criteria;
 
 namespace Vault.Framework.Api.Boards
 {

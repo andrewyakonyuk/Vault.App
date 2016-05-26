@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using System.Collections.Generic;
+using Vault.Shared;
 using Vault.Shared.Events;
 
 namespace Vault.Framework.Api.Boards

@@ -4,14 +4,13 @@ using System.Linq;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
-using Vault.Framework.Search;
-using Vault.Framework.Search.Criteria;
 using Vault.Framework.Search.Parsing;
 using Vault.Framework.Security;
 using Vault.Shared;
 using Vault.Shared.Domain;
 using Vault.Shared.Events;
 using Vault.Shared.Queries;
+using Vault.Shared.Search;
 
 namespace Vault.Framework.Api.Boards
 {
