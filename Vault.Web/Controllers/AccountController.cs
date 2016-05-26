@@ -136,6 +136,11 @@ namespace Vault.Web.Controllers
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
+        public IActionResult Index()
+        {
+            return View();
+        }
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -171,14 +176,23 @@ namespace Vault.Web.Controllers
             {
                 return View("Lockout");
             }
-            else
+            if (HttpContext.User.Identity.IsAuthenticated)
             {
-                // If the user does not have an account, then ask the user to create an account.
-                ViewData["ReturnUrl"] = returnUrl;
-                ViewData["LoginProvider"] = info.LoginProvider;
-                var email = info.ExternalPrincipal.FindFirstValue(ClaimTypes.Email);
-                return View("ExternalLoginConfirmation", new ExternalLoginConfirmationModel { Email = email });
+                var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+                if (user != null)
+                {
+                    await _userManager.AddLoginAsync(user, info);
+                    if (Url.IsLocalUrl(returnUrl))
+                        return LocalRedirect(returnUrl);
+                    return RedirectToAction(nameof(AccountController.Index), "Account");
+                }
             }
+
+            // If the user does not have an account, then ask the user to create an account.
+            ViewData["ReturnUrl"] = returnUrl;
+            ViewData["LoginProvider"] = info.LoginProvider;
+            var email = info.ExternalPrincipal.FindFirstValue(ClaimTypes.Email);
+            return View("ExternalLoginConfirmation", new ExternalLoginConfirmationModel { Email = email });
         }
 
         [HttpPost]

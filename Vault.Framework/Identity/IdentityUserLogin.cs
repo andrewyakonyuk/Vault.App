@@ -32,13 +32,11 @@ namespace Vault.Framework.Identity
             get; set;
         }
 
-        /// <summary>
-        /// Gets or sets the of the primary key of the user associated with this login.
-        /// </summary>
-        public virtual int UserId { get; set; }
-
         public virtual int Id { get; set; }
 
+        /// <summary>
+        /// Gets or sets the user associated with this login.
+        /// </summary>
         public virtual IdentityUser User { get; set; }
     }
 }

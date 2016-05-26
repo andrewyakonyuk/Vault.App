@@ -3,6 +3,7 @@ using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
+using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Routing;
@@ -94,7 +95,11 @@ namespace Vault.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, Microsoft.Extensions.Logging.ILoggerFactory loggerFactory, IHostingEnvironment env)
+        public void Configure(
+            IApplicationBuilder app,
+            Microsoft.Extensions.Logging.ILoggerFactory loggerFactory,
+            IHostingEnvironment env,
+            IConfiguration configuration)
         {
             app.UseStaticFiles();
             loggerFactory.AddConsole();
@@ -109,6 +114,10 @@ namespace Vault.Web
             }
             // Add cookie-based authentication to the request pipeline.
             app.UseIdentity();
+            app.UsePocketAuthentication(options =>
+            {
+                options.ConsumerKey = configuration["authentication:pocket:consumerKey"];
+            });
 
             app.UseStatusCodePages();
 
@@ -150,6 +159,15 @@ namespace Vault.Web
                        action = "Search"
                    }
                );
+
+                routes.MapRoute("user-profile",
+                    template: "{username:regex(^.+$)}",
+                    defaults: new
+                    {
+                        controller = "Account",
+                        action = "Index"
+                    }
+                );
 
                 routes.MapRoute(
                     name: "default",
@@ -208,4 +226,5 @@ namespace Vault.Web
             }
         }
     }
+    
 }
