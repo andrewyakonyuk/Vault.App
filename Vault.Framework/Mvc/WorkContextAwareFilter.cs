@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNet.Mvc.Filters;
 using System;
-using Vault.Framework.Identity;
-using Vault.Framework.Identity.Query;
+using Vault.Shared.Identity;
+using Vault.Shared.Identity.Query;
 using Vault.Shared.Queries;
 
 namespace Vault.Framework.Mvc

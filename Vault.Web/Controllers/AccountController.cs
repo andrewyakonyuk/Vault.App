@@ -8,7 +8,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Vault.Framework.Api.Users;
-using Vault.Framework.Identity;
+using Vault.Shared.Identity;
 using Vault.Web.Models.Account;
 
 namespace Vault.Web.Controllers

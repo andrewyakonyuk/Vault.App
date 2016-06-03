@@ -18,7 +18,7 @@ using System;
 using Vault.Framework;
 using Vault.Framework.Api.Boards.Overrides;
 using Vault.Framework.Api.Users;
-using Vault.Framework.Identity;
+using Vault.Shared.Identity;
 using Vault.Framework.Mvc;
 using Vault.Framework.Mvc.Routing;
 using Vault.Framework.Mvc.Routing.Projections;
@@ -26,6 +26,9 @@ using Vault.Shared.Domain;
 using Vault.Shared.NEventStore;
 using Vault.Shared.NHibernate;
 using Vault.Shared.NHibernate.Conventions;
+using Vault.Shared.Connectors.Pocket;
+using Vault.Shared.Connectors;
+using Vault.Shared.Identity.Overrides;
 
 namespace Vault.Web
 {
@@ -52,6 +55,7 @@ namespace Vault.Web
             .AddUserStore<UserStore>()
             .AddRoleStore<RoleStore>()
             .AddDefaultTokenProviders();
+
 
             services.AddTransient<IEmailSender, EmptyMessageSender>();
             services.AddTransient<ISmsSender, EmptyMessageSender>();
@@ -92,6 +96,11 @@ namespace Vault.Web
             {
                 options.LowercaseUrls = true;
             });
+
+
+            services.Configure<PocketConnectionOptions>(options => options.ConsumerKey = configuration["authentication:pocket:consumerKey"]);
+            services.AddTransient<IPullConnectionProvider, PocketConnectionProvider>();
+            services.AddTransient<IConnectionService, DefaultConnectionService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -193,9 +202,11 @@ namespace Vault.Web
         public Configuration GetConfiguration()
         {
             var persistenceModel = AutoMap.AssemblyOf<IdentityUser>(new AutomappingConfiguration())
-                                                           .UseOverridesFromAssemblyOf<NHibernateInitializer>()
-                                                           .UseOverridesFromAssemblyOf<BoardMapping>()
-                                                           .Conventions.AddFromAssemblyOf<EntityMapConvention>();
+                .AddEntityAssembly(typeof(BoardMapping).Assembly)
+                .UseOverridesFromAssemblyOf<NHibernateInitializer>()
+                .UseOverridesFromAssemblyOf<BoardMapping>()
+                .UseOverridesFromAssemblyOf<IdentityUserClaimOverride>()
+                .Conventions.AddFromAssemblyOf<EntityMapConvention>();
 
             //if (_environmant.IsProduction() || _environmant.IsStaging())
             //{

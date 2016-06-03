@@ -25,7 +25,9 @@
     "Vault.Shared": "1.0.0-*",
     "Vault.Shared.NHibernate": "1.0.0-*",
     "Vault.Shared.Search": "1.0.0-*",
-    "Vault.Shared.Search.Lucene": "1.0.0-*"
+    "Vault.Shared.Search.Lucene": "1.0.0-*",
+    "Vault.Shared.Connectors": "1.0.0-*",
+    "Vault.Shared.Identity": "1.0.0-*"
   },
 
   "frameworks": {

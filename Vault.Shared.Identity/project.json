@@ -1,0 +1,20 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "Vault.Shared.Identity",
+  "authors": [ "a.yakonyuk" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+
+  "frameworks": {
+    "net451": { }
+  },
+
+  "dependencies": {
+    "Microsoft.AspNet.Identity": "3.0.0-rc1-final",
+    "Vault.Shared": "1.0.0-*",
+    "Vault.Shared.NHibernate": "1.0.0-*",
+    "NHibernate": "4.0.3.4000",
+    "FluentNHibernate": "2.0.1.0"
+  }
+}

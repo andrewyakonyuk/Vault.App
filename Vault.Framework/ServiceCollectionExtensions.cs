@@ -20,6 +20,11 @@ using Vault.Shared.Search;
 using Vault.Shared.Search.Lucene;
 using Vault.Shared.Search.Lucene.Analyzers;
 using Vault.Shared.Search.Lucene.Converters;
+using Vault.Shared.Connectors;
+using Microsoft.AspNet.Http;
+using Vault.Shared.Identity;
+using Vault.Shared.Identity.Query;
+using System.Threading;
 
 namespace Vault.Framework
 {
@@ -207,7 +212,7 @@ namespace Vault.Framework
                 var handlers = _eventHandlerFactory.GetHandlers(@event);
                 foreach (dynamic handler in handlers)
                 {
-                    handler.Handle(@event);
+                    await handler.HandleAsync(@event);
                 }
             }
         }
@@ -226,9 +231,9 @@ namespace Vault.Framework
             _reportUnitOfWorkFactory = reportUnitOfWorkFactory;
         }
 
-        public void Handle(EntityCreated<Board> @event)
+        public async Task HandleAsync(EntityCreated<Board> @event)
         {
-            Hook();
+          //  Hook();
         }
 
         private void Hook()
@@ -301,6 +306,37 @@ namespace Vault.Framework
                 }
 
                 unitOfWork.Commit();
+            }
+        }
+    }
+
+    class ConnectionProviderHandler : IHandle<EntityCreated<Board>>
+    {
+        readonly IQueryBuilder _queryBuilder;
+        readonly IHttpContextAccessor _httpContextAccessor;
+        readonly IConnectionService _connectionService;
+
+        public ConnectionProviderHandler(
+            IConnectionService connectionService,
+            IQueryBuilder queryBuilder,
+            IHttpContextAccessor httpContextAccessor
+            )
+        {
+            _connectionService = connectionService;
+            _queryBuilder = queryBuilder;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        public async Task HandleAsync(EntityCreated<Board> @event)
+        {
+            using (var tokenSource = new CancellationTokenSource())
+            {
+                var user = await _queryBuilder.For<IdentityUser>().With(new Username(_httpContextAccessor.HttpContext.User.Identity.Name));
+
+                foreach (var item in user.Logins)
+                {
+                    await _connectionService.PullAsync(item.LoginProvider, item.ProviderKey);
+                }
             }
         }
     }

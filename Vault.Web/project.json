@@ -32,7 +32,8 @@
     "Vault.Shared": "1.0.0-*",
     "Vault.Shared.NHibernate": "1.0.0-*",
     "Vault.Shared.NEventStore": "1.0.0-*",
-    "Vault.Shared.Authentication.Pocket": "1.0.0-*"
+    "Vault.Shared.Authentication.Pocket": "1.0.0-*",
+    "Vault.Shared.Connectors.Pocket": "1.0.0-*"
   },
 
   "commands": {

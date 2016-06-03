@@ -1,4 +1,4 @@
-﻿using Vault.Framework.Identity;
+﻿using Vault.Shared.Identity;
 using Vault.Shared;
 
 namespace Vault.Framework.Security

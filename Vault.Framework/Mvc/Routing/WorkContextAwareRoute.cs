@@ -2,7 +2,7 @@
 using Microsoft.AspNet.Routing;
 using System;
 using System.Threading.Tasks;
-using Vault.Framework.Identity;
+using Vault.Shared.Identity;
 
 namespace Vault.Framework.Mvc.Routing
 {

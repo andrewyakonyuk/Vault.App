@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Vault.Shared;
 using Vault.Shared.Events;
+using System.Threading.Tasks;
 
 namespace Vault.Framework.Api.Boards
 {
@@ -17,19 +18,19 @@ namespace Vault.Framework.Api.Boards
             _memoryCache = memoryCache;
         }
 
-        public void Handle(EntityDeleted<Board> @event)
+        public async Task HandleAsync(EntityDeleted<Board> @event)
         {
             var cacheKey = string.Format(OwnerKey.FormatCacheKey(@event.Entity.OwnerId), typeof(List<Board>).FullName);
             _memoryCache.Remove(cacheKey);
         }
 
-        public void Handle(EntityCreated<Board> @event)
+        public async Task HandleAsync(EntityCreated<Board> @event)
         {
             var cacheKey = string.Format(OwnerKey.FormatCacheKey(@event.Entity.OwnerId), typeof(List<Board>).FullName);
             _memoryCache.Remove(cacheKey);
         }
 
-        public void Handle(EntityUpdated<Board> @event)
+        public async Task HandleAsync(EntityUpdated<Board> @event)
         {
             var cacheKey = string.Format(ContentKey.FormatCacheKey(@event.Entity.Id, @event.Entity.OwnerId), typeof(Board).FullName);
             _memoryCache.Remove(cacheKey);

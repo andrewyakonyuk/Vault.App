@@ -1,0 +1,22 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "Vault.Shared.Connectors.Pocket",
+  "authors": [ "a.yakonyuk" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+
+  "frameworks": {
+    "net451": { }
+  },
+
+  "dependencies": {
+    "Vault.Shared": "1.0.0-*",
+    "Vault.Shared.Connectors": "1.0.0-*",
+    "Microsoft.AspNet.Http.Abstractions": "1.0.0-rc1-final",
+    "Newtonsoft.Json": "8.0.2",
+    "Microsoft.Net.Http": "2.2.29",
+    "Microsoft.Extensions.OptionsModel": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Http.Extensions": "1.0.0-rc1-final"
+  }
+}
