@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Vault.Framework.Models
+namespace Vault.Domain.Models
 {
     /// <summary>
     /// An event happening at a certain time and location, such as a concert, lecture, or festival.

@@ -1,6 +1,6 @@
 ﻿{
   "version": "1.0.0-*",
-  "description": "Vault.Shared.Connectors Class Library",
+  "description": "Vault.Domain Class Library",
   "authors": [ "a.yakonyuk" ],
   "tags": [ "" ],
   "projectUrl": "",
@@ -12,6 +12,7 @@
 
   "dependencies": {
     "Vault.Shared": "1.0.0-*",
-    "Vault.Domain": "1.0.0-*"
+    "Vault.Shared.NEventStore": "1.0.0-*",
+    "NEventStore": "5.2.0"
   }
 }

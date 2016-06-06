@@ -24,10 +24,4 @@ namespace Vault.Shared.NHibernate
             return _sessionProvider.CurrentSession.Query<TEntity>();
         }
     }
-
-    public interface ILinqProvider : IDisposable
-    {
-        IQueryable<TEntity> Query<TEntity>()
-            where TEntity : class, IEntity, new();
-    }
 }

@@ -38,8 +38,10 @@ namespace Vault.Shared.Connectors.Pocket
         [JsonProperty("excerpt")]
         public string Excerpt { get; set; }
 
-        private string Title { get { return GivenTitle ?? ResolvedTitle; } }
+        [JsonIgnore]
+        public string Title { get { return string.IsNullOrEmpty(GivenTitle) ? ResolvedTitle : GivenTitle; } }
 
-        private string Uri { get { return GivenUrl ?? ResolvedUrl; } }
+        [JsonIgnore]
+        public string Uri { get { return string.IsNullOrEmpty(GivenUrl) ? ResolvedUrl : GivenUrl; } }
     }
 }

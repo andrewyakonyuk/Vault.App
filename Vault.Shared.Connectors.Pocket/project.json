@@ -13,6 +13,7 @@
   "dependencies": {
     "Vault.Shared": "1.0.0-*",
     "Vault.Shared.Connectors": "1.0.0-*",
+    "Vault.Domain": "1.0.0-*", 
     "Microsoft.AspNet.Http.Abstractions": "1.0.0-rc1-final",
     "Newtonsoft.Json": "8.0.2",
     "Microsoft.Net.Http": "2.2.29",

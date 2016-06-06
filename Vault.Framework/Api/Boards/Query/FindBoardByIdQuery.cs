@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Vault.Shared;
+using Vault.Shared.Domain;
 using Vault.Shared.NHibernate;
 
 namespace Vault.Framework.Api.Boards.Query

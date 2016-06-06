@@ -1,11 +1,14 @@
 ﻿using System;
 using Vault.Shared.Domain;
+using Vault.Shared.Events;
 
-namespace Vault.Framework.Models.Activities
+namespace Vault.Domain.Models.Activities
 {
-    public class Activity : IEntity
+    public abstract class Activity
     {
         public virtual int Id { get; set; }
+
+        public virtual int OwnerId { get; set; }
 
         /// <summary>
         /// The object upon the action is carried out, whose state is kept intact or changed.
@@ -14,11 +17,21 @@ namespace Vault.Framework.Models.Activities
         /// </summary>
         //public virtual int ThingId { get; set; }
 
-        public virtual DateTime StartDate { get; set; }
+        public virtual Thing Affected { get; set; }
 
-        public virtual DateTime EndDate { get; set; }
+        public virtual DateTime? StartDate { get; set; }
 
+        public virtual DateTime? EndDate { get; set; }
+
+        /// <summary>
+        /// Indicates the current disposition of the Action.
+        /// </summary>
         public virtual ActionStatusType Status { get; set; }
+
+        /// <summary>
+        /// Indicates a target EntryPoint for an Action.
+        /// </summary>
+        public virtual EntryPoint Target { get; set; }
     }
 
     /// <summary>

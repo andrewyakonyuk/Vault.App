@@ -1,4 +1,4 @@
-﻿namespace Vault.Framework.Models
+﻿namespace Vault.Domain.Models
 {
     public class Article : CreativeWork
     {

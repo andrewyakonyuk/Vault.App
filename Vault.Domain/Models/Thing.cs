@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Vault.Framework.Models.Activities;
 using Vault.Shared.Domain;
 
-namespace Vault.Framework.Models
+namespace Vault.Domain.Models
 {
-    public abstract class Thing : IEntity
+    public abstract class Thing
     {
-        ICollection<InteractionCounter> _interactions = new List<InteractionCounter>();
-
         public virtual int Id { get; set; }
 
         /// <summary>
@@ -41,7 +38,5 @@ namespace Vault.Framework.Models
         public virtual string AdditionalType { get; set; }
 
         public virtual Image Image { get; set; }
-
-        public virtual ICollection<InteractionCounter> Interactions { get { return _interactions; } }
     }
 }

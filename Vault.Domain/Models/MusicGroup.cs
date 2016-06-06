@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Vault.Framework.Models
+namespace Vault.Domain.Models
 {
     /// <summary>
     /// A musical group, such as a band, an orchestra, or a choir. Can also be a solo musician.

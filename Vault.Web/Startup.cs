@@ -203,6 +203,7 @@ namespace Vault.Web
         {
             var persistenceModel = AutoMap.AssemblyOf<IdentityUser>(new AutomappingConfiguration())
                 .AddEntityAssembly(typeof(BoardMapping).Assembly)
+                .AddEntityAssembly(typeof(PullConnectionState).Assembly)
                 .UseOverridesFromAssemblyOf<NHibernateInitializer>()
                 .UseOverridesFromAssemblyOf<BoardMapping>()
                 .UseOverridesFromAssemblyOf<IdentityUserClaimOverride>()

@@ -38,6 +38,6 @@ namespace Vault.Shared.Connectors.Pocket
         /// </value>
         [JsonProperty("list")]
         [JsonConverter(typeof(ObjectToArrayConverter<PocketItem>))]
-        public IEnumerable<PocketItem> Items { get; set; }
+        public List<PocketItem> Items { get; set; }
     }
 }
