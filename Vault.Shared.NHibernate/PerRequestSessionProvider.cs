@@ -7,9 +7,7 @@ namespace Vault.Shared.NHibernate
     {
         private readonly ISessionFactory _sessionFactory;
         private bool _disposed;
-        private bool _preventCommit;
         private ISession _session;
-        private ITransaction _transaction;
 
         public PerRequestSessionProvider(ISessionFactory sessionFactory)
         {
@@ -21,29 +19,8 @@ namespace Vault.Shared.NHibernate
             if (_disposed)
                 return;
 
-            if (_session == null)
-                return;
-
-            try
-            {
-                if (_preventCommit)
-                    _transaction.Rollback();
-                else
-                    _transaction.Commit();
-            }
-            catch
-            {
-                _transaction.Rollback();
-                throw;
-            }
-            finally
-            {
-                _transaction.Dispose();
-            }
-
-            _session.Dispose();
+            _session?.Dispose();
             _session = null;
-            _transaction = null;
             _disposed = true;
         }
 
@@ -59,15 +36,9 @@ namespace Vault.Shared.NHibernate
                     return _session;
 
                 _session = _sessionFactory.OpenSession();
-                _transaction = _session.BeginTransaction();
 
                 return _session;
             }
-        }
-
-        public void PreventCommit()
-        {
-            _preventCommit = true;
         }
     }
 }

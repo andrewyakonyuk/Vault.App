@@ -30,7 +30,6 @@ namespace Vault.Shared.NHibernate
             _transaction = null;
 
             CurrentSessionContext.Unbind(_session.SessionFactory);
-            _session.Dispose();
         }
 
         public void Commit()

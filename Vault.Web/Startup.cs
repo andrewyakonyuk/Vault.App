@@ -18,17 +18,17 @@ using System;
 using Vault.Framework;
 using Vault.Framework.Api.Boards.Overrides;
 using Vault.Framework.Api.Users;
-using Vault.Shared.Identity;
 using Vault.Framework.Mvc;
 using Vault.Framework.Mvc.Routing;
 using Vault.Framework.Mvc.Routing.Projections;
+using Vault.Shared.Connectors;
+using Vault.Shared.Connectors.Pocket;
 using Vault.Shared.Domain;
+using Vault.Shared.Identity;
+using Vault.Shared.Identity.Overrides;
 using Vault.Shared.NEventStore;
 using Vault.Shared.NHibernate;
 using Vault.Shared.NHibernate.Conventions;
-using Vault.Shared.Connectors.Pocket;
-using Vault.Shared.Connectors;
-using Vault.Shared.Identity.Overrides;
 
 namespace Vault.Web
 {
@@ -56,7 +56,6 @@ namespace Vault.Web
             .AddRoleStore<RoleStore>()
             .AddDefaultTokenProviders();
 
-
             services.AddTransient<IEmailSender, EmptyMessageSender>();
             services.AddTransient<ISmsSender, EmptyMessageSender>();
             services.AddSingleton<IUrlHelper, DefaultUrlHelper>();
@@ -67,7 +66,7 @@ namespace Vault.Web
             services.AddTransient<ISessionFactory>(x => x.GetRequiredService<INHibernateInitializer>()
                 .GetConfiguration()
                 .BuildSessionFactory());
-            services.AddScoped<ISessionProvider, StaticSessionProvider>(x => new StaticSessionProvider(x.GetRequiredService<ISessionFactory>().OpenSession()));
+            services.AddScoped<ISessionProvider, PerRequestSessionProvider>();
 
             services.AddEventStore();
             services.AddVaultFramework();
@@ -96,7 +95,6 @@ namespace Vault.Web
             {
                 options.LowercaseUrls = true;
             });
-
 
             services.Configure<PocketConnectionOptions>(options => options.ConsumerKey = configuration["authentication:pocket:consumerKey"]);
             services.AddTransient<IPullConnectionProvider, PocketConnectionProvider>();
@@ -238,5 +236,4 @@ namespace Vault.Web
             }
         }
     }
-    
 }
