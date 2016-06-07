@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Vault.Shared.Commands
 {
@@ -6,10 +8,15 @@ namespace Vault.Shared.Commands
     {
         private readonly ICommandFactory _commandFactory;
         private readonly ILogger _logger;
+        private IList<ICommandInterceptor> _interceptors;
 
-        public CommandBuilder(ICommandFactory commandFactory, ILogger logger)
+        public CommandBuilder(
+            ICommandFactory commandFactory,
+            IEnumerable<ICommandInterceptor> interceptors,
+            ILogger logger)
         {
             _commandFactory = commandFactory;
+            _interceptors = interceptors.OrderByDescending(t => t.Order).ToArray();
             _logger = logger;
         }
 
@@ -17,10 +24,10 @@ namespace Vault.Shared.Commands
             where TCommandContext : ICommandContext
         {
             var command = _commandFactory.Create<TCommandContext>();
+            var executeMethod = BuildMethod(command);
             try
             {
-                command.Execute(commandContext);
-                return CommandResult.Accept();
+                return executeMethod(commandContext);
             }
             catch (ArgumentException ex)
             {
@@ -37,6 +44,25 @@ namespace Vault.Shared.Commands
                 _logger.WriteError("Exception occurs while executing command '{0}'. See details: '{1}'", command.GetType().FullName, ex.Message);
                 return CommandResult.Decline(ex.Message);
             }
+        }
+
+        private ExecuteCommandMethod<TCommandContext> BuildMethod<TCommandContext>(ICommand<TCommandContext> command)
+            where TCommandContext : ICommandContext
+        {
+            ExecuteCommandMethod<TCommandContext> result = (context) =>
+            {
+                command.Execute(context);
+                return CommandResult.Accept();
+            };
+
+            for (int i = _interceptors.Count - 1; i >= 0; i--)
+            {
+                var item = _interceptors[i];
+
+                var inner = result;
+                result = (context) => item.Execute(context, inner);
+            }
+            return result;
         }
     }
 }
