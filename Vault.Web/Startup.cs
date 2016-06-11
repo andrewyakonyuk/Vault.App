@@ -98,7 +98,6 @@ namespace Vault.Web
 
             services.Configure<PocketConnectionOptions>(options => options.ConsumerKey = configuration["authentication:pocket:consumerKey"]);
             services.AddTransient<IPullConnectionProvider, PocketConnectionProvider>();
-            services.AddTransient<IConnectionService, DefaultConnectionService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -201,7 +200,6 @@ namespace Vault.Web
         {
             var persistenceModel = AutoMap.AssemblyOf<IdentityUser>(new AutomappingConfiguration())
                 .AddEntityAssembly(typeof(BoardMapping).Assembly)
-                .AddEntityAssembly(typeof(PullConnectionState).Assembly)
                 .UseOverridesFromAssemblyOf<NHibernateInitializer>()
                 .UseOverridesFromAssemblyOf<BoardMapping>()
                 .UseOverridesFromAssemblyOf<IdentityUserClaimOverride>()

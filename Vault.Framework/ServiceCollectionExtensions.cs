@@ -2,6 +2,8 @@
 using Lucene.Net.Store;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using Quartz;
+using Quartz.Impl;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,22 +11,19 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Vault.Domain.Activities;
 using Vault.Framework.Api.Boards;
-using Vault.Framework.Search;
 using Vault.Framework.Search.Parsing;
 using Vault.Framework.Security;
 using Vault.Shared.Commands;
+using Vault.Shared.Connectors;
 using Vault.Shared.Events;
+using Vault.Shared.Identity;
 using Vault.Shared.Queries;
 using Vault.Shared.Search;
 using Vault.Shared.Search.Lucene;
 using Vault.Shared.Search.Lucene.Analyzers;
 using Vault.Shared.Search.Lucene.Converters;
-using Vault.Shared.Connectors;
-using Microsoft.AspNet.Http;
-using Vault.Shared.Identity;
-using Vault.Shared.Identity.Query;
-using System.Threading;
 
 namespace Vault.Framework
 {
@@ -43,6 +42,7 @@ namespace Vault.Framework
             services.AddQueries();
             services.AddCommands();
             services.AddHandles();
+            services.AddScheduler();
         }
 
         public static void AddQueries(this IServiceCollection services, Func<Assembly, bool> ignoredAssemblies = null)
@@ -141,10 +141,26 @@ namespace Vault.Framework
                 .Field("ByArtist", isKeyword: true, isAnalysed: true)
                 .Field("InAlbum", isKeyword: true, isAnalysed: true)
                 .Field("Body", isAnalysed: true)
-                .Field("Summary", isAnalysed: true);
+                .Field("Summary", isAnalysed: true)
+                .Field("Thumbnail");
 
             services.AddSingleton<IIndexDocumentMetadataProvider>(s => builder.Build());
             services.AddTransient<ISearchQueryParser, DefaultSearchQueryParser>();
+        }
+
+        public static void AddScheduler(this IServiceCollection services)
+        {
+            services.AddSingleton<ServiceJobFactory>();
+            services.AddSingleton(s =>
+            {
+                var schedulerFactory = new StdSchedulerFactory();
+                IScheduler scheduler = schedulerFactory.GetScheduler();
+                scheduler.JobFactory = s.GetRequiredService<ServiceJobFactory>();
+                scheduler.Start();
+                return scheduler;
+            });
+
+            services.AddTransient<PullConnectionJob>();
         }
     }
 
@@ -218,126 +234,75 @@ namespace Vault.Framework
         }
     }
 
-    internal class SearchDocumentGenerator : IHandle<EntityCreated<Board>>
+    public class NewBoardHandler : IHandle<EntityCreated<Board>>
     {
-        readonly IWorkContextAccessor _workContextAccessor;
-        readonly IReportUnitOfWorkFactory _reportUnitOfWorkFactory;
+        IScheduler _scheduler;
+        IQueryBuilder _queryBuilder;
 
-        public SearchDocumentGenerator(
-            IWorkContextAccessor workContextAccessor,
-            IReportUnitOfWorkFactory reportUnitOfWorkFactory)
+        public NewBoardHandler(
+            IScheduler scheduler,
+            IQueryBuilder queryBuilder)
         {
-            _workContextAccessor = workContextAccessor;
-            _reportUnitOfWorkFactory = reportUnitOfWorkFactory;
+            _scheduler = scheduler;
+            _queryBuilder = queryBuilder;
         }
 
         public async Task HandleAsync(EntityCreated<Board> @event)
         {
-          //  Hook();
-        }
+            var user = await _queryBuilder.For<IdentityUser>().ById(@event.Entity.OwnerId);
 
-        private void Hook()
-        {
-            var random = new Random();
-
-            var types = new[] { "Event", "Place", "Article", "Audio" };
-            var mapPoints = new[] {
-                new {
-                    Latitude = 40.714728, Longitude = -73.998672
-                },
-                 new {
-                    Latitude = 49.24195, Longitude = 8.5491213
-                },
-                  new {
-                    Latitude = 50.4496346, Longitude = 30.5231952
-                },
-                   new {
-                    Latitude = 50.2481061, Longitude = 28.6802412
-                },
-            };
-
-            using (var unitOfWork = _reportUnitOfWorkFactory.Create())
+            foreach (var item in user.Logins)
             {
-                for (int i = _workContextAccessor.WorkContext.Owner.Id * 1001; i < _workContextAccessor.WorkContext.Owner.Id * 1001 + 10000; i++)
-                {
-                    var actualType = types[Math.Min((int)(random.Next(0, 40) / 10), 3)];
+                IJobDetail job = JobBuilder.Create<PullConnectionJob>()
+                    .WithIdentity(item.ProviderKey, item.LoginProvider)
+                    .UsingJobData("providerKey", item.ProviderKey)
+                    .UsingJobData("providerName", item.LoginProvider)
+                    .UsingJobData("ownerId", item.User.Id)
+                    .Build();
 
-                    dynamic searchDocument = new SearchDocument();
+                ITrigger trigger = TriggerBuilder.Create()
+                  .WithIdentity(Guid.NewGuid().ToString(), item.LoginProvider)
+                  .StartAt(DateTimeOffset.Now.AddSeconds(5))
+                  .Build();
 
-                    searchDocument.Id = i;
-                    searchDocument.OwnerId = _workContextAccessor.WorkContext.Owner.Id;
-                    searchDocument.Published = DateTime.UtcNow.AddDays(i);
-                    searchDocument.DocumentType = actualType;
-
-                    if (actualType == "Event")
-                    {
-                        searchDocument.Name = "Event" + i;
-                        searchDocument.Description = "EventDescription" + i;
-                        searchDocument.Duration = new TimeSpan(1, 30, 0);
-                        searchDocument.StartDate = DateTime.UtcNow;
-                        searchDocument.EndDate = DateTime.UtcNow.AddHours(1.5);
-                    }
-                    else if (actualType == "Place")
-                    {
-                        searchDocument.Name = "Place" + i;
-                        searchDocument.Description = "Place description" + i;
-                        searchDocument.Elevation = random.NextDouble();
-                        var point = mapPoints[Math.Min((int)(random.Next(0, 40) / 10), 3)];
-                        searchDocument.Latitude = point.Latitude;
-                        searchDocument.Longitude = point.Longitude;
-                    }
-                    else if (actualType == "Audio")
-                    {
-                        searchDocument.Name = "Audio" + i;
-                        searchDocument.Description = "Audio description" + i;
-                        searchDocument.ByArtist = "By artist" + i;
-                        searchDocument.InAlbum = "In album" + i;
-                        searchDocument.Duration = new TimeSpan(0, 3, 33);
-                    }
-                    else if (actualType == "Article")
-                    {
-                        searchDocument.Name = "Article" + i;
-                        searchDocument.Description = "Article description" + i;
-                        searchDocument.Body = "Article body" + i;
-                        searchDocument.Summary = "Article summary" + i;
-                    }
-
-                    unitOfWork.Save(searchDocument);
-                }
-
-                unitOfWork.Commit();
+                _scheduler.ScheduleJob(job, trigger);
             }
         }
     }
 
-    class ConnectionProviderHandler : IHandle<EntityCreated<Board>>
+    public class ReadActivityHandler : IHandle<ReadActivity>
     {
-        readonly IQueryBuilder _queryBuilder;
-        readonly IHttpContextAccessor _httpContextAccessor;
-        readonly IConnectionService _connectionService;
+        readonly IReportUnitOfWorkFactory _reportUnitOfWorkFactory;
+        static Random random = new Random();
 
-        public ConnectionProviderHandler(
-            IConnectionService connectionService,
-            IQueryBuilder queryBuilder,
-            IHttpContextAccessor httpContextAccessor
-            )
+        public ReadActivityHandler(IReportUnitOfWorkFactory reportUnitOfWorkFactory)
         {
-            _connectionService = connectionService;
-            _queryBuilder = queryBuilder;
-            _httpContextAccessor = httpContextAccessor;
+            _reportUnitOfWorkFactory = reportUnitOfWorkFactory;
         }
 
-        public async Task HandleAsync(EntityCreated<Board> @event)
+        public Task HandleAsync(ReadActivity @event)
         {
-            using (var tokenSource = new CancellationTokenSource())
+            using (var unitOfWork = _reportUnitOfWorkFactory.Create())
             {
-                var user = await _queryBuilder.For<IdentityUser>().With(new Username(_httpContextAccessor.HttpContext.User.Identity.Name));
+                dynamic searchDocument = new SearchDocument();
 
-                foreach (var item in user.Logins)
-                {
-                    await _connectionService.PullAsync(item.LoginProvider, item.ProviderKey);
-                }
+                searchDocument.Id = random.Next(int.MaxValue);
+                searchDocument.OwnerId = @event.OwnerId;
+                searchDocument.Published = DateTime.UtcNow;
+                searchDocument.DocumentType = "Article";
+
+                searchDocument.Name = @event.Affected.Name;
+                searchDocument.Description = @event.Affected.Description;
+                searchDocument.Body = @event.Affected.Description;
+                searchDocument.Summary = @event.Affected.Description;
+                if (@event.Affected.Image != null)
+                    searchDocument.Thumbnail = @event.Affected.Image.Url;
+
+                unitOfWork.Save(searchDocument);
+                unitOfWork.Commit();
             }
+
+            return Task.FromResult(true);
         }
     }
 }

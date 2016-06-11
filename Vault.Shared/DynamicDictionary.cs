@@ -28,7 +28,7 @@ namespace Vault.Shared
                 return true;
 
             result = null;
-            return false;
+            return true;
         }
 
         public override bool TrySetMember(SetMemberBinder binder, object value)

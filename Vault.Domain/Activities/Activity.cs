@@ -1,13 +1,12 @@
 ﻿using System;
+using Vault.Domain.Models;
 using Vault.Shared.Domain;
 using Vault.Shared.Events;
 
-namespace Vault.Domain.Models.Activities
+namespace Vault.Domain.Activities
 {
-    public abstract class Activity
+    public abstract class Activity : IEvent
     {
-        public virtual int Id { get; set; }
-
         public virtual int OwnerId { get; set; }
 
         /// <summary>

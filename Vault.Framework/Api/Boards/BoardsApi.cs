@@ -261,7 +261,8 @@ namespace Vault.Framework.Api.Boards
                         Name = item.Name,
                         Description = item.Description,
                         Body = item.Body,
-                        Summary = item.Summary
+                        Summary = item.Summary,
+                        Thumbnail = item.Thumbnail
                     };
                     result.Add(articleCard);
                 }

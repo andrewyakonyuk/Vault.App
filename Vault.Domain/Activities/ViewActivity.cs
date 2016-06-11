@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Vault.Domain.Models.Activities
+namespace Vault.Domain.Activities
 {
     /// <summary>
-    /// The act of consuming written content.
+    /// The act of consuming static visual content.
     /// </summary>
-    public class ReadActivity : ConsumeActivity
+    public class ViewActivity : ConsumeActivity
     {
     }
 }

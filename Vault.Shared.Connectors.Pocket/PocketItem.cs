@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using System.Diagnostics;
 
 namespace Vault.Shared.Connectors.Pocket
 {
@@ -43,5 +43,8 @@ namespace Vault.Shared.Connectors.Pocket
 
         [JsonIgnore]
         public string Uri { get { return string.IsNullOrEmpty(GivenUrl) ? ResolvedUrl : GivenUrl; } }
+
+        [JsonProperty("image")]
+        public PocketImage Image { get; set; }
     }
 }

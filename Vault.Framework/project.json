@@ -22,6 +22,7 @@
     "NEventStore": "5.2.0",
     "FluentValidation": "5.4.0.0",
     "Lucene.Net": "3.0.3",
+    "Quartz": "2.3.3",
     "Vault.Shared": "1.0.0-*",
     "Vault.Shared.NHibernate": "1.0.0-*",
     "Vault.Shared.Search": "1.0.0-*",

@@ -33,6 +33,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Vault.Shared.Identity", "Va
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Vault.Domain", "Vault.Domain\Vault.Domain.xproj", "{74684A75-F8FA-43FB-9672-DB0B54958CF0}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Vault.Shared.TransientFaultHandling", "Vault.Shared.TransientFaultHandling\Vault.Shared.TransientFaultHandling.xproj", "{78A91B7D-7652-4CF8-811F-125090A4F83C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{74684A75-F8FA-43FB-9672-DB0B54958CF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74684A75-F8FA-43FB-9672-DB0B54958CF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74684A75-F8FA-43FB-9672-DB0B54958CF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78A91B7D-7652-4CF8-811F-125090A4F83C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78A91B7D-7652-4CF8-811F-125090A4F83C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78A91B7D-7652-4CF8-811F-125090A4F83C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78A91B7D-7652-4CF8-811F-125090A4F83C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,5 +107,6 @@ Global
 		{26C76E3C-4060-44DF-A408-B00E36AAC039} = {D42CB269-2B49-4B06-A0BD-71C078681818}
 		{5E3FA1D5-3EB0-4FC2-B35F-0C338BFC728F} = {D42CB269-2B49-4B06-A0BD-71C078681818}
 		{5AC759A8-DCF4-4DF7-A0BB-6C973E298D74} = {0E0BF6ED-0950-4028-8CA8-18E882F4641A}
+		{78A91B7D-7652-4CF8-811F-125090A4F83C} = {0E0BF6ED-0950-4028-8CA8-18E882F4641A}
 	EndGlobalSection
 EndGlobal

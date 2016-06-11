@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Vault.Domain.Models.Activities;
+using Vault.Domain.Activities;
 
 namespace Vault.Shared.Connectors
 {

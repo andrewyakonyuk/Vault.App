@@ -1,4 +1,4 @@
-﻿namespace Vault.Domain.Models.Activities
+﻿namespace Vault.Domain.Activities
 {
     /// <summary>
     /// The act of consuming audio content.

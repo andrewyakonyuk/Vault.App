@@ -1,6 +1,7 @@
 ﻿using NEventStore;
 using NEventStore.Dispatcher;
 using System;
+using System.Threading.Tasks;
 using Vault.Shared.Events;
 
 namespace Vault.Shared.NEventStore
@@ -18,7 +19,7 @@ namespace Vault.Shared.NEventStore
             _eventHandlerFactory = eventHandlerFactory;
         }
 
-        public void Publish<TEvent>(TEvent message)
+        public async Task PublishAsync<TEvent>(TEvent message)
             where TEvent : IEvent
         {
             if (message == null)
@@ -27,7 +28,7 @@ namespace Vault.Shared.NEventStore
             var handlers = _eventHandlerFactory.GetHandlers<TEvent>(message);
             foreach (dynamic handler in handlers)
             {
-                handler.Handle(message);
+                await handler.HandleAsync((dynamic)message);
             }
         }
 
@@ -38,7 +39,7 @@ namespace Vault.Shared.NEventStore
 
             foreach (var @event in commit.Events)
             {
-                Publish((dynamic)@event.Body);
+                PublishAsync((dynamic)@event.Body);
             }
         }
 

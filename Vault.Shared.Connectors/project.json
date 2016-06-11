@@ -12,6 +12,10 @@
 
   "dependencies": {
     "Vault.Shared": "1.0.0-*",
-    "Vault.Domain": "1.0.0-*"
+    "Vault.Domain": "1.0.0-*",
+    "Vault.Shared.NEventStore": "1.0.0-*",
+    "Vault.Shared.TransientFaultHandling": "1.0.0-*",
+    "Microsoft.Extensions.Logging.Abstractions": "1.0.0-rc1-final",
+    "Quartz": "2.3.3"
   }
 }

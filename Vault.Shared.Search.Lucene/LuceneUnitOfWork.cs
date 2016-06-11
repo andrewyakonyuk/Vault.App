@@ -41,7 +41,6 @@ namespace Vault.Shared.Search.Lucene
                 {
                     _indexWriter.PrepareCommit();
                     _indexWriter.Commit(new Dictionary<string, string> { { "ETag", DateTime.UtcNow.Ticks.ToString() } });
-                    _indexWriter.Optimize();
                 }
                 catch (OutOfMemoryException)
                 {

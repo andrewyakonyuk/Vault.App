@@ -1,0 +1,12 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "Vault.Shared.TransientFaultHandling",
+  "authors": [ "Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+
+  "frameworks": {
+    "net451": { }
+  }
+}

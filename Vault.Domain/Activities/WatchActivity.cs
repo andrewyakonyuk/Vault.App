@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Vault.Domain.Models.Activities
+namespace Vault.Domain.Activities
 {
     /// <summary>
     /// The act of consuming dynamic/moving visual content.
