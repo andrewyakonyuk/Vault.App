@@ -5,35 +5,49 @@
   },
 
   "dependencies": {
+    "FluentNHibernate": "2.0.1.0",
+    "Humanizer.Core": "2.0.1",
+    "Lucene.Net": "3.0.3",
+    "Microsoft.AspNet.Authentication": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Authentication.Cookies": "1.0.0-rc1-final",
+    "Microsoft.AspNet.DataProtection.Abstractions": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Diagnostics": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Http.Abstractions": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Http.Extensions": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Identity": "3.0.0-rc1-final",
     "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
     "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
+    "Microsoft.AspNet.Mvc.Abstractions": "6.0.0-rc1-final",
     "Microsoft.AspNet.Mvc.Core": "6.0.0-rc1-final",
+    "Microsoft.AspNet.Mvc.TagHelpers": "6.0.0-rc1-final",
     "Microsoft.AspNet.Mvc.ViewFeatures": "6.0.0-rc1-final",
     "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
     "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Configuration.FileProviderExtensions": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Abstractions": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
-    "Microsoft.AspNet.Authentication.Cookies": "1.0.0-rc1-final",
-    "Microsoft.AspNet.Identity": "3.0.0-rc1-final",
-    "Microsoft.AspNet.Mvc.TagHelpers": "6.0.0-rc1-final",
-    "Microsoft.AspNet.Diagnostics": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Configuration.FileProviderExtensions": "1.0.0-rc1-final",
-    "System.ComponentModel.Annotations": "4.0.11-beta-23516",
-    "Microsoft.AspNet.Mvc.Abstractions": "6.0.0-rc1-final",
     "Microsoft.Extensions.OptionsModel": "1.0.0-rc1-final",
+    "Microsoft.Extensions.WebEncoders.Core": "1.0.0-rc1-final",
+    "Microsoft.Net.Http": "2.2.29",
     "NHibernate": "4.0.3.4000",
     "Npgsql": "3.0.5",
-    "FluentNHibernate": "2.0.1.0",
-    "Lucene.Net": "3.0.3",
+    "Quartz": "2.3.3",
+    "System.ComponentModel.Annotations": "4.0.11-beta-23516",
     "system.data.sqlite.core": "1.0.99",
+    "Vault.Domain": "1.0.0-*",
     "Vault.Framework": "1.0.0-*",
     "Vault.Shared": "1.0.0-*",
-    "Vault.Shared.NHibernate": "1.0.0-*",
-    "Vault.Shared.NEventStore": "1.0.0-*",
     "Vault.Shared.Authentication.Pocket": "1.0.0-*",
-    "Vault.Shared.Connectors.Pocket": "1.0.0-*"
+    "Vault.Shared.Connectors": "1.0.0-*",
+    "Vault.Shared.Connectors.Pocket": "1.0.0-*",
+    "Vault.Shared.Identity": "1.0.0-*",
+    "Vault.Shared.NEventStore": "1.0.0-*",
+    "Vault.Shared.NHibernate": "1.0.0-*",
+    "Vault.Shared.Search": "1.0.0-*",
+    "Vault.Shared.Search.Lucene": "1.0.0-*",
+    "Vault.Shared.TransientFaultHandling": "1.0.0-*"
   },
 
   "commands": {
@@ -46,7 +60,8 @@
       "dependencies": {
       },
       "frameworkAssemblies": {
-        "System.Data": "4.0.0.0"
+        "System.Data": "4.0.0.0",
+        "System.Globalization": "4.0.0.0"
       }
     }
   },
