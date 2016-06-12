@@ -64,7 +64,7 @@ namespace Vault.Web
             services.AddSingleton<INHibernateInitializer, NHibernateInitializer>();
             services.AddTransient<IUnitOfWorkFactory, NHibernateUnitOfWorkFactory>();
             services.AddTransient<ILinqProvider, NHibernateLinqProvider>();
-            services.AddTransient<ISessionFactory>(x => x.GetRequiredService<INHibernateInitializer>()
+            services.AddSingleton<ISessionFactory>(x => x.GetRequiredService<INHibernateInitializer>()
                 .GetConfiguration()
                 .BuildSessionFactory());
             services.AddScoped<ISessionProvider, PerRequestSessionProvider>();
@@ -208,34 +208,17 @@ namespace Vault.Web
                 .UseOverridesFromAssemblyOf<IdentityUserClaimOverride>()
                 .Conventions.AddFromAssemblyOf<EntityMapConvention>();
 
-            //if (_environmant.IsProduction() || _environmant.IsStaging())
-            //{
-            //    return Fluently
-            //        .Configure()
-            //        .CurrentSessionContext<ThreadStaticSessionContext>()
-            //            .Database(
-            //                PostgreSQLConfiguration.Standard
-            //                .AdoNetBatchSize(100).UseReflectionOptimizer()
-            //                .ConnectionString(c => c.Is(_configuration["DATABASE_CONNECTION_STRING"]))
-            //                .ShowSql())
-            //            .Mappings(m => m.AutoMappings.Add(persistenceModel))
-            //            .ExposeConfiguration(cfg => new SchemaUpdate(cfg).Execute(true, true))
-            //        .BuildConfiguration();
-            //}
-            //else
-            {
-                return Fluently
-                    .Configure()
-                    .CurrentSessionContext<ThreadStaticSessionContext>()
-                        .Database(
-                            MsSqlConfiguration.MsSql2012
-                            .ConnectionString(_configuration["connectionStrings:db"])
-                            .AdoNetBatchSize(100).UseReflectionOptimizer()
-                            .ShowSql())
-                        .Mappings(m => m.AutoMappings.Add(persistenceModel))
-                        .ExposeConfiguration(cfg => new SchemaUpdate(cfg).Execute(true, true))
-                    .BuildConfiguration();
-            }
+            return Fluently
+                .Configure()
+                .CurrentSessionContext<ThreadStaticSessionContext>()
+                    .Database(
+                        MsSqlConfiguration.MsSql2012
+                        .ConnectionString(_configuration["connectionStrings:db"])
+                        .AdoNetBatchSize(100).UseReflectionOptimizer()
+                        .ShowSql())
+                    .Mappings(m => m.AutoMappings.Add(persistenceModel))
+                    .ExposeConfiguration(cfg => new SchemaUpdate(cfg).Execute(true, true))
+                .BuildConfiguration();
         }
     }
 

@@ -142,7 +142,8 @@ namespace Vault.Framework
                 .Field("InAlbum", isKeyword: true, isAnalysed: true)
                 .Field("Body", isAnalysed: true)
                 .Field("Summary", isAnalysed: true)
-                .Field("Thumbnail");
+                .Field("Thumbnail")
+                .Field("Url");
 
             services.AddSingleton<IIndexDocumentMetadataProvider>(s => builder.Build());
             services.AddTransient<ISearchQueryParser, DefaultSearchQueryParser>();
@@ -290,6 +291,7 @@ namespace Vault.Framework
                 searchDocument.OwnerId = @event.OwnerId;
                 searchDocument.Published = DateTime.UtcNow;
                 searchDocument.DocumentType = "Article";
+                searchDocument.Url = @event.Affected.Url;
 
                 searchDocument.Name = @event.Affected.Name;
                 searchDocument.Description = @event.Affected.Description;

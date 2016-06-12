@@ -6,7 +6,7 @@ namespace Vault.Framework.Api.Boards
     {
         public string Summary { get; set; }
         public string Body { get; set; }
-        public Uri Url { get; set; }
+        public string Url { get; set; }
         public string Thumbnail { get; set; }
     }
 }

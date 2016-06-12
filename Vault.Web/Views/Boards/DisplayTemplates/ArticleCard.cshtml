@@ -1,12 +1,30 @@
 ﻿@model Vault.Framework.Api.Boards.ArticleCard
+@{
+    var url = string.IsNullOrEmpty(Model.Url) ? null : new Uri(Model.Url);
+    string domain = null;
 
-<h3 class="card-title u-truncate">
+    if (url != null)
+    {
+        domain = url.GetLeftPart(UriPartial.Authority)
+            .Replace("/www.", "/")
+            .Replace("http://", "")
+            .Replace("https://", "");
+    }
+}
+
+<h3 class="card-title">
     @Model.Name
 </h3>
+@if (!string.IsNullOrEmpty(domain))
+{
+    <div class="card-destination">
+        <a href="@Model.Url" target="_blank">@domain</a>
+    </div>
+}
 @if (!string.IsNullOrEmpty(Model.Thumbnail))
 {
     <div class="card-image">
-        <img src="@Model.Thumbnail">
+        <img src="@Model.Thumbnail" alt="@Model.Name">
     </div>
 }
 <div class="card-summary">
