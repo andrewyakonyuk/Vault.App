@@ -18,7 +18,6 @@ namespace Vault.Shared.NEventStore
             services.AddTransient<IDetectConflicts, ConflictDetector>();
             services.AddTransient<IConstructAggregates, AggregateFactory>();
             services.AddSingleton<IPipelineHook, LowLatencyPollingPipelineHook>();
-            services.AddSingleton<IEventStoreInitializer, NEventStoreWithCustomPipelineFactory>();
             services.AddSingleton<IStoreEvents>(s => s.GetRequiredService<IEventStoreInitializer>().Create());
             services.AddSingleton<ICheckpointRepository, InMemoryCheckpointRepository>();
             services.AddTransient<IObserver<ICommit>, ReadModelCommitObserver>();

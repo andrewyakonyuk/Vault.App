@@ -3,18 +3,19 @@ using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NEventStore;
+using NEventStore.Persistence.Sql.SqlDialects;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Context;
 using NHibernate.Tool.hbm2ddl;
 using System;
+using System.Collections.Generic;
 using Vault.Framework;
 using Vault.Framework.Api.Boards.Overrides;
 using Vault.Framework.Api.Users;
@@ -67,6 +68,8 @@ namespace Vault.Web
                 .GetConfiguration()
                 .BuildSessionFactory());
             services.AddScoped<ISessionProvider, PerRequestSessionProvider>();
+
+            services.AddSingleton<IEventStoreInitializer, NEventStoreWithCustomPipelineFactory>();
 
             services.AddEventStore();
             services.AddVaultFramework();
@@ -225,13 +228,47 @@ namespace Vault.Web
                     .Configure()
                     .CurrentSessionContext<ThreadStaticSessionContext>()
                         .Database(
-                            SQLiteConfiguration.Standard.UsingFile("vault.db")
+                            MsSqlConfiguration.MsSql2012
+                            .ConnectionString(_configuration["connectionStrings:db"])
                             .AdoNetBatchSize(100).UseReflectionOptimizer()
                             .ShowSql())
                         .Mappings(m => m.AutoMappings.Add(persistenceModel))
                         .ExposeConfiguration(cfg => new SchemaUpdate(cfg).Execute(true, true))
                     .BuildConfiguration();
             }
+        }
+    }
+
+    public class NEventStoreWithCustomPipelineFactory : IEventStoreInitializer
+    {
+        readonly IEnumerable<IPipelineHook> _pipelineHooks;
+        readonly IConfiguration _configuration;
+
+        public NEventStoreWithCustomPipelineFactory(
+            IEnumerable<IPipelineHook> pipelineHooks,
+            IConfiguration configuration)
+        {
+            _pipelineHooks = pipelineHooks;
+            _configuration = configuration;
+        }
+
+        public IStoreEvents Create()
+        {
+            return Wireup
+                .Init()
+                    .LogToOutputWindow()
+                    .UsingSqlPersistence("EventStore", "System.Data.SqlClient", _configuration["connectionStrings:db"]) // Connection string is in web.config
+                        .WithDialect(new MsSqlDialect())
+                            .InitializeStorageEngine()
+                    .UsingCustomSerialization(new NewtonsoftJsonSerializer(new VersionedEventSerializationBinder()))
+                    // Compress Aggregate serialization. Does NOT allow to do a SQL-uncoding of varbinary Payload
+                    // Comment if you need to decode message with CAST([Payload] AS VARCHAR(MAX)) AS [Payload] (on some VIEW)
+                    //.Compress()
+                    .UsingEventUpconversion()
+
+                    //   .WithConvertersFromAssemblyContaining(new Type[] { typeof(ToDoEventsConverters) })
+                    .HookIntoPipelineUsing(_pipelineHooks)
+                    .Build();
         }
     }
 }
