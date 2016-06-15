@@ -1,6 +1,8 @@
 ﻿using Lucene.Net.Index;
 using Lucene.Net.Store;
+using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 using Quartz.Impl;
@@ -122,7 +124,7 @@ namespace Vault.Framework
                         s.GetRequiredService<IIndexDocumentTransformer>(),
                         s.GetRequiredService<IIndexDocumentMetadataProvider>())));
             services.AddTransient<IIndexDocumentTransformer, DefaultIndexDocumentTransformer>();
-            services.AddTransient<IIndexWriterInitializer, InMemoryWriterInitializer>();
+            services.AddTransient<IIndexWriterInitializer, IndexWriterInitializer>();
             services.AddSingleton<IIndexWriterAccessor, DefaultIndexWriterAccessor>();
 
             var builder = new FluentDescriptorProviderBuilder()
@@ -199,14 +201,40 @@ namespace Vault.Framework
         }
     }
 
-    internal class InMemoryWriterInitializer : IIndexWriterInitializer
+    internal class IndexWriterInitializer : IIndexWriterInitializer
     {
+        public const string InMemory = ":memory:";
+
+        readonly IConfiguration _configuration;
+        readonly IHostingEnvironment _environment;
+
+        public IndexWriterInitializer(
+            IConfiguration configuration,
+            IHostingEnvironment environment)
+        {
+            _configuration = configuration;
+            _environment = environment;
+        }
+
         public LuceneIndexWriter Create()
         {
-            var directory = FSDirectory.Open(Path.Combine(Environment.CurrentDirectory, "index"));
-            var shouldCreate = !directory.Directory.Exists || !directory.ListAll().Any();
-            var writer = new LuceneIndexWriter(directory, new LowerCaseAnalyzer(Lucene.Net.Util.Version.LUCENE_30), shouldCreate, IndexWriter.MaxFieldLength.UNLIMITED);
+            Lucene.Net.Store.Directory directory;
+            var shouldCreate = true;
 
+            if (_configuration["connectionStrings:index"] == InMemory)
+            {
+                directory = new RAMDirectory();
+            }
+            else
+            {
+                var pathToIndex = Path.IsPathRooted(_configuration["connectionStrings:index"])
+                    ? _configuration["connectionStrings:index"]
+                    : _environment.MapPath(_configuration["connectionStrings:index"]);
+                directory = FSDirectory.Open(pathToIndex);
+                shouldCreate = !((FSDirectory)directory).Directory.Exists || !directory.ListAll().Any();
+            }
+
+            var writer = new LuceneIndexWriter(directory, new LowerCaseAnalyzer(Lucene.Net.Util.Version.LUCENE_30), shouldCreate, IndexWriter.MaxFieldLength.UNLIMITED);
             writer.Commit();
 
             return writer;

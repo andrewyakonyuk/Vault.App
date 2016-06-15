@@ -9,13 +9,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NEventStore;
+using NEventStore.Persistence.Sql;
 using NEventStore.Persistence.Sql.SqlDialects;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Context;
 using NHibernate.Tool.hbm2ddl;
+using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using Vault.Framework;
 using Vault.Framework.Api.Boards.Overrides;
 using Vault.Framework.Api.Users;
@@ -212,7 +215,7 @@ namespace Vault.Web
                 .Configure()
                 .CurrentSessionContext<ThreadStaticSessionContext>()
                     .Database(
-                        MsSqlConfiguration.MsSql2012
+                        PostgreSQLConfiguration.Standard
                         .ConnectionString(_configuration["connectionStrings:db"])
                         .AdoNetBatchSize(100).UseReflectionOptimizer()
                         .ShowSql())
@@ -240,8 +243,8 @@ namespace Vault.Web
             return Wireup
                 .Init()
                     .LogToOutputWindow()
-                    .UsingSqlPersistence("EventStore", "System.Data.SqlClient", _configuration["connectionStrings:db"]) // Connection string is in web.config
-                        .WithDialect(new MsSqlDialect())
+                    .UsingSqlPersistence(new PostgreSqlConnectionFactory(_configuration["connectionStrings:db"]))
+                        .WithDialect(new PostgreSqlDialect())
                             .InitializeStorageEngine()
                     .UsingCustomSerialization(new NewtonsoftJsonSerializer(new VersionedEventSerializationBinder()))
                     // Compress Aggregate serialization. Does NOT allow to do a SQL-uncoding of varbinary Payload
@@ -252,6 +255,34 @@ namespace Vault.Web
                     //   .WithConvertersFromAssemblyContaining(new Type[] { typeof(ToDoEventsConverters) })
                     .HookIntoPipelineUsing(_pipelineHooks)
                     .Build();
+        }
+    }
+
+    public class PostgreSqlConnectionFactory : IConnectionFactory
+    {
+        readonly string _connectionString;
+
+        public PostgreSqlConnectionFactory(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
+
+        public Type GetDbProviderFactoryType()
+        {
+            return typeof(NpgsqlFactory);
+        }
+
+        public IDbConnection Open()
+        {
+            return Open(_connectionString);
+        }
+
+        protected virtual IDbConnection Open(string connectionString)
+        {
+            var connection = NpgsqlFactory.Instance.CreateConnection();
+            connection.ConnectionString = connectionString;
+            connection.Open();
+            return connection;
         }
     }
 }
