@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Vault.Shared.Queries;
+using Vault.Shared.Search.Criteria;
 
 namespace Vault.Shared.Search
 {

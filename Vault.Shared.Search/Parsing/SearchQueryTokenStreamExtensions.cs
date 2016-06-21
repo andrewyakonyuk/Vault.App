@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Vault.Shared.Search;
+using Vault.Shared.Search.Criteria;
 
 namespace Vault.Framework.Search.Parsing
 {

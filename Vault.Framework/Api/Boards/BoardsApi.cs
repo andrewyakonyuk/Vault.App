@@ -11,6 +11,7 @@ using Vault.Shared.Domain;
 using Vault.Shared.Events;
 using Vault.Shared.Queries;
 using Vault.Shared.Search;
+using Vault.Shared.Search.Criteria;
 
 namespace Vault.Framework.Api.Boards
 {

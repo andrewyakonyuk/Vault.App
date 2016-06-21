@@ -1,4 +1,4 @@
-namespace Vault.Shared.Search
+namespace Vault.Shared.Search.Criteria
 {
     public class EqualCriteria : ISearchCriteria
     {
@@ -7,9 +7,12 @@ namespace Vault.Shared.Search
 
         public bool Not { get; set; }
 
-        public void Apply(ISearchFilterBuilder builder)
+        public void Apply(ISearchCriteriaBuilder builder)
         {
-            builder.AddEqual(FieldName, Value, Not);
+            var criteriaBuilder = builder;
+            if (Not)
+                criteriaBuilder = builder.Boolean().Not();
+            criteriaBuilder.Field(FieldName, new SearchValue(Examineness.Explicit, Value));
         }
     }
 }

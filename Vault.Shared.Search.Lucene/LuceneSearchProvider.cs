@@ -1,7 +1,11 @@
+using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Index;
 using Lucene.Net.Search;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using Vault.Shared.Search.Lucene.Criteria;
+using Version = Lucene.Net.Util.Version;
 
 namespace Vault.Shared.Search.Lucene
 {
@@ -36,10 +40,10 @@ namespace Vault.Shared.Search.Lucene
                 throw new ArgumentNullException(nameof(request));
 
             var numHits = request.Offset + request.Count;
-            var query = new MatchAllDocsQuery();
             var sort = CreateSort(request);
-            var filter = CreateFilter(request);
+            var query = CreateQuery(request);
             var collector = TopFieldCollector.Create(sort, Math.Max(numHits, 1), false, false, false, false);
+            var filter = CreateFilter(request);
 
             using (var indexReader = _writerAccessor.Writer.GetReader())
             using (var indexSearcher = new IndexSearcher(indexReader))
@@ -71,16 +75,27 @@ namespace Vault.Shared.Search.Lucene
             }
         }
 
+        Query CreateQuery(SearchRequest request)
+        {
+            if (request.Criteria.Count == 0)
+                return new MatchAllDocsQuery();
+
+            var metadata = _metadataProvider.GetMetadata();
+            var builder = new LuceneSearchCriteriaBuilder(metadata, _writerAccessor.Writer.Analyzer, Version.LUCENE_30, false);
+
+            for (var i = 0; i < request.Criteria.Count; i++)
+            {
+                request.Criteria[i].Apply(builder);
+            }
+
+            return builder.Query;
+        }
+
         Filter CreateFilter(SearchRequest request)
         {
             var metadata = _metadataProvider.GetMetadata();
-            var filterBuilder = new LuceneFilterBuilder(metadata);
-            filterBuilder.AddEqual("OwnerId", request.OwnerId, false);
-            for (var i = 0; i < request.Criteria.Count; i++)
-            {
-                request.Criteria[i].Apply(filterBuilder);
-            }
-            return filterBuilder;
+            var query = new TermQuery(new Term(metadata.RewriteFieldName("OwnerId"), request.OwnerId.ToString(CultureInfo.InvariantCulture)));
+            return FilterManager.Instance.GetFilter(new QueryWrapperFilter(query));
         }
 
         Sort CreateSort(SearchRequest request)

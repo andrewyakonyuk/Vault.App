@@ -1,4 +1,4 @@
-﻿namespace Vault.Shared.Search
+﻿namespace Vault.Shared.Search.Criteria
 {
     public class ContainsCriteria : ISearchCriteria
     {
@@ -7,9 +7,12 @@
 
         public bool Not { get; set; }
 
-        public void Apply(ISearchFilterBuilder builder)
+        public void Apply(ISearchCriteriaBuilder builder)
         {
-            builder.AddContains(FieldName, Value, Not);
+            var criteriaBuilder = builder;
+            if (Not)
+                criteriaBuilder = builder.Boolean().Not();
+            criteriaBuilder.Field(FieldName, new SearchValue(Examineness.ComplexWildcard, Value));
         }
     }
 }

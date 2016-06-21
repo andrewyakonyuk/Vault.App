@@ -1,4 +1,4 @@
-﻿namespace Vault.Shared.Search
+﻿namespace Vault.Shared.Search.Criteria
 {
     public class GreaterCriteria : ISearchCriteria
     {
@@ -8,9 +8,9 @@
 
         public object Value { get; set; }
 
-        public void Apply(ISearchFilterBuilder builder)
+        public void Apply(ISearchCriteriaBuilder builder)
         {
-            builder.AddBetween(FieldName, Value, null, Strict);
+            builder.Range(FieldName, Value, null, true, false);
         }
     }
 }

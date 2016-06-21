@@ -1,4 +1,5 @@
-﻿using Lucene.Net.Index;
+﻿using Lucene.Net.Analysis.Standard;
+using Lucene.Net.Index;
 using Lucene.Net.Store;
 using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Caching.Memory;
@@ -137,15 +138,15 @@ namespace Vault.Framework
                 .Field("Duration", converter: new TimeSpanConverter())
                 .Field("Name", isKeyword: true, isAnalysed: true)
                 .Field("Description", isKeyword: true, isAnalysed: true)
-                .Field("Elevation", converter: new DecimalConverter())
-                .Field("Latitude", converter: new DecimalConverter())
-                .Field("Longitude", converter: new DecimalConverter())
+                .Field("Elevation", converter: new DoubleConverter())
+                .Field("Latitude", converter: new DoubleConverter())
+                .Field("Longitude", converter: new DoubleConverter())
                 .Field("ByArtist", isKeyword: true, isAnalysed: true)
                 .Field("InAlbum", isKeyword: true, isAnalysed: true)
                 .Field("Body", isAnalysed: true)
                 .Field("Summary", isAnalysed: true)
                 .Field("Thumbnail")
-                .Field("Url");
+                .Field("Url", isAnalysed: true, isKeyword: true);
 
             services.AddSingleton<IIndexDocumentMetadataProvider>(s => builder.Build());
             services.AddTransient<ISearchQueryParser, DefaultSearchQueryParser>();
@@ -234,7 +235,10 @@ namespace Vault.Framework
                 shouldCreate = !((FSDirectory)directory).Directory.Exists || !directory.ListAll().Any();
             }
 
-            var writer = new LuceneIndexWriter(directory, new LowerCaseAnalyzer(Lucene.Net.Util.Version.LUCENE_30), shouldCreate, IndexWriter.MaxFieldLength.UNLIMITED);
+            var analyzer = new PerFieldAnalyzer(new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30));
+            analyzer.AddAnalyzer("keywords", new KeywordsAnalyzer(Lucene.Net.Util.Version.LUCENE_30, new string[0]));
+
+            var writer = new LuceneIndexWriter(directory, analyzer, shouldCreate, IndexWriter.MaxFieldLength.UNLIMITED);
             writer.Commit();
 
             return writer;
@@ -263,39 +267,35 @@ namespace Vault.Framework
         }
     }
 
-    public class NewBoardHandler : IHandle<EntityCreated<Board>>
+    public class NewUserLoginHandler : IHandle<EntityCreated<IdentityUserLogin>>
     {
         IScheduler _scheduler;
-        IQueryBuilder _queryBuilder;
 
-        public NewBoardHandler(
-            IScheduler scheduler,
-            IQueryBuilder queryBuilder)
+        public NewUserLoginHandler(
+            IScheduler scheduler)
         {
             _scheduler = scheduler;
-            _queryBuilder = queryBuilder;
         }
 
-        public async Task HandleAsync(EntityCreated<Board> @event)
+        public Task HandleAsync(EntityCreated<IdentityUserLogin> @event)
         {
-            var user = await _queryBuilder.For<IdentityUser>().ById(@event.Entity.OwnerId);
+            var login = @event.Entity;
 
-            foreach (var item in user.Logins)
-            {
-                IJobDetail job = JobBuilder.Create<PullConnectionJob>()
-                    .WithIdentity(item.ProviderKey, item.LoginProvider)
-                    .UsingJobData("providerKey", item.ProviderKey)
-                    .UsingJobData("providerName", item.LoginProvider)
-                    .UsingJobData("ownerId", item.User.Id)
-                    .Build();
+            IJobDetail job = JobBuilder.Create<PullConnectionJob>()
+                .WithIdentity(login.ProviderKey, login.LoginProvider)
+                .UsingJobData("providerKey", login.ProviderKey)
+                .UsingJobData("providerName", login.LoginProvider)
+                .UsingJobData("ownerId", login.User.Id)
+                .Build();
 
-                ITrigger trigger = TriggerBuilder.Create()
-                  .WithIdentity(Guid.NewGuid().ToString(), item.LoginProvider)
-                  .StartAt(DateTimeOffset.Now.AddSeconds(5))
-                  .Build();
+            ITrigger trigger = TriggerBuilder.Create()
+              .WithIdentity(Guid.NewGuid().ToString(), login.LoginProvider)
+              .StartAt(DateTimeOffset.Now.AddSeconds(5))
+              .Build();
 
-                _scheduler.ScheduleJob(job, trigger);
-            }
+            _scheduler.ScheduleJob(job, trigger);
+
+            return Task.FromResult(true);
         }
     }
 
