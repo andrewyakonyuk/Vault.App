@@ -26,6 +26,7 @@ namespace Vault.Shared.NEventStore
             services.AddTransient<IDispatchCommits, InMemoryDispatcher>();
             services.AddTransient<Lazy<IObserveCommits>>(s => new Lazy<IObserveCommits>(() => s.GetRequiredService<IObserveCommits>()));
             services.AddTransient<IEventedUnitOfWorkFactory, EventedUnitOfWorkFactory>();
+            services.AddTransient<IEventsRebuilder, EventsRebuilder>();
         }
     }
 }

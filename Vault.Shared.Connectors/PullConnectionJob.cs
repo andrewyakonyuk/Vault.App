@@ -89,18 +89,21 @@ namespace Vault.Shared.Connectors
 
         void SaveConnectionResult(PullConnectionResult result)
         {
-            using (var unitOfWork = _eventedUnitOfWorkFactory.Create())
+            foreach (var batch in result.Batch(10))
             {
-                var stream = unitOfWork.GetStream("activity-" + OwnerId);
-
-                foreach (var item in result)
+                using (var unitOfWork = _eventedUnitOfWorkFactory.Create())
                 {
-                    item.OwnerId = OwnerId;
-                    stream.Add(item);
-                }
+                    var stream = unitOfWork.GetStream("activity-" + OwnerId);
 
-                unitOfWork.Save(stream);
-                unitOfWork.Commit();
+                    foreach (var item in batch)
+                    {
+                        item.OwnerId = OwnerId;
+                        stream.Add(item);
+                    }
+
+                    unitOfWork.Save(stream);
+                    unitOfWork.Commit();
+                }
             }
         }
 
