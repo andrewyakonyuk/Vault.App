@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNet.Authentication;
-using Microsoft.AspNet.Http;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using System;
 
 namespace Vault.Shared.Authentication.Pocket

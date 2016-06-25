@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNet.Http.Extensions;
-using Microsoft.Extensions.OptionsModel;
+﻿using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

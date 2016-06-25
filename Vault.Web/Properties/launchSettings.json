@@ -12,20 +12,19 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "Hosting:Environment": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "web": {
       "commandName": "web",
       "environmentVariables": {
-        "Hosting:Environment": "Development"
-      },
-      "sdkVersion": "dnx-clr-win-x86.1.0.0-rc1-update1"
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
     },
     "prod": {
       "commandName": "web",
       "environmentVariables": {
-        "Hosting:Environment": "Production"
+        "ASPNETCORE_ENVIRONMENT": "Production"
       }
     }
   }

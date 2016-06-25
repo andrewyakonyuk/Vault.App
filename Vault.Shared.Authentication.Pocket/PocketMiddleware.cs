@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNet.Authentication;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.DataProtection;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.OptionsModel;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.WebEncoders;
 using System;
 using System.Net.Http;
+using System.Text.Encodings.Web;
 
 namespace Vault.Shared.Authentication.Pocket
 {
@@ -17,16 +19,15 @@ namespace Vault.Shared.Authentication.Pocket
             RequestDelegate next,
             IDataProtectionProvider dataProtectionProvider,
             ILoggerFactory loggerFactory,
-            IUrlEncoder encoder,
-            IOptions<SharedAuthenticationOptions> sharedOptions,
-            PocketOptions options)
+            UrlEncoder encoder,
+            IOptions<PocketOptions> options)
             : base(next, options, loggerFactory, encoder)
         {
-            if (string.IsNullOrEmpty(options.ConsumerKey))
+            if (string.IsNullOrEmpty(options.Value.ConsumerKey))
                 throw new ArgumentException("ConsumerKey must be specified");
 
-            _httpClient = new HttpClient(options.BackchannelHttpHandler ?? new HttpClientHandler());
-            _httpClient.Timeout = options.BackchannelTimeout;
+            _httpClient = new HttpClient(options.Value.BackchannelHttpHandler ?? new HttpClientHandler());
+            _httpClient.Timeout = options.Value.BackchannelTimeout;
             _httpClient.MaxResponseContentBufferSize = 1024 * 1024 * 10; // 10 MB
             _httpClient.DefaultRequestHeaders.Accept.ParseAdd("*/*");
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Pocket authentication middleware");
@@ -44,11 +45,6 @@ namespace Vault.Shared.Authentication.Pocket
                 Options.StateDataFormat = new SecureDataFormat<RequestToken>(
                     new RequestTokenSerializer(),
                     dataProtector);
-            }
-
-            if (string.IsNullOrEmpty(Options.SignInScheme))
-            {
-                Options.SignInScheme = sharedOptions.Value.SignInScheme;
             }
         }
 

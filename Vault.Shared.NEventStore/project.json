@@ -1,16 +1,16 @@
 {
   "version": "1.0.0-*",
   "description": "Vault.Shared.NEventStore",
-  "authors": [ "andre" ],
-  "tags": [ "" ],
-  "projectUrl": "",
-  "licenseUrl": "",
+  "authors": [ "Andrew Yakonyuk" ],
+
+  "packOptions": {
+    "projectUrl": "https://github.com/andrewyakonyuk/Vault.App/"
+  },
 
   "dependencies": {
     "Vault.Shared": "1.0.0-*",
-    "Newtonsoft.Json": "8.0.2",
-    "NEventStore": "5.2.0",
-    "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-rc1-final"
+    "Newtonsoft.Json": "8.0.3",
+    "NEventStore": "5.2.0"
   },
 
   "frameworks": {

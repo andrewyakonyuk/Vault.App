@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNet.Authentication;
-using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Http.Authentication;
-using Microsoft.AspNet.Http.Extensions;
-using Microsoft.AspNet.Http.Features.Authentication;
-using Microsoft.AspNet.Http.Internal;
-using Microsoft.AspNet.WebUtilities;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Authentication;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Http.Features.Authentication;
+using Microsoft.AspNetCore.Http.Internal;
+using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -61,13 +61,13 @@ namespace Vault.Shared.Authentication.Pocket
             var cookieRequestToken = Options.StateDataFormat.Unprotect(protectedRequestToken);
             if (cookieRequestToken == null)
             {
-                return AuthenticateResult.Failed("Invalid state cookie.");
+                return AuthenticateResult.Fail("Invalid state cookie.");
             }
 
             var returnedRequestToken = Options.StateDataFormat.Unprotect(Request.Query["state"]);
 
             if (!string.Equals(returnedRequestToken.Token, cookieRequestToken.Token, StringComparison.Ordinal))
-                return AuthenticateResult.Failed("Unmatched token");
+                return AuthenticateResult.Fail("Unmatched token");
 
             var cookieOptions = new CookieOptions
             {
@@ -122,7 +122,7 @@ namespace Vault.Shared.Authentication.Pocket
                     });
             var response = await _httpClient.SendAsync(request, Context.RequestAborted);
             response.EnsureSuccessStatusCode();
-            var formCollection = new FormCollection(FormReader.ReadForm(await response.Content.ReadAsStringAsync()));
+            var formCollection = new FormCollection(new FormReader(await response.Content.ReadAsStringAsync()).ReadForm());
             var requestToken = formCollection["code"];
 
             return new RequestToken

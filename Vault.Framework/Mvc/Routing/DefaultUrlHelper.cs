@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Mvc.Infrastructure;
-using Microsoft.AspNet.Mvc.Routing;
-using Microsoft.Extensions.OptionsModel;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.Extensions.Options;
 using System;
 
 namespace Vault.Framework.Mvc.Routing
@@ -10,10 +11,10 @@ namespace Vault.Framework.Mvc.Routing
     {
         private readonly UrlOptions _options;
 
-        public DefaultUrlHelper(IActionContextAccessor contextAccessor,
-            IActionSelector actionSelector,
+        public DefaultUrlHelper(
+            ActionContext actionContext,
             IOptions<UrlOptions> options)
-            : base(contextAccessor, actionSelector)
+            : base(actionContext)
         {
             _options = options.Value;
         }

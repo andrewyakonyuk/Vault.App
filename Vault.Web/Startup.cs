@@ -1,14 +1,20 @@
-﻿using FluentNHibernate.Automapping;
+﻿using CommonDomain;
+using CommonDomain.Core;
+using CommonDomain.Persistence;
+using CommonDomain.Persistence.EventStore;
+using FluentNHibernate.Automapping;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Routing;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NEventStore;
+using NEventStore.Client;
+using NEventStore.Dispatcher;
 using NEventStore.Persistence.Sql;
 using NEventStore.Persistence.Sql.SqlDialects;
 using NHibernate;
@@ -19,6 +25,7 @@ using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using Vault.Framework;
 using Vault.Framework.Api.Boards.Overrides;
 using Vault.Framework.Api.Users;
@@ -38,6 +45,19 @@ namespace Vault.Web
 {
     public class Startup
     {
+        public IConfigurationRoot Configuration { get; }
+
+        public Startup(IHostingEnvironment env)
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("config.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"config.{env.EnvironmentName}.json", optional: true)
+                .AddEnvironmentVariables();
+
+            Configuration = builder.Build();
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
@@ -51,7 +71,6 @@ namespace Vault.Web
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
-                options.Password.RequireNonLetterOrDigit = true;
                 options.User.RequireUniqueEmail = true;
                 options.Cookies.ApplicationCookie.LoginPath = "/account/signIn";
                 options.Cookies.ApplicationCookie.ExpireTimeSpan = new TimeSpan(0, 20, 0);
@@ -72,29 +91,31 @@ namespace Vault.Web
                 .BuildSessionFactory());
             services.AddScoped<ISessionProvider, PerRequestSessionProvider>();
 
-            services.AddSingleton<IEventStoreInitializer, NEventStoreWithCustomPipelineFactory>();
-
-            services.AddEventStore();
             services.AddVaultFramework();
 
             services.AddSingleton<Shared.ILogger, Shared.ConsoleLogger>();
 
-            // Below code demonstrates usage of multiple configuration sources. For instance a setting say 'setting1'
-            // is found in both the registered sources, then the later source will win. By this way a Local config
-            // can be overridden by a different setting while deployed remotely.
-            var builder = new ConfigurationBuilder()
-                .AddJsonFile("config.json")
-                //All environment variables in the process's context flow in as configuration values.
-                .AddEnvironmentVariables();
+            services.AddTransient<IRepository, EventStoreRepository>();
+            services.AddTransient<IDetectConflicts, ConflictDetector>();
+            services.AddTransient<IConstructAggregates, AggregateFactory>();
+            services.AddSingleton<IPipelineHook, LowLatencyPollingPipelineHook>();
+            services.AddSingleton<IStoreEvents>(s => s.GetRequiredService<IEventStoreInitializer>().Create());
+            services.AddSingleton<ICheckpointRepository, InMemoryCheckpointRepository>();
+            services.AddTransient<IObserver<ICommit>, ReadModelCommitObserver>();
+            services.AddTransient<EventObserverSubscriptionFactory, EventObserverSubscriptionFactory>();
+            services.AddSingleton<IObserveCommits>(s => s.GetRequiredService<EventObserverSubscriptionFactory>().Construct());
+            services.AddTransient<IDispatchCommits, InMemoryDispatcher>();
+            services.AddTransient<Lazy<IObserveCommits>>(s => new Lazy<IObserveCommits>(() => s.GetRequiredService<IObserveCommits>()));
+            services.AddTransient<IEventedUnitOfWorkFactory, EventedUnitOfWorkFactory>();
+            services.AddTransient<IEventsRebuilder, EventsRebuilder>();
+            services.AddSingleton<IEventStoreInitializer, NEventStoreWithCustomPipelineFactory>();
 
-            var configuration = builder.Build();
-
-            services.AddSingleton<IConfiguration>(s => configuration);
+            services.AddSingleton<IConfiguration>(s => Configuration);
 
             services.Configure<UrlOptions>(options =>
             {
-                options.ServeCDNContent = !string.IsNullOrEmpty(configuration["CDN_URL"]);
-                options.CDNServerBaseUrl = configuration["CDN_URL"];
+                options.ServeCDNContent = !string.IsNullOrEmpty(Configuration["CDN_URL"]);
+                options.CDNServerBaseUrl = Configuration["CDN_URL"];
             });
 
             services.Configure<RouteOptions>(options =>
@@ -102,7 +123,7 @@ namespace Vault.Web
                 options.LowercaseUrls = true;
             });
 
-            services.Configure<PocketConnectionOptions>(options => options.ConsumerKey = configuration["authentication:pocket:consumerKey"]);
+            services.Configure<PocketConnectionOptions>(options => options.ConsumerKey = Configuration["authentication:pocket:consumerKey"]);
             services.AddTransient<IPullConnectionProvider, PocketConnectionProvider>();
         }
 
@@ -128,7 +149,7 @@ namespace Vault.Web
             app.UseIdentity();
             app.UsePocketAuthentication(options =>
             {
-                options.ConsumerKey = configuration["authentication:pocket:consumerKey"];
+                options.ConsumerKey = Configuration["authentication:pocket:consumerKey"];
             });
 
             app.UseStatusCodePages();
@@ -188,7 +209,17 @@ namespace Vault.Web
         }
 
         // Entry point for the application.
-        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+        public static void Main(string[] args)
+        {
+            var host = new WebHostBuilder()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseIISIntegration()
+                .UseKestrel()
+                .UseStartup<Startup>()
+                .Build();
+
+            host.Run();
+        }
     }
 
     public class NHibernateInitializer : INHibernateInitializer

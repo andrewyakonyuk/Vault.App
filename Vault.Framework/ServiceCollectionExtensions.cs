@@ -1,7 +1,7 @@
 ﻿using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Index;
 using Lucene.Net.Store;
-using Microsoft.AspNet.Hosting;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -228,9 +228,7 @@ namespace Vault.Framework
             }
             else
             {
-                var pathToIndex = Path.IsPathRooted(_configuration["connectionStrings:index"])
-                    ? _configuration["connectionStrings:index"]
-                    : _environment.MapPath(_configuration["connectionStrings:index"]);
+                var pathToIndex = _configuration["connectionStrings:index"];
                 directory = FSDirectory.Open(pathToIndex);
                 shouldCreate = !((FSDirectory)directory).Directory.Exists || !directory.ListAll().Any();
             }

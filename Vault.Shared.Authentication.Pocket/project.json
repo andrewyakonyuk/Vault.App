@@ -1,23 +1,26 @@
 ﻿{
   "version": "1.0.0-*",
   "description": "Vault.Shared.Authentication.Pocket",
-  "authors": [ "a.yakonyuk" ],
-  "tags": [ "" ],
-  "projectUrl": "",
-  "licenseUrl": "",
+  "authors": [ "Andrew Yakonyuk" ],
+
+  "packOptions": {
+    "projectUrl": "https://github.com/andrewyakonyuk/Vault.App/"
+  },
 
   "dependencies": {
-    "Vault.Framework": "1.0.0-*",
-    "Microsoft.AspNet.Authentication": "1.0.0-rc1-final",
-    "Microsoft.AspNet.DataProtection.Abstractions": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Logging.Abstractions": "1.0.0-rc1-final",
-    "Microsoft.Extensions.WebEncoders.Core": "1.0.0-rc1-final",
-    "Microsoft.Extensions.OptionsModel": "1.0.0-rc1-final",
-    "Microsoft.AspNet.Http.Abstractions": "1.0.0-rc1-final",
-    "Newtonsoft.Json": "8.0.2"
+    "Microsoft.AspNetCore.Authentication": "1.0.0-rc2-final",
+    "Microsoft.AspNetCore.DataProtection.Abstractions": "1.0.0-rc2-final",
+    "Microsoft.AspNetCore.Http.Abstractions": "1.0.0-rc2-final",
+    "Microsoft.Extensions.DependencyInjection": "1.0.0-rc2-final",
+    "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Logging.Abstractions": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Options": "1.0.0-rc2-final",
+    "Microsoft.Extensions.WebEncoders": "1.0.0-rc2-final",
+    "Newtonsoft.Json": "8.0.3"
   },
 
   "frameworks": {
-    "net451": { }
+    "net451": {
+    }
   }
 }

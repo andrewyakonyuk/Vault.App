@@ -1,45 +1,56 @@
 {
   "version": "1.0.0-*",
-  "compilationOptions": {
-    "emitEntryPoint": true
+
+  "buildOptions": {
+    "emitEntryPoint": true,
+    "preserveCompilationContext": true
+  },
+
+  "runtimeOptions": {
+    "configProperties": {
+      "System.GC.Server": true
+    }
   },
 
   "dependencies": {
     "FluentNHibernate": "2.0.1.0",
     "Humanizer.Core": "2.0.1",
     "Lucene.Net": "3.0.3",
-    "Microsoft.AspNet.Authentication": "1.0.0-rc1-final",
-    "Microsoft.AspNet.Authentication.Cookies": "1.0.0-rc1-final",
-    "Microsoft.AspNet.DataProtection.Abstractions": "1.0.0-rc1-final",
-    "Microsoft.AspNet.Diagnostics": "1.0.0-rc1-final",
-    "Microsoft.AspNet.Http.Abstractions": "1.0.0-rc1-final",
-    "Microsoft.AspNet.Http.Extensions": "1.0.0-rc1-final",
-    "Microsoft.AspNet.Identity": "3.0.0-rc1-final",
-    "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
-    "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
-    "Microsoft.AspNet.Mvc.Abstractions": "6.0.0-rc1-final",
-    "Microsoft.AspNet.Mvc.Core": "6.0.0-rc1-final",
-    "Microsoft.AspNet.Mvc.TagHelpers": "6.0.0-rc1-final",
-    "Microsoft.AspNet.Mvc.ViewFeatures": "6.0.0-rc1-final",
-    "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
-    "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
-    "Microsoft.Extensions.DependencyInjection": "1.0.0-rc1-final",
-    "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Configuration.Abstractions": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Configuration": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Configuration.FileProviderExtensions": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Logging.Abstractions": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
-    "Microsoft.Extensions.OptionsModel": "1.0.0-rc1-final",
-    "Microsoft.Extensions.WebEncoders.Core": "1.0.0-rc1-final",
+    "Microsoft.AspNetCore.Authentication": "1.0.0-rc2-final",
+    "Microsoft.AspNetCore.Authentication.Cookies": "1.0.0-rc2-final",
+    "Microsoft.AspNetCore.DataProtection.Abstractions": "1.0.0-rc2-final",
+    "Microsoft.AspNetCore.Diagnostics": "1.0.0-rc2-final",
+    "Microsoft.AspNetCore.Http.Abstractions": "1.0.0-rc2-final",
+    "Microsoft.AspNetCore.Http.Extensions": "1.0.0-rc2-final",
+    "Microsoft.AspNetCore.Identity": "1.0.0-rc2-final",
+    "Microsoft.AspNetCore.Mvc": "1.0.0-rc2-final",
+    "Microsoft.AspNetCore.Mvc.Abstractions": "1.0.0-rc2-final",
+    "Microsoft.AspNetCore.Mvc.Core": "1.0.0-rc2-final",
+    "Microsoft.AspNetCore.Mvc.TagHelpers": "1.0.0-rc2-final",
+    "Microsoft.AspNetCore.Mvc.ViewFeatures": "1.0.0-rc2-final",
+    "Microsoft.AspNetCore.Server.IISIntegration": "1.0.0-*",
+    "Microsoft.AspNetCore.Server.Kestrel": "1.0.0-*",
+    "Microsoft.AspNetCore.StaticFiles": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Configuration": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Configuration.Abstractions": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Configuration.FileExtensions": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Configuration.Json": "1.0.0-rc2-final",
+    "Microsoft.Extensions.DependencyInjection": "1.0.0-rc2-final",
+    "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Logging": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Logging.Abstractions": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Logging.Console": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Logging.Debug": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Options": "1.0.0-rc2-final",
+    "Microsoft.Extensions.WebEncoders": "1.0.0-rc2-final",
     "Microsoft.Net.Http": "2.2.29",
+    "Microsoft.NETCore.Platforms": "1.0.1-*",
     "NEventStore": "5.2.0",
     "NHibernate": "4.0.3.4000",
     "Npgsql": "3.0.5",
     "Quartz": "2.3.3",
-    "System.ComponentModel.Annotations": "4.0.11-beta-23516",
+    "System.ComponentModel.Annotations": "4.0.0-*",
     "system.data.sqlite.core": "1.0.99",
     "Vault.Domain": "1.0.0-*",
     "Vault.Framework": "1.0.0-*",
@@ -56,33 +67,31 @@
   },
 
   "commands": {
-    "web": "Microsoft.AspNet.Server.Kestrel ASPNET_ENV=Production",
-    "dev": "Microsoft.AspNet.Server.Kestrel ASPNET_ENV=Development DNX_IIS_RUNTIME_FRAMEWORK=DNX451 --watch web"
-  },
-
-  "frameworks": {
-    "dnx451": {
-      "dependencies": {
-      },
-      "frameworkAssemblies": {
-        "System.Data": "4.0.0.0",
-        "System.Globalization": "4.0.0.0"
-      }
-    }
+    "web": "Microsoft.AspNetCore.Server.Kestrel"
   },
 
   "exclude": [
     "wwwroot",
     "node_modules"
   ],
-  "publishExclude": [
-    "**.user",
-    "**.vspscc"
-  ],
-
+  "frameworks": {
+    "net451": {
+    }
+  },
   "packExclude": [
     "**.xproj",
     "**.user",
     "**.vspscc"
   ],
+  "publishOptions": {
+    "include": [
+      "Views",
+      "web.config",
+      "wwwroot"
+    ],
+    "exclude": [
+      "**.user",
+      "**.vspscc"
+    ]
+  }
 }

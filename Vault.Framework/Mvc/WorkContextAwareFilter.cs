@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNet.Mvc.Filters;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 using Vault.Shared.Identity;
 using Vault.Shared.Identity.Query;

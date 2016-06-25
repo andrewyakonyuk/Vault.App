@@ -1,10 +1,11 @@
 ﻿{
   "version": "1.0.0-*",
   "description": "Vault.Shared.Search",
-  "authors": [ "mechanical animals" ],
-  "tags": [ "" ],
-  "projectUrl": "",
-  "licenseUrl": "",
+  "authors": [ "Andrew Yakonyuk" ],
+
+  "packOptions": {
+    "projectUrl": "https://github.com/andrewyakonyuk/Vault.App/"
+  },
 
   "frameworks": {
     "net451": { }

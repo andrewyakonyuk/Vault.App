@@ -1,10 +1,11 @@
 ﻿{
   "version": "1.0.0-*",
   "description": "Vault.Shared.NHibernate",
-  "authors": [ "mechanical animals" ],
-  "tags": [ "" ],
-  "projectUrl": "",
-  "licenseUrl": "",
+  "authors": [ "Andrew Yakonyuk" ],
+
+  "packOptions": {
+    "projectUrl": "https://github.com/andrewyakonyuk/Vault.App/"
+  },
 
   "dependencies": {
     "NHibernate": "4.0.3.4000",
@@ -12,7 +13,8 @@
     "Vault.Shared": "1.0.0-*"
   },
 
-    "frameworks": {
-      "net451": {}
+  "frameworks": {
+    "net451": {
     }
   }
+}

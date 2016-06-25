@@ -8,7 +8,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Vault.Shared.Connectors
+namespace Vault.Framework
 {
     public class ServiceJobFactory : PropertySettingJobFactory
     {
@@ -26,6 +26,7 @@ namespace Vault.Shared.Connectors
             IJob job = null;
             try
             {
+                Type a = null;
                 job = (IJob)_serviceProvider.GetRequiredService(jobType);
             }
             catch (Exception e)

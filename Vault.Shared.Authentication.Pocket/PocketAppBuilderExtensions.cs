@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Microsoft.Extensions.Options;
+using System;
 using Vault.Shared.Authentication.Pocket;
 
-namespace Microsoft.AspNet.Builder
+namespace Microsoft.AspNetCore.Builder
 {
     public static class PocketAppBuilderExtensions
     {
@@ -27,7 +28,7 @@ namespace Microsoft.AspNet.Builder
                 throw new ArgumentNullException(nameof(options));
             }
 
-            return UseMiddlewareExtensions.UseMiddleware<PocketMiddleware>(app, options);
+            return app.UseMiddleware<PocketMiddleware>(Options.Create(options));
         }
     }
 }

@@ -1,17 +1,18 @@
 {
   "version": "1.0.0-*",
   "description": "Vault.Shared",
-  "authors": [ "Mechanicals animals" ],
-  "tags": [ "" ],
-  "projectUrl": "",
-  "licenseUrl": "",
+  "authors": [ "Andrew Yakonyuk" ],
+
+  "packOptions": {
+    "projectUrl": "https://github.com/andrewyakonyuk/Vault.App/"
+  },
 
   "frameworks": {
     "net451": {
-      "frameworkAssemblies": {
-        "System.Data": "4.0.0.0",
-        "System.Runtime.Serialization": "4.0.0.0"
-      }
     }
+  },
+
+  "dependencies": {
+    "System.Data.Common": "4.0.1-rc2-24027"
   }
 }

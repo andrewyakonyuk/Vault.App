@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +13,8 @@ using Vault.Web.Models.Account;
 
 namespace Vault.Web.Controllers
 {
+    using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
+
     [Authorize]
     public class AccountController : Controller
     {
@@ -191,7 +193,7 @@ namespace Vault.Web.Controllers
             // If the user does not have an account, then ask the user to create an account.
             ViewData["ReturnUrl"] = returnUrl;
             ViewData["LoginProvider"] = info.LoginProvider;
-            var email = info.ExternalPrincipal.FindFirstValue(ClaimTypes.Email);
+            var email = info.Principal.FindFirstValue(ClaimTypes.Email);
             return View("ExternalLoginConfirmation", new ExternalLoginConfirmationModel { Email = email });
         }
 
@@ -200,7 +202,7 @@ namespace Vault.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationModel model, string returnUrl = null)
         {
-            if (User.IsSignedIn())
+            if (_signInManager.IsSignedIn(User))
             {
                 return RedirectToAction(nameof(BoardsController.Index), "Board");
             }

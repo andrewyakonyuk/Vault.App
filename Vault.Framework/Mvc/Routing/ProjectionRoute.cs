@@ -1,17 +1,15 @@
-using Microsoft.AspNet.Routing;
-using Microsoft.AspNet.Routing.Template;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Routing.Template;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Vault.Framework.Mvc.Routing
 {
-    public class ProjectionTemplateRoute : TemplateRoute
+    public class ProjectionRoute : Route
     {
-        private readonly IReadOnlyDictionary<string, IRouteProjection> _projections;
+        public virtual RouteValueDictionary Projections { get; protected set; }
 
-        public IReadOnlyDictionary<string, IRouteProjection> Projections { get { return _projections; } }
-
-        public ProjectionTemplateRoute(
+        public ProjectionRoute(
             IRouter target,
             string routeTemplate,
             IInlineConstraintResolver inlineConstraintResolver)
@@ -19,26 +17,26 @@ namespace Vault.Framework.Mvc.Routing
         {
         }
 
-        public ProjectionTemplateRoute(
+        public ProjectionRoute(
             IRouter target,
             string routeTemplate,
-            IDictionary<string, object> defaults,
-            IDictionary<string, object> constraints,
-            IDictionary<string, object> projections,
-            IDictionary<string, object> dataTokens,
+            RouteValueDictionary defaults,
+            RouteValueDictionary constraints,
+            RouteValueDictionary projections,
+            RouteValueDictionary dataTokens,
             IInlineConstraintResolver inlineConstraintResolver)
             : this(target, null, routeTemplate, defaults, constraints, projections, dataTokens, inlineConstraintResolver)
         {
         }
 
-        public ProjectionTemplateRoute(
+        public ProjectionRoute(
             IRouter target,
             string routeName,
             string routeTemplate,
-            IDictionary<string, object> defaults,
-            IDictionary<string, object> constraints,
-            IDictionary<string, object> projections,
-            IDictionary<string, object> dataTokens,
+           RouteValueDictionary defaults,
+            RouteValueDictionary constraints,
+            RouteValueDictionary projections,
+            RouteValueDictionary dataTokens,
             IInlineConstraintResolver inlineConstraintResolver)
                 : base(target,
                 routeName,
@@ -48,7 +46,7 @@ namespace Vault.Framework.Mvc.Routing
                 dataTokens,
                 inlineConstraintResolver)
         {
-            _projections = GetProjections(projections);
+            Projections = projections;
         }
 
         public override VirtualPathData GetVirtualPath(VirtualPathContext context)
@@ -58,7 +56,7 @@ namespace Vault.Framework.Mvc.Routing
                 if (item.Value == null)
                     continue;
 
-                item.Value.Outgoing(item.Key, context.Values);
+                ((IRouteProjection)item.Value).Outgoing(item.Key, context.Values);
             }
 
             return base.GetVirtualPath(context);
@@ -71,7 +69,7 @@ namespace Vault.Framework.Mvc.Routing
                 if (item.Value == null)
                     continue;
 
-                item.Value.Incoming(item.Key, context.RouteData.Values);
+                ((IRouteProjection)item.Value).Incoming(item.Key, context.RouteData.Values);
             }
 
             return base.RouteAsync(context);

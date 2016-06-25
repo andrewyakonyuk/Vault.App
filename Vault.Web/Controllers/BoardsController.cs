@@ -2,15 +2,16 @@
 {
     using Framework;
     using Framework.Api.Boards;
-    using Microsoft.AspNet.Authorization;
-    using Microsoft.AspNet.Mvc;
+    using Framework.Mvc;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
     using Models.Boards;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
+    using Shared.NEventStore;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Threading.Tasks;
-    using Framework.Mvc;
 
     [Authorize]
     public class BoardsController : Controller
@@ -55,7 +56,7 @@
         {
             var board = await _boardsApi.GetBoardAsync(boardId, offset, count);
             if (board == null)
-                return new HttpNotFoundResult();
+                return new NotFoundResult();
 
             if (Request.IsPjaxRequest())
                 return PartialView("Index", board);
@@ -83,7 +84,7 @@
 
             var board = await _boardsApi.GetBoardAsync(boardId, 0, 20);
             if (board == null)
-                return new HttpNotFoundResult();
+                return new NotFoundResult();
 
             return Redirect(Url.Board(board.Id, board.Name, HttpContext.User.Identity.Name));
         }

@@ -21,7 +21,6 @@
         minifyCSS = require('gulp-minify-css'),
         concatCss = require('gulp-concat-css'),
         less = require('gulp-less'),
-        shell = require('gulp-shell'),
         //autoprefixer = require('gulp-autoprefixer'),
         path = require('path');
 
@@ -57,12 +56,12 @@
 
     // Concatenates CSS files, rewrites relative paths to Font Awesome, copies Font Awesome fonts
     gulp.task('css', function () {
-       return gulp.src('./wwwroot/styles/main.css')
-            .pipe(replace(/url\((')?\.\.\/img\//g, 'url($1img/'))
-           // .pipe(autoprefixer())
-            .pipe(minifyCSS({}))
-            .pipe(concat('main.min.css'))
-            .pipe(gulp.dest('./wwwroot/styles'));
+        return gulp.src('./wwwroot/styles/main.css')
+             .pipe(replace(/url\((')?\.\.\/img\//g, 'url($1img/'))
+            // .pipe(autoprefixer())
+             .pipe(minifyCSS({}))
+             .pipe(concat('main.min.css'))
+             .pipe(gulp.dest('./wwwroot/styles'));
     });
 
     gulp.task('less', function () {
@@ -73,15 +72,12 @@
           .pipe(gulp.dest('./wwwroot/styles'));
     });
 
-    gulp.task('dnx', shell.task(['dnx-watch dev']));
-    
-    gulp.task('watch', ['less'], function() {
+    gulp.task('watch', ['less'], function () {
         gulp.watch('./wwwroot/styles/**/*.less', ['less']);  // Watch all the .less files, then run the less task
     });
 
-    gulp.task('default', ['js','less', 'css'], function (callback) {
+    gulp.task('default', ['js', 'less', 'css'], function (callback) {
         callback();
         console.log('\nPlaced optimized files in ' + chalk.magenta('dist/\n'));
     });
-
 })();

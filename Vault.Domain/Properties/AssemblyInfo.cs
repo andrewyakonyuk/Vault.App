@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Vault.Domain")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("ISM eCompany")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Vault.Domain")]
-[assembly: AssemblyCopyright("Copyright © ISM eCompany 2016")]
+[assembly: AssemblyCopyright("Copyright © 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Routing;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Routing;
 using System;
 using System.Threading.Tasks;
 using Vault.Shared.Identity;

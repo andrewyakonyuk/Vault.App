@@ -1,10 +1,9 @@
-using Microsoft.AspNet.Routing;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using Vault.Framework.Mvc.Routing;
 
-namespace Microsoft.AspNet.Builder
+namespace Microsoft.AspNetCore.Builder
 {
     public static class RouteBuilderExtensions
     {
@@ -22,24 +21,9 @@ namespace Microsoft.AspNet.Builder
                 throw new InvalidOperationException("DefaultHandler_MustBeSet");
             }
 
-            IInlineConstraintResolver constraintResolver = routeBuilder.ServiceProvider.GetRequiredService<IInlineConstraintResolver>();
-
-            var templateRoute = new ProjectionTemplateRoute(routeBuilder.DefaultHandler, name, template,
-                ObjectToDictionary(defaults), ObjectToDictionary(constraints),
-                ObjectToDictionary(projections), ObjectToDictionary(dataTokens), constraintResolver);
-
-            routeBuilder.Routes.Add(templateRoute);
+            IInlineConstraintResolver requiredService = routeBuilder.ServiceProvider.GetRequiredService<IInlineConstraintResolver>();
+            routeBuilder.Routes.Add(new ProjectionRoute(routeBuilder.DefaultHandler, name, template, new RouteValueDictionary(defaults), new RouteValueDictionary(constraints), new RouteValueDictionary(projections), new RouteValueDictionary(dataTokens), requiredService));
             return routeBuilder;
-        }
-
-        private static IDictionary<string, object> ObjectToDictionary(object value)
-        {
-            IDictionary<string, object> dictionary = value as IDictionary<string, object>;
-            if (dictionary != null)
-            {
-                return dictionary;
-            }
-            return new RouteValueDictionary(value);
         }
     }
 }

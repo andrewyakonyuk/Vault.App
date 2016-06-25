@@ -12,7 +12,6 @@ namespace Vault.Shared
     }
 
     [Serializable]
-    [DataContract]
     public sealed class PagedEnumerable<T> : PagedEnumerable, IPagedEnumerable<T>
     {
         private readonly IEnumerable<T> _inner;
@@ -26,10 +25,8 @@ namespace Vault.Shared
             Count = count;
         }
 
-        [DataMember]
         public int TotalCount { get; private set; }
 
-        [DataMember]
         public int Count { get; private set; }
 
         public IEnumerator<T> GetEnumerator()

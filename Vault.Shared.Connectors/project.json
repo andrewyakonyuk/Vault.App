@@ -1,13 +1,15 @@
 ﻿{
   "version": "1.0.0-*",
-  "description": "Vault.Shared.Connectors Class Library",
-  "authors": [ "a.yakonyuk" ],
-  "tags": [ "" ],
-  "projectUrl": "",
-  "licenseUrl": "",
+  "description": "Vault.Shared.Connectors",
+  "authors": [ "Andrew Yakonyuk" ],
+
+  "packOptions": {
+    "projectUrl": "https://github.com/andrewyakonyuk/Vault.App/"
+  },
 
   "frameworks": {
-    "net451": { }
+    "net451": {
+    }
   },
 
   "dependencies": {
@@ -15,7 +17,10 @@
     "Vault.Domain": "1.0.0-*",
     "Vault.Shared.NEventStore": "1.0.0-*",
     "Vault.Shared.TransientFaultHandling": "1.0.0-*",
-    "Microsoft.Extensions.Logging.Abstractions": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Logging": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Logging.Abstractions": "1.0.0-rc2-final",
+    "Microsoft.Extensions.DependencyInjection": "1.0.0-rc2-final",
+    "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-rc2-final",
     "Quartz": "2.3.3"
   }
 }
