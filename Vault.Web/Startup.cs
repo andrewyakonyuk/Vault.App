@@ -1,4 +1,8 @@
-﻿using CommonDomain;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using CommonDomain;
 using CommonDomain.Core;
 using CommonDomain.Persistence;
 using CommonDomain.Persistence.EventStore;
@@ -22,15 +26,12 @@ using NHibernate.Cfg;
 using NHibernate.Context;
 using NHibernate.Tool.hbm2ddl;
 using Npgsql;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
 using Vault.Framework;
 using Vault.Framework.Api.Boards.Overrides;
 using Vault.Framework.Api.Users;
 using Vault.Framework.Mvc;
 using Vault.Framework.Mvc.Routing;
+using Vault.Framework.Mvc.Routing.Constraints;
 using Vault.Framework.Mvc.Routing.Projections;
 using Vault.Shared.Connectors;
 using Vault.Shared.Connectors.Pocket;
@@ -40,6 +41,7 @@ using Vault.Shared.Identity.Overrides;
 using Vault.Shared.NEventStore;
 using Vault.Shared.NHibernate;
 using Vault.Shared.NHibernate.Conventions;
+using Vault.Shared.Queries;
 
 namespace Vault.Web
 {
@@ -123,6 +125,8 @@ namespace Vault.Web
                 options.LowercaseUrls = true;
             });
 
+            services.AddTransient<UsernameRouteConstraint>();
+
             services.Configure<PocketConnectionOptions>(options => options.ConsumerKey = Configuration["authentication:pocket:consumerKey"]);
             services.AddTransient<IPullConnectionProvider, PocketConnectionProvider>();
         }
@@ -163,6 +167,10 @@ namespace Vault.Web
                 routes.MapRoute(
                     name: "boards",
                     template: "{username:regex(^.+$)}/b/",
+                    constraints: new
+                    {
+                        username = routes.ServiceProvider.GetRequiredService<UsernameRouteConstraint>()
+                    },
                     defaults: new
                     {
                         controller = "Boards",
@@ -173,6 +181,10 @@ namespace Vault.Web
                 routes.MapRoute(
                     name: "board-detail",
                     template: "{username:regex(^.+$)}/b/{title}-{boardId:int}",
+                    constraints: new
+                    {
+                        username = routes.ServiceProvider.GetRequiredService<UsernameRouteConstraint>()
+                    },
                     defaults: new
                     {
                         controller = "Boards",
@@ -183,18 +195,25 @@ namespace Vault.Web
                         title = new DashedRouteProjection(false)
                     }
                 );
-
                 routes.MapRoute("board-search",
-                   template: "{username:regex(^.+$)}/b/search",
-                   defaults: new
-                   {
-                       controller = "Boards",
-                       action = "Search"
-                   }
+                    template: "{username:regex(^.+$)}/b/search",
+                    constraints: new
+                    {
+                        username = routes.ServiceProvider.GetRequiredService<UsernameRouteConstraint>()
+                    },
+                    defaults: new
+                    {
+                        controller = "Boards",
+                        action = "Search"
+                    }
                );
 
                 routes.MapRoute("user-profile",
-                    template: "{username:regex(^.+$)}",
+                    template: "{username:regex(^.+$)}/a",
+                    constraints: new
+                    {
+                        username = routes.ServiceProvider.GetRequiredService<UsernameRouteConstraint>()
+                    },
                     defaults: new
                     {
                         controller = "Account",
