@@ -14,39 +14,5 @@
             @RenderBody()
         </div>
     </div>
-
-    <div class="snackbar">
-
-        <div class="card audio-card" style="color: #fff">
-            <div class="media-player">
-                @*<div class="album-art">
-                        <img src="@Url.Content("~/img/cd-icon-picture.svg")" class="cover">
-                    </div>*@
-                <div class="description">
-                    <div class="title">Something to nothing</div>
-                    <div class="sub-title">by Foo Fighters</div>
-                    <div class="time-indicator">
-                        <span>
-                            <svg class="icon icon-time"><use xlink:href="#icon-time"></use></svg>
-                            <span class="time">3:38</span>
-                        </span>
-                    </div>
-                </div>
-                <div class="play-button">
-                    <div class="lp-background"></div>
-                    <svg class="icon icon-play"><use xlink:href="#icon-play"></use></svg>
-                    <svg class="icon icon-pause"><use xlink:href="#icon-pause"></use></svg>
-                </div>
-            </div>
-        </div>
-
-        @*<button class="btn snackbar-action" onclick="$('.snackbar').toggleClass('snackbar-open')">Undo</button>*@
-    </div>
-
-    @*<div class="snackbar">
-            <div class="snackbar-text">Text</div>
-
-            <button class="btn snackbar-action" onclick="$('.snackbar').toggleClass('snackbar-open')">Undo</button>
-        </div>*@
 </div>
 @Html.Partial("_Icons")

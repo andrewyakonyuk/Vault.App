@@ -1,18 +1,19 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Vault.Framework.Api.Users;
 using Vault.Shared.Identity;
 using Vault.Web.Models.Account;
 
 namespace Vault.Web.Controllers
 {
+    using Framework;
     using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
     [Authorize]
@@ -22,17 +23,20 @@ namespace Vault.Web.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
+        private readonly IWorkContextAccessor _workContextAccessor;
 
         public AccountController(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             IEmailSender emailSender,
-            ISmsSender smsSender)
+            ISmsSender smsSender,
+            IWorkContextAccessor workContextAccessor)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
+            _workContextAccessor = workContextAccessor;
         }
 
         [AllowAnonymous]
@@ -138,9 +142,25 @@ namespace Vault.Web.Controllers
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var model = new ProfileModel();
+
+            var user = await _userManager.FindByIdAsync(_workContextAccessor.WorkContext.User.Id.ToString());
+            model.Username = user.UserName;
+            model.Email = user.Email;
+
+            foreach (var item in HttpContext.Authentication.GetAuthenticationSchemes())
+            {
+                model.Logins.Add(new ExternalLoginModel
+                {
+                    AuthenticationScheme = item.AuthenticationScheme,
+                    DisplayName = item.DisplayName,
+                    HasLogin = user.Logins.Any(t => string.Equals(t.LoginProvider, item.AuthenticationScheme, StringComparison.OrdinalIgnoreCase))
+                });
+            }
+
+            return View(model);
         }
 
         [HttpPost]

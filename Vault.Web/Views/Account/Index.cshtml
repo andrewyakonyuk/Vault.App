@@ -1,6 +1,9 @@
-﻿@{
+﻿@using Vault.Web.Models.Account
+@model ProfileModel
+
+@{
     Layout = "_Layout";
-    ViewBag.Title = Context.User.Identity.Name;
+    ViewBag.Title = Model.Username;
 }
 
 <header class="app-header">
@@ -13,7 +16,7 @@
                             <a asp-controller="Account" asp-action="Index">/a</a>
                         </li>
                         <li class="active">
-                            @@@Context.User.Identity.Name
+                            @@@Model.Username
                         </li>
                     </ol>
                 </div>
@@ -26,19 +29,26 @@
 <div class="app-main-section-wrapper draw-pusher">
     <div class="app-main-section">
         <div class="card-section">
-            <div class="board">
-                <h4>Add a login to your account.</h4>
-                <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" role="form">
-                    <ul>
-                        @foreach (var provider in Context.Authentication.GetAuthenticationSchemes().ToList())
-                        {
-                            <li>
-                                <button type="submit" class="btn btn-default" name="provider" value="@provider.AuthenticationScheme" title="Connect your @provider.DisplayName account">@provider.AuthenticationScheme</button>
-                            </li>
-                        }
-                    </ul>
-                </form>
-            </div>
+            <h4>Add a login to your account.</h4>
+            <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" role="form">
+                <ul>
+                    @foreach (var login in Model.Logins)
+                    {
+                        <li>
+                            <button type="submit"
+                                    class="btn btn-default btn-icon @(login.HasLogin ? "has-login" : null)"
+                                    @(login.HasLogin ? "disabled" : null)
+                                    name="provider" value="@login.AuthenticationScheme"
+                                    title="Connect your @login.DisplayName account">
+                                <svg style="width: 22px; height: 22px;" class="icon">
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-share"></use>
+                                </svg>
+                                @login.AuthenticationScheme
+                            </button>
+                        </li>
+                    }
+                </ul>
+            </form>
         </div>
     </div>
 </div>
