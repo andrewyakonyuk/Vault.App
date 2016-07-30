@@ -7,7 +7,7 @@ namespace Vault.Shared.Identity.Overrides
     {
         public void Override(AutoMapping<IdentityUserClaim> mapping)
         {
-            mapping.HasOne(t => t.User).ForeignKey("UserId").Cascade.SaveUpdate();
+            mapping.References(t => t.User, "user_id").Fetch.Join();
         }
     }
 }

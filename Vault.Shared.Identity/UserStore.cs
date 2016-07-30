@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Vault.Shared.Domain;
 using Vault.Shared.NHibernate;
 
@@ -222,12 +222,17 @@ namespace Vault.Shared.Identity
         public Task AddLoginAsync(IdentityUser user, UserLoginInfo login, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            user.Logins.Add(new IdentityUserLogin
+            var userLogin = user.Logins.SingleOrDefault(t => t.LoginProvider == login.LoginProvider && t.ProviderKey == login.ProviderKey);
+            if (userLogin == null)
             {
-                LoginProvider = login.LoginProvider,
-                ProviderDisplayName = login.ProviderDisplayName,
-                ProviderKey = login.ProviderKey
-            });
+                user.Logins.Add(new IdentityUserLogin
+                {
+                    LoginProvider = login.LoginProvider,
+                    ProviderDisplayName = login.ProviderDisplayName,
+                    ProviderKey = login.ProviderKey,
+                    User = user
+                });
+            }
 
             return Task.FromResult(true);
         }

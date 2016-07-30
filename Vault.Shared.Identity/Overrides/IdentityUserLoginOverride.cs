@@ -1,5 +1,6 @@
-﻿using FluentNHibernate.Automapping.Alterations;
+﻿using System;
 using FluentNHibernate.Automapping;
+using FluentNHibernate.Automapping.Alterations;
 
 namespace Vault.Shared.Identity.Overrides
 {
@@ -7,7 +8,7 @@ namespace Vault.Shared.Identity.Overrides
     {
         public void Override(AutoMapping<IdentityUserLogin> mapping)
         {
-            mapping.HasOne(t => t.User).ForeignKey("UserId").Cascade.SaveUpdate();
+            mapping.References(t => t.User, "user_id").Fetch.Join();
         }
     }
 }
