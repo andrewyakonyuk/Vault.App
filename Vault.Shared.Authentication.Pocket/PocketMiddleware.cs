@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using System;
+using System.Net.Http;
+using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.WebEncoders;
-using System;
-using System.Net.Http;
-using System.Text.Encodings.Web;
 
 namespace Vault.Shared.Authentication.Pocket
 {
@@ -20,6 +20,7 @@ namespace Vault.Shared.Authentication.Pocket
             IDataProtectionProvider dataProtectionProvider,
             ILoggerFactory loggerFactory,
             UrlEncoder encoder,
+            IOptions<SharedAuthenticationOptions> sharedOptions,
             IOptions<PocketOptions> options)
             : base(next, options, loggerFactory, encoder)
         {
@@ -45,6 +46,15 @@ namespace Vault.Shared.Authentication.Pocket
                 Options.StateDataFormat = new SecureDataFormat<RequestToken>(
                     new RequestTokenSerializer(),
                     dataProtector);
+            }
+
+            if (string.IsNullOrEmpty(Options.SignInScheme))
+            {
+                Options.SignInScheme = sharedOptions.Value.SignInScheme;
+            }
+            if (string.IsNullOrEmpty(Options.SignInScheme))
+            {
+                throw new ArgumentException("SignInScheme must be provided");
             }
         }
 

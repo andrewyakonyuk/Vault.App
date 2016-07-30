@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using System;
 
 namespace Vault.Shared.Authentication.Pocket
 {
@@ -15,7 +16,7 @@ namespace Vault.Shared.Authentication.Pocket
             DisplayName = AuthenticationScheme;
             CallbackPath = new PathString("/signin-pocket");
             BackchannelTimeout = TimeSpan.FromSeconds(60);
-            SaveTokensAsClaims = true;
+            SaveTokens = true;
         }
 
         public ISecureDataFormat<RequestToken> StateDataFormat { get; set; }
@@ -25,7 +26,5 @@ namespace Vault.Shared.Authentication.Pocket
             get { return base.Events as IPocketEvents; }
             set { base.Events = value; }
         }
-
-        public bool SaveTokensAsClaims { get; set; }
     }
 }

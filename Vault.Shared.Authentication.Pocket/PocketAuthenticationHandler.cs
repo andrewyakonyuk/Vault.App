@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -6,11 +11,6 @@ using Microsoft.AspNetCore.Http.Features.Authentication;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace Vault.Shared.Authentication.Pocket
 {
@@ -84,7 +84,7 @@ namespace Vault.Shared.Authentication.Pocket
                 new Claim(ClaimTypes.NameIdentifier, accessToken.Token, ClaimValueTypes.String, Options.ClaimsIssuer),
                 new Claim(ClaimTypes.Name, accessToken.ScreenName, ClaimValueTypes.String, Options.ClaimsIssuer)
             }, Options.ClaimsIssuer);
-            if (Options.SaveTokensAsClaims)
+            if (Options.SaveTokens)
             {
                 claimsIdentity.AddClaim(new Claim("access_token", accessToken.Token, ClaimValueTypes.String, Options.ClaimsIssuer));
             }
