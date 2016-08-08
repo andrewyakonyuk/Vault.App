@@ -8,7 +8,7 @@ using Vault.Framework.Search.Parsing;
 using Vault.Framework.Security;
 using Vault.Shared;
 using Vault.Shared.Domain;
-using Vault.Shared.Events;
+using Vault.Shared.EventSourcing;
 using Vault.Shared.Queries;
 using Vault.Shared.Search;
 using Vault.Shared.Search.Criteria;

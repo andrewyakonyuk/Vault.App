@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
-using Quartz;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Vault.Shared.NEventStore;
+using Microsoft.Extensions.Logging;
+using Quartz;
+using Vault.Shared.EventSourcing;
 using Vault.Shared.TransientFaultHandling;
 
 namespace Vault.Shared.Connectors

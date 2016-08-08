@@ -1,7 +1,7 @@
 ﻿using System;
 using Vault.Domain.Models;
 using Vault.Shared.Domain;
-using Vault.Shared.Events;
+using Vault.Shared.EventSourcing;
 
 namespace Vault.Domain.Activities
 {

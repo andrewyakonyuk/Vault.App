@@ -15,7 +15,8 @@
   "dependencies": {
     "Vault.Shared": "1.0.0-*",
     "Vault.Domain": "1.0.0-*",
-    "Vault.Shared.NEventStore": "1.0.0-*",
+    "Vault.Shared.EventSourcing.NEventStore": "1.0.0-*",
+    "Vault.Shared.EventSourcing": "1.0.0-*",
     "Vault.Shared.TransientFaultHandling": "1.0.0-*",
     "Microsoft.Extensions.Logging": "1.0.0-rc2-final",
     "Microsoft.Extensions.Logging.Abstractions": "1.0.0-rc2-final",

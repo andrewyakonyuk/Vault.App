@@ -1,20 +1,20 @@
-﻿{
+{
   "version": "1.0.0-*",
-  "description": "Vault.Domain",
+  "description": "Vault.Shared.EventSourcing.NEventStore",
   "authors": [ "Andrew Yakonyuk" ],
 
   "packOptions": {
     "projectUrl": "https://github.com/andrewyakonyuk/Vault.App/"
   },
 
-  "frameworks": {
-    "net451": { }
-  },
-
   "dependencies": {
     "Vault.Shared": "1.0.0-*",
-    "NEventStore": "5.2.0",
     "Vault.Shared.EventSourcing": "1.0.0-*",
-    "Vault.Shared.EventSourcing.NEventStore": "1.0.0-*"
+    "Newtonsoft.Json": "8.0.3",
+    "NEventStore": "5.2.0"
+  },
+
+  "frameworks": {
+    "net451": { }
   }
 }

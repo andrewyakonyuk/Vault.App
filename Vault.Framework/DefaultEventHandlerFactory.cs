@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Vault.Shared.Events;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Vault.Shared.EventSourcing;
 
 namespace Vault.Framework
 {
@@ -27,7 +27,7 @@ namespace Vault.Framework
             {
                 return (IEnumerable<IHandle>)_serviceProvider.GetServices(typeof(IHandle<>).MakeGenericType(@event.GetType())) ?? Enumerable.Empty<IHandle>();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogCritical(ex.Message);
                 throw;

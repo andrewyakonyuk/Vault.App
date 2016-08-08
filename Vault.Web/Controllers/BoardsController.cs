@@ -1,5 +1,8 @@
 ﻿namespace Vault.Web.Controllers
 {
+    using System.ComponentModel.DataAnnotations;
+    using System.Linq;
+    using System.Threading.Tasks;
     using Framework;
     using Framework.Api.Boards;
     using Framework.Mvc;
@@ -8,10 +11,6 @@
     using Models.Boards;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
-    using Shared.NEventStore;
-    using System.ComponentModel.DataAnnotations;
-    using System.Linq;
-    using System.Threading.Tasks;
 
     [Authorize]
     public class BoardsController : Controller
