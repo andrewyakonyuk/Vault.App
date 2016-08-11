@@ -14,7 +14,7 @@
 
   "dependencies": {
     "Vault.Shared": "1.0.0-*",
-    "Vault.Domain": "1.0.0-*",
+    "Vault.Activity": "1.0.0-*",
     "Vault.Shared.EventSourcing.NEventStore": "1.0.0-*",
     "Vault.Shared.EventSourcing": "1.0.0-*",
     "Vault.Shared.TransientFaultHandling": "1.0.0-*",

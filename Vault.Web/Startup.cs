@@ -26,6 +26,7 @@ using NHibernate.Cfg;
 using NHibernate.Context;
 using NHibernate.Tool.hbm2ddl;
 using Npgsql;
+using Vault.Activity;
 using Vault.Framework;
 using Vault.Framework.Api.Boards.Overrides;
 using Vault.Framework.Api.Users;
@@ -112,6 +113,8 @@ namespace Vault.Web
             services.AddTransient<IEventedUnitOfWorkFactory, EventedUnitOfWorkFactory>();
             services.AddTransient<IEventsRebuilder, EventsRebuilder>();
             services.AddSingleton<IEventStoreInitializer, NEventStoreWithCustomPipelineFactory>();
+
+            services.AddSingleton<IResourceKeyMapper, InMemoryResourceKeyMapper>();
 
             services.AddSingleton<IConfiguration>(s => Configuration);
 

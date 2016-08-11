@@ -1,0 +1,21 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "Vault.Activity",
+  "authors": [ "Andrew Yakonyuk" ],
+
+  "packOptions": {
+    "projectUrl": "https://github.com/andrewyakonyuk/Vault.App/"
+  },
+
+  "frameworks": {
+    "net451": { }
+  },
+
+  "dependencies": {
+    "Vault.Shared": "1.0.0-*",
+    "Vault.Shared.EventSourcing": "1.0.0-*",
+    "Vault.Shared.EventSourcing.NEventStore": "1.0.0-*",
+    "Vault.Shared.TransientFaultHandling": "1.0.0-*",
+    "NEventStore": "5.2.0"
+  }
+}

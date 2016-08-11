@@ -14,7 +14,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 using Quartz.Impl;
-using Vault.Domain.Activities;
 using Vault.Framework.Api.Boards;
 using Vault.Framework.Search.Parsing;
 using Vault.Framework.Security;
@@ -292,43 +291,6 @@ namespace Vault.Framework
               .Build();
 
             _scheduler.ScheduleJob(job, trigger);
-
-            return Task.FromResult(true);
-        }
-    }
-
-    public class ReadActivityHandler : IHandle<ReadActivity>
-    {
-        readonly IReportUnitOfWorkFactory _reportUnitOfWorkFactory;
-        static Random random = new Random();
-
-        public ReadActivityHandler(IReportUnitOfWorkFactory reportUnitOfWorkFactory)
-        {
-            _reportUnitOfWorkFactory = reportUnitOfWorkFactory;
-        }
-
-        public Task HandleAsync(ReadActivity @event)
-        {
-            using (var unitOfWork = _reportUnitOfWorkFactory.Create())
-            {
-                dynamic searchDocument = new SearchDocument();
-
-                searchDocument.Id = random.Next(int.MaxValue);
-                searchDocument.OwnerId = @event.OwnerId;
-                searchDocument.Published = DateTime.UtcNow;
-                searchDocument.DocumentType = "Article";
-                searchDocument.Url = @event.Affected.Url;
-
-                searchDocument.Name = @event.Affected.Name;
-                searchDocument.Description = @event.Affected.Description;
-                searchDocument.Body = @event.Affected.Description;
-                searchDocument.Summary = @event.Affected.Description;
-                if (@event.Affected.Image != null)
-                    searchDocument.Thumbnail = @event.Affected.Image.Url;
-
-                unitOfWork.Save(searchDocument);
-                unitOfWork.Commit();
-            }
 
             return Task.FromResult(true);
         }

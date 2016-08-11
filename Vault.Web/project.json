@@ -51,7 +51,7 @@
     "NHibernate": "4.0.3.4000",
     "Npgsql": "3.0.5",
     "Quartz": "2.3.3",
-    "Vault.Domain": "1.0.0-*",
+    "Vault.Activity": "1.0.0-*",
     "Vault.Framework": "1.0.0-*",
     "Vault.Shared": "1.0.0-*",
     "Vault.Shared.Authentication.Pocket": "1.0.0-*",

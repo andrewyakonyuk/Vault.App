@@ -3,32 +3,32 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Vault.Domain.Activities;
+using Vault.Activity.Commands;
 
 namespace Vault.Shared.Connectors
 {
-    public class PullConnectionResult : IEnumerable<Activity>
+    public class PullConnectionResult : IEnumerable<ActivityCommandBase>
     {
-        readonly List<Activity> _activities;
+        readonly List<ActivityCommandBase> _activities;
 
         public readonly static PullConnectionResult Empty = new PullConnectionResult { IsCancellationRequested = true };
 
         public bool IsCancellationRequested { get; set; }
 
-        public PullConnectionResult(IEnumerable<Activity> activities)
+        public PullConnectionResult(IEnumerable<ActivityCommandBase> activities)
         {
             if (activities == null)
                 throw new ArgumentNullException(nameof(activities));
 
-            _activities = new List<Activity>(activities);
+            _activities = new List<ActivityCommandBase>(activities);
         }
 
         public PullConnectionResult()
         {
-            _activities = new List<Activity>();
+            _activities = new List<ActivityCommandBase>();
         }
 
-        public IEnumerator<Activity> GetEnumerator()
+        public IEnumerator<ActivityCommandBase> GetEnumerator()
         {
             return _activities.GetEnumerator();
         }

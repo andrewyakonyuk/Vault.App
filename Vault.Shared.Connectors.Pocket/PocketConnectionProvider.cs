@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Vault.Domain.Activities;
-using Vault.Domain.Models;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using Vault.Activity;
+using Vault.Activity.Commands;
+using Vault.Activity.Resources;
 
 namespace Vault.Shared.Connectors.Pocket
 {
@@ -62,51 +63,32 @@ namespace Vault.Shared.Connectors.Pocket
             var parsedResponse = JsonConvert.DeserializeObject<Retrieve>(json, new JsonSerializerSettings
             {
                 Converters =
-                    {
-                        new PocketItemConverter(),
-                        new BoolConverter(),
-                        new UnixDateTimeConverter(),
-                        new NullableIntConverter(),
-                        new UriConverter()
-                    }
+                {
+                    new PocketItemConverter(),
+                    new BoolConverter(),
+                    new UnixDateTimeConverter(),
+                    new NullableIntConverter(),
+                    new UriConverter()
+                }
             });
 
-            var activities = new List<Activity>(parsedResponse.Items.Count);
+            var activities = new List<ActivityCommandBase>(parsedResponse.Items.Count * 2);
 
             foreach (var parsedItem in parsedResponse.Items)
             {
-                var article = new Article
+                var key = new ResourceKey(parsedItem.ResolvedId, Name, context.User.Id);
+                var published = DateTimeOffset.UtcNow;
+                var article = new ArticleResource
                 {
-                    AdditionalType = "Pocket",
-                    Summary = parsedItem.Excerpt,
-                    Description = parsedItem.Excerpt,
-                    Name = parsedItem.Title,
-                    Url = parsedItem.Uri
+                    Uri = new Uri(parsedItem.Uri, UriKind.Absolute)
                 };
 
-                if (parsedItem.Image != null)
-                {
-                    article.Image = new Image
-                    {
-                        Caption = parsedItem.Image.Caption,
-                        Height = parsedItem.Image.Height,
-                        Width = parsedItem.Image.Width,
-                        Url = parsedItem.Image.Src
-                    };
-                }
+                activities.Add(new ReadActivityCommand<ArticleResource>(article, key,
+                    published));
 
-                activities.Add(new ReadActivity
-                {
-                    Affected = article,
-                    Status = ActionStatusType.Completed,
-                    Target = new EntryPoint
-                    {
-                        ActionPlatform = "Pocket",
-                        ContentType = "text/html",
-                        HttpMethod = HttpMethod.Get.Method,
-                        UrlTemplate = $"https://getpocket.com/a/read/{parsedItem.ItemId}"
-                    }
-                });
+                if (parsedItem.IsFavorite)
+                    activities.Add(new LikeActivityCommand<ArticleResource>(key, published));
+                else activities.Add(new DislikeActivityCommand<ArticleResource>(key, published));
             }
 
             return new PullConnectionResult(activities) { IsCancellationRequested = parsedResponse.Items.Count == 0 };

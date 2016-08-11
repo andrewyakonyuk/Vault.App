@@ -18,7 +18,7 @@
     "Microsoft.Extensions.Options": "1.0.0-rc2-final",
     "Microsoft.Net.Http": "2.2.29",
     "Newtonsoft.Json": "8.0.3",
-    "Vault.Domain": "1.0.0-*",
+    "Vault.Activity": "1.0.0-*",
     "Vault.Shared": "1.0.0-*",
     "Vault.Shared.Connectors": "1.0.0-*"
   }

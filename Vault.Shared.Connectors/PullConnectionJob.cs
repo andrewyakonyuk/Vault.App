@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Quartz;
+using Vault.Shared.Commands;
 using Vault.Shared.EventSourcing;
 using Vault.Shared.TransientFaultHandling;
 
@@ -15,7 +16,7 @@ namespace Vault.Shared.Connectors
     {
         readonly IDictionary<string, IPullConnectionProvider> _pullProviders;
         readonly CancellationTokenSource _tokenSource;
-        readonly IEventedUnitOfWorkFactory _eventedUnitOfWorkFactory;
+        readonly ICommandBuilder _commandBuilder;
         readonly ILogger<PullConnectionJob> _logger;
 
         public string ProviderName { get; set; }
@@ -25,11 +26,11 @@ namespace Vault.Shared.Connectors
 
         public PullConnectionJob(
             IEnumerable<IPullConnectionProvider> pullProviders,
-            IEventedUnitOfWorkFactory eventedUnitOfWorkFactory,
+            ICommandBuilder commandBuilder,
             ILogger<PullConnectionJob> logger)
         {
             _pullProviders = pullProviders.ToDictionary(t => t.Name);
-            _eventedUnitOfWorkFactory = eventedUnitOfWorkFactory;
+            _commandBuilder = commandBuilder;
             _logger = logger;
             _tokenSource = new CancellationTokenSource();
         }
@@ -48,7 +49,7 @@ namespace Vault.Shared.Connectors
             var retryStrategy = new Incremental(5, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(5));
             var retryPolicy = new RetryPolicy<PullConnectionErrorDetectionStrategy>(retryStrategy);
 
-            var connectionContext = new PullConnectionContext(new UserInfo(ProviderKey), _tokenSource.Token)
+            var connectionContext = new PullConnectionContext(new UserInfo(ProviderKey, OwnerId), _tokenSource.Token)
             {
                 LastRunTimeUtc = context.PreviousFireTimeUtc,
                 Iteration = Iteration,
@@ -61,7 +62,10 @@ namespace Vault.Shared.Connectors
                 {
                     var result = await retryPolicy.ExecuteAsync(() => provider.PullAsync(connectionContext), _tokenSource.Token);
 
-                    SaveConnectionResult(result);
+                    foreach (var command in result)
+                    {
+                        _commandBuilder.Execute((dynamic)command);
+                    }
 
                     if (result.IsCancellationRequested)
                     {
@@ -84,26 +88,6 @@ namespace Vault.Shared.Connectors
                     + $"connection for user '{ProviderKey}' on '{connectionContext?.Iteration}'. ";
                 _logger.LogCritical(message);
                 throw new JobExecutionException(message, ex);
-            }
-        }
-
-        void SaveConnectionResult(PullConnectionResult result)
-        {
-            foreach (var batch in result.Batch(10))
-            {
-                using (var unitOfWork = _eventedUnitOfWorkFactory.Create())
-                {
-                    var stream = unitOfWork.GetStream("activity-" + OwnerId);
-
-                    foreach (var item in batch)
-                    {
-                        item.OwnerId = OwnerId;
-                        stream.Add(item);
-                    }
-
-                    unitOfWork.Save(stream);
-                    unitOfWork.Commit();
-                }
             }
         }
 
