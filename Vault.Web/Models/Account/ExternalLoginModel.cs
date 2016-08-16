@@ -11,5 +11,6 @@ namespace Vault.Web.Models.Account
         public string DisplayName { get; set; }
         public bool HasLogin { get; set; }
         public bool IsValid { get; set; }
+        public int? ExternalLoginId { get; set; }
     }
 }

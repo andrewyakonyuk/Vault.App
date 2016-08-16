@@ -1418,6 +1418,9 @@ a.btn {
 .btn-primary {
   color: #fff !important;
 }
+.btn-default {
+  border: 1px solid #cccccc;
+}
 .btn-info {
   border-color: #12b4b1;
   border-width: 3px;
@@ -1467,6 +1470,8 @@ fieldset[disabled] .btn-link {
 }
 .btn-action {
   color: #B61F56;
+  border-width: 0;
+  border-color: #B61F56;
 }
 .btn-favorite {
   cursor: pointer;
@@ -1562,7 +1567,7 @@ input[type="checkbox"] {
 }
 @media (min-width: 768px) {
   .form-horizontal .control-label {
-    text-align: right;
+    text-align: left;
     margin-bottom: 0;
     padding-top: 7px;
   }
@@ -2417,6 +2422,65 @@ body .ui-tooltip {
 }
 .dropdown-menu .btn {
   font-size: inherit;
+}
+.content-main {
+  background-color: #fff;
+}
+.content-main ~ .content-main {
+  margin: 15px 0 auto;
+}
+.content-main blockquote,
+.content-main dl,
+.content-main dd,
+.content-main h1,
+.content-main h2,
+.content-main h3,
+.content-main h4,
+.content-main h5,
+.content-main h6,
+.content-main figure,
+.content-main p,
+.content-main pre {
+  margin: 0;
+}
+.content-main .subheader {
+  color: #8899a6;
+  margin-top: 3px;
+}
+.content-main .content-header,
+.content-main .content-no-header {
+  border-bottom-width: 0;
+  border-radius: 6px 6px 0 0;
+  background-clip: padding-box;
+}
+.content-main .content-header {
+  border-bottom-width: 0;
+}
+.content-main .content-header .header-inner,
+.content-main .content-no-header .no-header-inner {
+  min-height: 20px;
+  padding: 15px;
+  border-bottom: 1px solid #e1e8ed;
+  border-radius: 4px 4px 0 0;
+}
+.content-main .content-inner {
+  padding: 15px;
+  border-radius: 0 0 6px 6px;
+}
+.content-main .section-header {
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #292f33;
+}
+.content-main hr {
+  border: 0;
+  border-top: 1px solid #eee;
+  height: 0;
+  margin: 14px 0 0;
+  padding: 0;
+}
+.content-main .content-inner hr {
+  margin: 20px -12px;
 }
 /*
  * Globals

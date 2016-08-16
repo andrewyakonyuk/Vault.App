@@ -34,6 +34,10 @@ a.btn {
     color: #fff !important;
 }
 
+.btn-default {
+    border: 1px solid #cccccc;
+}
+
 .btn-info {
     border-color: #12b4b1;
     border-width: 3px;
@@ -71,30 +75,32 @@ a.btn {
     border-radius: 0;
 }
 
-.btn-link,
-.btn-link.active,
-.btn-link:active,
-.btn-link[disabled],
-fieldset[disabled] .btn-link {
-    background-color: transparent;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-}
+    .btn-link,
+    .btn-link.active,
+    .btn-link:active,
+    .btn-link[disabled],
+    fieldset[disabled] .btn-link {
+        background-color: transparent;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
 
-.btn-link,
-.btn-link:active,
-.btn-link:focus,
-.btn-link:hover {
-    border-color: transparent;
-}
+        .btn-link,
+        .btn-link:active,
+        .btn-link:focus,
+        .btn-link:hover {
+            border-color: transparent;
+        }
 
 .btn-action {
     color: #B61F56;
+    border-width: 0;
+    border-color: #B61F56;
 }
 
 .btn-favorite {
     cursor: pointer;
-    
+
     .icon {
         cursor: pointer;
         stroke: #303e49;
@@ -113,7 +119,6 @@ fieldset[disabled] .btn-link {
         .icon {
             stroke: #ffab40;
             fill: #ffab40;
-            
             transition: fill ease-in 75ms;
         }
     }

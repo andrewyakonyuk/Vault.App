@@ -28,27 +28,48 @@
 </header>
 <div class="app-main-section-wrapper draw-pusher">
     <div class="app-main-section">
-        <div class="card-section">
-            <h4>Add a login to your account.</h4>
-            <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" role="form">
-                <ul>
-                    @foreach (var login in Model.Logins)
+        <div class="content-main">
+            <div class="content-header">
+                <div class="header-inner">
+                    <h2>Manage logins</h2>
+                    <p class="subheader">You can add multiple logins to your account.</p>
+                </div>
+            </div>
+            <div class="content-inner">
+                <div class="form-horizontal">
+                    @foreach (var login in Model.Logins.OrderByDescending(t => t.HasLogin).ThenBy(t => t.AuthenticationScheme))
                     {
-                        <li>
-                            <button type="submit"
-                                    class="btn btn-default btn-icon @(login.HasLogin ? "has-login" : null)"
-                                    @(login.HasLogin ? "disabled" : null)
-                                    name="provider" value="@login.AuthenticationScheme"
-                                    title="Connect your @login.DisplayName account">
-                                <svg style="width: 22px; height: 22px;" class="icon">
-                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-share"></use>
-                                </svg>
-                                @login.AuthenticationScheme
-                            </button>
-                        </li>
+                        <div class="form-group">
+                            <div class="col-md-9 control-label">
+                                <b>@login.AuthenticationScheme</b>
+                                <div class="subheader">
+                                    login summary
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @if (login.HasLogin)
+                                {
+                                    <form asp-controller="Account" asp-action="RemoveExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" role="form">
+                                        <button type="submit" name="externalLoginId" value="@login.ExternalLoginId" class="btn btn-action btn-default form-control">
+                                            <svg class="icon"><use xlink:href="#icon-plus"></use></svg>
+                                            Disconnect
+                                        </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" role="form">
+                                        <button type="submit" name="provider" value="@login.AuthenticationScheme" class="btn btn-default form-control">
+                                            <svg class="icon"><use xlink:href="#icon-plus"></use></svg>
+                                            Connect
+                                        </button>
+                                    </form>
+                                }
+                            </div>
+                        </div>
                     }
-                </ul>
-            </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -14,6 +14,8 @@ using Vault.Web.Models.Account;
 namespace Vault.Web.Controllers
 {
     using Framework;
+    using Quartz;
+    using Shared.EventSourcing;
     using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
     [Authorize]
@@ -24,19 +26,22 @@ namespace Vault.Web.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly IWorkContextAccessor _workContextAccessor;
+        private readonly IEventPublisher _eventPublisher;
 
         public AccountController(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            IWorkContextAccessor workContextAccessor)
+            IWorkContextAccessor workContextAccessor,
+            IEventPublisher eventPublisher)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _workContextAccessor = workContextAccessor;
+            _eventPublisher = eventPublisher;
         }
 
         [AllowAnonymous]
@@ -152,11 +157,14 @@ namespace Vault.Web.Controllers
 
             foreach (var item in HttpContext.Authentication.GetAuthenticationSchemes())
             {
+                var userLogin = user.Logins.FirstOrDefault(t => string.Equals(t.LoginProvider, item.AuthenticationScheme, StringComparison.OrdinalIgnoreCase));
+
                 model.Logins.Add(new ExternalLoginModel
                 {
                     AuthenticationScheme = item.AuthenticationScheme,
                     DisplayName = item.DisplayName,
-                    HasLogin = user.Logins.Any(t => string.Equals(t.LoginProvider, item.AuthenticationScheme, StringComparison.OrdinalIgnoreCase))
+                    HasLogin = userLogin != null,
+                    ExternalLoginId = userLogin?.Id
                 });
             }
 
@@ -203,10 +211,15 @@ namespace Vault.Web.Controllers
                 var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
                 if (user != null)
                 {
-                    await _userManager.AddLoginAsync(user, info);
-                    if (Url.IsLocalUrl(returnUrl))
-                        return LocalRedirect(returnUrl);
-                    return RedirectToAction(nameof(AccountController.Index), "Account");
+                    var loginResult = await _userManager.AddLoginAsync(user, info);
+                    if (loginResult.Succeeded)
+                    {
+                        var userByLogin = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
+                        await _eventPublisher.EntityCreated(userByLogin.Logins.First(t => t.LoginProvider == info.LoginProvider && t.ProviderKey == info.ProviderKey));
+                        if (Url.IsLocalUrl(returnUrl))
+                            return LocalRedirect(returnUrl);
+                        return RedirectToAction(nameof(AccountController.Index), "Account");
+                    }
                 }
             }
 
@@ -215,6 +228,23 @@ namespace Vault.Web.Controllers
             ViewData["LoginProvider"] = info.LoginProvider;
             var email = info.Principal.FindFirstValue(ClaimTypes.Email);
             return View("ExternalLoginConfirmation", new ExternalLoginConfirmationModel { Email = email });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveExternalLogin(int externalLoginId)
+        {
+            var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+            if (user != null)
+            {
+                var userLogin = user.Logins.FirstOrDefault(t => t.Id == externalLoginId);
+                if (userLogin != null)
+                {
+                    await _userManager.RemoveLoginAsync(user, userLogin.LoginProvider, userLogin.ProviderKey);
+                    await _eventPublisher.EntityDeleted(userLogin);
+                }
+            }
+
+            return RedirectToAction(nameof(AccountController.Index));
         }
 
         [HttpPost]
