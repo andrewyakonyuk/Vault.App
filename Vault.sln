@@ -37,8 +37,6 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Vault.Shared.EventSourcing.
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Vault.Activity", "Vault.Activity\Vault.Activity.xproj", "{40E8E113-173B-48A2-9FF6-605CE957FEA0}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Vault.Domain", "Vault.Domain\Vault.Domain.xproj", "{74684A75-F8FA-43FB-9672-DB0B54958CF0}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,10 +99,6 @@ Global
 		{40E8E113-173B-48A2-9FF6-605CE957FEA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40E8E113-173B-48A2-9FF6-605CE957FEA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40E8E113-173B-48A2-9FF6-605CE957FEA0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{74684A75-F8FA-43FB-9672-DB0B54958CF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{74684A75-F8FA-43FB-9672-DB0B54958CF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{74684A75-F8FA-43FB-9672-DB0B54958CF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{74684A75-F8FA-43FB-9672-DB0B54958CF0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
