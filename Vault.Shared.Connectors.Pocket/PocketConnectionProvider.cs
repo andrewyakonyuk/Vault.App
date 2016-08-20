@@ -76,7 +76,7 @@ namespace Vault.Shared.Connectors.Pocket
 
             foreach (var parsedItem in parsedResponse.Items)
             {
-                var key = new ResourceKey(parsedItem.ResolvedId, Name, context.User.Id);
+                var key = new ResourceKey(parsedItem.ResolvedId, ResourceTypes.Article, Name, context.User.Id);
                 var published = DateTimeOffset.UtcNow;
                 var article = new ArticleResource
                 {
