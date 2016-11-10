@@ -98,7 +98,6 @@ namespace Vault.Shared.EventSourcing.NEventStore
             try
             {
                 result = (T)GetSerializer(type).Deserialize(reader, type);
-                System.Diagnostics.Debug.WriteLine(traceWriter);
             }
             finally
             {
