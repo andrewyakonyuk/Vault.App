@@ -1,8 +1,8 @@
-﻿using Lucene.Net.Index;
-using Lucene.Net.Search;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Lucene.Net.Index;
+using Lucene.Net.Search;
 using Vault.Shared.Domain;
 
 namespace Vault.Shared.Search.Lucene
@@ -91,7 +91,6 @@ namespace Vault.Shared.Search.Lucene
                 var convertedValue = descriptor.Converter.ConvertToString(document[descriptor.Name]).ToLower();
                 var term = new Term(descriptor.FieldName, convertedValue);
                 conditionForDelete.Add(new TermQuery(term), Occur.MUST);
-                break;
             }
 
             try
