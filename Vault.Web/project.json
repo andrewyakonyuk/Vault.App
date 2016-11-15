@@ -55,7 +55,6 @@
     "Vault.Framework": "1.0.0-*",
     "Vault.Shared": "1.0.0-*",
     "Vault.Shared.Authentication.Pocket": "1.0.0-*",
-    "Vault.Shared.Connectors": "1.0.0-*",
     "Vault.Shared.Connectors.Pocket": "1.0.0-*",
     "Vault.Shared.Identity": "1.0.0-*",
     "Vault.Shared.EventSourcing": "1.0.0-*",
@@ -63,7 +62,11 @@
     "Vault.Shared.NHibernate": "1.0.0-*",
     "Vault.Shared.Search": "1.0.0-*",
     "Vault.Shared.Search.Lucene": "1.0.0-*",
-    "Vault.Shared.TransientFaultHandling": "1.0.0-*"
+    "Vault.Shared.TransientFaultHandling": "1.0.0-*",
+    "Microsoft.Orleans.OrleansRuntime": "1.3.0",
+    "Microsoft.Orleans.Server": "1.3.0",
+    "Microsoft.Orleans.OrleansProviders": "1.3.0",
+    "Microsoft.Orleans.OrleansCodeGenerator.Build": "1.3.0"
   },
 
   "commands": {

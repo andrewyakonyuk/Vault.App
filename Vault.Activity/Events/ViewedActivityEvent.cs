@@ -24,6 +24,7 @@ namespace Vault.Activity.Events
     /// <summary>
     /// The act of consuming static visual content.
     /// </summary>
+    [Serializable]
     public class ViewedActivityEvent<TResource> : ViewedActivityEvent, IHasResource<TResource>
         where TResource : ICanBeViewed
     {

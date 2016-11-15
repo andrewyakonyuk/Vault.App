@@ -13,6 +13,7 @@ namespace Vault.Activity.Commands
         }
     }
 
+    [Serializable]
     public class ViewActivityCommand<TResource> : ViewActivityCommand, IHasResource<TResource>
        where TResource : ICanBeViewed
     {

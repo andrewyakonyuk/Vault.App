@@ -21,7 +21,7 @@ namespace Vault.Shared.EventSourcing.NEventStore
 
         public Guid Id { get; protected set; }
 
-        public int Version { get; protected set; }
+        public int Version { get; internal set; }
 
         public virtual bool Equals(IAggregate other)
         {

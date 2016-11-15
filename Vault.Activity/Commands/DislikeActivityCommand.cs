@@ -13,6 +13,7 @@ namespace Vault.Activity.Commands
         }
     }
 
+    [Serializable]
     public class DislikeActivityCommand<TResource> : DislikeActivityCommand, IHasResource<TResource>
         where TResource : ICanBeLiked
     {

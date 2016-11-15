@@ -54,11 +54,28 @@ namespace Vault.Shared.EventSourcing.NEventStore
                 throw new ArgumentNullException("eventMessage");
             }
             Action<object> handler;
-            if (this._handlers.TryGetValue(eventMessage.GetType(), out handler))
+            var eventType = eventMessage.GetType();
+
+            do
             {
-                handler(eventMessage);
-                return;
+                if (this._handlers.TryGetValue(eventType, out handler))
+                {
+                    handler(eventMessage);
+                    return;
+                }
+                eventType = eventType.BaseType;
+            } while (eventType != typeof(object));
+
+            eventType = eventMessage.GetType();
+            foreach (var item in _handlers.Keys)
+            {
+                if (item.IsAssignableFrom(eventType))
+                {
+                    _handlers[item](eventMessage);
+                    return;
+                }
             }
+
             if (this._throwOnApplyNotFound)
             {
                 throw new InvalidOperationException();
@@ -71,10 +88,7 @@ namespace Vault.Shared.EventSourcing.NEventStore
             {
                 throw new ArgumentNullException("handler");
             }
-            this.Register(typeof(T), delegate (object @event)
-            {
-                handler((T)((object)@event));
-            });
+            this.Register(typeof(T), @event => handler((T)@event));
         }
 
         private void Register(Type messageType, Action<object> handler)

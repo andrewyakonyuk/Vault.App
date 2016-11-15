@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Vault.Activity;
 using Vault.Activity.Commands;
 using Vault.Activity.Resources;
+using Vault.Activity.Services.Connectors;
 
 namespace Vault.Shared.Connectors.Pocket
 {
@@ -32,11 +33,8 @@ namespace Vault.Shared.Connectors.Pocket
 
         public string Name { get { return "Pocket"; } }
 
-        public async Task<PullConnectionResult> PullAsync(PullConnectionContext context)
+        public async Task<PullResult> PullAsync(PullConnectionContext context)
         {
-            if (context.CancellationToken.IsCancellationRequested)
-                return PullConnectionResult.Empty;
-
             var queryBuilder = new QueryBuilder();
             queryBuilder.Add("consumer_key", _options.ConsumerKey);
             queryBuilder.Add("access_token", context.User.AccessCode);
@@ -44,18 +42,18 @@ namespace Vault.Shared.Connectors.Pocket
             queryBuilder.Add("detailType", "complete");
             queryBuilder.Add("contentType", "article"); //todo: hardcode
             queryBuilder.Add("sort", "oldest");
-            var offset = DefaultCount * context.Iteration;
+            var offset = DefaultCount * context.Batch;
             queryBuilder.Add("offset", offset.ToString());
 
-            if (context.LastRunTimeUtc.HasValue)
+            if (context.LastFetchTimeUtc.HasValue)
             {
-                var unixTime = (int)Math.Truncate(context.LastRunTimeUtc.Value.Subtract(Epoc).TotalSeconds);
+                var unixTime = (int)Math.Truncate(context.LastFetchTimeUtc.Value.Subtract(Epoc).TotalSeconds);
                 queryBuilder.Add("since", unixTime.ToString());
             }
 
             var request = new HttpRequestMessage(HttpMethod.Get, PocketDataEndpoint + queryBuilder.ToString());
 
-            var response = await _httpClient.SendAsync(request, context.CancellationToken);
+            var response = await _httpClient.SendAsync(request);
             response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();
@@ -91,7 +89,7 @@ namespace Vault.Shared.Connectors.Pocket
                 else activities.Add(new DislikeActivityCommand<ArticleResource>(key, published));
             }
 
-            return new PullConnectionResult(activities) { IsCancellationRequested = parsedResponse.Items.Count == 0 };
+            return new PullResult(activities, context.Batch) { IsCancellationRequested = parsedResponse.Items.Count == 0 };
         }
     }
 }

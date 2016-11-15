@@ -18,6 +18,7 @@ namespace Vault.Activity.Events
         }
     }
 
+    [Serializable]
     public class DislikedActivityEvent<TResource> : DislikedActivityEvent, IHasResource<TResource>
         where TResource : ICanBeLiked
     {
@@ -32,13 +33,6 @@ namespace Vault.Activity.Events
             : base(id, itemKey, published)
         {
             Resource = resource;
-        }
-
-        public DislikedActivityEvent(Guid id,
-            ResourceKey itemKey,
-            DateTimeOffset published)
-            : this(id, default(TResource), itemKey, published)
-        {
         }
 
         public TResource Resource { get; protected set; }

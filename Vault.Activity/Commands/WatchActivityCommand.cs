@@ -13,6 +13,7 @@ namespace Vault.Activity.Commands
         }
     }
 
+    [Serializable]
     public class WatchActivityCommand<TResource> : WatchActivityCommand, IHasResource<TResource>
       where TResource : ICanBeWatched
     {

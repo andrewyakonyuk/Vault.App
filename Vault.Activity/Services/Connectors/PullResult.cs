@@ -5,28 +5,33 @@ using System.Linq;
 using System.Threading.Tasks;
 using Vault.Activity.Commands;
 
-namespace Vault.Shared.Connectors
+namespace Vault.Activity.Services.Connectors
 {
-    public class PullConnectionResult : IEnumerable<ActivityCommandBase>
+    public class PullResult : IEnumerable<ActivityCommandBase>
     {
         readonly List<ActivityCommandBase> _activities;
 
-        public readonly static PullConnectionResult Empty = new PullConnectionResult { IsCancellationRequested = true };
+        public readonly static PullResult Empty = new PullResult { IsCancellationRequested = true };
 
         public bool IsCancellationRequested { get; set; }
 
-        public PullConnectionResult(IEnumerable<ActivityCommandBase> activities)
+        public int Iteration { get; }
+
+        public PullResult(IEnumerable<ActivityCommandBase> activities, int iteration)
         {
             if (activities == null)
                 throw new ArgumentNullException(nameof(activities));
 
             _activities = new List<ActivityCommandBase>(activities);
+            Iteration = iteration;
         }
 
-        public PullConnectionResult()
+        public PullResult()
         {
             _activities = new List<ActivityCommandBase>();
         }
+
+        public int Count { get { return _activities.Count; } }
 
         public IEnumerator<ActivityCommandBase> GetEnumerator()
         {

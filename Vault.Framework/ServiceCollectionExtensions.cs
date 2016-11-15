@@ -18,7 +18,6 @@ using Vault.Framework.Api.Boards;
 using Vault.Framework.Search.Parsing;
 using Vault.Framework.Security;
 using Vault.Shared.Commands;
-using Vault.Shared.Connectors;
 using Vault.Shared.EventSourcing;
 using Vault.Shared.Identity;
 using Vault.Shared.Queries;
@@ -117,7 +116,7 @@ namespace Vault.Framework
         {
             services.AddTransient<ISearchProvider, LuceneSearchProvider>();
             services.AddSingleton<ISearchResultTransformer, DefaultSearchResultTransformer>();
-            services.AddTransient<IReportUnitOfWorkFactory>(s =>
+            services.AddSingleton<IReportUnitOfWorkFactory>(s =>
                 new DefaultReportUnitOfWorkFactory(
                     new LuceneUnitOfWorkFactory(
                         s.GetRequiredService<IIndexWriterAccessor>(),
@@ -128,10 +127,12 @@ namespace Vault.Framework
             services.AddSingleton<IIndexWriterAccessor, DefaultIndexWriterAccessor>();
 
             var builder = new FluentDescriptorProviderBuilder()
-                .Field("Id", "_id", isKey: true, converter: new Int32Converter())
+                .Field("Id", "_id", converter: new Int32Converter())
                 .Field("OwnerId", "_ownerId", isKey: true, converter: new Int32Converter())
-                .Field("Published", "_published", converter: new LuceneDateTimeConverter())
+                .Field("ResourceId", isKey: true)
+                .Field("ServiceName", isKey: true)
                 .Field("DocumentType", "_documentType", isKey: true, isAnalysed: true)
+                .Field("Published", "_published", converter: new LuceneDateTimeConverter())
                 .Field("StartDate", converter: new LuceneDateTimeConverter())
                 .Field("EndDate", converter: new LuceneDateTimeConverter())
                 .Field("Duration", converter: new TimeSpanConverter())
@@ -162,8 +163,6 @@ namespace Vault.Framework
                 scheduler.Start();
                 return scheduler;
             });
-
-            services.AddTransient<PullConnectionJob>();
         }
     }
 
@@ -261,38 +260,6 @@ namespace Vault.Framework
                     await handler.HandleAsync(@event);
                 }
             }
-        }
-    }
-
-    public class NewUserLoginHandler : IHandle<EntityCreated<IdentityUserLogin>>
-    {
-        IScheduler _scheduler;
-
-        public NewUserLoginHandler(
-            IScheduler scheduler)
-        {
-            _scheduler = scheduler;
-        }
-
-        public Task HandleAsync(EntityCreated<IdentityUserLogin> @event)
-        {
-            var login = @event.Entity;
-
-            IJobDetail job = JobBuilder.Create<PullConnectionJob>()
-                .WithIdentity(login.ProviderKey, login.LoginProvider)
-                .UsingJobData("providerKey", login.ProviderKey)
-                .UsingJobData("providerName", login.LoginProvider)
-                .UsingJobData("ownerId", login.User.Id)
-                .Build();
-
-            ITrigger trigger = TriggerBuilder.Create()
-              .WithIdentity(Guid.NewGuid().ToString(), login.LoginProvider)
-              .StartAt(DateTimeOffset.Now.AddSeconds(5))
-              .Build();
-
-            _scheduler.ScheduleJob(job, trigger);
-
-            return Task.FromResult(true);
         }
     }
 }

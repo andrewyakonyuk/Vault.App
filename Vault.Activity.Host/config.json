@@ -1,0 +1,11 @@
+{
+  "authentication": {
+    "pocket": {
+      "consumerKey": "43647-e6f36b34c2f4e68df9ea8b4b"
+    }
+  },
+  "connectionStrings": {
+    "db": "Server=127.0.01;Port=5432;Database=vault;User Id=postgres;Password=abc123!;Timeout=60",
+    "index": "index"
+  }
+}

@@ -15,7 +15,7 @@ namespace Vault.Activity
             string resourceId,
             string resourceType,
             string serviceName,
-            int ownerId)
+            Guid ownerId)
         {
             if (string.IsNullOrEmpty(resourceId))
                 throw new ArgumentException("Must be not null or empty", nameof(resourceId));
@@ -23,7 +23,7 @@ namespace Vault.Activity
                 throw new ArgumentNullException("Must be not null or empty", nameof(resourceType));
             if (string.IsNullOrEmpty(serviceName))
                 throw new ArgumentException("Must be not null or empty", nameof(serviceName));
-            if (ownerId <= 0)
+            if (ownerId == Guid.Empty)
                 throw new ArgumentOutOfRangeException(nameof(ownerId));
 
             ServiceName = serviceName;
@@ -35,7 +35,7 @@ namespace Vault.Activity
         public virtual string ServiceName { get; protected set; }
         public virtual string ResourceType { get; protected set; }
         public string ResourceId { get; protected set; }
-        public int OwnerId { get; protected set; }
+        public Guid OwnerId { get; protected set; }
 
         public override bool Equals(object obj)
         {
@@ -67,7 +67,7 @@ namespace Vault.Activity
 
         public override string ToString()
         {
-            return string.Join("/", OwnerId, ResourceType, ServiceName, ResourceId);
+            return string.Join("/", OwnerId.ToString("N"), ResourceType, ServiceName, ResourceId);
         }
 
         public static explicit operator string(ResourceKey key)

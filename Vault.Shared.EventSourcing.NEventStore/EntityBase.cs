@@ -44,8 +44,14 @@ namespace Vault.Shared.EventSourcing.NEventStore
 
         protected void RaiseEvent(IEvent @event)
         {
-            RegisteredRoutes.Dispatch(@event);
+            ApplyEvent(@event);
             _uncommittedEvents.Add(@event);
+        }
+
+        void ApplyEvent(IEvent @event)
+        {
+            RegisteredRoutes.Dispatch(@event);
+            AggregateRoot.Version++;
         }
 
         void IEventProvider.ClearUncommittedEvents()
@@ -65,7 +71,7 @@ namespace Vault.Shared.EventSourcing.NEventStore
 
             foreach (var item in events)
             {
-                RaiseEvent(item);
+                ApplyEvent(item);
             }
         }
     }

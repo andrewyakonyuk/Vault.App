@@ -24,6 +24,7 @@ namespace Vault.Activity.Events
     /// <summary>
     /// The act of consuming written content.
     /// </summary>
+    [Serializable]
     public class ReadActivityEvent<TResource> : ReadActivityEvent, IHasResource<TResource>
         where TResource : ICanBeRead
     {

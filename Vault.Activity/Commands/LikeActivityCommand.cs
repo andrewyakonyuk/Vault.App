@@ -13,6 +13,7 @@ namespace Vault.Activity.Commands
         }
     }
 
+    [Serializable]
     public class LikeActivityCommand<TResource> : LikeActivityCommand, IHasResource<TResource>
         where TResource : ICanBeLiked
     {

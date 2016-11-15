@@ -3,5 +3,7 @@
     public interface IHasResource<TResource>
     {
         TResource Resource { get; }
+
+        ResourceKey ItemKey { get; }
     }
 }

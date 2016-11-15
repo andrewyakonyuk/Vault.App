@@ -13,6 +13,7 @@ namespace Vault.Activity.Commands
         }
     }
 
+    [Serializable]
     public class ReadActivityCommand<TResource> : ReadActivityCommand, IHasResource<TResource>
         where TResource : ICanBeRead
     {

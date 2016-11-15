@@ -5,28 +5,24 @@ using CommonDomain;
 using CommonDomain.Core;
 using Vault.Activity.Events;
 using Vault.Activity.Resources;
+using Vault.Shared.EventSourcing.NEventStore;
 
-namespace Vault.Activity
+namespace Vault.Activity.Services.ActivityLog
 {
-    public class Article : AggregateBase
+    public class Article : EntityBase
     {
         readonly HashSet<Uri> _urls;
 
-        protected Article(IRouteEvents handler)
-            : base(handler)
-        {
-            _urls = new HashSet<Uri>();
-        }
-
-        protected Article(Guid id)
+        protected Article(Guid id, AggregateRootBase aggregate)
+            : base(aggregate)
         {
             _urls = new HashSet<Uri>();
             Id = id;
         }
 
         public Article(
-            ResourceKey key)
-            : this(Guid.NewGuid())
+            ResourceKey key, AggregateRootBase aggregate)
+            : this(Guid.NewGuid(), aggregate)
         {
             if (key == null)
                 throw new ArgumentNullException(nameof(key));
@@ -52,13 +48,13 @@ namespace Vault.Activity
         public void Like(DateTimeOffset published)
         {
             if (!Liked)
-                RaiseEvent(new LikedActivityEvent<ArticleResource>(Id, ItemKey, published));
+                RaiseEvent(new LikedActivityEvent<ArticleResource>(Id, default(ArticleResource), ItemKey, published));
         }
 
         public void Dislike(DateTimeOffset published)
         {
             if (Liked)
-                RaiseEvent(new DislikedActivityEvent<ArticleResource>(Id, ItemKey, published));
+                RaiseEvent(new DislikedActivityEvent<ArticleResource>(Id, default(ArticleResource), ItemKey, published));
         }
 
         void Apply(ReadActivityEvent<ArticleResource> e)

@@ -2,12 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Serialization;
-using Vault.Shared.EventSourcing;
 
 namespace Vault.Shared.EventSourcing.NEventStore
 {
     public class VersionedEventSerializationBinder : DefaultSerializationBinder
     {
+        readonly Type[] _versionedEventTypes;
+
+        public VersionedEventSerializationBinder()
+        {
+            _versionedEventTypes = GetVersionedEventTypes().ToArray();
+        }
+
         private VersionedEventAttribute GetVersionInformation(Type type)
         {
             return type.GetCustomAttributes(typeof(VersionedEventAttribute), false)
@@ -70,14 +76,12 @@ namespace Vault.Shared.EventSourcing.NEventStore
 
         private bool IsUpversionedEvent(string typeName)
         {
-            return typeName.Contains('|') || GetVersionedEventTypes().Where(x => x.FullName.Equals(typeName)).Any();
+            return typeName.Contains('|') || _versionedEventTypes.Where(x => x.FullName.Equals(typeName)).Any();
         }
 
         private Type GetImplementation(VersionedEventAttribute attribute)
         {
-            var versionedEvents = GetVersionedEventTypes();
-
-            return versionedEvents.Where(x =>
+            return _versionedEventTypes.Where(x =>
             {
                 var attributes = x.GetCustomAttributes(typeof(VersionedEventAttribute), false).Cast<VersionedEventAttribute>();
 

@@ -13,6 +13,7 @@ namespace Vault.Activity.Commands
         }
     }
 
+    [Serializable]
     public class ListenActivityCommand<TResource> : ListenActivityCommand, IHasResource<TResource>
       where TResource : ICanBeListened
     {
