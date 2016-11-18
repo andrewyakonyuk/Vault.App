@@ -17,20 +17,21 @@ using NHibernate.Context;
 using NHibernate.Tool.hbm2ddl;
 using Orleans;
 using Orleans.Runtime;
-using Vault.Framework;
-using Vault.Framework.Api.Boards.Overrides;
-using Vault.Framework.Api.Users;
-using Vault.Framework.Mvc;
-using Vault.Framework.Mvc.Routing;
-using Vault.Framework.Mvc.Routing.Constraints;
-using Vault.Framework.Mvc.Routing.Projections;
 using Vault.Shared.Domain;
 using Vault.Shared.Identity;
 using Vault.Shared.Identity.Overrides;
 using Vault.Shared.NHibernate;
 using Vault.Shared.NHibernate.Conventions;
+using Vault.WebHost.Mvc;
+using Vault.WebHost.Mvc.Routing;
+using Vault.WebHost.Mvc.Routing.Constraints;
+using Vault.WebHost.Mvc.Routing.Projections;
+using Vault.WebHost.Services;
+using Vault.WebHost.Services.Boards;
+using Vault.WebHost.Services.Boards.Overrides;
+using Vault.WebHost.Services.Security;
 
-namespace Vault.Web
+namespace Vault.WebHost
 {
     public class Startup
     {
@@ -68,8 +69,16 @@ namespace Vault.Web
             .AddRoleStore<RoleStore>()
             .AddDefaultTokenProviders();
 
+            services.AddSingleton<IAuthorizationService, DefaultAuthorizationService>();
+            services.AddScoped<IAuthorizer, DefaultAuthorizer>();
+            services.AddScoped<WorkContext, WorkContext>();
+            services.AddSingleton<IWorkContextAccessor, DefaultWorkContextAccessor>();
+
             services.AddTransient<IEmailSender, EmptyMessageSender>();
             services.AddTransient<ISmsSender, EmptyMessageSender>();
+
+            services.AddScoped<IBoardsApi, BoardsApi>();
+
             services.AddSingleton<IUrlHelper, DefaultUrlHelper>();
 
             services.AddSingleton<INHibernateInitializer, NHibernateInitializer>();
@@ -80,7 +89,9 @@ namespace Vault.Web
                 .BuildSessionFactory());
             services.AddScoped<ISessionProvider, PerRequestSessionProvider>();
 
-            services.AddVaultFramework();
+            services.AddQueries();
+            services.AddCommands();
+            services.AddHandles();
 
             services.AddSingleton<Shared.ILogger, Shared.ConsoleLogger>();
 
@@ -129,10 +140,6 @@ namespace Vault.Web
 
             app.UseMvc(routes =>
             {
-                //routes.DefaultHandler = new WorkContextAwareRoute(routes.DefaultHandler,
-                //    routes.ServiceProvider.GetRequiredService<IWorkContextAccessor>(),
-                //    routes.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>());
-
                 routes.MapRoute(
                     name: "boards",
                     template: "{username:regex(^.+$)}/b/",

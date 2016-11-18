@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Vault.Framework.Search.Parsing
+namespace Vault.Shared.Search.Parsing
 {
     public class SearchQueryTokenStream : IEnumerable<SearchQueryToken>
     {

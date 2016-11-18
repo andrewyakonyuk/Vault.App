@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading.Tasks;
-using Vault.Framework.Api.Boards;
-using Vault.Web.Models.Navigation;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Vault.WebHost.Models.Navigation;
+using Vault.WebHost.Services.Boards;
 
-namespace Vault.Web.Components
+namespace Vault.WebHost.Components
 {
     [ViewComponent(Name = "Navigation")]
     public class NavigationComponent : ViewComponent

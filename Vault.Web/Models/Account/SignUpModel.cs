@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Vault.Web.Models.Account
+namespace Vault.WebHost.Models.Account
 {
     public class SignUpModel
     {

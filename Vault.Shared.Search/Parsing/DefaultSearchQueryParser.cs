@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace Vault.Framework.Search.Parsing
+namespace Vault.Shared.Search.Parsing
 {
     public class DefaultSearchQueryParser : ISearchQueryParser
     {

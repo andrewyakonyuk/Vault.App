@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Vault.Shared.Commands;
 
-namespace Vault.Web.Models.Boards
+namespace Vault.WebHost.Models.Boards
 {
     public class CreateBoard : ICommandContext
     {

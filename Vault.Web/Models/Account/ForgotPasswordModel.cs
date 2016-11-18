@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Vault.Web.Models.Account
+namespace Vault.WebHost.Models.Account
 {
     public class ForgotPasswordModel
     {

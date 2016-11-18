@@ -1,16 +1,15 @@
-﻿namespace Vault.Web.Controllers
+﻿namespace Vault.WebHost.Controllers
 {
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Threading.Tasks;
-    using Framework;
-    using Framework.Api.Boards;
-    using Framework.Mvc;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Models.Boards;
+    using Mvc;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
+    using Services.Boards;
 
     [Authorize]
     public class BoardsController : Controller

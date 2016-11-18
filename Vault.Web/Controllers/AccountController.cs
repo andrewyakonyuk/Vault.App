@@ -7,15 +7,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Vault.Framework.Api.Users;
 using Vault.Shared.Identity;
-using Vault.Web.Models.Account;
+using Vault.WebHost.Models.Account;
 
-namespace Vault.Web.Controllers
+namespace Vault.WebHost.Controllers
 {
-    using Framework;
-    using Quartz;
-    using Shared.EventSourcing;
+    using Services;
     using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
     [Authorize]
@@ -26,22 +23,19 @@ namespace Vault.Web.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly IWorkContextAccessor _workContextAccessor;
-        private readonly IEventPublisher _eventPublisher;
 
         public AccountController(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            IWorkContextAccessor workContextAccessor,
-            IEventPublisher eventPublisher)
+            IWorkContextAccessor workContextAccessor)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _workContextAccessor = workContextAccessor;
-            _eventPublisher = eventPublisher;
         }
 
         [AllowAnonymous]
@@ -215,7 +209,6 @@ namespace Vault.Web.Controllers
                     if (loginResult.Succeeded)
                     {
                         var userByLogin = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
-                        await _eventPublisher.EntityCreated(userByLogin.Logins.First(t => t.LoginProvider == info.LoginProvider && t.ProviderKey == info.ProviderKey));
                         if (Url.IsLocalUrl(returnUrl))
                             return LocalRedirect(returnUrl);
                         return RedirectToAction(nameof(AccountController.Index), "Account");
@@ -240,7 +233,6 @@ namespace Vault.Web.Controllers
                 if (userLogin != null)
                 {
                     await _userManager.RemoveLoginAsync(user, userLogin.LoginProvider, userLogin.ProviderKey);
-                    await _eventPublisher.EntityDeleted(userLogin);
                 }
             }
 

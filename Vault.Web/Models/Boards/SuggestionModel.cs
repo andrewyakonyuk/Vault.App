@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Vault.Framework.Api.Boards;
+﻿using Vault.WebHost.Services.Boards;
 
-namespace Vault.Web.Models.Boards
+namespace Vault.WebHost.Models.Boards
 {
     public class SuggestionModel
     {

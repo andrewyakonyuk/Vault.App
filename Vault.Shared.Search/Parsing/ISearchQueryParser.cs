@@ -1,4 +1,4 @@
-﻿namespace Vault.Framework.Search.Parsing
+﻿namespace Vault.Shared.Search.Parsing
 {
     /// <summary>
     /// Advanced search query parser

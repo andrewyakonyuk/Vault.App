@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.Localization;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Localization;
 
-namespace Vault.Web.Models.Navigation
+namespace Vault.WebHost.Models.Navigation
 {
     public class NavigationItem
     {
