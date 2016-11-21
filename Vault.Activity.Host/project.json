@@ -30,6 +30,7 @@
     "Npgsql": "3.0.5",
     "Vault.Activity": "1.0.0-*",
     "Vault.Shared.Connectors.Pocket": "1.0.0-*",
+    "Vault.Shared.EventStreams": "1.0.0-*",
     "Vault.Shared.Search": "1.0.0-*",
     "Vault.Shared.Search.Lucene": "1.0.0-*"
   },

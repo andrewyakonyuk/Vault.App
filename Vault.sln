@@ -37,6 +37,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Vault.Activity.Host", "Vaul
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Vault.WebHost", "Vault.Web\Vault.WebHost.xproj", "{C4223588-A8F2-4F72-AAC3-A4BE30900C9F}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Vault.Shared.EventStreams", "Vault.Shared.EventStreams\Vault.Shared.EventStreams.xproj", "{BD250EC9-3B30-49B8-A681-B25B5553DCBD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,10 @@ Global
 		{C4223588-A8F2-4F72-AAC3-A4BE30900C9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4223588-A8F2-4F72-AAC3-A4BE30900C9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4223588-A8F2-4F72-AAC3-A4BE30900C9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD250EC9-3B30-49B8-A681-B25B5553DCBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD250EC9-3B30-49B8-A681-B25B5553DCBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD250EC9-3B30-49B8-A681-B25B5553DCBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD250EC9-3B30-49B8-A681-B25B5553DCBD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -116,5 +122,6 @@ Global
 		{40E8E113-173B-48A2-9FF6-605CE957FEA0} = {6CB80A10-AF12-4BE2-A79E-2B20ABA23999}
 		{19EBFE63-0B9C-4446-8257-DAB1B6E08798} = {6CB80A10-AF12-4BE2-A79E-2B20ABA23999}
 		{C4223588-A8F2-4F72-AAC3-A4BE30900C9F} = {6CB80A10-AF12-4BE2-A79E-2B20ABA23999}
+		{BD250EC9-3B30-49B8-A681-B25B5553DCBD} = {0E0BF6ED-0950-4028-8CA8-18E882F4641A}
 	EndGlobalSection
 EndGlobal

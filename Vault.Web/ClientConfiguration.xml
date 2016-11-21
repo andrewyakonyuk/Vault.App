@@ -3,6 +3,7 @@
   <Gateway Address="localhost" Port="30000" />
   <StreamProviders>
     <Provider Type="Orleans.Providers.Streams.SimpleMessageStream.SimpleMessageStreamProvider" Name="ActivityProvider" />
+    <Provider Type="Vault.Shared.Streams.EventStoreStreamProvider" Name="EventStream" DataConnectionString="Server=127.0.01;Port=5432;Database=vault;User Id=postgres;Password=abc123!;Timeout=60" />
   </StreamProviders>
   <StorageProviders>
     <Provider Type="Orleans.Storage.MemoryStorage" Name="PubSubStore" />

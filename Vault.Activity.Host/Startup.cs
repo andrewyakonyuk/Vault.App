@@ -37,7 +37,7 @@ namespace Vault.Activity.Host
             services.AddTransient<IObserver<ICommit>, ReadModelCommitObserver>();
             services.AddTransient<EventObserverSubscriptionFactory, EventObserverSubscriptionFactory>();
             services.AddSingleton<IObserveCommits>(s => s.GetRequiredService<EventObserverSubscriptionFactory>().Construct());
-            services.AddTransient<IDispatchCommits, DistributedDispatchCommits>();
+            services.AddTransient<IDispatchCommits, EmptyDispatchCommits>();
             services.AddTransient<Lazy<IObserveCommits>>(s => new Lazy<IObserveCommits>(() => s.GetRequiredService<IObserveCommits>()));
             services.AddTransient<IEventedUnitOfWorkFactory, EventedUnitOfWorkFactory>();
             services.AddSingleton<IEventStoreInitializer, NEventStoreWithCustomPipelineFactory>();
