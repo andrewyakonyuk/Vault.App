@@ -1,15 +1,16 @@
-﻿using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using NEventStore;
 using NEventStore.Persistence.Sql.SqlDialects;
+using NEventStore.Serialization;
+using System.Collections.Generic;
 using Vault.Shared.EventSourcing.NEventStore;
 
 namespace Vault.Activity.Host
 {
     public class NEventStoreWithCustomPipelineFactory : IEventStoreInitializer
     {
-        readonly IEnumerable<IPipelineHook> _pipelineHooks;
-        readonly IConfiguration _configuration;
+        private readonly IEnumerable<IPipelineHook> _pipelineHooks;
+        private readonly IConfiguration _configuration;
 
         public NEventStoreWithCustomPipelineFactory(
             IEnumerable<IPipelineHook> pipelineHooks,
@@ -27,7 +28,7 @@ namespace Vault.Activity.Host
                     .UsingSqlPersistence(new PostgreSqlConnectionFactory(_configuration["connectionStrings:db"]))
                         .WithDialect(new PostgreSqlDialect())
                             .InitializeStorageEngine()
-                    .UsingCustomSerialization(new NewtonsoftJsonSerializer(new VersionedEventSerializationBinder()))
+                    .UsingCustomSerialization(new JsonSerializer())
                     // Compress Aggregate serialization. Does NOT allow to do a SQL-uncoding of varbinary Payload
                     // Comment if you need to decode message with CAST([Payload] AS VARCHAR(MAX)) AS [Payload] (on some VIEW)
                     //.Compress()
