@@ -44,13 +44,21 @@ namespace Vault.Shared.EventStreams
 
         public Task QueueMessageBatchAsync<T>(Guid streamGuid, string streamNamespace, IEnumerable<T> events, StreamSequenceToken token, Dictionary<string, object> requestContext)
         {
-            using (var stream = _store.OpenStream(streamNamespace, streamGuid))
+            var latestSnapshot = _store.Advanced.GetSnapshot(streamNamespace, streamGuid, int.MaxValue);
+
+            using (var stream = latestSnapshot == null ?
+                _store.OpenStream(streamNamespace, streamGuid) :
+                _store.OpenStream(latestSnapshot, int.MaxValue))
             {
                 foreach (var item in events)
                 {
                     stream.Add(new EventMessage { Body = item, Headers = requestContext });
                 }
                 stream.CommitChanges(Guid.NewGuid());
+
+                if (stream.CommitSequence % 1000 == 0)
+                    _store.Advanced.AddSnapshot(new Snapshot(stream.BucketId, stream.StreamRevision, string.Empty));
+
                 return Task.FromResult(true);
             }
         }

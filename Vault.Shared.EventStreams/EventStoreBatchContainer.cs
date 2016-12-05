@@ -35,29 +35,27 @@ namespace Vault.Shared.EventStreams
 
         public IEnumerable<Tuple<T, StreamSequenceToken>> GetEvents<T>()
         {
-            return Events.Select((t, i) =>
-                Tuple.Create<T, StreamSequenceToken>((T)t.Body,
-                    new EventSequenceToken(CommitSequence, i)));
+            return Events.Where(t => t.Body is T).Select((t, i) =>
+                 Tuple.Create<T, StreamSequenceToken>((T)t.Body,
+                     new EventSequenceToken(CommitSequence, i)));
         }
 
         public bool ImportRequestContext()
         {
-            //if (_commit.Headers != null)
-            //{
-            //    RequestContext.Import(new Dictionary<string, object>(_commit.Headers));
-            //    return true;
-            //}
             return false;
         }
 
         public bool ShouldDeliver(IStreamIdentity stream, object filterData, StreamFilterPredicate shouldReceiveFunc)
         {
-            return true;
+            if (shouldReceiveFunc == null)
+                return true;
 
-            //if(shouldReceiveFunc == null)
-            //return true;
-
-            //return shouldReceiveFunc(stream, filterData,)
+            foreach (var item in Events)
+            {
+                if (shouldReceiveFunc(stream, filterData, item.Body))
+                    return true; // There is something in this batch that the consumer is intereted in, so we should send it.
+            }
+            return false; // Consumer is not interested in any of these events, so don't send.
         }
     }
 }
