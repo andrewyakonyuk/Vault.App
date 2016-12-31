@@ -3,13 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Vault.Activity.Commands;
 
 namespace Vault.Activity.Services.Connectors
 {
-    public class PullResult : IEnumerable<ActivityCommandBase>
+    public class PullResult : IEnumerable<ActivityEvent>
     {
-        readonly List<ActivityCommandBase> _activities;
+        readonly List<ActivityEvent> _activities;
 
         public readonly static PullResult Empty = new PullResult { IsCancellationRequested = true };
 
@@ -17,23 +16,23 @@ namespace Vault.Activity.Services.Connectors
 
         public int Iteration { get; }
 
-        public PullResult(IEnumerable<ActivityCommandBase> activities, int iteration)
+        public PullResult(IEnumerable<ActivityEvent> activities, int iteration)
         {
             if (activities == null)
                 throw new ArgumentNullException(nameof(activities));
 
-            _activities = new List<ActivityCommandBase>(activities);
+            _activities = new List<ActivityEvent>(activities);
             Iteration = iteration;
         }
 
         public PullResult()
         {
-            _activities = new List<ActivityCommandBase>();
+            _activities = new List<ActivityEvent>();
         }
 
         public int Count { get { return _activities.Count; } }
 
-        public IEnumerator<ActivityCommandBase> GetEnumerator()
+        public IEnumerator<ActivityEvent> GetEnumerator()
         {
             return _activities.GetEnumerator();
         }

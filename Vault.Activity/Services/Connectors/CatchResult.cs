@@ -1,32 +1,31 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Vault.Activity.Commands;
 
 namespace Vault.Activity.Services.Connectors
 {
-    public class CatchResult : IEnumerable<ActivityCommandBase>
+    public class CatchResult : IEnumerable<ActivityEvent>
     {
-        readonly List<ActivityCommandBase> _activities;
+        readonly List<ActivityEvent> _activities;
 
         public readonly static CatchResult Empty = new CatchResult { };
 
-        public CatchResult(IEnumerable<ActivityCommandBase> activities)
+        public CatchResult(IEnumerable<ActivityEvent> activities)
         {
             if (activities == null)
                 throw new ArgumentNullException(nameof(activities));
 
-            _activities = new List<ActivityCommandBase>(activities);
+            _activities = new List<ActivityEvent>(activities);
         }
 
         CatchResult()
         {
-            _activities = new List<ActivityCommandBase>();
+            _activities = new List<ActivityEvent>();
         }
 
         public int Count { get { return _activities.Count; } }
 
-        public IEnumerator<ActivityCommandBase> GetEnumerator()
+        public IEnumerator<ActivityEvent> GetEnumerator()
         {
             return _activities.GetEnumerator();
         }

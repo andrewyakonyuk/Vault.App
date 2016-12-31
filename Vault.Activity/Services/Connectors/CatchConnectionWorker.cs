@@ -1,11 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Orleans;
 using Orleans.Concurrency;
 using Orleans.Runtime;
-using Vault.Activity.Commands;
-using Vault.Activity.Services.ActivityLog;
 
 namespace Vault.Activity.Services.Connectors
 {
@@ -88,17 +87,20 @@ namespace Vault.Activity.Services.Connectors
 
             try
             {
-                var notifier = GrainFactory.GetGrain<IPushActivityNotifier<ActivityCommandBase>>(State.OwnerId);
+                var activityFeed = GrainFactory.GetGrain<IActivityFeed>(State.OwnerId, keyExtension: "timeline");
                 var userInfo = new UserInfo(State.ProviderKey, State.OwnerId);
                 var context = new CatchConnectionContext(userInfo, response);
 
                 var result = await connectionProvider.CatchAsync(context);
+
+                var attempts = new List<ActivityAttempt>(result.Count);
                 foreach (var activity in result)
                 {
-                    await notifier.NewActivityAsync(activity.AsImmutable());
+                    var attempt = ActivityAttempt.Create(activity);
+                    attempts.Add(attempt);
                 }
 
-                await notifier.CompleteAsync();
+                await activityFeed.NewActivityAsync(attempts);
 
                 _logger.Verbose($"{this.GetPrimaryKey()}: Finished '{State.ProviderName}'s catch hook with {result.Count} results");
             }

@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Vault.Activity;
-using Vault.Activity.Commands;
-using Vault.Activity.Resources;
 using Vault.Activity.Services.Connectors;
 
 namespace Vault.Shared.Connectors.Pocket
@@ -70,23 +68,35 @@ namespace Vault.Shared.Connectors.Pocket
                 }
             });
 
-            var activities = new List<ActivityCommandBase>(parsedResponse.Items.Count * 2);
+            var activities = new List<ActivityEvent>(parsedResponse.Items.Count * 2);
 
             foreach (var parsedItem in parsedResponse.Items)
             {
-                var key = new ResourceKey(parsedItem.ResolvedId, ResourceTypes.Article, Name, context.User.Id);
                 var published = DateTimeOffset.UtcNow;
-                var article = new ArticleResource
+
+                activities.Add(new ActivityEvent
                 {
-                    Uri = new Uri(parsedItem.Uri, UriKind.Absolute)
-                };
+                    Actor = context.User.Id.ToString("N"),
+                    Id = parsedItem.ResolvedId,
+                    Provider = Name,
+                    Verb = ActivityVerbs.Read,
+                    Published = published,
+                    Title = parsedItem.Title,
+                    Uri = parsedItem.Uri,
+                    Content = parsedItem.Excerpt
+                });
 
-                activities.Add(new ReadActivityCommand<ArticleResource>(article, key,
-                    published));
-
-                if (parsedItem.IsFavorite)
-                    activities.Add(new LikeActivityCommand<ArticleResource>(key, published));
-                else activities.Add(new DislikeActivityCommand<ArticleResource>(key, published));
+                activities.Add(new ActivityEvent
+                {
+                    Actor = context.User.Id.ToString("N"),
+                    Id = parsedItem.ResolvedId,
+                    Provider = Name,
+                    Verb = parsedItem.IsFavorite ? ActivityVerbs.Like : ActivityVerbs.Unlike,
+                    Published = published,
+                    Title = parsedItem.Title,
+                    Uri = parsedItem.Uri,
+                    Content = parsedItem.Excerpt
+                });
             }
 
             return new PullResult(activities, context.Batch) { IsCancellationRequested = parsedResponse.Items.Count == 0 };

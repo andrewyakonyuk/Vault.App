@@ -1,10 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Orleans;
 using Orleans.Concurrency;
 using Orleans.Runtime;
-using Vault.Activity.Commands;
-using Vault.Activity.Services.ActivityLog;
 using Vault.Shared.TransientFaultHandling;
 
 namespace Vault.Activity.Services.Connectors
@@ -87,16 +86,19 @@ namespace Vault.Activity.Services.Connectors
             {
                 PullResult result = null;
                 var batch = 0;
-                var notifier = GrainFactory.GetGrain<IPushActivityNotifier<ActivityCommandBase>>(State.OwnerId);
+                var activityFeed = GrainFactory.GetGrain<IActivityFeed>(State.OwnerId, keyExtension: "timeline");
                 do
                 {
                     result = await ExecuteBatchAsync(connectionProvider, batch, State.LastFetchDateUtc);
+
+                    var attempts = new List<ActivityAttempt>(result.Count);
                     foreach (var activity in result)
                     {
-                        await notifier.NewActivityAsync(activity.AsImmutable());
+                        var attempt = ActivityAttempt.Create(activity);
+                        attempts.Add(attempt);
                     }
 
-                    await notifier.CompleteAsync();
+                    await activityFeed.NewActivityAsync(attempts);
 
                     _logger.Verbose($"{this.GetPrimaryKey()}: Finished pulling batch '{batch}' with {result.Count} results");
 

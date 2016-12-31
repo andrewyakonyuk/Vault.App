@@ -5,6 +5,7 @@ using System.Dynamic;
 
 namespace Vault.Shared
 {
+    [Serializable]
     public class DynamicDictionary : DynamicObject, IDictionary<string, object>
     {
         private readonly IDictionary<string, object> _properties;
