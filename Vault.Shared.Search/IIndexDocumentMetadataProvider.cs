@@ -3,9 +3,9 @@
     public interface IIndexDocumentMetadataProvider
     {
         /// <summary>
-        /// Provide the metadata for the all search fields
+        /// Provide the metadata for the specific index
         /// </summary>
         /// <returns></returns>
-        IndexDocumentMetadata GetMetadata();
+        IndexDocumentMetadata GetMetadata(string indexName);
     }
 }

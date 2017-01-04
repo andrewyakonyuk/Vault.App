@@ -9,6 +9,7 @@ using Version = Lucene.Net.Util.Version;
 
 namespace Vault.Shared.Search.Lucene
 {
+    using global::Lucene.Net.Analysis;
     using SortField = global::Lucene.Net.Search.SortField;
 
     public class LuceneSearchProvider : ISearchProvider
@@ -39,13 +40,18 @@ namespace Vault.Shared.Search.Lucene
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
 
+            var indexName = request.IndexName;
+            if (string.IsNullOrEmpty(indexName))
+                indexName = IndexNames.Default;
+            var indexWriter = _writerAccessor.GetWriter(indexName);
+            var metadata = _metadataProvider.GetMetadata(indexName);
             var numHits = request.Offset + request.Count;
-            var sort = CreateSort(request);
-            var query = CreateQuery(request);
+            var sort = CreateSort(request, metadata);
+            var query = CreateQuery(request, indexWriter.Analyzer, metadata);
             var collector = TopFieldCollector.Create(sort, Math.Max(numHits, 1), false, false, false, false);
-            var filter = CreateFilter(request);
+            var filter = CreateFilter(request, metadata);
 
-            using (var indexReader = _writerAccessor.Writer.GetReader())
+            using (var indexReader = indexWriter.GetReader())
             using (var indexSearcher = new IndexSearcher(indexReader))
             {
                 // the search() method returns a Hits object re-executes the search internally when you need more than 100 hits.
@@ -67,7 +73,7 @@ namespace Vault.Shared.Search.Lucene
                 {
                     var doc = indexSearcher.Doc(scoreDocs[i].Doc);
                     var valuesProvider = new LuceneDocumentValuesProvider(doc);
-                    var document = resultTransformer.Transform(valuesProvider);
+                    var document = resultTransformer.Transform(valuesProvider, metadata);
                     result.Add(document);
                 }
 
@@ -75,13 +81,12 @@ namespace Vault.Shared.Search.Lucene
             }
         }
 
-        Query CreateQuery(SearchRequest request)
+        Query CreateQuery(SearchRequest request, Analyzer analyzer, IndexDocumentMetadata metadata)
         {
             if (request.Criteria.Count == 0)
                 return new MatchAllDocsQuery();
 
-            var metadata = _metadataProvider.GetMetadata();
-            var builder = new LuceneSearchCriteriaBuilder(metadata, _writerAccessor.Writer.Analyzer, Version.LUCENE_30, false);
+            var builder = new LuceneSearchCriteriaBuilder(metadata, analyzer, Version.LUCENE_30, false);
 
             for (var i = 0; i < request.Criteria.Count; i++)
             {
@@ -91,19 +96,17 @@ namespace Vault.Shared.Search.Lucene
             return builder.Query;
         }
 
-        Filter CreateFilter(SearchRequest request)
+        Filter CreateFilter(SearchRequest request, IndexDocumentMetadata metadata)
         {
-            var metadata = _metadataProvider.GetMetadata();
             var query = new TermQuery(new Term(metadata.RewriteFieldName("OwnerId"), request.OwnerId.ToString(CultureInfo.InvariantCulture)));
             return FilterManager.Instance.GetFilter(new QueryWrapperFilter(query));
         }
 
-        Sort CreateSort(SearchRequest request)
+        Sort CreateSort(SearchRequest request, IndexDocumentMetadata metadata)
         {
             if (request.SortBy == null || request.SortBy.Count == 0)
                 return new Sort();
 
-            var metadata = _metadataProvider.GetMetadata();
             var sortFields = new List<SortField>(request.SortBy.Count);
             foreach (var item in request.SortBy)
             {

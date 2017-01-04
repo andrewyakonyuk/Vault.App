@@ -4,7 +4,7 @@ using Vault.Shared.Domain;
 
 namespace Vault.Shared.Search.Lucene
 {
-    public class LuceneUnitOfWorkFactory : IUnitOfWorkFactory
+    public class LuceneUnitOfWorkFactory : IIndexUnitOfWorkFactory
     {
         readonly IIndexWriterAccessor _writerAccessor;
         readonly IIndexDocumentTransformer _documentTransformer;
@@ -27,14 +27,13 @@ namespace Vault.Shared.Search.Lucene
             _metadataProvider = metadataProvider;
         }
 
-        public IUnitOfWork Create()
+        public IIndexUnitOfWork Create(string indexName)
         {
-            return Create(IsolationLevel.Unspecified);
-        }
-
-        public IUnitOfWork Create(IsolationLevel isolationLevel)
-        {
-            return new LuceneUnitOfWork(_writerAccessor.Writer, _documentTransformer, _metadataProvider);
+            if (string.IsNullOrEmpty(indexName))
+                indexName = IndexNames.Default;
+            var indexWriter = _writerAccessor.GetWriter(indexName);
+            var metadata = _metadataProvider.GetMetadata(indexName);
+            return new LuceneUnitOfWork(indexWriter, _documentTransformer, metadata);
         }
     }
 }

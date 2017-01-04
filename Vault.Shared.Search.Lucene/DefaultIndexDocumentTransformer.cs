@@ -7,29 +7,9 @@ namespace Vault.Shared.Search.Lucene
 {
     public class DefaultIndexDocumentTransformer : IIndexDocumentTransformer
     {
-        readonly IIndexDocumentMetadataProvider _documentDescriptorProvider;
-
-        public DefaultIndexDocumentTransformer(IIndexDocumentMetadataProvider documentDescriptorProvider)
+        public Document Transform(SearchDocument document, IndexDocumentMetadata metadata)
         {
-            if (documentDescriptorProvider == null)
-                throw new ArgumentNullException(nameof(documentDescriptorProvider));
-
-            _documentDescriptorProvider = documentDescriptorProvider;
-        }
-
-        public Document Transform(IEntity entity)
-        {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
-            var dictionary = ObjectDictionary.Create(entity);
-            var metadata = _documentDescriptorProvider.GetMetadata();
-            return Transform(dictionary, metadata);
-        }
-
-        Document Transform(IDictionary<string, object> entity, IndexDocumentMetadata metadata)
-        {
-            var document = new Document();
+            var luceneDocument = new Document();
 
             var separator = new[] { Environment.NewLine };
 
@@ -38,7 +18,7 @@ namespace Vault.Shared.Search.Lucene
                 var fieldDescriptor = metadata.Fields[i];
 
                 object value;
-                if (entity.TryGetValue(fieldDescriptor.Name, out value))
+                if (document.TryGetValue(fieldDescriptor.Name, out value))
                 {
                     var store = fieldDescriptor.IsStored ? Field.Store.YES : Field.Store.NO;
                     var index = FieldExtensions.ToIndex(fieldDescriptor.IsIndexed, fieldDescriptor.IsAnalysed, fieldDescriptor.OmitNorms);
@@ -50,18 +30,18 @@ namespace Vault.Shared.Search.Lucene
                     {
                         var rawValue = values[j];
                         var field = new Field(fieldDescriptor.FieldName, rawValue, store, index);
-                        document.Add(field);
+                        luceneDocument.Add(field);
 
                         if (fieldDescriptor.IsKeyword)
                         {
                             var keywordsField = new Field(IndexDocumentMetadata.KeywordsFieldName, rawValue, Field.Store.YES, Field.Index.ANALYZED);
-                            document.Add(keywordsField);
+                            luceneDocument.Add(keywordsField);
                         }
                     }
                 }
             }
 
-            return document;
+            return luceneDocument;
         }
     }
 }

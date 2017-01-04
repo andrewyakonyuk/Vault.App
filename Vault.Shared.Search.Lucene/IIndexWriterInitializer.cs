@@ -10,6 +10,6 @@ namespace Vault.Shared.Search.Lucene
     /// </summary>
     public interface IIndexWriterInitializer
     {
-        LuceneIndexWriter Create();
+        LuceneIndexWriter Create(string indexName);
     }
 }

@@ -2,6 +2,6 @@ namespace Vault.Shared.Search
 {
     public interface ISearchResultTransformer
     {
-        SearchDocument Transform(ISearchValuesProvider valuesProvider);
+        SearchDocument Transform(ISearchValuesProvider valuesProvider, IndexDocumentMetadata metadata);
     }
 }

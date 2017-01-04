@@ -7,59 +7,92 @@ namespace Vault.Shared.Search.Lucene
 {
     public class FluentDescriptorProviderBuilder
     {
-        readonly List<DocumentFieldDescriptor> _fieldDescriptors;
+        readonly Dictionary<string, IndexMetadataBuilder> _indexBuilders;
 
         public FluentDescriptorProviderBuilder()
         {
-            _fieldDescriptors = new List<DocumentFieldDescriptor>();
+            _indexBuilders = new Dictionary<string, IndexMetadataBuilder>(StringComparer.InvariantCultureIgnoreCase);
         }
 
-        public FluentDescriptorProviderBuilder Field(
-                string name,
-                string fieldName = null,
-                bool isStored = true,
-                bool isKeyword = false,
-                bool isIndexed = true,
-                bool isAnalysed = false,
-                bool omitNorms = true,
-                bool isKey = false,
-                TypeConverter converter = null)
+        public IndexMetadataBuilder Index(string indexName)
         {
-            fieldName = fieldName ?? name.ToLowerInvariant();
-            converter = converter ?? DocumentFieldDescriptor.DefaultConverter;
-            var descriptor = new DocumentFieldDescriptor(name, fieldName)
+            IndexMetadataBuilder indexBuilder;
+            if (!_indexBuilders.TryGetValue(indexName, out indexBuilder))
             {
-                IsKeyword = isKeyword,
-                IsAnalysed = isAnalysed,
-                IsIndexed = isIndexed,
-                IsStored = isStored,
-                OmitNorms = omitNorms,
-                Converter = converter,
-                IsKey = isKey
-            };
+                indexBuilder = new IndexMetadataBuilder(this);
+                _indexBuilders[indexName] = indexBuilder;
+            }
 
-            _fieldDescriptors.Add(descriptor);
-
-            return this;
+            return indexBuilder;
         }
 
-        public IIndexDocumentMetadataProvider Build()
+        public IIndexDocumentMetadataProvider BuildProvider()
         {
-            return new DefaultIndexDocumentDescriptorProvider(_fieldDescriptors);
+            return new DefaultIndexDocumentDescriptorProvider(_indexBuilders);
+        }
+
+        public class IndexMetadataBuilder
+        {
+            public List<DocumentFieldDescriptor> Descriptors { get; }
+            readonly FluentDescriptorProviderBuilder _parentBuilder;
+
+            public IndexMetadataBuilder(FluentDescriptorProviderBuilder parentBuilder)
+            {
+                Descriptors = new List<DocumentFieldDescriptor>();
+                _parentBuilder = parentBuilder;
+            }
+
+            public IndexMetadataBuilder Field(
+                    string name,
+                    string fieldName = null,
+                    bool isStored = true,
+                    bool isKeyword = false,
+                    bool isIndexed = true,
+                    bool isAnalysed = false,
+                    bool omitNorms = true,
+                    bool isKey = false,
+                    TypeConverter converter = null)
+            {
+                fieldName = fieldName ?? name.ToLowerInvariant();
+                converter = converter ?? DocumentFieldDescriptor.DefaultConverter;
+                var descriptor = new DocumentFieldDescriptor(name, fieldName)
+                {
+                    IsKeyword = isKeyword,
+                    IsAnalysed = isAnalysed,
+                    IsIndexed = isIndexed,
+                    IsStored = isStored,
+                    OmitNorms = omitNorms,
+                    Converter = converter,
+                    IsKey = isKey
+                };
+
+                Descriptors.Add(descriptor);
+
+                return this;
+            }
+
+            public FluentDescriptorProviderBuilder BuildIndex()
+            {
+                return _parentBuilder;
+            }
         }
 
         private class DefaultIndexDocumentDescriptorProvider : IIndexDocumentMetadataProvider
         {
-            readonly List<DocumentFieldDescriptor> _descriptors;
+            readonly Dictionary<string, IndexMetadataBuilder> _indexBuilders;
 
-            public DefaultIndexDocumentDescriptorProvider(List<DocumentFieldDescriptor> descriptors)
+            public DefaultIndexDocumentDescriptorProvider(Dictionary<string, IndexMetadataBuilder> indexBuilders)
             {
-                _descriptors = descriptors;
+                _indexBuilders = indexBuilders;
             }
 
-            public IndexDocumentMetadata GetMetadata()
+            public IndexDocumentMetadata GetMetadata(string indexName)
             {
-                return new IndexDocumentMetadata(_descriptors);
+                IndexMetadataBuilder indexBuilder;
+                if (!_indexBuilders.TryGetValue(indexName, out indexBuilder))
+                    return new IndexDocumentMetadata(new List<DocumentFieldDescriptor>());
+
+                return new IndexDocumentMetadata(indexBuilder.Descriptors);
             }
         }
     }

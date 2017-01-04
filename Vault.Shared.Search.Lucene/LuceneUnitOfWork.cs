@@ -7,11 +7,12 @@ using Vault.Shared.Domain;
 
 namespace Vault.Shared.Search.Lucene
 {
-    public class LuceneUnitOfWork : IUnitOfWork
+    public class LuceneUnitOfWork : IIndexUnitOfWork
     {
         IndexWriter _indexWriter;
         IIndexDocumentTransformer _documentTransformer;
-        IIndexDocumentMetadataProvider _metadataProvider;
+        IndexDocumentMetadata _metadata;
+
         bool _isCommited = false;
         bool _isDisposed = false;
         int _uncommitedCount = 0;
@@ -19,18 +20,18 @@ namespace Vault.Shared.Search.Lucene
         public LuceneUnitOfWork(
             IndexWriter indexWriter,
             IIndexDocumentTransformer documentTransformer,
-            IIndexDocumentMetadataProvider metadataProvider)
+            IndexDocumentMetadata metadata)
         {
             if (indexWriter == null)
                 throw new ArgumentNullException(nameof(indexWriter));
             if (documentTransformer == null)
                 throw new ArgumentNullException(nameof(documentTransformer));
-            if (metadataProvider == null)
-                throw new ArgumentNullException(nameof(metadataProvider));
+            if (metadata == null)
+                throw new ArgumentNullException(nameof(metadata));
 
             _indexWriter = indexWriter;
             _documentTransformer = documentTransformer;
-            _metadataProvider = metadataProvider;
+            _metadata = metadata;
         }
 
         public void Commit()
@@ -55,13 +56,13 @@ namespace Vault.Shared.Search.Lucene
             }
         }
 
-        public void Save(IEntity entity)
+        public void Save(SearchDocument document)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
+            if (document == null)
+                throw new ArgumentNullException(nameof(document));
 
-            Delete(entity);
-            var indexDocument = _documentTransformer.Transform(entity);
+            Delete(document);
+            var indexDocument = _documentTransformer.Transform(document, _metadata);
             try
             {
                 _indexWriter.AddDocument(indexDocument);
@@ -74,19 +75,13 @@ namespace Vault.Shared.Search.Lucene
             }
         }
 
-        public void Delete(IEntity entity)
+        public void Delete(SearchDocument document)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
-            var metadata = _metadataProvider.GetMetadata();
-            var document = ObjectDictionary.Create(entity);
-
-            if (!metadata.Keys.Any())
+            if (!_metadata.Keys.Any())
                 throw new InvalidOperationException("Any document keys are not specified");
 
             var conditionForDelete = new BooleanQuery();
-            foreach (var descriptor in metadata.Keys)
+            foreach (var descriptor in _metadata.Keys)
             {
                 var convertedValue = descriptor.Converter.ConvertToString(document[descriptor.Name]).ToLower();
                 var term = new Term(descriptor.FieldName, convertedValue);
@@ -118,7 +113,7 @@ namespace Vault.Shared.Search.Lucene
                     }
 
                     _documentTransformer = null;
-                    _metadataProvider = null;
+                    _metadata = null;
                     _indexWriter = null;
                 }
 

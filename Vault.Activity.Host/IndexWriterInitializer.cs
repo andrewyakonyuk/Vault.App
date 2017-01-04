@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using System.Linq;
 using Vault.Shared.Search.Lucene;
 using Vault.Shared.Search.Lucene.Analyzers;
+using System.IO;
+using Vault.Shared.Search;
 
 namespace Vault.Activity.Host
 {
@@ -19,8 +21,11 @@ namespace Vault.Activity.Host
             _configuration = configuration;
         }
 
-        public LuceneIndexWriter Create()
+        public LuceneIndexWriter Create(string indexName)
         {
+            if (string.IsNullOrEmpty(indexName))
+                indexName = IndexNames.Default;
+
             Lucene.Net.Store.Directory directory;
             var shouldCreate = true;
 
@@ -30,7 +35,8 @@ namespace Vault.Activity.Host
             }
             else
             {
-                var pathToIndex = _configuration["connectionStrings:index"];
+                var safeIndexName = string.Join("_", indexName.Split(Path.GetInvalidFileNameChars()));
+                var pathToIndex = Path.Combine(_configuration["connectionStrings:index"], safeIndexName);
                 directory = FSDirectory.Open(pathToIndex);
                 shouldCreate = !((FSDirectory)directory).Directory.Exists || !directory.ListAll().Any();
             }

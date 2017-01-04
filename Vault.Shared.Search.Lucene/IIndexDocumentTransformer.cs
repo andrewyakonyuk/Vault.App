@@ -9,8 +9,8 @@ namespace Vault.Shared.Search.Lucene
         /// <summary>
         /// Transform an entity into lucene document
         /// </summary>
-        /// <param name="entity">An antity</param>
+        /// <param name="entity">A search document</param>
         /// <returns>Lucene document</returns>
-        Document Transform(IEntity entity);
+        Document Transform(SearchDocument entity, IndexDocumentMetadata metadata);
     }
 }

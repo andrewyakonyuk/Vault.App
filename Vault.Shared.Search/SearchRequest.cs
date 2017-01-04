@@ -10,7 +10,10 @@ namespace Vault.Shared.Search
         {
             Criteria = new List<ISearchCriteria>();
             SortBy = new List<SortField>();
+            IndexName = IndexNames.Default;
         }
+
+        public string IndexName { get; set; }
 
         public int Offset { get; set; }
 

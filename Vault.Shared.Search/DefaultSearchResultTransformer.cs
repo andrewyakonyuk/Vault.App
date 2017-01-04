@@ -5,16 +5,8 @@ namespace Vault.Shared.Search
 {
     public class DefaultSearchResultTransformer : ISearchResultTransformer
     {
-        private readonly IIndexDocumentMetadataProvider _documentMetadataProvider;
-
-        public DefaultSearchResultTransformer(IIndexDocumentMetadataProvider provider)
+        public SearchDocument Transform(ISearchValuesProvider valueProvider, IndexDocumentMetadata metadata)
         {
-            _documentMetadataProvider = provider;
-        }
-
-        public SearchDocument Transform(ISearchValuesProvider valueProvider)
-        {
-            var metadata = _documentMetadataProvider.GetMetadata();
             var searchDocument = new SearchDocument();
 
             foreach (var fieldDescriptor in metadata.Fields)

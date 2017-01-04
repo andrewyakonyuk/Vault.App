@@ -70,39 +70,36 @@ namespace Vault.Activity.Host
 
             services.AddTransient<ISearchProvider, LuceneSearchProvider>();
             services.AddSingleton<ISearchResultTransformer, DefaultSearchResultTransformer>();
-            services.AddSingleton<IReportUnitOfWorkFactory>(s =>
-                new DefaultReportUnitOfWorkFactory(
-                    new LuceneUnitOfWorkFactory(
-                        s.GetRequiredService<IIndexWriterAccessor>(),
-                        s.GetRequiredService<IIndexDocumentTransformer>(),
-                        s.GetRequiredService<IIndexDocumentMetadataProvider>())));
+            services.AddSingleton<IIndexUnitOfWorkFactory, LuceneUnitOfWorkFactory>();
             services.AddTransient<IIndexDocumentTransformer, DefaultIndexDocumentTransformer>();
             services.AddTransient<IIndexWriterInitializer, IndexWriterInitializer>();
             services.AddSingleton<IIndexWriterAccessor, DefaultIndexWriterAccessor>();
             services.AddTransient<ISearchQueryParser, DefaultSearchQueryParser>();
 
             var builder = new FluentDescriptorProviderBuilder()
-                .Field("Id", "_id", converter: new Int32Converter())
-                .Field("OwnerId", "_ownerId", isKey: true, converter: new Int32Converter())
-                .Field("ResourceId", isKey: true)
-                .Field("ServiceName", isKey: true)
-                .Field("DocumentType", "_documentType", isKey: true, isAnalysed: true)
-                .Field("Published", "_published", converter: new LuceneDateTimeConverter())
-                .Field("StartDate", converter: new LuceneDateTimeConverter())
-                .Field("EndDate", converter: new LuceneDateTimeConverter())
-                .Field("Duration", converter: new TimeSpanConverter())
-                .Field("Name", isKeyword: true, isAnalysed: true)
-                .Field("Description", isKeyword: true, isAnalysed: true)
-                .Field("Elevation", converter: new DoubleConverter())
-                .Field("Latitude", converter: new DoubleConverter())
-                .Field("Longitude", converter: new DoubleConverter())
-                .Field("ByArtist", isKeyword: true, isAnalysed: true)
-                .Field("InAlbum", isKeyword: true, isAnalysed: true)
-                .Field("Body", isAnalysed: true)
-                .Field("Summary", isAnalysed: true)
-                .Field("Thumbnail")
-                .Field("Url", isAnalysed: true, isKeyword: true);
-            services.AddSingleton<IIndexDocumentMetadataProvider>(s => builder.Build());
+                .Index(IndexNames.Default)
+                    .Field("Id", "_id", converter: new Int32Converter())
+                    .Field("OwnerId", "_ownerId", isKey: true, converter: new Int32Converter())
+                    .Field("ResourceId", isKey: true)
+                    .Field("ServiceName", isKey: true)
+                    .Field("DocumentType", "_documentType", isKey: true, isAnalysed: true)
+                    .Field("Published", "_published", converter: new LuceneDateTimeConverter())
+                    .Field("StartDate", converter: new LuceneDateTimeConverter())
+                    .Field("EndDate", converter: new LuceneDateTimeConverter())
+                    .Field("Duration", converter: new TimeSpanConverter())
+                    .Field("Name", isKeyword: true, isAnalysed: true)
+                    .Field("Description", isKeyword: true, isAnalysed: true)
+                    .Field("Elevation", converter: new DoubleConverter())
+                    .Field("Latitude", converter: new DoubleConverter())
+                    .Field("Longitude", converter: new DoubleConverter())
+                    .Field("ByArtist", isKeyword: true, isAnalysed: true)
+                    .Field("InAlbum", isKeyword: true, isAnalysed: true)
+                    .Field("Body", isAnalysed: true)
+                    .Field("Summary", isAnalysed: true)
+                    .Field("Thumbnail")
+                    .Field("Url", isAnalysed: true, isKeyword: true)
+                    .BuildIndex();
+            services.AddSingleton<IIndexDocumentMetadataProvider>(s => builder.BuildProvider());
 
             return services.BuildServiceProvider();
         }
