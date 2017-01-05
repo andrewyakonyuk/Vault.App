@@ -106,7 +106,7 @@ namespace Vault.WebHost.Services.Boards
             var request = new SearchRequest
             {
                 Criteria = ParseSearchQuery(board.RawQuery),
-                OwnerId = board.OwnerId,
+                OwnerId = "a314130a91c244e3949bbe4c60bf1752", //todo: hardcode board.OwnerId,
                 Offset = offset,
                 Count = count,
                 SortBy = new[] { new SortField("Published", false) }
@@ -135,7 +135,7 @@ namespace Vault.WebHost.Services.Boards
             {
                 Offset = offset,
                 Count = count,
-                OwnerId = board.OwnerId,
+                OwnerId = "a314130a91c244e3949bbe4c60bf1752", //todo: hardcode board.OwnerId,
                 Criteria = ParseSearchQuery(query),
                 SortBy = new[] { new SortField("Published", false) }
             };

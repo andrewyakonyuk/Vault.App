@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using Vault.Shared.Queries;
 using Vault.Shared.Search.Criteria;
 
 namespace Vault.Shared.Search
 {
+    [Serializable]
     public class SearchRequest : ICriterion
     {
         public SearchRequest()
@@ -19,7 +21,7 @@ namespace Vault.Shared.Search
 
         public int Count { get; set; }
 
-        public int OwnerId { get; set; }
+        public string OwnerId { get; set; }
 
         public IList<ISearchCriteria> Criteria { get; set; }
 
@@ -28,6 +30,7 @@ namespace Vault.Shared.Search
         public IList<SortField> SortBy { get; set; }
     }
 
+    [Serializable]
     public class SortField
     {
         public string FieldName { get; private set; }

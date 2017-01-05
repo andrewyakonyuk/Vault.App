@@ -7,6 +7,7 @@ using Orleans.Providers.Streams.Common;
 using Orleans.Runtime;
 using Orleans.Streams;
 using Vault.Shared.EventSourcing.NEventStore;
+using NEventStore.Serialization;
 
 namespace Vault.Shared.EventStreams
 {
@@ -63,7 +64,7 @@ namespace Vault.Shared.EventStreams
                 .UsingSqlPersistence(new PostgreSqlConnectionFactory(config.GetProperty("DataConnectionString", null)))
                 .WithDialect(new PostgreSqlDialect())
                 .InitializeStorageEngine()
-                .UsingCustomSerialization(new NewtonsoftJsonSerializer(new VersionedEventSerializationBinder()))
+                .UsingCustomSerialization(new JsonSerializer())
                 .UsingEventUpconversion()
                 .Build();
 

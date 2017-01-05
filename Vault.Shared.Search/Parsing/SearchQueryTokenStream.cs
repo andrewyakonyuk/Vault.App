@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Vault.Shared.Search.Parsing
 {
+    [Serializable]
     public class SearchQueryTokenStream : IEnumerable<SearchQueryToken>
     {
         public static SearchQueryTokenStream Empty = new SearchQueryTokenStream();
@@ -34,6 +36,7 @@ namespace Vault.Shared.Search.Parsing
         }
     }
 
+    [Serializable]
     public class SearchQueryToken
     {
         public string FieldName { get; private set; }

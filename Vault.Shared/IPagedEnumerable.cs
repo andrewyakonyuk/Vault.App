@@ -40,6 +40,7 @@ namespace Vault.Shared
         }
     }
 
+    [Serializable]
     public abstract class PagedEnumerable
     {
         public static IPagedEnumerable<T> Create<T>(IEnumerable<T> enumerable, int count, int totalCount)

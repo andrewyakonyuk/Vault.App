@@ -11,12 +11,12 @@ namespace Vault.Activity
 {
     public interface IActivityFeed : IGrainWithGuidCompoundKey
     {
-        Task NewActivityAsync(IList<ActivityAttempt> activity);
+        Task NewActivityAsync(IList<ActivityEvent> activity);
     }
 
     public class ActivityFeed : Grain, IActivityFeed
     {
-        IAsyncStream<ActivityAttempt> _consumer;
+        IAsyncStream<ActivityEvent> _consumer;
 
         public override async Task OnActivateAsync()
         {
@@ -24,10 +24,10 @@ namespace Vault.Activity
 
             var streamProvider = GetStreamProvider("EventStream");
             string keyExt = null;
-            _consumer = streamProvider.GetStream<ActivityAttempt>(this.GetPrimaryKey(out keyExt), "activity-log");
+            _consumer = streamProvider.GetStream<ActivityEvent>(this.GetPrimaryKey(out keyExt), "activity-log");
         }
 
-        public async Task NewActivityAsync(IList<ActivityAttempt> activities)
+        public async Task NewActivityAsync(IList<ActivityEvent> activities)
         {
             await _consumer.OnNextBatchAsync(activities);
         }

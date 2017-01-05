@@ -5,6 +5,7 @@ using Orleans;
 using Orleans.Concurrency;
 using Orleans.Runtime;
 using Vault.Shared.TransientFaultHandling;
+using System.Linq;
 
 namespace Vault.Activity.Services.Connectors
 {
@@ -91,14 +92,7 @@ namespace Vault.Activity.Services.Connectors
                 {
                     result = await ExecuteBatchAsync(connectionProvider, batch, State.LastFetchDateUtc);
 
-                    var attempts = new List<ActivityAttempt>(result.Count);
-                    foreach (var activity in result)
-                    {
-                        var attempt = ActivityAttempt.Create(activity);
-                        attempts.Add(attempt);
-                    }
-
-                    await activityFeed.NewActivityAsync(attempts);
+                    await activityFeed.NewActivityAsync(result.ToList());
 
                     _logger.Verbose($"{this.GetPrimaryKey()}: Finished pulling batch '{batch}' with {result.Count} results");
 

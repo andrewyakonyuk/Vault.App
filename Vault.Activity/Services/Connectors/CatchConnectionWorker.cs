@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Orleans;
 using Orleans.Concurrency;
 using Orleans.Runtime;
+using System.Linq;
 
 namespace Vault.Activity.Services.Connectors
 {
@@ -93,14 +94,7 @@ namespace Vault.Activity.Services.Connectors
 
                 var result = await connectionProvider.CatchAsync(context);
 
-                var attempts = new List<ActivityAttempt>(result.Count);
-                foreach (var activity in result)
-                {
-                    var attempt = ActivityAttempt.Create(activity);
-                    attempts.Add(attempt);
-                }
-
-                await activityFeed.NewActivityAsync(attempts);
+                await activityFeed.NewActivityAsync(result.ToList());
 
                 _logger.Verbose($"{this.GetPrimaryKey()}: Finished '{State.ProviderName}'s catch hook with {result.Count} results");
             }

@@ -6,17 +6,17 @@ using Vault.Shared.EventSourcing;
 
 namespace Vault.Activity
 {
-    //[Serializable]
+    [Serializable]
     [Immutable]
     public class ActivityEvent : IEvent
     {
         public ActivityEvent()
         {
-            MetaBag = new DynamicDictionary();
+            //MetaBag = new DynamicDictionary();
         }
 
-        [JsonProperty(TypeNameHandling = TypeNameHandling.Objects)]
-        public dynamic MetaBag { get; set; }
+        //[JsonProperty(TypeNameHandling = TypeNameHandling.Objects)]
+        //public dynamic MetaBag { get; set; }
 
         /// <summary>
         /// Provides a permanent, universally unique identifier for the activity

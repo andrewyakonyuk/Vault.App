@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Vault.Shared.Search
 {
+    [Serializable]
     public class DefaultSearchResultTransformer : ISearchResultTransformer
     {
         public SearchDocument Transform(ISearchValuesProvider valueProvider, IndexDocumentMetadata metadata)
@@ -30,11 +31,11 @@ namespace Vault.Shared.Search
                     switch (fieldDescriptor.Name.ToLowerInvariant())
                     {
                         case "id":
-                            searchDocument.Id = (int)convertedValue;
+                            searchDocument.Id = (string)convertedValue;
                             break;
 
                         case "ownerid":
-                            searchDocument.OwnerId = (int)convertedValue;
+                            searchDocument.OwnerId = (string)convertedValue;
                             break;
 
                         case "published":

@@ -30,6 +30,10 @@ using Vault.WebHost.Services;
 using Vault.WebHost.Services.Boards;
 using Vault.WebHost.Services.Boards.Overrides;
 using Vault.WebHost.Services.Security;
+using Vault.Shared.Search;
+using Vault.Shared;
+using Vault.Activity.Services.Search;
+using Vault.Shared.Search.Parsing;
 
 namespace Vault.WebHost
 {
@@ -109,6 +113,8 @@ namespace Vault.WebHost
             });
 
             services.AddTransient<UsernameRouteConstraint>();
+            services.AddSingleton<ISearchProvider, RemoteSearchProvider>();
+            services.AddSingleton<ISearchQueryParser, RemoteSearchQueryParser>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -271,6 +277,28 @@ namespace Vault.WebHost
                     .Mappings(m => m.AutoMappings.Add(persistenceModel))
                     .ExposeConfiguration(cfg => new SchemaUpdate(cfg).Execute(true, true))
                 .BuildConfiguration();
+        }
+    }
+
+    public class RemoteSearchProvider : ISearchProvider
+    {
+        public IPagedEnumerable<SearchDocument> Search(SearchRequest request)
+        {
+            var searchGrain = GrainClient.GrainFactory.GetGrain<ISearchGrain>(0);
+            var searchResult = searchGrain.Search(request);
+
+            return searchResult.Result;
+        }
+    }
+
+    public class RemoteSearchQueryParser : ISearchQueryParser
+    {
+        public SearchQueryTokenStream Parse(string query)
+        {
+            var searchGrain = GrainClient.GrainFactory.GetGrain<ISearchGrain>(0);
+            var searchResult = searchGrain.ParseSearchQuery(query);
+
+            return searchResult.Result;
         }
     }
 }

@@ -89,8 +89,7 @@ namespace Vault.WebHost
             where TCriterion : ICriterion
         {
             var query = _serviceProvider.GetRequiredService<IQuery<TCriterion, TResult>>();
-            var memoryCache = _serviceProvider.GetRequiredService<IMemoryCache>();
-            return new CachedQuery<TCriterion, TResult>(query, memoryCache);
+            return query;
         }
     }
 

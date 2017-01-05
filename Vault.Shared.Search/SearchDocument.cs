@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Vault.Shared.Domain;
 
 namespace Vault.Shared.Search
 {
-    public class SearchDocument : DynamicDictionary, IEntity, IContent
+    [Serializable]
+    public class SearchDocument : DynamicDictionary
     {
         public SearchDocument()
         {
@@ -15,15 +15,15 @@ namespace Vault.Shared.Search
         {
         }
 
-        public int Id
+        public string Id
         {
             get
             {
                 object value;
                 if (TryGetValue("Id", out value))
-                    return (int)value;
+                    return (string)value;
 
-                return default(int);
+                return default(string);
             }
             set
             {
@@ -31,15 +31,15 @@ namespace Vault.Shared.Search
             }
         }
 
-        public int OwnerId
+        public string OwnerId
         {
             get
             {
                 object value;
                 if (TryGetValue("OwnerId", out value))
-                    return (int)value;
+                    return (string)value;
 
-                return default(int);
+                return default(string);
             }
             set
             {
