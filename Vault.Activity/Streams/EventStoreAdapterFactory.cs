@@ -9,7 +9,7 @@ using Orleans.Streams;
 using Vault.Shared.EventSourcing.NEventStore;
 using NEventStore.Serialization;
 
-namespace Vault.Shared.EventStreams
+namespace Vault.Activity.Streams
 {
     public class EventStoreAdapterFactory : IQueueAdapterFactory
     {
@@ -58,15 +58,9 @@ namespace Vault.Shared.EventStreams
             _providerName = providerName;
             _logger = logger;
             _serviceProvider = serviceProvider;
-            _store = Wireup
-                .Init()
-                .LogToOutputWindow()
-                .UsingSqlPersistence(new PostgreSqlConnectionFactory(config.GetProperty("DataConnectionString", null)))
-                .WithDialect(new PostgreSqlDialect())
-                .InitializeStorageEngine()
-                .UsingCustomSerialization(new JsonSerializer())
-                .UsingEventUpconversion()
-                .Build();
+
+            var initializer = (IEventStoreInitializer)_serviceProvider.GetService(typeof(IEventStoreInitializer));
+            _store = initializer.Create();
 
             _cacheSize = SimpleQueueAdapterCache.ParseSize(config, CacheSizeDefaultValue);
             _adapterCache = new SimpleQueueAdapterCache(_cacheSize, logger);

@@ -10,7 +10,7 @@
     </StorageProviders>
     <StreamProviders>
       <Provider Type="Orleans.Providers.Streams.SimpleMessageStream.SimpleMessageStreamProvider" Name="ActivityProvider" />
-      <Provider Type="Vault.Shared.EventStreams.EventStoreStreamProvider" Name="EventStream" DataConnectionString="Server=127.0.01;Port=5432;Database=vault;User Id=postgres;Password=abc123!;Timeout=60" />
+      <Provider Type="Vault.Activity.Streams.EventStoreStreamProvider" Name="EventStream" DataConnectionString="Server=127.0.01;Port=5432;Database=vault;User Id=postgres;Password=abc123!;Timeout=60" />
     </StreamProviders>
     <BootstrapProviders>
       <Provider Type="Vault.Activity.Host.Bootstrap" Name="Activity" />

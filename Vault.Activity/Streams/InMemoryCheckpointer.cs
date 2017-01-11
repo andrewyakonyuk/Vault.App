@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Orleans.Streams;
 
-namespace Vault.Shared.EventStreams
+namespace Vault.Activity.Streams
 {
     public class InMemoryCheckpointer : IStreamQueueCheckpointer<string>
     {

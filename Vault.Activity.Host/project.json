@@ -31,7 +31,6 @@
     "NEventStore": "5.2.0",
     "Vault.Activity": "1.0.0-*",
     "Vault.Shared.Connectors.Pocket": "1.0.0-*",
-    "Vault.Shared.EventStreams": "1.0.0-*",
     "Vault.Shared.Search": "1.0.0-*",
     "Vault.Shared.Search.Lucene": "1.0.0-*"
   },

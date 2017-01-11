@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using NEventStore;
 using Orleans.Streams;
 
-namespace Vault.Shared.EventStreams
+namespace Vault.Activity.Streams
 {
     public class EventStoreQueryAdapter : IQueueAdapter
     {

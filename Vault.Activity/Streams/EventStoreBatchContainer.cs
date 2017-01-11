@@ -6,7 +6,7 @@ using Orleans.Providers.Streams.Common;
 using Orleans.Runtime;
 using Orleans.Streams;
 
-namespace Vault.Shared.EventStreams
+namespace Vault.Activity.Streams
 {
     [Serializable]
     public class EventStoreBatchContainer : IBatchContainer
