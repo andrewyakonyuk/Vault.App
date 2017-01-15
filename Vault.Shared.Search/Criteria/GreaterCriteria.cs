@@ -1,5 +1,8 @@
-﻿namespace Vault.Shared.Search.Criteria
+﻿using System;
+
+namespace Vault.Shared.Search.Criteria
 {
+    [Serializable]
     public class GreaterCriteria : ISearchCriteria
     {
         public bool Strict { get; set; }

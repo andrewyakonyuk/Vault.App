@@ -1,5 +1,8 @@
+using System;
+
 namespace Vault.Shared.Search.Criteria
 {
+    [Serializable]
     public class EqualCriteria : ISearchCriteria
     {
         public object Value { get; set; }

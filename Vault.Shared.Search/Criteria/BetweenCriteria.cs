@@ -1,5 +1,8 @@
-﻿namespace Vault.Shared.Search.Criteria
+﻿using System;
+
+namespace Vault.Shared.Search.Criteria
 {
+    [Serializable]
     public class BetweenCriteria : ISearchCriteria
     {
         public object Lower { get; set; }

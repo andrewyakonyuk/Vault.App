@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Orleans.Concurrency;
 using Vault.Shared;
 using Vault.Shared.EventSourcing;
+using Orleans.Serialization;
 
 namespace Vault.Activity
 {
@@ -12,11 +13,14 @@ namespace Vault.Activity
     {
         public ActivityEvent()
         {
-            //MetaBag = new DynamicDictionary();
+            MetaBag = new DynamicDictionary();
         }
 
-        //[JsonProperty(TypeNameHandling = TypeNameHandling.Objects)]
-        //public dynamic MetaBag { get; set; }
+        /// <summary>
+        /// Additional data for activity
+        /// </summary>
+        [JsonProperty(TypeNameHandling = TypeNameHandling.Objects)]
+        public dynamic MetaBag { get; set; }
 
         /// <summary>
         /// Provides a permanent, universally unique identifier for the activity

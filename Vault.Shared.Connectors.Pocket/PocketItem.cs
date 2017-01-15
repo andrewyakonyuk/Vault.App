@@ -11,6 +11,11 @@ namespace Vault.Shared.Connectors.Pocket
     [DebuggerDisplay("Uri = {Uri}, Title = {Title}")]
     public class PocketItem
     {
+        public PocketItem()
+        {
+            Tags = new List<PocketTag>();
+        }
+
         [JsonProperty("item_id")]
         public string ItemId { get; set; }
 
@@ -46,5 +51,13 @@ namespace Vault.Shared.Connectors.Pocket
 
         [JsonProperty("image")]
         public PocketImage Image { get; set; }
+
+        [JsonProperty("tags")]
+        [JsonConverter(typeof(ObjectToArrayConverter<PocketTag>))]
+        public IEnumerable<PocketTag> Tags { get; set; }
+
+        [JsonProperty("time_added")]
+        [JsonConverter(typeof(UnixDateTimeConverter))]
+        public DateTime TimeAdded { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
+using Vault.Activity;
 using Vault.Shared;
 using Vault.Shared.Domain;
 using Vault.Shared.Queries;
@@ -243,17 +244,17 @@ namespace Vault.WebHost.Services.Boards
 
                     result.Add(placeCard);
                 }
-                else if (item.DocumentType == "Article")
+                else if (item.DocumentType == "Article" || item.Verb == ActivityVerbs.Read)
                 {
                     var articleCard = new ArticleCard
                     {
-                        Id = item.Id,
-                        OwnerId = item.OwnerId,
+                       // Id = item.Id,
+                       // OwnerId = item.OwnerId,
                         Published = item.Published,
-                        Name = item.Name,
-                        Description = item.Description,
-                        Body = item.Body,
-                        Summary = item.Summary,
+                        Name = item.Title,
+                        Description = item.Content,
+                        Body = item.Content,
+                        Summary = item.Content,
                         Thumbnail = item.Thumbnail,
                         Url = item.Url
                     };

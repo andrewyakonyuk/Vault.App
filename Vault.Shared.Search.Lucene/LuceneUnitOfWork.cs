@@ -83,7 +83,7 @@ namespace Vault.Shared.Search.Lucene
             var conditionForDelete = new BooleanQuery();
             foreach (var descriptor in _metadata.Keys)
             {
-                var convertedValue = descriptor.Converter.ConvertToString(document[descriptor.Name]).ToLower();
+                var convertedValue = descriptor.Converter.ConvertToString(document[descriptor.Name]);
                 var term = new Term(descriptor.FieldName, convertedValue);
                 conditionForDelete.Add(new TermQuery(term), Occur.MUST);
             }

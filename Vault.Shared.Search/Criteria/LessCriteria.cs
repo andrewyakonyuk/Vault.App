@@ -1,6 +1,9 @@
-﻿namespace Vault.Shared.Search.Criteria
+﻿using System;
+
+namespace Vault.Shared.Search.Criteria
 {
-    public class LessCriteria : ISearchCriteria
+    [Serializable]
+    class LessCriteria : ISearchCriteria
     {
         public bool Strict { get; set; }
 

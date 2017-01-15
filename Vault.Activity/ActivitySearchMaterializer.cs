@@ -42,6 +42,8 @@ namespace Vault.Activity
                 document.Url = @event.Uri;
                 document.Provider = @event.Provider;
                 document.Published = @event.Published.ToUniversalTime().DateTime;
+                document.Tags = @event.MetaBag.Tags;
+                document.Thumbnail = @event.MetaBag.Thumbnail;
                 //todo: copy from meta
 
                 uow.Save(document);

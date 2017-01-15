@@ -1,5 +1,8 @@
-﻿namespace Vault.Shared.Search.Criteria
+﻿using System;
+
+namespace Vault.Shared.Search.Criteria
 {
+    [Serializable]
     public class ContainsCriteria : ISearchCriteria
     {
         public object Value { get; set; }

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Vault.Activity;
 using Vault.Activity.Services.Connectors;
+using System.Linq;
 
 namespace Vault.Shared.Connectors.Pocket
 {
@@ -72,9 +73,9 @@ namespace Vault.Shared.Connectors.Pocket
 
             foreach (var parsedItem in parsedResponse.Items)
             {
-                var published = DateTimeOffset.UtcNow;
+                var published = parsedItem.TimeAdded.ToUniversalTime();
 
-                activities.Add(new ActivityEvent
+                var readActivity = new ActivityEvent
                 {
                     Actor = context.User.Id.ToString("N"),
                     Id = parsedItem.ResolvedId,
@@ -84,7 +85,11 @@ namespace Vault.Shared.Connectors.Pocket
                     Title = parsedItem.Title,
                     Uri = parsedItem.Uri,
                     Content = parsedItem.Excerpt
-                });
+                };
+                readActivity.MetaBag.Thumbnail = parsedItem.Image?.Src;
+                readActivity.MetaBag.Tags = parsedItem.Tags?.Select(t => t.Name).ToList();
+
+                activities.Add(readActivity);
 
                 activities.Add(new ActivityEvent
                 {

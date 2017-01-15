@@ -20,6 +20,10 @@ using Vault.Shared.Search;
 using Vault.Shared.Search.Lucene;
 using Vault.Shared.Search.Lucene.Converters;
 using Vault.Shared.Search.Parsing;
+using Orleans.Serialization;
+using System.Globalization;
+using System.Collections.Generic;
+using MultilineStringConverter = Vault.Shared.Search.Lucene.Converters.MultilineStringConverter;
 
 namespace Vault.Activity.Host
 {
@@ -27,6 +31,8 @@ namespace Vault.Activity.Host
     {
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            SerializationManager.Register(typeof(ActivityEvent), typeof(ActivityEventSerializer));
+
             services.AddSingleton<ILogger, ConsoleLogger>();
             services.AddTransient<IRepository, EventStoreRepository>();
             services.AddTransient<IDetectConflicts, ConflictDetector>();
@@ -78,7 +84,7 @@ namespace Vault.Activity.Host
 
             var builder = new FluentDescriptorProviderBuilder()
                 .Index(IndexNames.Default)
-                    .Field("Id", "_id")
+                    .Field("Id", "_id", isKey: true)
                     .Field("OwnerId", "_ownerId", isKey: true, converter: new StringConverter())
                     .Field("Provider", isKey: true)
                     .Field("Verb", "_verb", isKey: true, isAnalysed: true)
@@ -98,6 +104,7 @@ namespace Vault.Activity.Host
                     .Field("Summary", isAnalysed: true)
                     .Field("Thumbnail")
                     .Field("Url", isAnalysed: true, isKeyword: true)
+                    .Field("Tags", "_tags", converter: new MultilineStringConverter(), isKeyword: true, isAnalysed: true)
                     .BuildIndex();
             services.AddSingleton<IIndexDocumentMetadataProvider>(s => builder.BuildProvider());
 
