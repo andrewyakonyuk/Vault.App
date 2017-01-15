@@ -59,8 +59,15 @@ namespace Vault.Activity.Streams
             _logger = logger;
             _serviceProvider = serviceProvider;
 
-            var initializer = (IEventStoreInitializer)_serviceProvider.GetService(typeof(IEventStoreInitializer));
-            _store = initializer.Create();
+            _store = Wireup
+                .Init()
+                .LogToOutputWindow()
+                .UsingSqlPersistence(new PostgreSqlConnectionFactory(config.GetProperty("DataConnectionString", null)))
+                .WithDialect(new PostgreSqlDialect())
+                .InitializeStorageEngine()
+                .UsingCustomSerialization(new JsonSerializer())
+                .UsingEventUpconversion()
+                .Build();
 
             _cacheSize = SimpleQueueAdapterCache.ParseSize(config, CacheSizeDefaultValue);
             _adapterCache = new SimpleQueueAdapterCache(_cacheSize, logger);
