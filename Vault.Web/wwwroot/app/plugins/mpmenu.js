@@ -1,6 +1,6 @@
 /*global define */
 
-define(['jquery', 'jquery-ui/accordion'], function ($, Hammer) {
+define(['jquery', 'jquery-ui/widgets/accordion'], function ($, Hammer) {
     'use strict';
 
     var PushMenu = function () {

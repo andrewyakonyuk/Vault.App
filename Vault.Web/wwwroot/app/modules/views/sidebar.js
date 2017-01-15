@@ -1,4 +1,4 @@
-define(['jquery', 'backbone', 'plugins/mpmenu', 'jquery-ui/accordion'], function($, Backbone, mpmenu){
+define(['jquery', 'backbone', 'plugins/mpmenu', 'jquery-ui/widgets/accordion'], function($, Backbone, mpmenu){
    
    var SideBarView = Backbone.View.extend({
         el: '#sidebar',

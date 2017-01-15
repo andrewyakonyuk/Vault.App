@@ -1,4 +1,4 @@
-define(['jquery', 'backbone', 'jquery-ui/autocomplete', 'jquery-ui/menu'], function ($, Backbone) {
+define(['jquery', 'backbone', 'jquery-ui/widgets/autocomplete', 'jquery-ui/widgets/menu'], function ($, Backbone) {
     var templateSettings = {
         evaluate: /{{=([\s\S]+?)}}/g,
         interpolate: /{{([\s\S]+?)}}/g,

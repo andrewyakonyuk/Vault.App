@@ -14,8 +14,8 @@ define(function (require, exports, module) {
 
     require('widgets/audio');
     require('plugins/jquery.sticky');
-    require('jquery-ui/menu');
-    require('jquery-ui/tooltip');
+    require('jquery-ui/widgets/menu');
+    require('jquery-ui/widgets/tooltip');
 
     $('.menu').menu({
         position: { my: "right bottom", at: "right top" }
