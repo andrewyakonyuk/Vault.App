@@ -18,7 +18,7 @@
         replace = require('gulp-replace'),
         uglify = require('gulp-uglify'),
         htmlreplace = require('gulp-html-replace'),
-        minifyCSS = require('gulp-minify-css'),
+        minifyCSS = require('gulp-clean-css'),
         concatCss = require('gulp-concat-css'),
         less = require('gulp-less'),
         //autoprefixer = require('gulp-autoprefixer'),
