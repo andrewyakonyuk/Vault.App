@@ -14,8 +14,6 @@ using Vault.Activity.Services;
 using Vault.Activity.Services.Connectors;
 using Vault.Shared;
 using Vault.Shared.Connectors.Pocket;
-using Vault.Shared.EventSourcing;
-using Vault.Shared.EventSourcing.NEventStore;
 using Vault.Shared.Search;
 using Vault.Shared.Search.Lucene;
 using Vault.Shared.Search.Lucene.Converters;
@@ -34,20 +32,6 @@ namespace Vault.Activity.Host
             SerializationManager.Register(typeof(ActivityEvent), typeof(ActivityEventSerializer));
 
             services.AddSingleton<ILogger, ConsoleLogger>();
-            services.AddTransient<IRepository, EventStoreRepository>();
-            services.AddTransient<IDetectConflicts, ConflictDetector>();
-            services.AddTransient<IConstructAggregates, AggregateFactory>();
-            services.AddSingleton<IPipelineHook, LowLatencyPollingPipelineHook>();
-            services.AddSingleton<IStoreEvents>(s => s.GetRequiredService<IEventStoreInitializer>().Create());
-            services.AddSingleton<ICheckpointRepository, InMemoryCheckpointRepository>();
-            services.AddTransient<IObserver<ICommit>, ReadModelCommitObserver>();
-            services.AddTransient<EventObserverSubscriptionFactory, EventObserverSubscriptionFactory>();
-            services.AddSingleton<IObserveCommits>(s => s.GetRequiredService<EventObserverSubscriptionFactory>().Construct());
-            services.AddTransient<IDispatchCommits, EmptyDispatchCommits>();
-            services.AddTransient<Lazy<IObserveCommits>>(s => new Lazy<IObserveCommits>(() => s.GetRequiredService<IObserveCommits>()));
-            services.AddTransient<IEventedUnitOfWorkFactory, EventedUnitOfWorkFactory>();
-            services.AddSingleton<IEventStoreInitializer, NEventStoreWithCustomPipelineFactory>();
-
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Environment.CurrentDirectory)
                  .AddJsonFile("config.json", optional: false, reloadOnChange: true)
@@ -81,29 +65,19 @@ namespace Vault.Activity.Host
             services.AddTransient<IIndexWriterInitializer, IndexWriterInitializer>();
             services.AddSingleton<IIndexWriterAccessor, DefaultIndexWriterAccessor>();
             services.AddTransient<ISearchQueryParser, DefaultSearchQueryParser>();
+            services.AddQueries();
 
             var builder = new FluentDescriptorProviderBuilder()
                 .Index(IndexNames.Default)
-                    .Field("Id", "_id", isKey: true)
-                    .Field("OwnerId", "_ownerId", isKey: true, converter: new StringConverter())
-                    .Field("Provider", isKey: true)
-                    .Field("Verb", "_verb", isKey: true, isAnalysed: true)
-                    .Field("Published", "_published", converter: new LuceneDateTimeConverter())
-                    .Field("Title", isKeyword: true, isAnalysed: true)
-                    .Field("Content", isKeyword: true, isAnalysed: true)
-                    .Field("Target")
-                    .Field("StartDate", converter: new LuceneDateTimeConverter())
-                    .Field("EndDate", converter: new LuceneDateTimeConverter())
-                    .Field("Duration", converter: new TimeSpanConverter())
-                    .Field("Elevation", converter: new DoubleConverter())
-                    .Field("Latitude", converter: new DoubleConverter())
-                    .Field("Longitude", converter: new DoubleConverter())
-                    .Field("ByArtist", isKeyword: true, isAnalysed: true)
-                    .Field("InAlbum", isKeyword: true, isAnalysed: true)
-                    .Field("Body", isAnalysed: true)
-                    .Field("Summary", isAnalysed: true)
-                    .Field("Thumbnail")
-                    .Field("Url", isAnalysed: true, isKeyword: true)
+                    .Field(nameof(ActivityEvent.Id), "_id", isKey: true)
+                    .Field(nameof(ActivityEvent.Actor), "_ownerId", isKey: true, converter: new StringConverter())
+                    .Field(nameof(ActivityEvent.Provider), isKey: true)
+                    .Field(nameof(ActivityEvent.Verb), "_verb", isKey: true, isAnalysed: true)
+                    .Field(nameof(ActivityEvent.Published), "_published", converter: new LuceneDateTimeConverter())
+                    .Field(nameof(ActivityEvent.Title), isKeyword: true, isAnalysed: true)
+                    .Field(nameof(ActivityEvent.Content), isKeyword: true, isAnalysed: true)
+                    .Field(nameof(ActivityEvent.Target))
+                    .Field(nameof(ActivityEvent.Uri), isAnalysed: true, isKeyword: true)
                     .Field("Tags", "_tags", converter: new MultilineStringConverter(), isKeyword: true, isAnalysed: true)
                     .BuildIndex();
             services.AddSingleton<IIndexDocumentMetadataProvider>(s => builder.BuildProvider());

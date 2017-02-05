@@ -6,7 +6,6 @@ using Orleans.Providers;
 using Orleans.Providers.Streams.Common;
 using Orleans.Runtime;
 using Orleans.Streams;
-using Vault.Shared.EventSourcing.NEventStore;
 using NEventStore.Serialization;
 
 namespace Vault.Activity.Streams

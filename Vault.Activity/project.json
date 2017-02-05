@@ -20,8 +20,6 @@
     "NEventStore": "5.2.0",
     "Npgsql": "3.0.5",
     "Vault.Shared": "1.0.0-*",
-    "Vault.Shared.EventSourcing": "1.0.0-*",
-    "Vault.Shared.EventSourcing.NEventStore": "1.0.0-*",
     "Vault.Shared.Search": "1.0.0-*",
     "Vault.Shared.TransientFaultHandling": "1.0.0-*"
   }
