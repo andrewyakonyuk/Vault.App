@@ -4,18 +4,20 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using NEventStore;
 using Orleans.Streams;
+using Vault.Activity.Persistence;
+using Orleans;
 
 namespace Vault.Activity.Streams
 {
     public class EventStoreQueryAdapter : IQueueAdapter
     {
-        readonly IStoreEvents _store;
+        readonly IAppendOnlyStore _store;
         readonly ConcurrentDictionary<QueueId, EventStoreAdapterReceiver> _receivers;
         readonly IStreamQueueCheckpointer<string> _checkpointer;
 
         public EventStoreQueryAdapter(
             string providerName,
-            IStoreEvents store,
+            IAppendOnlyStore store,
             IStreamQueueCheckpointer<string> checkpointer)
         {
             if (string.IsNullOrEmpty(providerName))
@@ -31,7 +33,7 @@ namespace Vault.Activity.Streams
             _checkpointer = checkpointer;
         }
 
-        public StreamProviderDirection Direction => StreamProviderDirection.ReadWrite;
+        public StreamProviderDirection Direction => StreamProviderDirection.ReadOnly;
 
         public bool IsRewindable => true;
 
@@ -44,23 +46,7 @@ namespace Vault.Activity.Streams
 
         public Task QueueMessageBatchAsync<T>(Guid streamGuid, string streamNamespace, IEnumerable<T> events, StreamSequenceToken token, Dictionary<string, object> requestContext)
         {
-            var latestSnapshot = _store.Advanced.GetSnapshot(streamNamespace, streamGuid, int.MaxValue);
-
-            using (var stream = latestSnapshot == null ?
-                _store.OpenStream(streamNamespace, streamGuid) :
-                _store.OpenStream(latestSnapshot, int.MaxValue))
-            {
-                foreach (var item in events)
-                {
-                    stream.Add(new EventMessage { Body = item, Headers = requestContext });
-                }
-                stream.CommitChanges(Guid.NewGuid());
-
-                if (stream.CommitSequence % 1000 == 0)
-                    _store.Advanced.AddSnapshot(new Snapshot(stream.BucketId, stream.StreamRevision, string.Empty));
-
-                return Task.FromResult(true);
-            }
+            throw new NotSupportedException();
         }
 
         private EventStoreAdapterReceiver MakeReceiver(QueueId queueId)

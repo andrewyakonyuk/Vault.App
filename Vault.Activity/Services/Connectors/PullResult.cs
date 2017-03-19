@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vault.Activity.Services.Connectors
 {
-    public class PullResult : IEnumerable<ActivityEvent>
+    public class PullResult : IEnumerable<ActivityEventAttempt>
     {
-        readonly List<ActivityEvent> _activities;
+        readonly List<ActivityEventAttempt> _activities;
 
         public readonly static PullResult Empty = new PullResult { IsCancellationRequested = true };
 
@@ -16,23 +16,23 @@ namespace Vault.Activity.Services.Connectors
 
         public int Iteration { get; }
 
-        public PullResult(IEnumerable<ActivityEvent> activities, int iteration)
+        public PullResult(IEnumerable<ActivityEventAttempt> activities, int iteration)
         {
             if (activities == null)
                 throw new ArgumentNullException(nameof(activities));
 
-            _activities = new List<ActivityEvent>(activities);
+            _activities = new List<ActivityEventAttempt>(activities);
             Iteration = iteration;
         }
 
         public PullResult()
         {
-            _activities = new List<ActivityEvent>();
+            _activities = new List<ActivityEventAttempt>();
         }
 
         public int Count { get { return _activities.Count; } }
 
-        public IEnumerator<ActivityEvent> GetEnumerator()
+        public IEnumerator<ActivityEventAttempt> GetEnumerator()
         {
             return _activities.GetEnumerator();
         }

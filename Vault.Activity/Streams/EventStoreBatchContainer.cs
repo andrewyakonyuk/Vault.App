@@ -5,6 +5,7 @@ using NEventStore;
 using Orleans.Providers.Streams.Common;
 using Orleans.Runtime;
 using Orleans.Streams;
+using Orleans.Concurrency;
 
 namespace Vault.Activity.Streams
 {
@@ -17,27 +18,30 @@ namespace Vault.Activity.Streams
 
         public string StreamNamespace { get; }
 
-        ICollection<EventMessage> Events { get; }
-
         int CommitSequence { get; }
 
-        public EventStoreBatchContainer(ICommit commit)
-        {
-            if (commit == null)
-                throw new ArgumentNullException(nameof(commit));
+        readonly CommitedActivityEvent _activity;
 
-            StreamGuid = Guid.Parse(commit.StreamId);
-            StreamNamespace = commit.BucketId;
-            SequenceToken = new EventSequenceToken(commit.CommitSequence);
-            Events = commit.Events;
-            CommitSequence = commit.CommitSequence;
+        public EventStoreBatchContainer()
+        {
+
+        }
+
+        public EventStoreBatchContainer(CommitedActivityEvent activity)
+        {
+            if (activity == null)
+                throw new ArgumentNullException(nameof(activity));
+
+            _activity = activity;
+            StreamGuid = activity.StreamId;
+            StreamNamespace = activity.Bucket;
+            SequenceToken = new EventSequenceToken(activity.CheckpointToken);
+            CommitSequence = (int)activity.CheckpointToken;
         }
 
         public IEnumerable<Tuple<T, StreamSequenceToken>> GetEvents<T>()
         {
-            return Events.Where(t => t.Body is T).Select((t, i) =>
-                 Tuple.Create<T, StreamSequenceToken>((T)t.Body,
-                     new EventSequenceToken(CommitSequence, i)));
+            yield return new Tuple<T, StreamSequenceToken>((T)(object)_activity, new EventSequenceToken(CommitSequence));
         }
 
         public bool ImportRequestContext()
@@ -50,11 +54,9 @@ namespace Vault.Activity.Streams
             if (shouldReceiveFunc == null)
                 return true;
 
-            foreach (var item in Events)
-            {
-                if (shouldReceiveFunc(stream, filterData, item.Body))
-                    return true; // There is something in this batch that the consumer is intereted in, so we should send it.
-            }
+            if (shouldReceiveFunc(stream, filterData, _activity))
+                return true; // There is something in this batch that the consumer is intereted in, so we should send it.
+
             return false; // Consumer is not interested in any of these events, so don't send.
         }
     }

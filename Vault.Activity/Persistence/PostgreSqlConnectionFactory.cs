@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Data;
+using System.Data.Common;
 using NEventStore.Persistence.Sql;
 using Npgsql;
 
-namespace Vault.Activity.Host
+namespace Vault.Activity.Persistence
 {
-    public class PostgreSqlConnectionFactory : IConnectionFactory
+    public class PostgreSqlConnectionFactory : IConnectionFactory, ISqlConnectionFactory
     {
         readonly string _connectionString;
 
         public PostgreSqlConnectionFactory(string connectionString)
         {
+            if (string.IsNullOrEmpty(connectionString))
+                throw new ArgumentNullException(nameof(connectionString));
+
             _connectionString = connectionString;
         }
 

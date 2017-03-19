@@ -69,6 +69,14 @@ namespace Vault.Shared
 
             logger.Write(LogCategory.Error, ex.ToString());
         }
+
+        public static void WriteError(this ILogger logger, Exception ex, string message, params object[] args)
+        {
+            if (logger == null)
+                return;
+
+            logger.Write(LogCategory.Error, string.Join(Environment.NewLine, ex.ToString(), message), args);
+        }
     }
 
     public enum LogCategory

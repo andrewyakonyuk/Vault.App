@@ -6,6 +6,8 @@ using Orleans;
 using Orleans.Concurrency;
 using Orleans.Runtime;
 using System.Linq;
+using Vault.Activity.Client;
+using Vault.Activity.Utility;
 
 namespace Vault.Activity.Services.Connectors
 {
@@ -17,8 +19,7 @@ namespace Vault.Activity.Services.Connectors
 
         Task DisconnectAsync();
     }
-
-    [Serializable]
+    
     public class CatchConnectionState
     {
         public Guid OwnerId { get; set; }
@@ -29,17 +30,22 @@ namespace Vault.Activity.Services.Connectors
     public class CatchConnectionWorker : Grain<CatchConnectionState>, ICatchConnectionWorker
     {
         readonly IConnectionPool<ICatchConnectionProvider> _connectionPool;
+        readonly IActivityClient _activityClient;
         Logger _logger;
         IClock _clock;
 
         public CatchConnectionWorker(
             IConnectionPool<ICatchConnectionProvider> connectionPool,
+            IActivityClient activityClient,
             IClock clock)
         {
             if (connectionPool == null)
                 throw new ArgumentNullException(nameof(connectionPool));
+            if (activityClient == null)
+                throw new ArgumentNullException(nameof(activityClient));
 
             _connectionPool = connectionPool;
+            _activityClient = activityClient;
             _clock = clock;
         }
 
@@ -88,13 +94,16 @@ namespace Vault.Activity.Services.Connectors
 
             try
             {
-                var activityFeed = GrainFactory.GetGrain<IActivityFeed>(State.OwnerId, keyExtension: "timeline");
+                var activityFeed = await _activityClient.GetFeedAsync("timeline", State.OwnerId);
                 var userInfo = new UserInfo(State.ProviderKey, State.OwnerId);
                 var context = new CatchConnectionContext(userInfo, response);
 
                 var result = await connectionProvider.CatchAsync(context);
 
-                await activityFeed.NewActivityAsync(result.ToList());
+                foreach (var activity in result)
+                {
+                    await activityFeed.PushActivityAsync(activity);
+                }
 
                 _logger.Verbose($"{this.GetPrimaryKey()}: Finished '{State.ProviderName}'s catch hook with {result.Count} results");
             }

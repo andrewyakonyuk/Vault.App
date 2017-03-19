@@ -6,9 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Vault.Shared;
 
-namespace Vault.Activity.Host
+namespace Vault.Activity
 {
-    public class ActivityEventSerializer
+    public partial class ActivityEventAttempt
     {
         [CopierMethod]
         public static object DeepCopier(object original)
@@ -19,7 +19,7 @@ namespace Vault.Activity.Host
         [SerializerMethod]
         public static void Serializer(object untypedInput, BinaryTokenStreamWriter stream, Type expected)
         {
-            ActivityEvent input = (ActivityEvent)untypedInput;
+            var input = (CommitedActivityEvent)untypedInput;
             SerializationManager.SerializeInner(input.Actor, stream, typeof(String));
             SerializationManager.SerializeInner(input.Content, stream, typeof(String));
             SerializationManager.SerializeInner(input.Id, stream, typeof(String));
@@ -35,7 +35,7 @@ namespace Vault.Activity.Host
         [DeserializerMethod]
         public static Object Deserializer(Type expected, BinaryTokenStreamReader stream)
         {
-            ActivityEvent result = new ActivityEvent();
+            var result = new CommitedActivityEvent();
             @DeserializationContext.@Current.@RecordObject(result);
             result.Actor = (String)SerializationManager.@DeserializeInner(typeof(String), stream);
             result.Content = (String)SerializationManager.@DeserializeInner(typeof(String), stream);

@@ -113,7 +113,7 @@ namespace Vault.WebHost.Services.Boards
                 SortBy = new[] { new SortField("Published", false) }
             };
             var searchResults = await _queryBuilder.For<IPagedEnumerable<SearchDocument>>().With(request);
-
+            
             board.Cards = CreateCards(searchResults);
 
             return board;
@@ -256,7 +256,7 @@ namespace Vault.WebHost.Services.Boards
                         Body = item.Content,
                         Summary = item.Content,
                         Thumbnail = item.Thumbnail,
-                        Url = item.Url
+                        Url = item.Uri
                     };
                     result.Add(articleCard);
                 }

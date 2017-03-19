@@ -15,6 +15,11 @@
     <BootstrapProviders>
       <Provider Type="Vault.Activity.Host.Bootstrap" Name="Activity" />
     </BootstrapProviders>
+    <Messaging>
+      <SerializationProviders>
+        <Provider type="Orleans.Serialization.BondSerializer, OrleansBondUtils"/>
+      </SerializationProviders>
+    </Messaging>
   </Globals>
   <Defaults>
     <Networking Address="localhost" Port="11111" />

@@ -11,4 +11,9 @@
   <StorageProviders>
     <Provider Type="Orleans.Storage.MemoryStorage" Name="PubSubStore" />
   </StorageProviders>
+  <Messaging>
+    <SerializationProviders>
+      <Provider type="Orleans.Serialization.BondSerializer, OrleansBondUtils"/>
+    </SerializationProviders>
+  </Messaging>
 </ClientConfiguration>

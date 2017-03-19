@@ -31,52 +31,6 @@ namespace Vault.Shared.Search.Lucene
             return new DefaultIndexDocumentDescriptorProvider(_indexBuilders);
         }
 
-        public class IndexMetadataBuilder
-        {
-            public List<DocumentFieldDescriptor> Descriptors { get; }
-            readonly FluentDescriptorProviderBuilder _parentBuilder;
-
-            public IndexMetadataBuilder(FluentDescriptorProviderBuilder parentBuilder)
-            {
-                Descriptors = new List<DocumentFieldDescriptor>();
-                _parentBuilder = parentBuilder;
-            }
-
-            public IndexMetadataBuilder Field(
-                    string name,
-                    string fieldName = null,
-                    bool isStored = true,
-                    bool isKeyword = false,
-                    bool isIndexed = true,
-                    bool isAnalysed = false,
-                    bool omitNorms = true,
-                    bool isKey = false,
-                    TypeConverter converter = null)
-            {
-                fieldName = fieldName ?? name.ToLowerInvariant();
-                converter = converter ?? DocumentFieldDescriptor.DefaultConverter;
-                var descriptor = new DocumentFieldDescriptor(name, fieldName)
-                {
-                    IsKeyword = isKeyword,
-                    IsAnalysed = isAnalysed,
-                    IsIndexed = isIndexed,
-                    IsStored = isStored,
-                    OmitNorms = omitNorms,
-                    Converter = converter,
-                    IsKey = isKey
-                };
-
-                Descriptors.Add(descriptor);
-
-                return this;
-            }
-
-            public FluentDescriptorProviderBuilder BuildIndex()
-            {
-                return _parentBuilder;
-            }
-        }
-
         private class DefaultIndexDocumentDescriptorProvider : IIndexDocumentMetadataProvider
         {
             readonly Dictionary<string, IndexMetadataBuilder> _indexBuilders;
@@ -94,6 +48,63 @@ namespace Vault.Shared.Search.Lucene
 
                 return new IndexDocumentMetadata(indexBuilder.Descriptors);
             }
+        }
+    }
+
+    public class IndexMetadataBuilder
+    {
+        public List<DocumentFieldDescriptor> Descriptors { get; }
+        readonly FluentDescriptorProviderBuilder _parentBuilder;
+
+        public IndexMetadataBuilder()
+            : this(new FluentDescriptorProviderBuilder())
+        {
+
+        }
+
+        public IndexMetadataBuilder(FluentDescriptorProviderBuilder parentBuilder)
+        {
+            Descriptors = new List<DocumentFieldDescriptor>();
+            _parentBuilder = parentBuilder;
+        }
+
+        public IndexMetadataBuilder Field(
+                string name,
+                string fieldName = null,
+                bool isStored = true,
+                bool isKeyword = false,
+                bool isIndexed = true,
+                bool isAnalysed = false,
+                bool omitNorms = true,
+                bool isKey = false,
+                TypeConverter converter = null)
+        {
+            fieldName = fieldName ?? name.ToLowerInvariant();
+            converter = converter ?? DocumentFieldDescriptor.DefaultConverter;
+            var descriptor = new DocumentFieldDescriptor(name, fieldName)
+            {
+                IsKeyword = isKeyword,
+                IsAnalysed = isAnalysed,
+                IsIndexed = isIndexed,
+                IsStored = isStored,
+                OmitNorms = omitNorms,
+                Converter = converter,
+                IsKey = isKey
+            };
+
+            Descriptors.Add(descriptor);
+
+            return this;
+        }
+
+        public FluentDescriptorProviderBuilder BuildIndex()
+        {
+            return _parentBuilder;
+        }
+
+        public IndexDocumentMetadata NewMetadata()
+        {
+            return new IndexDocumentMetadata(Descriptors);
         }
     }
 }

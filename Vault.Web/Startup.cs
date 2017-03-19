@@ -32,8 +32,15 @@ using Vault.WebHost.Services.Boards.Overrides;
 using Vault.WebHost.Services.Security;
 using Vault.Shared.Search;
 using Vault.Shared;
-using Vault.Activity.Services.Search;
+//using Vault.Activity.Services.Search;
 using Vault.Shared.Search.Parsing;
+using Orleans.Streams;
+using Vault.Activity;
+using Orleans.Serialization;
+using Vault.Activity.Persistence;
+using Vault.Activity.Services.Search;
+using Vault.Activity.Client;
+using System.Threading.Tasks;
 
 namespace Vault.WebHost
 {
@@ -115,8 +122,11 @@ namespace Vault.WebHost
             services.AddTransient<UsernameRouteConstraint>();
             services.AddSingleton<ISearchProvider, RemoteSearchProvider>();
             services.AddSingleton<ISearchQueryParser, RemoteSearchQueryParser>();
-        }
 
+            services.AddSingleton<IAppendOnlyStore, SqlAppendOnlyStore>();
+            services.AddSingleton<ISqlConnectionFactory, PostgreSqlConnectionFactory>(_ => new PostgreSqlConnectionFactory(Configuration["connectionStrings:db"]));
+
+    }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(
             IApplicationBuilder app,
@@ -218,6 +228,17 @@ namespace Vault.WebHost
                 try
                 {
                     GrainClient.Initialize("ClientConfiguration.xml");
+                    //SerializationManager.Register(typeof(ActivityEvent), typeof(ActivityEventSerializer));
+                    //SerializationManager.Register(typeof(CommitedActivityEvent), typeof(CommitedActivityEventSerializer));
+
+                    var streamProvider = GrainClient.GetStreamProvider("EventStream");
+                    var consumer = streamProvider.GetStream<CommitedActivityEvent>(Guid.Parse("a314130a-91c2-44e3-949b-be4c60bf1752"), "timeline");
+                    consumer.SubscribeAsync((activity, token) =>
+                    {
+                        var a = 5;
+
+                        return TaskDone.Done;
+                    });
                     break;
                 }
                 catch (SiloUnavailableException)

@@ -69,13 +69,13 @@ namespace Vault.Shared.Connectors.Pocket
                 }
             });
 
-            var activities = new List<ActivityEvent>(parsedResponse.Items.Count * 2);
+            var activities = new List<ActivityEventAttempt>(parsedResponse.Items.Count * 2);
 
             foreach (var parsedItem in parsedResponse.Items)
             {
                 var published = parsedItem.TimeAdded.ToUniversalTime();
 
-                var readActivity = new ActivityEvent
+                var readActivity = new ActivityEventAttempt
                 {
                     Actor = context.User.Id.ToString("N"),
                     Id = parsedItem.ResolvedId,
@@ -91,7 +91,7 @@ namespace Vault.Shared.Connectors.Pocket
 
                 activities.Add(readActivity);
 
-                activities.Add(new ActivityEvent
+                activities.Add(new ActivityEventAttempt
                 {
                     Actor = context.User.Id.ToString("N"),
                     Id = parsedItem.ResolvedId,

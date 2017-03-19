@@ -13,5 +13,6 @@ namespace Vault.Activity
         public const string Like = "like";
         public const string Dislike = "dislike";
         public const string Unlike = "unlike";
+        public const string Post = "post";
     }
 }

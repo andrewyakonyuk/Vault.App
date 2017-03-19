@@ -4,19 +4,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using NEventStore;
 using Orleans.Streams;
+using Vault.Activity.Persistence;
 
 namespace Vault.Activity.Streams
 {
     public class EventStoreAdapterReceiver : IQueueAdapterReceiver
     {
-        readonly IStoreEvents _store;
         readonly QueueId _queueId;
         readonly IStreamQueueCheckpointer<string> _checkpointer;
-        string _offset;
+        long _offset;
+        readonly IAppendOnlyStore _store;
 
         public EventStoreAdapterReceiver(
             QueueId queueId,
-            IStoreEvents store,
+            IAppendOnlyStore store,
             IStreamQueueCheckpointer<string> checkpointer)
         {
             if (queueId == null)
@@ -31,14 +32,14 @@ namespace Vault.Activity.Streams
             _checkpointer = checkpointer;
         }
 
-        public Task<IList<IBatchContainer>> GetQueueMessagesAsync(int maxCount)
+        public async Task<IList<IBatchContainer>> GetQueueMessagesAsync(int maxCount)
         {
-            var commits = _store.Advanced.GetFrom(_offset).ToArray();
-            if (commits.Length == 0)
-                return Task.FromResult<IList<IBatchContainer>>(new List<IBatchContainer>());
+            var records = await _store.ReadRecordsAsync(_offset, maxCount);
+            if (records.Count == 0)
+                return new List<IBatchContainer>();
 
-            var result = new List<IBatchContainer>(commits.Length);
-            foreach (var item in commits)
+            var result = new List<IBatchContainer>(records.Count);
+            foreach (var item in records)
             {
                 var batchContainer = new EventStoreBatchContainer(item);
                 result.Add(batchContainer);
@@ -46,14 +47,15 @@ namespace Vault.Activity.Streams
                 _offset = item.CheckpointToken;
             }
 
-            _checkpointer.Update(_offset, DateTime.UtcNow);
+            _checkpointer.Update(_offset.ToString(), DateTime.UtcNow);
 
-            return Task.FromResult<IList<IBatchContainer>>(result);
+            return result;
         }
 
         public async Task Initialize(TimeSpan timeout)
         {
-            _offset = await _checkpointer.Load();
+            if (!long.TryParse((await _checkpointer.Load()), out _offset))
+                _offset = 0;
         }
 
         public Task MessagesDeliveredAsync(IList<IBatchContainer> messages)

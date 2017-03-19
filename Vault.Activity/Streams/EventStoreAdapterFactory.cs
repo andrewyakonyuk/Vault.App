@@ -7,6 +7,7 @@ using Orleans.Providers.Streams.Common;
 using Orleans.Runtime;
 using Orleans.Streams;
 using NEventStore.Serialization;
+using Vault.Activity.Persistence;
 
 namespace Vault.Activity.Streams
 {
@@ -16,7 +17,7 @@ namespace Vault.Activity.Streams
         IServiceProvider _serviceProvider;
         IProviderConfiguration _providerConfig;
         string _providerName;
-        IStoreEvents _store;
+        IAppendOnlyStore _store;
         int _cacheSize;
         IQueueAdapterCache _adapterCache;
         IStreamQueueMapper _streamQueueMapper;
@@ -58,15 +59,7 @@ namespace Vault.Activity.Streams
             _logger = logger;
             _serviceProvider = serviceProvider;
 
-            _store = Wireup
-                .Init()
-                .LogToOutputWindow()
-                .UsingSqlPersistence(new PostgreSqlConnectionFactory(config.GetProperty("DataConnectionString", null)))
-                .WithDialect(new PostgreSqlDialect())
-                .InitializeStorageEngine()
-                .UsingCustomSerialization(new JsonSerializer())
-                .UsingEventUpconversion()
-                .Build();
+            _store = new SqlAppendOnlyStore(new PostgreSqlConnectionFactory(config.GetProperty("DataConnectionString", null)), new Persistence.JsonSerializer());
 
             _cacheSize = SimpleQueueAdapterCache.ParseSize(config, CacheSizeDefaultValue);
             _adapterCache = new SimpleQueueAdapterCache(_cacheSize, logger);

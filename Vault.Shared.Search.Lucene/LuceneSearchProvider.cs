@@ -98,7 +98,7 @@ namespace Vault.Shared.Search.Lucene
 
         Filter CreateFilter(SearchRequest request, IndexDocumentMetadata metadata)
         {
-            var query = new TermQuery(new Term(metadata.RewriteFieldName("OwnerId"), request.OwnerId.ToString(CultureInfo.InvariantCulture)));
+            var query = new TermQuery(new Term(metadata.RewriteFieldName("StreamId"), request.OwnerId.ToString(CultureInfo.InvariantCulture)));
             return FilterManager.Instance.GetFilter(new QueryWrapperFilter(query));
         }
 

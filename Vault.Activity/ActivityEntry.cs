@@ -9,9 +9,9 @@ namespace Vault.Activity
 {
     [Serializable]
     [Immutable]
-    public class ActivityEvent : IEvent
+    public abstract class ActivityEntry : IEvent
     {
-        public ActivityEvent()
+        public ActivityEntry()
         {
             MetaBag = new DynamicDictionary();
         }

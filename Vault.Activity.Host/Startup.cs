@@ -12,6 +12,7 @@ using NEventStore.Client;
 using NEventStore.Dispatcher;
 using Vault.Activity.Services;
 using Vault.Activity.Services.Connectors;
+using Vault.Activity.Sinks;
 using Vault.Shared;
 using Vault.Shared.Connectors.Pocket;
 using Vault.Shared.Search;
@@ -22,6 +23,10 @@ using Orleans.Serialization;
 using System.Globalization;
 using System.Collections.Generic;
 using MultilineStringConverter = Vault.Shared.Search.Lucene.Converters.MultilineStringConverter;
+using Vault.Activity.Client;
+using Vault.Activity.Persistence;
+using Vault.Activity.Utility;
+using Vault.Activity.Indexes;
 
 namespace Vault.Activity.Host
 {
@@ -29,8 +34,6 @@ namespace Vault.Activity.Host
     {
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            SerializationManager.Register(typeof(ActivityEvent), typeof(ActivityEventSerializer));
-
             services.AddSingleton<ILogger, ConsoleLogger>();
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Environment.CurrentDirectory)
@@ -69,18 +72,47 @@ namespace Vault.Activity.Host
 
             var builder = new FluentDescriptorProviderBuilder()
                 .Index(IndexNames.Default)
-                    .Field(nameof(ActivityEvent.Id), "_id", isKey: true)
-                    .Field(nameof(ActivityEvent.Actor), "_ownerId", isKey: true, converter: new StringConverter())
-                    .Field(nameof(ActivityEvent.Provider), isKey: true)
-                    .Field(nameof(ActivityEvent.Verb), "_verb", isKey: true, isAnalysed: true)
-                    .Field(nameof(ActivityEvent.Published), "_published", converter: new LuceneDateTimeConverter())
-                    .Field(nameof(ActivityEvent.Title), isKeyword: true, isAnalysed: true)
-                    .Field(nameof(ActivityEvent.Content), isKeyword: true, isAnalysed: true)
-                    .Field(nameof(ActivityEvent.Target))
-                    .Field(nameof(ActivityEvent.Uri), isAnalysed: true, isKeyword: true)
+                    .Field(nameof(CommitedActivityEvent.Id), "_id", isKey: true)
+                    .Field(nameof(CommitedActivityEvent.Actor), isKey: true)
+                    .Field(nameof(CommitedActivityEvent.Bucket), isKey: true)
+                    .Field(nameof(CommitedActivityEvent.StreamId), "_ownerId", isKey: true)
+                    .Field(nameof(CommitedActivityEvent.Provider), isKey: true)
+                    .Field(nameof(CommitedActivityEvent.Verb), "_verb", isKey: true, isAnalysed: true)
+                    .Field(nameof(CommitedActivityEvent.Published), "_published", converter: new LuceneDateTimeConverter())
+                    .Field(nameof(CommitedActivityEvent.Title), isKeyword: true, isAnalysed: true)
+                    .Field(nameof(CommitedActivityEvent.Content), isKeyword: true, isAnalysed: true)
+                    .Field(nameof(CommitedActivityEvent.Target))
+                    .Field(nameof(CommitedActivityEvent.CheckpointToken), converter: new Int64Converter())
+                    .Field(nameof(CommitedActivityEvent.Uri), isAnalysed: true, isKeyword: true)
                     .Field("Tags", "_tags", converter: new MultilineStringConverter(), isKeyword: true, isAnalysed: true)
                     .BuildIndex();
             services.AddSingleton<IIndexDocumentMetadataProvider>(s => builder.BuildProvider());
+
+            services.AddSingleton<IAppendOnlyStore, SqlAppendOnlyStore>();
+            services.AddSingleton<ISqlConnectionFactory, PostgreSqlConnectionFactory>(_ => new PostgreSqlConnectionFactory(configuration["connectionStrings:db"]));
+
+            services.AddSingleton<ISink<UncommitedActivityEvent>, PluggableBatchingSink<UncommitedActivityEvent>>(s =>
+            {
+                var store = s.GetRequiredService<IAppendOnlyStore>();
+                var adapter = new AppendOnlyStoreBatchingAdapter(store);
+
+                var clock = s.GetRequiredService<IClock>();
+                var logger = s.GetRequiredService<ILogger>();
+                return new PluggableBatchingSink<UncommitedActivityEvent>(adapter, logger, clock);
+            });
+            services.AddSingleton<ISink<CommitedActivityEvent>, PluggableBatchingSink<CommitedActivityEvent>>(s =>
+            {
+                var unitOfWorkFactory = s.GetRequiredService<IIndexUnitOfWorkFactory>();
+                var indexTasks = s.GetServices<AbstractIndexCreationTask<CommitedActivityEvent>>();
+
+                var adapter = new IndexBatchingAdapter<CommitedActivityEvent>(unitOfWorkFactory, indexTasks);
+                var clock = s.GetRequiredService<IClock>();
+                var logger = s.GetRequiredService<ILogger>();
+                return new PluggableBatchingSink<CommitedActivityEvent>(adapter, logger, clock);
+            });
+            services.AddSingleton<IActivityClient, DefaultActivityClient>();
+            services.AddSingleton<JsonSerializer>(_ => new JsonSerializer());
+            services.AddSingleton<AbstractIndexCreationTask<CommitedActivityEvent>, DefaultIndexCreationTask>();
 
             return services.BuildServiceProvider();
         }
