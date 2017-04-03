@@ -67,14 +67,19 @@ namespace Vault.Activity.Client
 
         public async Task<IReadOnlyCollection<CommitedActivityEvent>> SearchEventsAsync(string query, long checkpointToken, int maxCount)
         {
+            if (maxCount <= 0)
+                return new List<CommitedActivityEvent>();
+
             var parsedQuery = _queryParser.Parse(query);
             var searchCriteria = parsedQuery.AsCriteria();
+
+            maxCount = Math.Min(maxCount, 100);
 
             var searchRequest = new SearchRequest
             {
                 Count = maxCount,
                 Criteria = searchCriteria.ToList(),
-                IndexName = IndexNames.Default,
+                IndexName = _bucket,
                 OwnerId = _streamId.ToString("N")
             };
             //todo: include checkpointToken and bucket vars into search request
@@ -94,6 +99,8 @@ namespace Vault.Activity.Client
         {
             if (maxCount <= 0)
                 return new List<CommitedActivityEvent>();
+
+            maxCount = Math.Min(maxCount, 100);
 
             return await _appendOnlyStore.ReadRecordsAsync(_streamId, _bucket, checkpointToken, maxCount);
         }

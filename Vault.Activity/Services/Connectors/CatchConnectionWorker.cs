@@ -94,7 +94,7 @@ namespace Vault.Activity.Services.Connectors
 
             try
             {
-                var activityFeed = await _activityClient.GetFeedAsync("timeline", State.OwnerId);
+                var activityFeed = await _activityClient.GetFeedAsync(Buckets.Default, State.OwnerId);
                 var userInfo = new UserInfo(State.ProviderKey, State.OwnerId);
                 var context = new CatchConnectionContext(userInfo, response);
 

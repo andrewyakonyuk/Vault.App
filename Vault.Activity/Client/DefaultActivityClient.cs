@@ -34,6 +34,11 @@ namespace Vault.Activity.Client
 
         public Task<IActivityFeed> GetFeedAsync(string bucket, Guid streamId)
         {
+            if (string.IsNullOrEmpty(bucket))
+                throw new ArgumentNullException(nameof(bucket));
+            if (streamId == Guid.Empty)
+                throw new ArgumentException("Stream id is not set", nameof(streamId));
+
             var activityFeed = new ActivityFeed(bucket, streamId, _sink, _appendOnlyStore, _searchProvider, _queryParser, _clock);
 
             return Task.FromResult<IActivityFeed>(activityFeed);

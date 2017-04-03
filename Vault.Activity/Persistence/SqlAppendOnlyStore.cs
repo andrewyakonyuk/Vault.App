@@ -25,9 +25,9 @@ namespace Vault.Activity.Persistence
             using (var connection = _connectionFactory.Open())
             using (var transaction = connection.BeginTransaction())
             {
-                var result = await connection.ExecuteAsync(@"insert into public.activitylogs
+                var result = await connection.ExecuteAsync(@"INSERT INTO public.activitylogs
                     (bucketid, streamid, id, verb, actor, target, provider, url, published, metabag, title, content)
-                    values (@bucketid, @streamid, @id, @verb, @actor, @target, @provider, @url, @published, @metabag, @title, @content); ",
+                    VALUES (@bucketid, @streamid, @id, @verb, @actor, @target, @provider, @url, @published, @metabag, @title, @content); ",
                     events.Select(t => new
                     {
                         id = t.Id,
@@ -57,8 +57,8 @@ namespace Vault.Activity.Persistence
                             url, published, metabag, checkpointnumber, actor,
                             title, content
                             FROM public.activitylogs
-                            where checkpointnumber in @checkpointTokens
-                            order by checkpointnumber", new { checkpointTokens });
+                            WHERE checkpointnumber IN @checkpointTokens
+                            ORDER BY checkpointnumber", new { checkpointTokens });
 
                 var result = new List<CommitedActivityEvent>();
 
@@ -97,9 +97,9 @@ namespace Vault.Activity.Persistence
                             url, published, metabag, checkpointnumber, actor,
                             title, content
                             FROM public.activitylogs
-                            where checkpointnumber > @checkpointToken
-                            order by checkpointnumber asc
-                            limit @maxCount", new { checkpointToken, maxCount });
+                            WHERE checkpointnumber > @checkpointToken
+                            ORDER BY checkpointnumber ASC
+                            LIMIT @maxCount", new { checkpointToken, maxCount });
 
                 var result = new List<CommitedActivityEvent>(maxCount);
 
@@ -138,9 +138,9 @@ namespace Vault.Activity.Persistence
                             url, published, metabag, checkpointnumber, actor,
                             title, content
                             FROM public.activitylogs
-                            where checkpointnumber > @checkpointToken and streamid = @streamId and bucket = @bucket
-                            order by checkpointnumber asc
-                            limit @maxCount", new { streamId = streamId.ToString("N"), bucket, checkpointToken, maxCount });
+                            WHERE checkpointnumber > @checkpointToken AND streamid = @streamId AND bucket = @bucket
+                            ORDER BY checkpointnumber asc
+                            LIMIT @maxCount", new { streamId = streamId.ToString("N"), bucket, checkpointToken, maxCount });
 
                 var result = new List<CommitedActivityEvent>(maxCount);
 

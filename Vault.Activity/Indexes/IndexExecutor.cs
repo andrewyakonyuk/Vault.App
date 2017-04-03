@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Vault.Activity.Client;
 using Vault.Activity.Sinks;
 using Vault.Activity.Utility;
 using Vault.Shared;
@@ -15,7 +16,7 @@ namespace Vault.Activity.Indexes
     {
     }
 
-    [ImplicitStreamSubscription("timeline")]
+    [ImplicitStreamSubscription(Buckets.Default)]
     public class IndexExecutor : Grain, IIndexExecutor
     {
         private ISink<CommitedActivityEvent> _sink;
@@ -30,7 +31,7 @@ namespace Vault.Activity.Indexes
             await base.OnActivateAsync();
 
             var streamProvider = GetStreamProvider("EventStream");
-            var consumer = streamProvider.GetStream<CommitedActivityEvent>(this.GetPrimaryKey(), "timeline");
+            var consumer = streamProvider.GetStream<CommitedActivityEvent>(this.GetPrimaryKey(), Buckets.Default);
             await consumer.SubscribeAsync((@event, token) => NewActivityAsync(@event, token));
         }
 
