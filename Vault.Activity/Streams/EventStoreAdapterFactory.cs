@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using NEventStore;
-using NEventStore.Persistence.Sql.SqlDialects;
 using Orleans.Providers;
 using Orleans.Providers.Streams.Common;
 using Orleans.Runtime;
 using Orleans.Streams;
-using NEventStore.Serialization;
 using Vault.Activity.Persistence;
 
 namespace Vault.Activity.Streams

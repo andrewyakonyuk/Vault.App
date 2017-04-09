@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using NEventStore;
 using Orleans.Streams;
 using Vault.Activity.Persistence;
 

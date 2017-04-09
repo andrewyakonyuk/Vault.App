@@ -2,14 +2,12 @@
 using Newtonsoft.Json;
 using Orleans.Concurrency;
 using Vault.Shared;
-using Vault.Shared.EventSourcing;
-using Orleans.Serialization;
 
 namespace Vault.Activity
 {
     [Serializable]
     [Immutable]
-    public abstract class ActivityEntry : IEvent
+    public abstract class ActivityEntry
     {
         public ActivityEntry()
         {

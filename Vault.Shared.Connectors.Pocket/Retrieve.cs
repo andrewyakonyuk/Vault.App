@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Vault.Shared.Connectors.Pocket.Json;
 
 namespace Vault.Shared.Connectors.Pocket
 {

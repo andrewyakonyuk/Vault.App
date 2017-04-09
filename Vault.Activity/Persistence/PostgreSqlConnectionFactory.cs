@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Data;
 using System.Data.Common;
-using NEventStore.Persistence.Sql;
 using Npgsql;
 
 namespace Vault.Activity.Persistence
 {
-    public class PostgreSqlConnectionFactory : IConnectionFactory, ISqlConnectionFactory
+    public class PostgreSqlConnectionFactory : ISqlConnectionFactory
     {
         readonly string _connectionString;
 

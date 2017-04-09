@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Vault.Activity;
 using Vault.Activity.Services.Connectors;
 using System.Linq;
+using Vault.Shared.Connectors.Pocket.Json;
 
 namespace Vault.Shared.Connectors.Pocket
 {
