@@ -1,23 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Vault.Activity.Sinks;
-using Vault.Shared.Search;
 
 namespace Vault.Activity.Indexes
 {
     public class IndexBatchingAdapter<TDocument> : IPeriodicBatchingAdapter<TDocument>
     {
-        readonly IIndexUnitOfWorkFactory _unitOfWorkFactory;
+        readonly IIndexStoreAccessor _indexStoreAccessor;
         readonly IEnumerable<AbstractIndexCreationTask<TDocument>> _indexCreationTasks;
 
         public IndexBatchingAdapter(
-            IIndexUnitOfWorkFactory unitOfWorkFactory,
+            IIndexStoreAccessor indexStoreAccessor,
             IEnumerable<AbstractIndexCreationTask<TDocument>> indexCreationTasks)
         {
-            _unitOfWorkFactory = unitOfWorkFactory;
             _indexCreationTasks = indexCreationTasks;
+            _indexStoreAccessor = indexStoreAccessor;
         }
 
         public int BatchSizeLimit => 100;
@@ -31,40 +29,13 @@ namespace Vault.Activity.Indexes
             return true;
         }
 
-        public Task EmitBatchAsync(IEnumerable<TDocument> messages)
+        public async Task EmitBatchAsync(IEnumerable<TDocument> messages)
         {
-            foreach (var indexCreation in _indexCreationTasks)
+            foreach (var indexTask in _indexCreationTasks)
             {
-                var definition = indexCreation.GetIndexMetadata();
-                //todo: include here the task of creating an indexinvolve index creation task
-                using (var uow = _unitOfWorkFactory.Create(indexCreation.IndexName))
-                {
-                    foreach (var @event in messages.OfType<CommitedActivityEvent>())
-                    {
-                        dynamic document = new SearchDocument();
-                        document.Id = @event.Id;
-                        document.Bucket = @event.Bucket;
-                        document.CheckpointToken = @event.CheckpointToken;
-                        document.StreamId = @event.StreamId.ToString("N");
-                        document.Actor = @event.Actor;
-                        document.Title = @event.Title;
-                        document.Content = @event.Content;
-                        document.Verb = @event.Verb;
-                        document.Target = @event.Target;
-                        document.Uri = @event.Uri;
-                        document.Provider = @event.Provider;
-                        document.Published = @event.Published.ToUniversalTime().DateTime;
-                        document.Tags = @event.MetaBag.Tags;
-                        document.Thumbnail = @event.MetaBag.Thumbnail;
-                        //todo: copy from meta
-
-                        uow.Save(document);
-                    }
-                    uow.Commit();
-                }
+                var indexStore = _indexStoreAccessor.NewIndexStore(indexTask);
+                await indexTask.ExecuteAsync(messages, indexStore);
             }
-
-            return Task.FromResult(true);
         }
 
         public Task OnEmptyBatchAsync()

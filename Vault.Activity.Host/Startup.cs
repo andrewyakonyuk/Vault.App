@@ -60,33 +60,14 @@ namespace Vault.Activity.Host
             services.AddSingleton<IConnectionPool<ICatchConnectionProvider>, DefaultConnectionPool<ICatchConnectionProvider>>();
 
             services.AddSingleton<IClock, DefaultClock>();
-
-            services.AddTransient<ISearchProvider, LuceneSearchProvider>();
+            
             services.AddSingleton<ISearchResultTransformer, DefaultSearchResultTransformer>();
-            services.AddSingleton<IIndexUnitOfWorkFactory, LuceneUnitOfWorkFactory>();
             services.AddTransient<IIndexDocumentTransformer, DefaultIndexDocumentTransformer>();
             services.AddTransient<IIndexWriterInitializer, IndexWriterInitializer>();
             services.AddSingleton<IIndexWriterAccessor, DefaultIndexWriterAccessor>();
             services.AddTransient<ISearchQueryParser, DefaultSearchQueryParser>();
+            services.AddSingleton<IIndexStoreAccessor, DefaultIndexStoreAccessor>();
             services.AddQueries();
-
-            var builder = new FluentDescriptorProviderBuilder()
-                .Index(IndexNames.Default)
-                    .Field(nameof(CommitedActivityEvent.Id), "_id", isKey: true)
-                    .Field(nameof(CommitedActivityEvent.Actor), isKey: true)
-                    .Field(nameof(CommitedActivityEvent.Bucket), isKey: true)
-                    .Field(nameof(CommitedActivityEvent.StreamId), "_ownerId", isKey: true)
-                    .Field(nameof(CommitedActivityEvent.Provider), isKey: true)
-                    .Field(nameof(CommitedActivityEvent.Verb), "_verb", isKey: true, isAnalysed: true)
-                    .Field(nameof(CommitedActivityEvent.Published), "_published", converter: new LuceneDateTimeConverter())
-                    .Field(nameof(CommitedActivityEvent.Title), isKeyword: true, isAnalysed: true)
-                    .Field(nameof(CommitedActivityEvent.Content), isKeyword: true, isAnalysed: true)
-                    .Field(nameof(CommitedActivityEvent.Target))
-                    .Field(nameof(CommitedActivityEvent.CheckpointToken), converter: new Int64Converter())
-                    .Field(nameof(CommitedActivityEvent.Uri), isAnalysed: true, isKeyword: true)
-                    .Field("Tags", "_tags", converter: new MultilineStringConverter(), isKeyword: true, isAnalysed: true)
-                    .BuildIndex();
-            services.AddSingleton<IIndexDocumentMetadataProvider>(s => builder.BuildProvider());
 
             services.AddSingleton<IAppendOnlyStore, SqlAppendOnlyStore>();
             services.AddSingleton<ISqlConnectionFactory, PostgreSqlConnectionFactory>(_ => new PostgreSqlConnectionFactory(configuration["connectionStrings:db"]));
@@ -102,10 +83,10 @@ namespace Vault.Activity.Host
             });
             services.AddSingleton<ISink<CommitedActivityEvent>, PluggableBatchingSink<CommitedActivityEvent>>(s =>
             {
-                var unitOfWorkFactory = s.GetRequiredService<IIndexUnitOfWorkFactory>();
+                var indexAccessor = s.GetRequiredService<IIndexStoreAccessor>();
                 var indexTasks = s.GetServices<AbstractIndexCreationTask<CommitedActivityEvent>>();
 
-                var adapter = new IndexBatchingAdapter<CommitedActivityEvent>(unitOfWorkFactory, indexTasks);
+                var adapter = new IndexBatchingAdapter<CommitedActivityEvent>(indexAccessor, indexTasks);
                 var clock = s.GetRequiredService<IClock>();
                 var logger = s.GetRequiredService<ILogger>();
                 return new PluggableBatchingSink<CommitedActivityEvent>(adapter, logger, clock);

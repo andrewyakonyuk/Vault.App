@@ -8,6 +8,11 @@ namespace Vault.Shared.Search.Lucene
     /// </summary>
     public interface IIndexWriterAccessor
     {
-        IndexWriter GetWriter(string indexName);
+        IIndexWriterHolder GetWriter(string indexName);
+    }
+
+    public interface IIndexWriterHolder
+    {
+        IndexWriter Value { get; }
     }
 }

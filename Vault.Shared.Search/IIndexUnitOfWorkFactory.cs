@@ -4,6 +4,6 @@ namespace Vault.Shared.Search
 {
     public interface IIndexUnitOfWorkFactory
     {
-        IIndexUnitOfWork Create(string indexName);
+        IIndexUnitOfWork CreateUnitOfWork();
     }
 }

@@ -11,6 +11,7 @@ using Vault.Activity.Utility;
 using Vault.Activity.Persistence;
 using Vault.Shared.Search;
 using Vault.Shared.Search.Parsing;
+using Vault.Activity.Indexes;
 
 namespace Vault.Activity.Client
 {
@@ -31,7 +32,7 @@ namespace Vault.Activity.Client
         readonly string _bucket;
         readonly Guid _streamId;
         readonly IClock _clock;
-        readonly ISearchProvider _searchProvider;
+        readonly IIndexStoreAccessor _indexAccessor;
         readonly ISearchQueryParser _queryParser;
 
         public ActivityFeed(
@@ -39,7 +40,7 @@ namespace Vault.Activity.Client
             Guid streamId,
             ISink<UncommitedActivityEvent> sink,
             IAppendOnlyStore appendOnlyStore,
-            ISearchProvider searchProvider,
+            IIndexStoreAccessor indexAccessor,
             ISearchQueryParser queryParser,
             IClock clock)
         {
@@ -49,8 +50,8 @@ namespace Vault.Activity.Client
                 throw new ArgumentNullException(nameof(sink));
             if (appendOnlyStore == null)
                 throw new ArgumentNullException(nameof(appendOnlyStore));
-            if (searchProvider == null)
-                throw new ArgumentException(nameof(searchProvider));
+            if (indexAccessor == null)
+                throw new ArgumentException(nameof(indexAccessor));
             if (queryParser == null)
                 throw new ArgumentNullException(nameof(queryParser));
             if (clock == null)
@@ -58,7 +59,7 @@ namespace Vault.Activity.Client
 
             _sink = sink;
             _appendOnlyStore = appendOnlyStore;
-            _searchProvider = searchProvider;
+            _indexAccessor = indexAccessor;
             _queryParser = queryParser;
             _bucket = bucket;
             _streamId = streamId;
@@ -79,12 +80,12 @@ namespace Vault.Activity.Client
             {
                 Count = maxCount,
                 Criteria = searchCriteria.ToList(),
-                IndexName = _bucket,
                 OwnerId = _streamId.ToString("N")
             };
             //todo: include checkpointToken and bucket vars into search request
 
-            var searchResults = _searchProvider.Search(searchRequest);
+            ISearchProvider searchProvider = _indexAccessor.GetIndexStore(_bucket);
+            var searchResults = searchProvider.Search(searchRequest);
             var checkpointTokens = new List<long>(searchResults.Count);
 
             foreach (dynamic item in searchResults)

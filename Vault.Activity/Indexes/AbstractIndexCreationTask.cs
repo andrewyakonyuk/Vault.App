@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Vault.Shared.Search;
+using Vault.Shared.Search.Lucene;
 
 namespace Vault.Activity.Indexes
 {
@@ -30,14 +31,21 @@ namespace Vault.Activity.Indexes
         }
 
         public virtual bool IsMapReduce => false;
-    }
 
-    public interface IIndexCreationTask
-    {
-        string IndexName { get; }
+        public virtual Task ExecuteAsync(IEnumerable<TDocument> documents, IndexStore indexStore)
+        {
+            using (var uow = indexStore.CreateUnitOfWork())
+            {
+                var compiledMapFunc = Map.Compile();
+                foreach (var result in compiledMapFunc(documents))
+                {
+                    var document = new SearchDocument(ObjectDictionary.Create(result));
+                    uow.Save(document);
+                }
+                uow.Commit();
+            }
 
-        IndexDocumentMetadata GetIndexMetadata();
-
-        bool IsMapReduce { get; }
+            return Task.FromResult(true);
+        }
     }
 }

@@ -14,42 +14,38 @@ namespace Vault.Shared.Search.Lucene
 
     public class LuceneSearchProvider : ISearchProvider
     {
-        private readonly IIndexWriterAccessor _writerAccessor;
         private readonly ISearchResultTransformer _defaultResultTransformer;
-        private readonly IIndexDocumentMetadataProvider _metadataProvider;
+        private readonly IndexDocumentMetadata _metadata;
+        private readonly IIndexWriterHolder _indexWriter;
 
         public LuceneSearchProvider(
-            IIndexWriterAccessor writerAccessor,
+            IIndexWriterHolder indexWriter,
             ISearchResultTransformer resultTransformer,
-            IIndexDocumentMetadataProvider metadataProvider)
+            IndexDocumentMetadata metadata)
         {
-            if (writerAccessor == null)
-                throw new ArgumentNullException(nameof(writerAccessor));
+            if (indexWriter == null)
+                throw new ArgumentNullException(nameof(indexWriter));
             if (resultTransformer == null)
                 throw new ArgumentNullException(nameof(resultTransformer));
-            if (metadataProvider == null)
-                throw new ArgumentNullException(nameof(metadataProvider));
+            if (metadata == null)
+                throw new ArgumentNullException(nameof(metadata));
 
-            _writerAccessor = writerAccessor;
+            _indexWriter = indexWriter;
             _defaultResultTransformer = resultTransformer;
-            _metadataProvider = metadataProvider;
+            _metadata = metadata;
         }
 
         public IPagedEnumerable<SearchDocument> Search(SearchRequest request)
         {
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
-
-            var indexName = request.IndexName;
-            if (string.IsNullOrEmpty(indexName))
-                indexName = IndexNames.Default;
-            var indexWriter = _writerAccessor.GetWriter(indexName);
-            var metadata = _metadataProvider.GetMetadata(indexName);
+            
+            var indexWriter = _indexWriter.Value;
             var numHits = request.Offset + request.Count;
-            var sort = CreateSort(request, metadata);
-            var query = CreateQuery(request, indexWriter.Analyzer, metadata);
+            var sort = CreateSort(request, _metadata);
+            var query = CreateQuery(request, indexWriter.Analyzer, _metadata);
             var collector = TopFieldCollector.Create(sort, Math.Max(numHits, 1), false, false, false, false);
-            var filter = CreateFilter(request, metadata);
+            var filter = CreateFilter(request, _metadata);
 
             using (var indexReader = indexWriter.GetReader())
             using (var indexSearcher = new IndexSearcher(indexReader))
@@ -73,7 +69,7 @@ namespace Vault.Shared.Search.Lucene
                 {
                     var doc = indexSearcher.Doc(scoreDocs[i].Doc);
                     var valuesProvider = new LuceneDocumentValuesProvider(doc);
-                    var document = resultTransformer.Transform(valuesProvider, metadata);
+                    var document = resultTransformer.Transform(valuesProvider, _metadata);
                     result.Add(document);
                 }
 
@@ -98,6 +94,7 @@ namespace Vault.Shared.Search.Lucene
 
         Filter CreateFilter(SearchRequest request, IndexDocumentMetadata metadata)
         {
+            //todo: map owner
             var query = new TermQuery(new Term(metadata.RewriteFieldName("StreamId"), request.OwnerId.ToString(CultureInfo.InvariantCulture)));
             return FilterManager.Instance.GetFilter(new QueryWrapperFilter(query));
         }

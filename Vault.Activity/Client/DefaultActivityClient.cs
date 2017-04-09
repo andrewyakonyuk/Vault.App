@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Vault.Activity.Indexes;
 using Vault.Activity.Persistence;
 using Vault.Activity.Sinks;
 using Vault.Activity.Utility;
@@ -15,20 +16,20 @@ namespace Vault.Activity.Client
         readonly ISink<UncommitedActivityEvent> _sink;
         readonly IClock _clock;
         readonly IAppendOnlyStore _appendOnlyStore;
-        readonly ISearchProvider _searchProvider;
+        readonly IIndexStoreAccessor _indexAccessor;
         readonly ISearchQueryParser _queryParser;
 
         public DefaultActivityClient(
             IEnumerable<ISink<UncommitedActivityEvent>> sinks,
             IAppendOnlyStore appendOnlyStore,
-             ISearchProvider searchProvider,
+            IIndexStoreAccessor indexAccessor,
             ISearchQueryParser queryParser,
             IClock clock)
         {
             _sink = new AggregateSink<UncommitedActivityEvent>(sinks);
             _clock = clock;
             _appendOnlyStore = appendOnlyStore;
-            _searchProvider = searchProvider;
+            _indexAccessor = indexAccessor;
             _queryParser = queryParser;
         }
 
@@ -39,7 +40,7 @@ namespace Vault.Activity.Client
             if (streamId == Guid.Empty)
                 throw new ArgumentException("Stream id is not set", nameof(streamId));
 
-            var activityFeed = new ActivityFeed(bucket, streamId, _sink, _appendOnlyStore, _searchProvider, _queryParser, _clock);
+            var activityFeed = new ActivityFeed(bucket, streamId, _sink, _appendOnlyStore, _indexAccessor, _queryParser, _clock);
 
             return Task.FromResult<IActivityFeed>(activityFeed);
         }
