@@ -81,7 +81,7 @@
 @functions {
     bool IsCurrentPage(string action, string controller)
     {
-        if (ViewContext.ActionDescriptor.Name == action && string.Equals((string)ViewContext.RouteData.Values["controller"], controller, StringComparison.InvariantCultureIgnoreCase))
+        if (ViewContext.ActionDescriptor.Id == action && string.Equals((string)ViewContext.RouteData.Values["controller"], controller, StringComparison.InvariantCultureIgnoreCase))
             return true;
 
         return false;

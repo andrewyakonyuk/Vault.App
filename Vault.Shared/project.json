@@ -13,6 +13,6 @@
   },
 
   "dependencies": {
-    "System.Data.Common": "4.0.1-rc2-24027"
+    "System.Data.Common": "4.3.0"
   }
 }

@@ -17,36 +17,36 @@ namespace Vault.Activity
         }
 
         [SerializerMethod]
-        public static void Serializer(object untypedInput, BinaryTokenStreamWriter stream, Type expected)
+        public static void Serializer(object untypedInput, ISerializationContext context, Type expected)
         {
             var input = (CommitedActivityEvent)untypedInput;
-            SerializationManager.SerializeInner(input.Actor, stream, typeof(String));
-            SerializationManager.SerializeInner(input.Content, stream, typeof(String));
-            SerializationManager.SerializeInner(input.Id, stream, typeof(String));
-            SerializationManager.SerializeInner(input.MetaBag, stream, typeof(DynamicDictionary));
-            SerializationManager.SerializeInner(input.Provider, stream, typeof(String));
-            SerializationManager.SerializeInner(input.Published, stream, typeof(DateTimeOffset));
-            SerializationManager.SerializeInner(input.Target, stream, typeof(String));
-            SerializationManager.SerializeInner(input.Title, stream, typeof(String));
-            SerializationManager.SerializeInner(input.Uri, stream, typeof(String));
-            SerializationManager.SerializeInner(input.Verb, stream, typeof(String));
+            SerializationManager.SerializeInner(input.Actor, context, typeof(String));
+            SerializationManager.SerializeInner(input.Content, context, typeof(String));
+            SerializationManager.SerializeInner(input.Id, context, typeof(String));
+            SerializationManager.SerializeInner(input.MetaBag, context, typeof(DynamicDictionary));
+            SerializationManager.SerializeInner(input.Provider, context, typeof(String));
+            SerializationManager.SerializeInner(input.Published, context, typeof(DateTimeOffset));
+            SerializationManager.SerializeInner(input.Target, context, typeof(String));
+            SerializationManager.SerializeInner(input.Title, context, typeof(String));
+            SerializationManager.SerializeInner(input.Uri, context, typeof(String));
+            SerializationManager.SerializeInner(input.Verb, context, typeof(String));
         }
 
         [DeserializerMethod]
-        public static Object Deserializer(Type expected, BinaryTokenStreamReader stream)
+        public static Object Deserializer(Type expected, IDeserializationContext context)
         {
             var result = new CommitedActivityEvent();
-            @DeserializationContext.@Current.@RecordObject(result);
-            result.Actor = (String)SerializationManager.@DeserializeInner(typeof(String), stream);
-            result.Content = (String)SerializationManager.@DeserializeInner(typeof(String), stream);
-            result.Id = (String)SerializationManager.@DeserializeInner(typeof(String), stream);
-            result.MetaBag = (Object)SerializationManager.@DeserializeInner(typeof(DynamicDictionary), stream);
-            result.Provider = (String)SerializationManager.@DeserializeInner(typeof(String), stream);
-            result.Published = (DateTimeOffset)SerializationManager.@DeserializeInner(typeof(DateTimeOffset), stream);
-            result.Target = (String)SerializationManager.@DeserializeInner(typeof(String), stream);
-            result.Title = (String)SerializationManager.@DeserializeInner(typeof(String), stream);
-            result.Uri = (String)SerializationManager.@DeserializeInner(typeof(String), stream);
-            result.Verb = (String)SerializationManager.@DeserializeInner(typeof(String), stream);
+            context.@RecordObject(result);
+            result.Actor = (String)SerializationManager.@DeserializeInner(typeof(String), context);
+            result.Content = (String)SerializationManager.@DeserializeInner(typeof(String), context);
+            result.Id = (String)SerializationManager.@DeserializeInner(typeof(String), context);
+            result.MetaBag = (Object)SerializationManager.@DeserializeInner(typeof(DynamicDictionary), context);
+            result.Provider = (String)SerializationManager.@DeserializeInner(typeof(String), context);
+            result.Published = (DateTimeOffset)SerializationManager.@DeserializeInner(typeof(DateTimeOffset), context);
+            result.Target = (String)SerializationManager.@DeserializeInner(typeof(String), context);
+            result.Title = (String)SerializationManager.@DeserializeInner(typeof(String), context);
+            result.Uri = (String)SerializationManager.@DeserializeInner(typeof(String), context);
+            result.Verb = (String)SerializationManager.@DeserializeInner(typeof(String), context);
             return result;
         }
     }

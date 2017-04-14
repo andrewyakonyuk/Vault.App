@@ -13,11 +13,11 @@
   },
 
   "dependencies": {
-    "FluentNHibernate": "2.0.1.0",
-    "Microsoft.AspNetCore.Identity": "1.0.0-rc2-final",
-    "Microsoft.Extensions.DependencyInjection": "1.0.0-rc2-final",
-    "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-rc2-final",
-    "NHibernate": "4.0.3.4000",
+    "FluentNHibernate": "2.0.3",
+    "Microsoft.AspNetCore.Identity": "1.1.1",
+    "Microsoft.Extensions.DependencyInjection": "1.1.0",
+    "Microsoft.Extensions.DependencyInjection.Abstractions": "1.1.0",
+    "NHibernate": "4.1.1.4000",
     "Vault.Shared": "1.0.0-*",
     "Vault.Shared.NHibernate": "1.0.0-*"
   }

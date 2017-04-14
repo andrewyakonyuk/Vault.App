@@ -134,7 +134,6 @@ namespace Vault.WebHost
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseRuntimeInfoPage();
             }
             else
             {

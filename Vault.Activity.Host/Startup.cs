@@ -1,15 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
-using CommonDomain;
-using CommonDomain.Core;
-using CommonDomain.Persistence;
-using CommonDomain.Persistence.EventStore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using NEventStore;
-using NEventStore.Client;
-using NEventStore.Dispatcher;
 using Vault.Activity.Services;
 using Vault.Activity.Services.Connectors;
 using Vault.Activity.Sinks;
