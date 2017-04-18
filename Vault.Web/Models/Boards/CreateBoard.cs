@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using Vault.Shared.Commands;
 
 namespace Vault.WebHost.Models.Boards
 {
-    public class CreateBoard : ICommandContext
+    public class CreateBoard
     {
         [Required]
         [MinLength(3)]
