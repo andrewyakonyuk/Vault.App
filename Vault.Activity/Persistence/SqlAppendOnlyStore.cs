@@ -138,7 +138,7 @@ namespace Vault.Activity.Persistence
                             url, published, metabag, checkpointnumber, actor,
                             title, content
                             FROM public.activitylogs
-                            WHERE checkpointnumber > @checkpointToken AND streamid = @streamId AND bucket = @bucket
+                            WHERE checkpointnumber > @checkpointToken AND streamid = @streamId AND bucketid = @bucket
                             ORDER BY checkpointnumber asc
                             LIMIT @maxCount", new { streamId = streamId.ToString("N"), bucket, checkpointToken, maxCount });
 
