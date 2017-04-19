@@ -15,7 +15,7 @@ using Vault.Activity.Indexes;
 
 namespace Vault.Activity.Client
 {
-    public interface IActivityFeed
+    public interface IActivityStream
     {
         Task PushActivityAsync(ActivityEventAttempt activity);
 
@@ -25,7 +25,7 @@ namespace Vault.Activity.Client
     }
 
     [Serializable]
-    public class ActivityFeed : IActivityFeed
+    public class ActivityStream : IActivityStream
     {
         readonly ISink<UncommitedActivityEvent> _sink;
         readonly IAppendOnlyStore _appendOnlyStore;
@@ -35,7 +35,7 @@ namespace Vault.Activity.Client
         readonly IIndexStoreAccessor _indexAccessor;
         readonly ISearchQueryParser _queryParser;
 
-        public ActivityFeed(
+        public ActivityStream(
             string bucket,
             Guid streamId,
             ISink<UncommitedActivityEvent> sink,
@@ -112,6 +112,8 @@ namespace Vault.Activity.Client
                 throw new ArgumentNullException(nameof(activity));
             if (string.IsNullOrEmpty(activity.Id))
                 throw new ArgumentException("Id is required", nameof(activity.Id));
+            if(string.IsNullOrEmpty(activity.Provider))
+                throw new ArgumentException("Provider is required", nameof(activity.Provider));
 
             var uncommitedEvent = new UncommitedActivityEvent
             {

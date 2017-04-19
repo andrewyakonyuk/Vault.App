@@ -93,7 +93,7 @@ namespace Vault.Activity.Services.Connectors
             {
                 PullResult result = null;
                 var batch = 0;
-                var activityFeed = await _activityClient.GetFeedAsync(Buckets.Default, State.OwnerId);
+                var activityFeed = await _activityClient.GetStreamAsync(Buckets.Default, State.OwnerId);
                 do
                 {
                     result = await ExecuteBatchAsync(connectionProvider, batch, State.LastFetchDateUtc);
