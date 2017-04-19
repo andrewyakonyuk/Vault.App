@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Vault.Activity</Description>
+    <Authors>Andrew Yakonyuk</Authors>
+    <TargetFramework>net451</TargetFramework>
+    <AssemblyName>Vault.Activity</AssemblyName>
+    <PackageId>Vault.Activity</PackageId>
+    <PackageProjectUrl>https://github.com/andrewyakonyuk/Vault.App/</PackageProjectUrl>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Vault.Shared\Vault.Shared.csproj" />
+    <ProjectReference Include="..\Vault.Shared.Search\Vault.Shared.Search.csproj" />
+    <ProjectReference Include="..\Vault.Shared.Search.Lucene\Vault.Shared.Search.Lucene.csproj" />
+    <ProjectReference Include="..\Vault.Shared.TransientFaultHandling\Vault.Shared.TransientFaultHandling.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="1.50.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Orleans.Core" Version="1.4.1" />
+    <PackageReference Include="Microsoft.Orleans.OrleansCodeGenerator.Build" Version="1.4.1" />
+    <PackageReference Include="Microsoft.Orleans.OrleansProviders" Version="1.4.1" />
+    <PackageReference Include="Npgsql" Version="3.2.2" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+</Project>
