@@ -20,6 +20,7 @@ using Vault.Activity.Client;
 using Vault.Activity.Persistence;
 using Vault.Activity.Utility;
 using Vault.Activity.Indexes;
+using Microsoft.Extensions.Logging;
 
 namespace Vault.Activity.Host
 {
@@ -27,7 +28,6 @@ namespace Vault.Activity.Host
     {
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<ILogger, ConsoleLogger>();
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Environment.CurrentDirectory)
                  .AddJsonFile("config.json", optional: false, reloadOnChange: true)
@@ -71,8 +71,8 @@ namespace Vault.Activity.Host
                 var adapter = new AppendOnlyStoreBatchingAdapter(store);
 
                 var clock = s.GetRequiredService<IClock>();
-                var logger = s.GetRequiredService<ILogger>();
-                return new PluggableBatchingSink<UncommitedActivityEvent>(adapter, logger, clock);
+                var loggerFactory = s.GetRequiredService<ILoggerFactory>();
+                return new PluggableBatchingSink<UncommitedActivityEvent>(adapter, loggerFactory, clock);
             });
             services.AddSingleton<ISink<CommitedActivityEvent>, PluggableBatchingSink<CommitedActivityEvent>>(s =>
             {
@@ -81,8 +81,8 @@ namespace Vault.Activity.Host
 
                 var adapter = new IndexBatchingAdapter<CommitedActivityEvent>(indexAccessor, indexTasks);
                 var clock = s.GetRequiredService<IClock>();
-                var logger = s.GetRequiredService<ILogger>();
-                return new PluggableBatchingSink<CommitedActivityEvent>(adapter, logger, clock);
+                var loggerFactory = s.GetRequiredService<ILoggerFactory>();
+                return new PluggableBatchingSink<CommitedActivityEvent>(adapter, loggerFactory, clock);
             });
             services.AddSingleton<IActivityClient, DefaultActivityClient>();
             services.AddSingleton<JsonSerializer>(_ => new JsonSerializer());

@@ -101,8 +101,6 @@ namespace Vault.WebHost
 
             services.AddQueries();
 
-            services.AddSingleton<Shared.ILogger, Shared.ConsoleLogger>();
-
             services.AddSingleton<IConfiguration>(s => Configuration);
 
             services.Configure<UrlOptions>(options =>

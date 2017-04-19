@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -22,17 +23,14 @@ namespace Vault.Activity.Utility
 
         public ScheduledTimer(
             Func<Task<DateTime?>> timerCallback,
-            ILogger logger,
+            ILoggerFactory logger,
             IClock clock,
             TimeSpan? dueTime = null, 
             TimeSpan? minimumIntervalTime = null)
         {
-            if (timerCallback == null)
-                throw new ArgumentNullException(nameof(timerCallback));
-
-            _logger = logger;
+            _logger = logger.CreateLogger<ScheduledTimer>();
             _clock = clock;
-            _timerCallback = timerCallback;
+            _timerCallback = timerCallback ?? throw new ArgumentNullException(nameof(timerCallback));
             _minimumInterval = minimumIntervalTime ?? TimeSpan.Zero;
 
             int dueTimeMs = dueTime.HasValue ? (int)dueTime.Value.TotalMilliseconds : Timeout.Infinite;
@@ -45,10 +43,10 @@ namespace Vault.Activity.Utility
             if (!utcDate.HasValue || utcDate.Value < utcNow)
                 utcDate = utcNow;
 
-            _logger.WriteInfo($"ScheduleNext called: value={utcDate.Value:O}");
+            _logger.LogInformation($"ScheduleNext called: value={utcDate.Value:O}");
             if (utcDate == DateTime.MaxValue)
             {
-                _logger.WriteInfo("Ignoring MaxValue");
+                _logger.LogInformation("Ignoring MaxValue");
                 return;
             }
 
@@ -57,14 +55,14 @@ namespace Vault.Activity.Utility
                 // already have an earlier scheduled time
                 if (_next > utcNow && utcDate > _next)
                 {
-                    _logger.WriteInfo($"Ignoring because already scheduled for earlier time {utcDate.Value.Ticks} {_next.Ticks}");
+                    _logger.LogInformation($"Ignoring because already scheduled for earlier time {utcDate.Value.Ticks} {_next.Ticks}");
                     return;
                 }
 
                 // ignore duplicate times
                 if (_next == utcDate)
                 {
-                    _logger.WriteInfo("Ignoring because already scheduled for same time");
+                    _logger.LogInformation("Ignoring because already scheduled for same time");
                     return;
                 }
 
@@ -73,7 +71,7 @@ namespace Vault.Activity.Utility
                 if (_last == DateTime.MinValue)
                     _last = _next;
 
-                _logger.WriteInfo($"Scheduling next: delay={delay}");
+                _logger.LogInformation($"Scheduling next: delay={delay}");
                 _timer.Change(delay, Timeout.Infinite);
             }
         }
@@ -86,7 +84,7 @@ namespace Vault.Activity.Utility
             if (_last == DateTime.MinValue)
                 _last = _next;
 
-            _logger.WriteInfo($"Scheduling next: delay={delay}");
+            _logger.LogInformation($"Scheduling next: delay={delay}");
             _timer.Change(delay, Timeout.Infinite);
         }
 
@@ -94,17 +92,17 @@ namespace Vault.Activity.Utility
         {
             if (_isRunning)
             {
-                _logger.WriteInfo("Exiting run callback because its already running, will run again immediately.");
+                _logger.LogInformation("Exiting run callback because its already running, will run again immediately.");
                 _shouldRunAgainImmediately = true;
                 return;
             }
 
-            _logger.WriteInfo("Starting RunCallbackAsync");
-           lock(_lock)
+            _logger.LogInformation("Starting RunCallbackAsync");
+            lock (_lock)
             {
                 if (_isRunning)
                 {
-                    _logger.WriteInfo("Exiting run callback because its already running, will run again immediately.");
+                    _logger.LogInformation("Exiting run callback because its already running, will run again immediately.");
                     _shouldRunAgainImmediately = true;
                     return;
                 }
@@ -123,15 +121,15 @@ namespace Vault.Activity.Utility
                 }
                 catch (Exception ex)
                 {
-                    _logger.WriteError(ex, $"Error running scheduled timer callback: {ex.Message}");
+                    _logger.LogError(new EventId(0), ex, $"Error running scheduled timer callback: {ex.Message}");
                     _shouldRunAgainImmediately = true;
                 }
 
                 if (_minimumInterval > TimeSpan.Zero)
                 {
-                    _logger.WriteInfo("Sleeping for minimum interval: {0}", _minimumInterval);
+                    _logger.LogInformation("Sleeping for minimum interval: {0}", _minimumInterval);
                     await _clock.SleepAsync((int)_minimumInterval.TotalMilliseconds, default(CancellationToken));
-                    _logger.WriteInfo("Finished sleeping");
+                    _logger.LogInformation("Finished sleeping");
                 }
 
                 var nextRun = _clock.UtcNow.AddMilliseconds(10);
@@ -142,7 +140,7 @@ namespace Vault.Activity.Utility
             }
             catch (Exception ex)
             {
-                _logger.WriteError(ex,$"Error running schedule next callback: {ex.Message}");
+                _logger.LogError(new EventId(0), ex, $"Error running schedule next callback: {ex.Message}");
             }
             finally
             {
@@ -150,7 +148,7 @@ namespace Vault.Activity.Utility
                 _shouldRunAgainImmediately = false;
             }
 
-            _logger.WriteInfo("Finished RunCallbackAsync");
+            _logger.LogInformation("Finished RunCallbackAsync");
         }
 
         public void Dispose()

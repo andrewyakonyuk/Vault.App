@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,13 +12,10 @@ namespace Vault.Activity.Sinks
     {
         readonly IPeriodicBatchingAdapter<T> _adapter;
 
-        public PluggableBatchingSink(IPeriodicBatchingAdapter<T> adapter, ILogger logger, IClock clock)
+        public PluggableBatchingSink(IPeriodicBatchingAdapter<T> adapter, ILoggerFactory logger, IClock clock)
             : base(adapter.BatchSizeLimit, adapter.Period, adapter.QueueLimit, logger, clock)
         {
-            if (adapter == null)
-                throw new ArgumentNullException(nameof(adapter));
-
-            _adapter = adapter;
+            _adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
         }
 
         protected override async Task EmitBatchAsync(IEnumerable<T> messages)

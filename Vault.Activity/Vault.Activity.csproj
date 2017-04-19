@@ -23,6 +23,7 @@
     <PackageReference Include="Dapper" Version="1.50.2" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="1.1.1" />
     <PackageReference Include="Microsoft.Orleans.Core" Version="1.4.1" />
     <PackageReference Include="Microsoft.Orleans.OrleansCodeGenerator.Build" Version="1.4.1" />
     <PackageReference Include="Microsoft.Orleans.OrleansProviders" Version="1.4.1" />

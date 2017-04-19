@@ -1,16 +1,17 @@
 ﻿using Vault.Shared;
+using Microsoft.Extensions.Logging;
 
 namespace Vault.WebHost.Services.Security
 {
     public class DefaultAuthorizer : IAuthorizer
     {
         private readonly IAuthorizationService _authorizationService;
-        private readonly ILogger _logger;
+        private readonly ILogger<DefaultAuthorizer> _logger;
         private readonly IWorkContextAccessor _workContextAccessor;
 
         public DefaultAuthorizer(
             IAuthorizationService authorizationService,
-            ILogger logger,
+            ILogger<DefaultAuthorizer> logger,
             IWorkContextAccessor workContextAccessor)
         {
             _authorizationService = authorizationService;
@@ -30,11 +31,11 @@ namespace Vault.WebHost.Services.Security
 
             if (_workContextAccessor.WorkContext.User == null)
             {
-                _logger.WriteInfo("Anonymous users do not have {0} permission.", permission.Name);
+                _logger.LogInformation("Anonymous users do not have {0} permission.", permission.Name);
             }
             else
             {
-                _logger.WriteInfo("Current user, {1}, does not have {0} permission.", permission.Name, _workContextAccessor.WorkContext.User.UserName);
+                _logger.LogInformation("Current user, {1}, does not have {0} permission.", permission.Name, _workContextAccessor.WorkContext.User.UserName);
             }
 
             return false;

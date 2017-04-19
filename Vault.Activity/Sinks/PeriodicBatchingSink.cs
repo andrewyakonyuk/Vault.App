@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -36,14 +37,14 @@ namespace Vault.Activity.Sinks
         /// </summary>
         /// <param name="batchSizeLimit">The maximum number of events to include in a single batch.</param>
         /// <param name="period">The time to wait between checking for event batches.</param>
-        protected PeriodicBatchingSink(int batchSizeLimit, TimeSpan period, ILogger logger, IClock clock)
+        protected PeriodicBatchingSink(int batchSizeLimit, TimeSpan period, ILoggerFactory loggerFactory, IClock clock)
         {
             _batchSizeLimit = batchSizeLimit;
             _queue = new BoundedConcurrentQueue<T>();
             _status = new BatchedConnectionStatus(period);
-            _logger = logger;
+            _logger = loggerFactory.CreateLogger(typeof(PeriodicBatchingSink<>));
 
-            _timer = new ScheduledTimer(() => OnTick(), logger, clock);
+            _timer = new ScheduledTimer(() => OnTick(), loggerFactory, clock);
         }
 
         /// <summary>
@@ -56,9 +57,9 @@ namespace Vault.Activity.Sinks
             int batchSizeLimit,
             TimeSpan period,
             int? queueLimit,
-            ILogger logger,
+            ILoggerFactory loggerFactory,
             IClock clock)
-            : this(batchSizeLimit, period, logger, clock)
+            : this(batchSizeLimit, period, loggerFactory, clock)
         {
             if (queueLimit.HasValue)
                 _queue = new BoundedConcurrentQueue<T>((int)queueLimit);
@@ -155,7 +156,7 @@ namespace Vault.Activity.Sinks
             }
             catch (Exception ex)
             {
-                _logger.WriteError(ex, "Exception while emitting periodic batch from");
+                _logger.LogError(new EventId(0), ex, "Exception while emitting periodic batch from");
                 _status.MarkFailure();
             }
             finally
