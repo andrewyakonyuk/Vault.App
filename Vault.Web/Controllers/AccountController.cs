@@ -13,7 +13,6 @@ using Vault.WebHost.Models.Account;
 namespace Vault.WebHost.Controllers
 {
     using Activity.Services.Connectors;
-    using Orleans;
     using Services;
     using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
@@ -212,8 +211,7 @@ namespace Vault.WebHost.Controllers
                     {
                         var userByLogin = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
 
-                        var connectionHub = GrainClient.GrainFactory.GetGrain<IConnectionPoolSupervisor>(Guid.Parse("a314130a-91c2-44e3-949b-be4c60bf1752"));
-                        await connectionHub.ConnectLoginAsync(info.LoginProvider, info.ProviderKey);
+                        //todo: connect external login
 
                         if (Url.IsLocalUrl(returnUrl))
                             return LocalRedirect(returnUrl);

@@ -15,8 +15,6 @@ using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Context;
 using NHibernate.Tool.hbm2ddl;
-using Orleans;
-using Orleans.Runtime;
 using Vault.Shared.Domain;
 using Vault.Shared.Identity;
 using Vault.Shared.Identity.Overrides;
@@ -30,16 +28,8 @@ using Vault.WebHost.Services;
 using Vault.WebHost.Services.Boards;
 using Vault.WebHost.Services.Boards.Overrides;
 using Vault.WebHost.Services.Security;
-using Vault.Shared.Search;
-using Vault.Shared;
-//using Vault.Activity.Services.Search;
-using Vault.Shared.Search.Parsing;
-using Orleans.Streams;
 using Vault.Activity;
-using Orleans.Serialization;
 using Vault.Activity.Persistence;
-using Vault.Activity.Client;
-using System.Threading.Tasks;
 
 namespace Vault.WebHost
 {
@@ -209,40 +199,6 @@ namespace Vault.WebHost
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-            // Attempt to connect a few times to overcome transient failures and to give the silo enough
-            // time to start up when starting at the same time as the client (useful when deploying or during development).
-            const int initializeAttemptsBeforeFailing = 5;
-
-            int attempt = 0;
-            while (true)
-            {
-                try
-                {
-                    GrainClient.Initialize("ClientConfiguration.xml");
-                    //SerializationManager.Register(typeof(ActivityEvent), typeof(ActivityEventSerializer));
-                    //SerializationManager.Register(typeof(CommitedActivityEvent), typeof(CommitedActivityEventSerializer));
-
-                    var streamProvider = GrainClient.GetStreamProvider("EventStream");
-                    var consumer = streamProvider.GetStream<CommitedActivityEvent>(Guid.Parse("a314130a-91c2-44e3-949b-be4c60bf1752"), "timeline");
-                    consumer.SubscribeAsync((activity, token) =>
-                    {
-                        var a = 5;
-
-                        return TaskDone.Done;
-                    });
-                    break;
-                }
-                catch (SiloUnavailableException)
-                {
-                    attempt++;
-                    if (attempt >= initializeAttemptsBeforeFailing)
-                    {
-                        throw;
-                    }
-                    Thread.Sleep(TimeSpan.FromSeconds(2));
-                }
-            }
         }
 
         // Entry point for the application.

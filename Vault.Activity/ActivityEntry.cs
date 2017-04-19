@@ -1,12 +1,10 @@
 ﻿using System;
 using Newtonsoft.Json;
-using Orleans.Concurrency;
 using Vault.Shared;
 
 namespace Vault.Activity
 {
     [Serializable]
-    [Immutable]
     public abstract class ActivityEntry
     {
         public ActivityEntry()

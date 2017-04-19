@@ -1,10 +1,8 @@
-﻿using Orleans.Concurrency;
-using System;
+﻿using System;
 
 namespace Vault.Activity
 {
     [Serializable]
-    [Immutable]
     public partial class UncommitedActivityEvent : ActivityEntry
     {
         /// <summary>

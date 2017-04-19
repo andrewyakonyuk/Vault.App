@@ -1,115 +1,74 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Orleans;
-using Orleans.Concurrency;
-using Orleans.Runtime;
 using Vault.Shared.TransientFaultHandling;
-using System.Linq;
 using Vault.Activity.Client;
 using Vault.Activity.Utility;
+using Microsoft.Extensions.Logging;
 
 namespace Vault.Activity.Services.Connectors
 {
-    public interface IPollingConnectionWorker : IGrainWithGuidKey
+    public interface IPollingConnectionWorker
     {
-        Task<bool> TryConnectAsync(ConnectionKey key);
-
-        Task DisconnectAsync();
-
         Task PullAsync();
     }
-    
-    public class PollingConnectionState
-    {
-        public Guid OwnerId { get; set; }
-        public string ProviderKey { get; set; }
-        public string ProviderName { get; set; }
-        public DateTimeOffset? LastFetchDateUtc { get; set; }
-    }
 
-    public class PollingConnectionWorker : Grain<PollingConnectionState>, IPollingConnectionWorker, IRemindable
+    public class PollingConnectionWorker :  IPollingConnectionWorker
     {
         readonly IConnectionPool<IPullConnectionProvider> _connectionPool;
-        Logger _logger;
+        ILogger<PollingConnectionWorker> _logger;
         IClock _clock;
         readonly IActivityClient _activityClient;
+        readonly string _providerName;
+        readonly string _providerKey;
+        readonly Guid _ownerId;
+        DateTimeOffset? _lastFetchTimeUtc;
 
         public PollingConnectionWorker(
+            string providerName,
+            string providerKey,
+            Guid ownerId,
             IConnectionPool<IPullConnectionProvider> connectionPool,
             IActivityClient activityClient,
+            ILogger<PollingConnectionWorker> logger,
             IClock clock)
         {
-            if (connectionPool == null)
-                throw new ArgumentNullException(nameof(connectionPool));
-            if (activityClient == null)
-                throw new ArgumentNullException(nameof(activityClient));
-            if (clock == null)
-                throw new ArgumentNullException(nameof(clock));
+            if (string.IsNullOrEmpty(providerName))
+                throw new ArgumentNullException(nameof(providerName));
 
-            _connectionPool = connectionPool;
-            _activityClient = activityClient;
-            _clock = clock;
-        }
-
-        public override async Task OnActivateAsync()
-        {
-            await base.OnActivateAsync();
-
-            _logger = GetLogger();
-
-            _logger.Verbose($"{this.GetPrimaryKey()}: Created activation of {nameof(PollingConnectionWorker)} grain");
-        }
-
-        public async Task<bool> TryConnectAsync(ConnectionKey connectionKey)
-        {
-            var connectionProvider = _connectionPool.GetByName(connectionKey.ProviderName);
-            if (connectionProvider != null)
-            {
-                State.ProviderKey = connectionKey.ProviderKey;
-                State.ProviderName = connectionKey.ProviderName;
-                State.OwnerId = connectionKey.OwnerId;
-
-                await RegisterOrUpdateReminder("Polling", new TimeSpan(0, 0, 5), new TimeSpan(0, 1, 0));
-
-                await WriteStateAsync();
-
-                _logger.Verbose($"{this.GetPrimaryKey()}: Connected a new '{connectionKey.ProviderName}'s login for '{connectionKey.OwnerId}' user");
-
-                return true;
-            }
-            return false;
+            _providerName = providerName;
+            _providerKey = providerKey ?? throw new ArgumentNullException(nameof(providerKey));
+            _ownerId = ownerId;
+            _connectionPool = connectionPool ?? throw new ArgumentNullException(nameof(connectionPool));
+            _activityClient = activityClient ?? throw new ArgumentNullException(nameof(activityClient));
+            _clock = clock ?? throw new ArgumentNullException(nameof(clock));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task PullAsync()
         {
-            if (string.IsNullOrEmpty(State.ProviderKey))
-                throw new InvalidOperationException("Connection must be configured before any usage");
-
-            var connectionProvider = _connectionPool.GetByName(State.ProviderName);
+            var connectionProvider = _connectionPool.GetByName(_providerName);
             if (connectionProvider == null)
-                throw new NotSupportedException($"Provider '{State.ProviderName}' is not support 'Pull' method");
+                throw new NotSupportedException($"Provider '{_providerName}' is not support 'Pull' method");
             try
             {
                 PullResult result = null;
                 var batch = 0;
-                var activityFeed = await _activityClient.GetStreamAsync(Buckets.Default, State.OwnerId);
+                var activityFeed = await _activityClient.GetStreamAsync(Buckets.Default, _ownerId);
                 do
                 {
-                    result = await ExecuteBatchAsync(connectionProvider, batch, State.LastFetchDateUtc);
+                    result = await ExecuteBatchAsync(connectionProvider, batch, _lastFetchTimeUtc);
 
                     foreach (var activity in result)
                     {
                         await activityFeed.PushActivityAsync(activity);
                     }
 
-                    _logger.Verbose($"{this.GetPrimaryKey()}: Finished pulling batch '{batch}' with {result.Count} results");
+                    _logger.LogInformation($"{_ownerId}: Finished pulling batch '{batch}' with {result.Count} results");
 
                     batch++;
                 } while (!result.IsCancellationRequested);
 
-                State.LastFetchDateUtc = _clock.OffsetUtcNow;
-                await WriteStateAsync();
+                _lastFetchTimeUtc = _clock.OffsetUtcNow;
             }
             finally
             {
@@ -119,7 +78,7 @@ namespace Vault.Activity.Services.Connectors
 
         async Task<PullResult> ExecuteBatchAsync(IPullConnectionProvider connectionProvider, int batch, DateTimeOffset? lastFetchTimeUtc = null)
         {
-            var userInfo = new UserInfo(State.ProviderKey, State.OwnerId);
+            var userInfo = new UserInfo(_providerKey, _ownerId);
             var context = new PullConnectionContext(userInfo)
             {
                 Batch = batch,
@@ -130,20 +89,6 @@ namespace Vault.Activity.Services.Connectors
             var retryPolicy = new RetryPolicy<ConnectionErrorDetectionStrategy>(retryStrategy);
 
             return await retryPolicy.ExecuteAsync(() => connectionProvider.PullAsync(context));
-        }
-
-        public async Task DisconnectAsync()
-        {
-            var reminder = await GetReminder("Polling");
-            if (reminder != null)
-                await UnregisterReminder(reminder);
-
-            _logger.Verbose($"{this.GetPrimaryKey()}: Disconnected '{State.ProviderName}'s login for '{State.OwnerId}' user");
-        }
-
-        public async Task ReceiveReminder(string reminderName, TickStatus status)
-        {
-            await PullAsync();
         }
     }
 }

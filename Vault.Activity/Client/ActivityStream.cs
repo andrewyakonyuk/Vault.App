@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Orleans;
-using Orleans.Concurrency;
-using Orleans.Streams;
-using Vault.Shared;
 using Vault.Activity.Sinks;
 using Vault.Activity.Utility;
 using Vault.Activity.Persistence;
@@ -141,7 +137,7 @@ namespace Vault.Activity.Client
                 uncommitedEvent.Actor = _streamId.ToString("N");
 
             _sink.Emit(uncommitedEvent);
-            return TaskDone.Done;
+            return Task.FromResult(true);
         }
     }
 }
