@@ -20,14 +20,14 @@ namespace Vault.Activity.Api.Controllers
         }
         
         [HttpGet("{bucket}/{streamid}")]
-        public async Task<IEnumerable<CommitedActivityEvent>> Get(string bucket, Guid streamId, long checkpointToken = 0, int maxCount = 100)
+        public async Task<IEnumerable<CommitedActivityEvent>> Get(string bucket, string streamId, long checkpointToken = 0, int maxCount = 100)
         {
             var stream = await _client.GetStreamAsync(bucket, streamId);
             return await stream.ReadEventsAsync(checkpointToken, maxCount);
         }
         
         [HttpPost("{bucket}/{streamid}")]
-        public async Task Post(string bucket, Guid streamId, [FromBody]ActivityEventInputModel model)
+        public async Task Post(string bucket, string streamId, [FromBody]ActivityEventInputModel model)
         {
             var stream = await _client.GetStreamAsync(bucket, streamId);
 

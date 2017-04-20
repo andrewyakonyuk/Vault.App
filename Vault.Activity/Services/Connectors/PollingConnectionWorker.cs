@@ -20,13 +20,13 @@ namespace Vault.Activity.Services.Connectors
         readonly IActivityClient _activityClient;
         readonly string _providerName;
         readonly string _providerKey;
-        readonly Guid _ownerId;
+        readonly string _ownerId;
         DateTimeOffset? _lastFetchTimeUtc;
 
         public PollingConnectionWorker(
             string providerName,
             string providerKey,
-            Guid ownerId,
+            string ownerId,
             IConnectionPool<IPullConnectionProvider> connectionPool,
             IActivityClient activityClient,
             ILogger<PollingConnectionWorker> logger,
@@ -34,6 +34,8 @@ namespace Vault.Activity.Services.Connectors
         {
             if (string.IsNullOrEmpty(providerName))
                 throw new ArgumentNullException(nameof(providerName));
+            if (string.IsNullOrEmpty(ownerId))
+                throw new ArgumentNullException(nameof(ownerId));
 
             _providerName = providerName;
             _providerKey = providerKey ?? throw new ArgumentNullException(nameof(providerKey));

@@ -26,14 +26,14 @@ namespace Vault.Activity.Client
         readonly ISink<UncommitedActivityEvent> _sink;
         readonly IAppendOnlyStore _appendOnlyStore;
         readonly string _bucket;
-        readonly Guid _streamId;
+        readonly string _streamId;
         readonly IClock _clock;
         readonly IIndexStoreAccessor _indexAccessor;
         readonly ISearchQueryParser _queryParser;
 
         public ActivityStream(
             string bucket,
-            Guid streamId,
+            string streamId,
             ISink<UncommitedActivityEvent> sink,
             IAppendOnlyStore appendOnlyStore,
             IIndexStoreAccessor indexAccessor,
@@ -76,7 +76,7 @@ namespace Vault.Activity.Client
             {
                 Count = maxCount,
                 Criteria = searchCriteria.ToList(),
-                OwnerId = _streamId.ToString("N")
+                OwnerId = _streamId
             };
             //todo: include checkpointToken and bucket vars into search request
 
@@ -134,7 +134,7 @@ namespace Vault.Activity.Client
                 uncommitedEvent.Published = _clock.OffsetUtcNow;
 
             if (string.IsNullOrEmpty(uncommitedEvent.Actor))
-                uncommitedEvent.Actor = _streamId.ToString("N");
+                uncommitedEvent.Actor = _streamId;
 
             _sink.Emit(uncommitedEvent);
             return Task.FromResult(true);

@@ -12,7 +12,7 @@ namespace Vault.Activity.Persistence
 
         Task<IReadOnlyCollection<CommitedActivityEvent>> ReadRecordsAsync(long checkpointToken, int maxCount);
 
-        Task<IReadOnlyCollection<CommitedActivityEvent>> ReadRecordsAsync(Guid streamId, string bucket, long checkpointToken, int maxCount);
+        Task<IReadOnlyCollection<CommitedActivityEvent>> ReadRecordsAsync(string streamId, string bucket, long checkpointToken, int maxCount);
 
         Task<IReadOnlyCollection<CommitedActivityEvent>> ReadRecordsAsync(IList<long> checkpointTokens);
     }

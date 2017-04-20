@@ -33,12 +33,12 @@ namespace Vault.Activity.Client
             _queryParser = queryParser;
         }
 
-        public Task<IActivityStream> GetStreamAsync(string bucket, Guid streamId)
+        public Task<IActivityStream> GetStreamAsync(string bucket, string streamId)
         {
             if (string.IsNullOrEmpty(bucket))
                 throw new ArgumentNullException(nameof(bucket));
-            if (streamId == Guid.Empty)
-                throw new ArgumentException("Stream id is not set", nameof(streamId));
+            if (string.IsNullOrEmpty(streamId))
+                throw new ArgumentNullException(nameof(streamId));
 
             var activityFeed = new ActivityStream(bucket, streamId, _sink, _appendOnlyStore, _indexAccessor, _queryParser, _clock);
 

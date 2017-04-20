@@ -22,7 +22,7 @@ namespace Vault.Activity.Indexes
                                     Id = @event.Id,
                                     Bucket = @event.Bucket,
                                     CheckpointToken = @event.CheckpointToken,
-                                    StreamId = @event.StreamId.ToString("N"),
+                                    StreamId = @event.StreamId,
                                     Actor = @event.Actor,
                                     Title = @event.Title,
                                     Content = @event.Content,

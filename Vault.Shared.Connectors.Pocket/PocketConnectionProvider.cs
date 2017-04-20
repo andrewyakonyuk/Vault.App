@@ -78,7 +78,7 @@ namespace Vault.Shared.Connectors.Pocket
 
                 var readActivity = new ActivityEventAttempt
                 {
-                    Actor = context.User.Id.ToString("N"),
+                    Actor = context.User.Id,
                     Id = parsedItem.ResolvedId,
                     Provider = Name,
                     Verb = ActivityVerbs.Read,
@@ -94,7 +94,7 @@ namespace Vault.Shared.Connectors.Pocket
 
                 activities.Add(new ActivityEventAttempt
                 {
-                    Actor = context.User.Id.ToString("N"),
+                    Actor = context.User.Id,
                     Id = parsedItem.ResolvedId,
                     Provider = Name,
                     Verb = parsedItem.IsFavorite ? ActivityVerbs.Like : ActivityVerbs.Unlike,

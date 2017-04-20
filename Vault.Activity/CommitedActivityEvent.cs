@@ -10,7 +10,7 @@ namespace Vault.Activity
         /// <summary>
         ///     Gets the value which uniquely identifies the stream to which the activity belongs.
         /// </summary>
-        public Guid StreamId { get; set; }
+        public string StreamId { get; set; }
 
         /// <summary>
         ///     Gets the value which identifies bucket to which the the activity belongs.

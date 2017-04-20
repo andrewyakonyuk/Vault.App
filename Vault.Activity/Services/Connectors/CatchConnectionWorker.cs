@@ -28,12 +28,12 @@ namespace Vault.Activity.Services.Connectors
         readonly IActivityClient _activityClient;
         readonly string _providerName;
         readonly string _providerKey;
-        readonly Guid _ownerId;
+        readonly string _ownerId;
 
         public CatchConnectionWorker(
             string providerName,
             string providerKey,
-            Guid ownerId,
+            string ownerId,
             IConnectionPool<ICatchConnectionProvider> connectionPool,
             IActivityClient activityClient,
             ILogger<PollingConnectionWorker> logger,

@@ -32,7 +32,7 @@ namespace Vault.Activity.Persistence
                     {
                         id = t.Id,
                         bucketid = t.Bucket,
-                        streamid = t.StreamId.ToString("N"),
+                        streamid = t.StreamId,
                         verb = t.Verb,
                         actor = t.Actor,
                         target = t.Target,
@@ -72,7 +72,7 @@ namespace Vault.Activity.Persistence
                         Id = item.id,
                         Provider = item.provider,
                         Published = item.published,
-                        StreamId = Guid.Parse((string)item.streamid),
+                        StreamId = item.streamid,
                         Target = item.target,
                         Uri = item.url,
                         Verb = item.verb,
@@ -113,7 +113,7 @@ namespace Vault.Activity.Persistence
                         Id = item.id,
                         Provider = item.provider,
                         Published = item.published,
-                        StreamId = Guid.Parse((string)item.streamid),
+                        StreamId = item.streamid,
                         Target = item.target,
                         Uri = item.url,
                         Verb = item.verb,
@@ -129,7 +129,7 @@ namespace Vault.Activity.Persistence
             }
         }
 
-        public async Task<IReadOnlyCollection<CommitedActivityEvent>> ReadRecordsAsync(Guid streamId, string bucket, long checkpointToken, int maxCount)
+        public async Task<IReadOnlyCollection<CommitedActivityEvent>> ReadRecordsAsync(string streamId, string bucket, long checkpointToken, int maxCount)
         {
             using (var connection = _connectionFactory.Open())
             {
@@ -140,7 +140,7 @@ namespace Vault.Activity.Persistence
                             FROM public.activitylogs
                             WHERE checkpointnumber > @checkpointToken AND streamid = @streamId AND bucketid = @bucket
                             ORDER BY checkpointnumber asc
-                            LIMIT @maxCount", new { streamId = streamId.ToString("N"), bucket, checkpointToken, maxCount });
+                            LIMIT @maxCount", new { streamId = streamId, bucket, checkpointToken, maxCount });
 
                 var result = new List<CommitedActivityEvent>(maxCount);
 
@@ -154,7 +154,7 @@ namespace Vault.Activity.Persistence
                         Id = item.id,
                         Provider = item.provider,
                         Published = item.published,
-                        StreamId = Guid.Parse((string)item.streamid),
+                        StreamId = item.streamid,
                         Target = item.target,
                         Uri = item.url,
                         Verb = item.verb,
