@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vault.Activity;
 using Vault.Shared;
+using Vault.Shared.Activity;
 using Vault.Shared.Domain;
 using Vault.Shared.Queries;
 using Vault.Shared.Search;
@@ -18,37 +19,22 @@ namespace Vault.WebHost.Services.Boards
     public class BoardsApi : IBoardsApi
     {
         private readonly IAuthorizer _authorizer;
-        private readonly ISearchQueryParser _searchQueryParser;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IWorkContextAccessor _workContextAccessor;
         private readonly IQueryBuilder _queryBuilder;
-
-        readonly static IDictionary<string, string> DefaultFieldsMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-        {
-            { "type", "documentType" },
-            { "published", "published" },
-            { "startDate", "startdate" },
-            { "endDate", "enddate" },
-            { "title", "name" },
-            { "description", "description" },
-            { "desc", "description" },
-            { "duration", "duration" },
-            { "artist", "byartist" },
-            { "album", "inalbum" },
-            { "keywords" , "keywords" }
-        };
+        private readonly IActivityClient _activityClient;
 
         public BoardsApi(
             IWorkContextAccessor workContextAccessor,
             IUnitOfWorkFactory unitOfWorkFactory,
             IAuthorizer authorizer,
-            ISearchQueryParser searchQueryParser,
+            IActivityClient activityClient,
             IQueryBuilder queryBuilder)
         {
             _workContextAccessor = workContextAccessor;
             _unitOfWorkFactory = unitOfWorkFactory;
             _authorizer = authorizer;
-            _searchQueryParser = searchQueryParser;
+            _activityClient = activityClient;
             _queryBuilder = queryBuilder;
         }
 
@@ -104,17 +90,10 @@ namespace Vault.WebHost.Services.Boards
             if (board == null || !_authorizer.Authorize(Permissions.ViewBoard, board))
                 return null;
 
-            var request = new SearchRequest
-            {
-                Criteria = ParseSearchQuery(board.RawQuery),
-                OwnerId = "a314130a91c244e3949bbe4c60bf1752", //todo: hardcode board.OwnerId,
-                Offset = offset,
-                Count = count,
-                SortBy = new[] { new SortField("Published", false) }
-            };
-            var searchResults = await _queryBuilder.For<IPagedEnumerable<SearchDocument>>().With(request);
-            
-            board.Cards = CreateCards(searchResults);
+            var stream = await _activityClient.GetStreamAsync(Buckets.Timeline, board.OwnerId.ToString());
+            var response = await stream.ReadEventsAsync(0, count);
+
+            board.Cards = CreateCards(PagedEnumerable.Create(response, count, count));
 
             return board;
         }
@@ -132,18 +111,10 @@ namespace Vault.WebHost.Services.Boards
             if (!_authorizer.Authorize(Permissions.ViewBoard, board))
                 return null;
 
-            var request = new SearchRequest
-            {
-                Offset = offset,
-                Count = count,
-                OwnerId = "a314130a91c244e3949bbe4c60bf1752", //todo: hardcode board.OwnerId,
-                Criteria = ParseSearchQuery(query),
-                SortBy = new[] { new SortField("Published", false) }
-            };
+            var stream = await _activityClient.GetStreamAsync(Buckets.Timeline, board.OwnerId.ToString());
+            var response = await stream.SearchEventsAsync(query, 0, count);
 
-            var searchResults = await _queryBuilder.For<IPagedEnumerable<SearchDocument>>().With(request);
-
-            board.Cards = CreateCards(searchResults);
+            board.Cards = CreateCards(PagedEnumerable.Create(response, count, count));
 
             return board;
         }
@@ -199,93 +170,31 @@ namespace Vault.WebHost.Services.Boards
             return hasChanges;
         }
 
-        private IPagedEnumerable<Card> CreateCards(IPagedEnumerable<SearchDocument> searchResults)
+        private IPagedEnumerable<Card> CreateCards(IPagedEnumerable<CommitedActivityEvent> searchResults)
         {
             var result = new List<Card>(searchResults.Count);
 
-            foreach (dynamic item in searchResults)
+            foreach (var item in searchResults)
             {
-                if (item.DocumentType == "Event")
-                {
-                    var eventCard = new EventCard
-                    {
-                        Id = item.Id,
-                        OwnerId = item.OwnerId,
-                        Published = item.Published,
-                        Name = item.Name,
-                        Description = item.Description,
-                        Duration = item.Duration,
-                        StartDate = item.StartDate,
-                        EndDate = item.EndDate
-                    };
-                    result.Add(eventCard);
-                }
-                else if (item.DocumentType == "Place")
-                {
-                    var placeCard = new PlaceCard
-                    {
-                        Id = item.Id,
-                        OwnerId = item.OwnerId,
-                        Published = item.Published,
-                        Name = item.Name,
-                        Description = item.Description,
-                        Elevation = item.Elevation,
-                        Latitude = item.Latitude,
-                        Longitude = item.Longitude
-                    };
-
-                    var placeImageUrl = new StringBuilder("//maps.googleapis.com/maps/api/staticmap?");
-                    placeImageUrl.Append("zoom=15");
-                    placeImageUrl.Append("&size=600x200");
-                    placeImageUrl.Append("&maptype=roadmap");
-                    placeImageUrl.AppendFormat("&center={0},{1}", placeCard.Latitude, placeCard.Longitude);
-                    placeImageUrl.AppendFormat("&markers=color:red%7Clabel:C%7C{0},{1}", placeCard.Latitude, placeCard.Longitude);
-                    placeCard.Thumbnail = placeImageUrl.ToString();
-
-                    result.Add(placeCard);
-                }
-                else if (item.DocumentType == "Article" || item.Verb == ActivityVerbs.Read)
+                if (item.Verb == ActivityVerbs.Read)
                 {
                     var articleCard = new ArticleCard
                     {
-                       // Id = item.Id,
-                       // OwnerId = item.OwnerId,
-                        Published = item.Published,
+                        // Id = item.Id,
+                        // OwnerId = item.OwnerId,
+                        Published = item.Published.UtcDateTime,
                         Name = item.Title,
                         Description = item.Content,
                         Body = item.Content,
                         Summary = item.Content,
-                        Thumbnail = item.Thumbnail,
+                        Thumbnail = item.MetaBag.Thumbnail,
                         Url = item.Uri
                     };
                     result.Add(articleCard);
                 }
-                else if (item.DocumentType == "Audio")
-                {
-                    var audioCard = new AudioCard
-                    {
-                        Id = item.Id,
-                        OwnerId = item.OwnerId,
-                        Published = item.Published,
-                        Name = item.Name,
-                        Description = item.Description,
-                        ByArtist = item.ByArtist,
-                        Duration = item.Duration,
-                        InAlbum = item.InAlbum
-                    };
-                    result.Add(audioCard);
-                }
             }
 
             return PagedEnumerable.Create(result, searchResults.Count, searchResults.TotalCount);
-        }
-
-        private IList<ISearchCriteria> ParseSearchQuery(string query)
-        {
-            return _searchQueryParser.Parse(query)
-                .RewriteWith(DefaultFieldsMap)
-                .AsCriteria()
-                .ToList();
         }
     }
 }

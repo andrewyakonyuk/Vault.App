@@ -30,6 +30,8 @@ using Vault.WebHost.Services.Boards.Overrides;
 using Vault.WebHost.Services.Security;
 using Vault.Activity;
 using Vault.Activity.Persistence;
+using Vault.Shared.Activity;
+using Vault.WebHost.Services.Activities;
 
 namespace Vault.WebHost
 {
@@ -104,12 +106,18 @@ namespace Vault.WebHost
                 options.LowercaseUrls = true;
             });
 
+            services.Configure<ActivityClientOptions>(options =>
+            {
+                options.WebserviceUri = Configuration["connectionStrings:webserviceUri"];
+            });
+
             services.AddTransient<UsernameRouteConstraint>();
 
             services.AddSingleton<IAppendOnlyStore, SqlAppendOnlyStore>();
             services.AddSingleton<ISqlConnectionFactory, PostgreSqlConnectionFactory>(_ => new PostgreSqlConnectionFactory(Configuration["connectionStrings:db"]));
+            services.AddSingleton<IActivityClient, RestActivityClient>();
+        }
 
-    }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(
             IApplicationBuilder app,
