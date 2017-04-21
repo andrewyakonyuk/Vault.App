@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Vault.Activity
+namespace Vault.Shared.Activity
 {
     [Serializable]
     public partial class UncommitedActivityEvent : ActivityEntry

@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Vault.Shared;
 
-namespace Vault.Activity
+namespace Vault.Shared.Activity
 {
     [Serializable]
     public abstract class ActivityEntry

@@ -14,6 +14,7 @@ using Vault.Activity.Persistence;
 using Vault.Activity.Utility;
 using Vault.Activity.Indexes;
 using Vault.Activity.Api.Mvc;
+using Vault.Shared.Activity;
 
 namespace Vault.Activity.Api
 {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Vault.Shared.Activity;
 using Vault.Shared.Search;
 using Vault.Shared.Search.Lucene;
 using Vault.Shared.Search.Lucene.Converters;

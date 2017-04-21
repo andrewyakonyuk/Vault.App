@@ -6,6 +6,7 @@ using Vault.Activity.Indexes;
 using Vault.Activity.Persistence;
 using Vault.Activity.Sinks;
 using Vault.Activity.Utility;
+using Vault.Shared.Activity;
 using Vault.Shared.Search;
 using Vault.Shared.Search.Parsing;
 

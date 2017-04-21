@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Vault.Activity
+namespace Vault.Shared.Activity
 {
     public class ActivityVerbs
     {

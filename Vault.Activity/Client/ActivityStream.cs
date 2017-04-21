@@ -8,18 +8,10 @@ using Vault.Activity.Persistence;
 using Vault.Shared.Search;
 using Vault.Shared.Search.Parsing;
 using Vault.Activity.Indexes;
+using Vault.Shared.Activity;
 
 namespace Vault.Activity.Client
 {
-    public interface IActivityStream
-    {
-        Task PushActivityAsync(ActivityEventAttempt activity);
-
-        Task<IReadOnlyCollection<CommitedActivityEvent>> ReadEventsAsync(long checkpointToken, int maxCount);
-
-        Task<IReadOnlyCollection<CommitedActivityEvent>> SearchEventsAsync(string query, long checkpointToken, int maxCount);
-    }
-
     [Serializable]
     public class ActivityStream : IActivityStream
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Vault.Activity.Client
+namespace Vault.Shared.Activity
 {
     public interface IActivityClient
     {

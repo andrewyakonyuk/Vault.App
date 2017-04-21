@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Vault.Activity.Client;
 using Vault.Activity.Api.Models;
 using Vault.Activity.Api.Mvc;
+using Vault.Shared.Activity;
 
 namespace Vault.Activity.Api.Controllers
 {

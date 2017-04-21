@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Vault.Shared.Activity;
 
 namespace Vault.Activity.Services.Connectors
 {

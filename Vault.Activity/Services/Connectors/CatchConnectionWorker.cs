@@ -5,6 +5,7 @@ using System.Linq;
 using Vault.Activity.Client;
 using Vault.Activity.Utility;
 using Microsoft.Extensions.Logging;
+using Vault.Shared.Activity;
 
 namespace Vault.Activity.Services.Connectors
 {

@@ -13,6 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Vault.Shared.Activity\Vault.Shared.Activity.csproj" />
     <ProjectReference Include="..\Vault.Shared\Vault.Shared.csproj" />
     <ProjectReference Include="..\Vault.Shared.Search\Vault.Shared.Search.csproj" />
     <ProjectReference Include="..\Vault.Shared.Search.Lucene\Vault.Shared.Search.Lucene.csproj" />

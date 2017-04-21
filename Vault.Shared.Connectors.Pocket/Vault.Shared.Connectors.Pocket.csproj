@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Vault.Activity\Vault.Activity.csproj" />
+    <ProjectReference Include="..\Vault.Shared.Activity\Vault.Shared.Activity.csproj" />
     <ProjectReference Include="..\Vault.Shared\Vault.Shared.csproj" />
   </ItemGroup>
 

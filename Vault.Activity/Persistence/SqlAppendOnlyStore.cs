@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Dapper;
 using Vault.Shared;
 using System;
+using Vault.Shared.Activity;
 
 namespace Vault.Activity.Persistence
 {
