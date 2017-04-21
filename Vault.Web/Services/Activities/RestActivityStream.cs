@@ -26,6 +26,9 @@ namespace Vault.WebHost.Services.Activities
 
         public async Task PushActivityAsync(ActivityEventAttempt activity)
         {
+            if (activity == null)
+                throw new ArgumentNullException(nameof(activity));
+
             string uri = $"{_options.WebserviceUri}/streams/{_bucket}/{_streamId}";
             var response = await _httpClient.PostAsync(uri, new StringContent(JsonConvert.SerializeObject(activity), System.Text.Encoding.UTF8, "application/json"));
             response.EnsureSuccessStatusCode();

@@ -180,8 +180,6 @@ namespace Vault.WebHost.Services.Boards
                 {
                     var articleCard = new ArticleCard
                     {
-                        // Id = item.Id,
-                        // OwnerId = item.OwnerId,
                         Published = item.Published.UtcDateTime,
                         Name = item.Title,
                         Description = item.Content,

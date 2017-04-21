@@ -7,6 +7,7 @@ using Vault.Activity.Client;
 using Vault.Activity.Api.Models;
 using Vault.Activity.Api.Mvc;
 using Vault.Shared.Activity;
+using System.ComponentModel.DataAnnotations;
 
 namespace Vault.Activity.Api.Controllers
 {
@@ -17,11 +18,16 @@ namespace Vault.Activity.Api.Controllers
 
         public StreamsController(IActivityClient client)
         {
-            _client = client;
+            _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
-        [HttpGet("{bucket}/{streamid}")]
-        public async Task<IEnumerable<CommitedActivityEvent>> Get(string bucket, string streamId, string query = null, long checkpointToken = 0, int maxCount = 100)
+        [HttpGet("{bucket:maxlength(50)}/{streamid:maxlength(50)}")]
+        public async Task<IEnumerable<CommitedActivityEvent>> Get(
+            string bucket, 
+            string streamId,
+            [FromQuery] string query = null,
+            [FromQuery] long checkpointToken = 0,
+            [FromQuery] int maxCount = 100)
         {
             var stream = await _client.GetStreamAsync(bucket, streamId);
             if (string.IsNullOrEmpty(query))
@@ -29,10 +35,16 @@ namespace Vault.Activity.Api.Controllers
 
             return await stream.SearchEventsAsync(query, checkpointToken, maxCount);
         }
-        
-        [HttpPost("{bucket}/{streamid}")]
-        public async Task Post(string bucket, string streamId, [FromBody]ActivityEventInputModel model)
+
+        [HttpPost("{bucket:maxlength(50)}/{streamid:maxlength(50)}")]
+        public async Task<IActionResult> Post(
+            string bucket,
+            string streamId,
+            [FromBody] ActivityEventInputModel model)
         {
+            if (model == null)
+                return new BadRequestResult();
+
             var stream = await _client.GetStreamAsync(bucket, streamId);
 
             var @event = new ActivityEventAttempt
@@ -49,6 +61,8 @@ namespace Vault.Activity.Api.Controllers
                 Verb = model.Verb
             };
             await stream.PushActivityAsync(@event);
+
+            return Ok();
         }
     }
 }
