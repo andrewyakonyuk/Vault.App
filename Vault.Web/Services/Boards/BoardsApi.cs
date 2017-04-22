@@ -91,7 +91,7 @@ namespace Vault.WebHost.Services.Boards
                 return null;
 
             var stream = await _activityClient.GetStreamAsync(Buckets.Timeline, board.OwnerId.ToString());
-            var response = await stream.ReadEventsAsync(0, count);
+            var response = await stream.ReadEventsAsync(board.RawQuery, 0, count);
 
             board.Cards = CreateCards(PagedEnumerable.Create(response, count, count));
 
@@ -112,7 +112,7 @@ namespace Vault.WebHost.Services.Boards
                 return null;
 
             var stream = await _activityClient.GetStreamAsync(Buckets.Timeline, board.OwnerId.ToString());
-            var response = await stream.SearchEventsAsync(query, 0, count);
+            var response = await stream.ReadEventsAsync(query, 0, count);
 
             board.Cards = CreateCards(PagedEnumerable.Create(response, count, count));
 

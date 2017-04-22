@@ -10,8 +10,6 @@ namespace Vault.Shared.Activity
     {
         Task PushActivityAsync(ActivityEventAttempt activity);
 
-        Task<IReadOnlyCollection<CommitedActivityEvent>> ReadEventsAsync(long checkpointToken, int maxCount);
-
-        Task<IReadOnlyCollection<CommitedActivityEvent>> SearchEventsAsync(string query, long checkpointToken, int maxCount);
+        Task<IReadOnlyCollection<CommitedActivityEvent>> ReadEventsAsync(string query, long checkpointToken, int maxCount);
     }
 }

@@ -54,42 +54,15 @@ namespace Vault.Activity.Client
             _clock = clock;
         }
 
-        public async Task<IReadOnlyCollection<CommitedActivityEvent>> SearchEventsAsync(string query, long checkpointToken, int maxCount)
-        {
-            if (maxCount <= 0)
-                return new List<CommitedActivityEvent>();
-
-            var parsedQuery = _queryParser.Parse(query);
-            var searchCriteria = parsedQuery.AsCriteria();
-
-            maxCount = Math.Min(maxCount, 100);
-
-            var searchRequest = new SearchRequest
-            {
-                Count = maxCount,
-                Criteria = searchCriteria.ToList(),
-                OwnerId = _streamId
-            };
-            //todo: include checkpointToken and bucket vars into search request
-
-            ISearchProvider searchProvider = _indexAccessor.GetIndexStore(_bucket);
-            var searchResults = searchProvider.Search(searchRequest);
-            var checkpointTokens = new List<long>(searchResults.Count);
-
-            foreach (dynamic item in searchResults)
-            {
-                checkpointTokens.Add(item.CheckpointToken);
-            }
-
-            return await _appendOnlyStore.ReadRecordsAsync(checkpointTokens);
-        }
-
-        public async Task<IReadOnlyCollection<CommitedActivityEvent>> ReadEventsAsync(long checkpointToken, int maxCount)
+        public async Task<IReadOnlyCollection<CommitedActivityEvent>> ReadEventsAsync(string query, long checkpointToken, int maxCount)
         {
             if (maxCount <= 0)
                 return new List<CommitedActivityEvent>();
 
             maxCount = Math.Min(maxCount, 100);
+
+            if (!string.IsNullOrEmpty(query))
+                return await SearchEventsAsync(query, checkpointToken, maxCount);
 
             return await _appendOnlyStore.ReadRecordsAsync(_streamId, _bucket, checkpointToken, maxCount);
         }
@@ -130,6 +103,31 @@ namespace Vault.Activity.Client
 
             _sink.Emit(uncommitedEvent);
             return Task.FromResult(true);
+        }
+
+        async Task<IReadOnlyCollection<CommitedActivityEvent>> SearchEventsAsync(string query, long checkpointToken, int maxCount)
+        {
+            var parsedQuery = _queryParser.Parse(query);
+            var searchCriteria = parsedQuery.AsCriteria();
+
+            var searchRequest = new SearchRequest
+            {
+                Count = maxCount,
+                Criteria = searchCriteria.ToList(),
+                OwnerId = _streamId
+            };
+            //todo: include checkpointToken and bucket vars into search request
+
+            ISearchProvider searchProvider = _indexAccessor.GetIndexStore(_bucket);
+            var searchResults = searchProvider.Search(searchRequest);
+            var checkpointTokens = new List<long>(searchResults.Count);
+
+            foreach (dynamic item in searchResults)
+            {
+                checkpointTokens.Add(item.CheckpointToken);
+            }
+
+            return await _appendOnlyStore.ReadRecordsAsync(checkpointTokens);
         }
     }
 }

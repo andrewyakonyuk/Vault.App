@@ -34,18 +34,10 @@ namespace Vault.WebHost.Services.Activities
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task<IReadOnlyCollection<CommitedActivityEvent>> ReadEventsAsync(long checkpointToken, int maxCount)
-        {
-            string uri = $"{_options.WebserviceUri}/streams/{_bucket}/{_streamId}?checkpointToken={checkpointToken}&maxCount={maxCount}";
-
-            var dataString = await _httpClient.GetStringAsync(uri);
-            var response = JsonConvert.DeserializeObject<IReadOnlyCollection<CommitedActivityEvent>>(dataString);
-            return response;
-        }
-
-        public async Task<IReadOnlyCollection<CommitedActivityEvent>> SearchEventsAsync(string query, long checkpointToken, int maxCount)
+        public async Task<IReadOnlyCollection<CommitedActivityEvent>> ReadEventsAsync(string query, long checkpointToken, int maxCount)
         {
             string uri = $"{_options.WebserviceUri}/streams/{_bucket}/{_streamId}?checkpointToken={checkpointToken}&maxCount={maxCount}&query={query}";
+
             var dataString = await _httpClient.GetStringAsync(uri);
             var response = JsonConvert.DeserializeObject<IReadOnlyCollection<CommitedActivityEvent>>(dataString);
             return response;
