@@ -186,7 +186,8 @@ namespace Vault.WebHost.Services.Boards
                         Body = item.Content,
                         Summary = item.Content,
                         Thumbnail = item.MetaBag.Thumbnail,
-                        Url = item.Uri
+                        Url = item.Uri,
+                        Tags = item.MetaBag.Tags.ToObject<IEnumerable<string>>()
                     };
                     result.Add(articleCard);
                 }

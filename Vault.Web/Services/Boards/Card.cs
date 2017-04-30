@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Vault.Shared;
 
 namespace Vault.WebHost.Services.Boards
@@ -16,5 +17,7 @@ namespace Vault.WebHost.Services.Boards
         public string Name { get; set; }
 
         public string Description { get; set; }
+
+        public IEnumerable<string> Tags { get; set; }
     }
 }

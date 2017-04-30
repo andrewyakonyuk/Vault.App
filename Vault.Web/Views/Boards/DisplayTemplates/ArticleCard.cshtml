@@ -15,6 +15,15 @@
 <h3 class="card-title">
     @Model.Name
 </h3>
+@if (Model.Tags != null && Model.Tags.Any())
+{
+    <div class="card-tags clearfix">
+        @foreach (var item in Model.Tags)
+        {
+            <a href="#" class="item">@item</a>
+        }
+    </div>
+}
 @if (!string.IsNullOrEmpty(domain))
 {
     <div class="card-destination">
