@@ -49,7 +49,7 @@ namespace Vault.Activity.Api.Controllers
                 Actor = model.Actor,
                 Content = model.Content,
                 Id = model.Id,
-                MetaBag = model.MetaBag,
+                MetaBag = new DynamicJsonObject(model.MetaBag),
                 Provider = model.Provider,
                 Published = model.Published,
                 Target = model.Target,

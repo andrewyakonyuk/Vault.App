@@ -1,6 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 using Vault.Shared;
+using Newtonsoft.Json.Linq;
 
 namespace Vault.Shared.Activity
 {
@@ -9,7 +10,7 @@ namespace Vault.Shared.Activity
     {
         public ActivityEntry()
         {
-            MetaBag = new DynamicDictionary();
+            MetaBag = new DynamicJsonObject();
         }
 
         /// <summary>

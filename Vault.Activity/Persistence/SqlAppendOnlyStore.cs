@@ -80,8 +80,8 @@ namespace Vault.Activity.Persistence
                         Title = item.title,
                         Content = item.content,
                         MetaBag = ReferenceEquals(item.metabag, null)
-                            ? new DynamicDictionary()
-                            : _serializer.Deserialize<DynamicDictionary>((byte[])item.metabag)
+                            ? new DynamicJsonObject()
+                            : _serializer.Deserialize<DynamicJsonObject>((byte[])item.metabag)
                     });
                 }
 
@@ -121,8 +121,8 @@ namespace Vault.Activity.Persistence
                         Title = item.title,
                         Content = item.content,
                         MetaBag = ReferenceEquals(item.metabag, null)
-                            ? new DynamicDictionary()
-                            : _serializer.Deserialize<DynamicDictionary>((byte[])item.metabag)
+                            ? new DynamicJsonObject()
+                            : _serializer.Deserialize<DynamicJsonObject>((byte[])item.metabag)
                     });
                 }
 
@@ -162,8 +162,8 @@ namespace Vault.Activity.Persistence
                         Title = item.title,
                         Content = item.content,
                         MetaBag = ReferenceEquals(item.metabag, null)
-                            ? new DynamicDictionary()
-                            : _serializer.Deserialize<DynamicDictionary>((byte[])item.metabag)
+                            ? new DynamicJsonObject()
+                            : _serializer.Deserialize<DynamicJsonObject>((byte[])item.metabag)
                     });
                 }
 

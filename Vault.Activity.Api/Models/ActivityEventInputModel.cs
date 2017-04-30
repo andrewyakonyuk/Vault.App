@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Vault.Activity.Api.Models
     {
         public ActivityEventInputModel()
         {
-            MetaBag = new DynamicDictionary();
+            MetaBag = new JObject();
         }
         
         public dynamic MetaBag { get; set; }
