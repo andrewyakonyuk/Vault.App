@@ -111,7 +111,7 @@ namespace Vault.WebHost.Services.Boards
             if (!_authorizer.Authorize(Permissions.ViewBoard, board))
                 return null;
 
-            var stream = await _activityClient.GetStreamAsync(Buckets.Timeline, board.OwnerId.ToString());
+            var stream = await _activityClient.GetStreamAsync(Buckets.Default, board.OwnerId.ToString());
             var response = await stream.ReadEventsAsync(query, 0, count);
 
             board.Cards = CreateCards(PagedEnumerable.Create(response, count, count));
@@ -187,7 +187,7 @@ namespace Vault.WebHost.Services.Boards
                         Summary = item.Content,
                         Thumbnail = item.MetaBag.Thumbnail,
                         Url = item.Uri,
-                        Tags = item.MetaBag.Tags.ToObject<IEnumerable<string>>()
+                        Tags = item.MetaBag.Tags.ToObject<string[]>()
                     };
                     result.Add(articleCard);
                 }

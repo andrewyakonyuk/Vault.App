@@ -33,6 +33,9 @@ namespace Vault.Shared.Activity
             if (ReferenceEquals(result, null))
                 result = DynamicNull.Null;
 
+            if (result is JToken jToken && jToken.IsNullOrEmpty())
+                result = DynamicNull.Null;
+
             return true;
         }
 

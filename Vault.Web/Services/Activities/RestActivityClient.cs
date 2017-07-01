@@ -10,9 +10,9 @@ namespace Vault.WebHost.Services.Activities
 {
     public class RestActivityClient : IActivityClient
     {
-        readonly ActivityClientOptions _options;
+        readonly WebserviceOptions _options;
 
-        public RestActivityClient(IOptions<ActivityClientOptions> options)
+        public RestActivityClient(IOptions<WebserviceOptions> options)
         {
             if (options == null)
                 throw new ArgumentNullException(nameof(options));

@@ -72,9 +72,9 @@ namespace Vault.Activity.Client
             if (activity == null)
                 throw new ArgumentNullException(nameof(activity));
             if (string.IsNullOrEmpty(activity.Id))
-                throw new ArgumentException("Id is required", nameof(activity.Id));
+                throw new ArgumentException("Id must be provided for an activity", nameof(activity.Id));
             if(string.IsNullOrEmpty(activity.Provider))
-                throw new ArgumentException("Provider is required", nameof(activity.Provider));
+                throw new ArgumentException("Provider must be provided for and activity", nameof(activity.Provider));
 
             var uncommitedEvent = new UncommitedActivityEvent
             {
@@ -117,8 +117,8 @@ namespace Vault.Activity.Client
                 OwnerId = _streamId
             };
             //todo: include checkpointToken and bucket vars into search request
-
-            ISearchProvider searchProvider = _indexAccessor.GetIndexStore(_bucket);
+            
+            ISearchProvider searchProvider = _indexAccessor.NewIndexStore(new DefaultIndexCreationTask());
             var searchResults = searchProvider.Search(searchRequest);
             var checkpointTokens = new List<long>(searchResults.Count);
 

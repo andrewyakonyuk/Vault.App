@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Vault.Shared
 {
-    public class DynamicNull : DynamicObject, IEnumerable
+    public class DynamicNull
     {
         public static readonly DynamicNull Null = new DynamicNull();
 
-        private DynamicNull() { }
+        public DynamicNull() { }
 
         public IEnumerator GetEnumerator()
         {
@@ -28,23 +28,17 @@ namespace Vault.Shared
             return string.Empty;
         }
 
-        public override bool TryGetMember(GetMemberBinder binder, out object result)
-        {
-            result = this;
-            return true;
-        }
+        //public override bool TryGetMember(GetMemberBinder binder, out object result)
+        //{
+        //    result = this;
+        //    return true;
+        //}
 
-        public override bool TryGetIndex(GetIndexBinder binder, object[] indexes, out object result)
-        {
-            result = this;
-            return true;
-        }
-
-        public override bool TryInvoke(InvokeBinder binder, object[] args, out object result)
-        {
-            result = this;
-            return true;
-        }
+        //public override bool TryGetIndex(GetIndexBinder binder, object[] indexes, out object result)
+        //{
+        //    result = this;
+        //    return true;
+        //}
 
         public bool IsNull()
         {
@@ -57,13 +51,13 @@ namespace Vault.Shared
         }
 
         public T ToObject<T>()
-            where T : class, new()
+            where T : new()
         {
             return new T();
         }
 
         public T Value<T>()
-            where T : class, new()
+            where T : new()
         {
             return new T();
         }

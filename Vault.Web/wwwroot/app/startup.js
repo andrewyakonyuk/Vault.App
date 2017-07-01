@@ -8,9 +8,9 @@ define(function (require, exports, module) {
         restartOnPushState: true
     });
 
-    //require('jquery-pjax');
+    require('jquery-pjax');
 
-    //$(document).pjax('[data-pjax] a, a[data-pjax]', '.app-container-holder')
+    $(document).pjax('[data-pjax] a, a[data-pjax]', '.app-container-holder')
 
     require('widgets/audio');
     require('plugins/jquery.sticky');

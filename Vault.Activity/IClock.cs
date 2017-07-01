@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Vault.Activity.Utility
+namespace Vault.Activity
 {
     public interface IClock
     {
@@ -15,6 +15,13 @@ namespace Vault.Activity.Utility
 
     public class DefaultClock : IClock
     {
+        private static IClock _instance = new DefaultClock();
+        public static IClock Instance
+        {
+            get => _instance ?? new DefaultClock();
+            set => _instance = value;
+        }
+
         public DateTimeOffset OffsetUtcNow => DateTimeOffset.UtcNow;
 
         public DateTime UtcNow => DateTime.UtcNow;

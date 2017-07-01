@@ -14,6 +14,7 @@ namespace Vault.WebHost.Controllers
 {
     using Activity.Services.Connectors;
     using Services;
+    using Vault.WebHost.Services.Connections;
     using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
     [Authorize]
@@ -24,19 +25,22 @@ namespace Vault.WebHost.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly IWorkContextAccessor _workContextAccessor;
+        private readonly ConnectionClient _connectionClient;
 
         public AccountController(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            IWorkContextAccessor workContextAccessor)
+            IWorkContextAccessor workContextAccessor,
+            ConnectionClient connectionClient)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _workContextAccessor = workContextAccessor;
+            _connectionClient = connectionClient;
         }
 
         [AllowAnonymous]
@@ -212,6 +216,8 @@ namespace Vault.WebHost.Controllers
                         var userByLogin = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
 
                         //todo: connect external login
+
+                        await _connectionClient.PullAsync(info, _workContextAccessor.WorkContext.Owner.Id.ToString());
 
                         if (Url.IsLocalUrl(returnUrl))
                             return LocalRedirect(returnUrl);

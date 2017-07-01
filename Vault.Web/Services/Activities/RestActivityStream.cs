@@ -14,9 +14,9 @@ namespace Vault.WebHost.Services.Activities
         readonly string _bucket;
         readonly string _streamId;
         readonly HttpClient _httpClient;
-        readonly ActivityClientOptions _options;
+        readonly WebserviceOptions _options;
 
-        public RestActivityStream(string bucket, string streamId, ActivityClientOptions options)
+        public RestActivityStream(string bucket, string streamId, WebserviceOptions options)
         {
             _bucket = bucket ?? throw new ArgumentNullException(nameof(bucket));
             _streamId = streamId ?? throw new ArgumentNullException(nameof(streamId));

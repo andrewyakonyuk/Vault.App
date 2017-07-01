@@ -51,6 +51,9 @@ namespace Vault.Activity.Persistence
 
         public async Task<IReadOnlyCollection<CommitedActivityEvent>> ReadRecordsAsync(IList<long> checkpointTokens)
         {
+            if (checkpointTokens.Count == 0)
+                return new CommitedActivityEvent[0];
+
             using (var connection = _connectionFactory.Open())
             {
                 var records = await connection.QueryAsync(

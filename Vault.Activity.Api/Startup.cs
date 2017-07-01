@@ -15,11 +15,17 @@ using Vault.Activity.Utility;
 using Vault.Activity.Indexes;
 using Vault.Activity.Api.Mvc;
 using Vault.Shared.Activity;
+using System.Threading.Tasks;
+using System;
+using System.Threading;
 
 namespace Vault.Activity.Api
 {
     public class Startup
     {
+        IApplicationBuilder _app;
+        CancellationTokenSource _environmentTokenSource;
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -28,6 +34,8 @@ namespace Vault.Activity.Api
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+
+            _environmentTokenSource = new CancellationTokenSource();
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -106,14 +114,21 @@ namespace Vault.Activity.Api
                 var loggerFactory = s.GetRequiredService<ILoggerFactory>();
                 return new PluggableBatchingSink<CommitedActivityEvent>(adapter, loggerFactory, clock);
             });
+
             services.AddSingleton<IActivityClient, DefaultActivityClient>();
             services.AddSingleton<JsonSerializer>(_ => new JsonSerializer());
             services.AddSingleton<AbstractIndexCreationTask<CommitedActivityEvent>, DefaultIndexCreationTask>();
+            services.AddTransient<StreamFlowBuilder>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(
+            IApplicationBuilder app,
+            IHostingEnvironment env,
+            IApplicationLifetime applicationLifetime,
+            ILoggerFactory loggerFactory)
         {
+            _app = app;
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
@@ -123,6 +138,20 @@ namespace Vault.Activity.Api
 
             app.UseSwagger();
             app.UseSwaggerUi();
+
+            applicationLifetime.ApplicationStarted.Register(OnApplicationStarted);
+            applicationLifetime.ApplicationStopping.Register(OnApplicationStopping);
+        }
+
+        void OnApplicationStarted()
+        {
+            var streamFlowBuilder = _app.ApplicationServices.GetRequiredService<StreamFlowBuilder>();
+            streamFlowBuilder.Configure(_environmentTokenSource.Token);
+        }
+
+        void OnApplicationStopping()
+        {
+            _environmentTokenSource.Dispose();
         }
     }
 }

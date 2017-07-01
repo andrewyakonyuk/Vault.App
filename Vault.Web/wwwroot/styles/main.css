@@ -1446,7 +1446,7 @@ a.btn {
 }
 .btn-primary:hover,
 .btn-primary:focus {
-  color: #333333 !important;
+  color: #333 !important;
 }
 .btn-link {
   font-weight: 400;
@@ -1671,11 +1671,11 @@ th {
   padding: 8px;
   line-height: 1.42857143;
   vertical-align: top;
-  border-top: 1px solid #dddddd;
+  border-top: 1px solid #ddd;
 }
 .table > thead > tr > th {
   vertical-align: bottom;
-  border-bottom: 2px solid #dddddd;
+  border-bottom: 2px solid #ddd;
 }
 .table > caption + thead > tr:first-child > th,
 .table > colgroup + thead > tr:first-child > th,
@@ -1686,10 +1686,10 @@ th {
   border-top: 0;
 }
 .table > tbody + tbody {
-  border-top: 2px solid #dddddd;
+  border-top: 2px solid #ddd;
 }
 .table .table {
-  background-color: #ffffff;
+  background-color: #fff;
 }
 .table-condensed > thead > tr > th,
 .table-condensed > tbody > tr > th,
@@ -1700,7 +1700,7 @@ th {
   padding: 5px;
 }
 .table-bordered {
-  border: 1px solid #dddddd;
+  border: 1px solid #ddd;
 }
 .table-bordered > thead > tr > th,
 .table-bordered > tbody > tr > th,
@@ -1708,7 +1708,7 @@ th {
 .table-bordered > thead > tr > td,
 .table-bordered > tbody > tr > td,
 .table-bordered > tfoot > tr > td {
-  border: 1px solid #dddddd;
+  border: 1px solid #ddd;
 }
 .table-bordered > thead > tr > th,
 .table-bordered > thead > tr > td {
@@ -1741,7 +1741,7 @@ table th[class*="col-"] {
     margin-bottom: 15px;
     overflow-y: hidden;
     -ms-overflow-style: -ms-autohiding-scrollbar;
-    border: 1px solid #dddddd;
+    border: 1px solid #ddd;
   }
   .table-responsive > .table {
     margin-bottom: 0;
@@ -1817,7 +1817,7 @@ table th[class*="col-"] {
   position: fixed;
   top: 0;
   z-index: 1000;
-  background-color: #161c27;
+  background-color: #161C27;
   overflow: hidden;
   /* enables momentum scrolling in iOS overflow elements */
   -webkit-overflow-scrolling: touch;
@@ -1919,7 +1919,7 @@ table th[class*="col-"] {
   transform: translate3d(285px, 0, 0);
 }
 .sidebar {
-  background-color: #161c27;
+  background-color: #161C27;
   font-size: 1.1em;
   font-weight: bold;
   color: #A7A9AF;
@@ -1970,7 +1970,7 @@ table th[class*="col-"] {
   color: #fff;
 }
 .sidebar .active .icon {
-  color: #12b4b1;
+  color: #12B4B1;
 }
 .sidebar-input-group {
   border: 2px dotted #12b4b1;
@@ -2251,6 +2251,52 @@ table th[class*="col-"] {
 .card-title {
   color: #292f33;
 }
+.card-title,
+.card-image,
+ + .card-tags,
+.card-destination,
+.card-summary {
+  margin-top: 5px;
+  color: #292f33;
+}
+.card-tags {
+  margin-bottom: 0;
+  margin-left: -0.5em;
+}
+.card-tags:before,
+.card-tags:after {
+  content: " ";
+  display: table;
+}
+.card-tags:after {
+  clear: both;
+}
+.card-tags:before,
+.card-tags:after {
+  content: " ";
+  display: table;
+}
+.card-tags:after {
+  clear: both;
+}
+.card-tags .item {
+  padding: 4px 2px;
+  background-color: #A7A9AF;
+  background-color: #b1b2b2;
+  border-radius: 3px;
+  color: #fff;
+  display: block;
+  float: left;
+  font-weight: 400;
+  font-size: .8em;
+  letter-spacing: .0125em;
+  line-height: 1;
+  margin-left: .5em;
+  margin-bottom: .5em;
+  padding: 4px 8px;
+  text-decoration: none;
+  top: 0;
+}
 .card-image {
   overflow-y: hidden;
   position: relative;
@@ -2354,7 +2400,7 @@ table th[class*="col-"] {
   font-size: 12px;
   padding: 6px 11px;
   border-radius: 4px;
-  color: #ffffff;
+  color: #fff;
 }
 body .ui-tooltip {
   border-width: 2px;

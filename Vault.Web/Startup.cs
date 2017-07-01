@@ -32,6 +32,7 @@ using Vault.Activity;
 using Vault.Activity.Persistence;
 using Vault.Shared.Activity;
 using Vault.WebHost.Services.Activities;
+using Vault.WebHost.Services.Connections;
 
 namespace Vault.WebHost
 {
@@ -106,7 +107,7 @@ namespace Vault.WebHost
                 options.LowercaseUrls = true;
             });
 
-            services.Configure<ActivityClientOptions>(options =>
+            services.Configure<WebserviceOptions>(options =>
             {
                 options.WebserviceUri = Configuration["connectionStrings:webserviceUri"];
             });
@@ -116,6 +117,7 @@ namespace Vault.WebHost
             services.AddSingleton<IAppendOnlyStore, SqlAppendOnlyStore>();
             services.AddSingleton<ISqlConnectionFactory, PostgreSqlConnectionFactory>(_ => new PostgreSqlConnectionFactory(Configuration["connectionStrings:db"]));
             services.AddSingleton<IActivityClient, RestActivityClient>();
+            services.AddSingleton<ConnectionClient, ConnectionClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

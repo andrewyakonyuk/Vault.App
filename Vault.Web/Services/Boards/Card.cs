@@ -18,6 +18,6 @@ namespace Vault.WebHost.Services.Boards
 
         public string Description { get; set; }
 
-        public IEnumerable<string> Tags { get; set; }
+        public string[] Tags { get; set; }
     }
 }
