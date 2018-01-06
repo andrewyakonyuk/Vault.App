@@ -22,6 +22,6 @@
   },
   
   "scripts": {
-    "postinstall": "cd ./Vault.Web && bower install --verbose -f && gulp"
+    "postinstall": "cd ./src/Vault.Web && bower install --verbose -f && gulp"
   }
 }

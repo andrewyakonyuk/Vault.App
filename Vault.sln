@@ -11,29 +11,29 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Connectors", "Connectors", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6CB80A10-AF12-4BE2-A79E-2B20ABA23999}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vault.Shared", "Vault.Shared\Vault.Shared.csproj", "{AC32727D-A876-4D06-84F2-35E2B39F0325}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vault.Shared", "src\Vault.Shared\Vault.Shared.csproj", "{AC32727D-A876-4D06-84F2-35E2B39F0325}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vault.Shared.NHibernate", "Vault.Shared.NHibernate\Vault.Shared.NHibernate.csproj", "{7A6E2FED-0E91-422C-A7AE-15B78882F857}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vault.Shared.NHibernate", "src\Vault.Shared.NHibernate\Vault.Shared.NHibernate.csproj", "{7A6E2FED-0E91-422C-A7AE-15B78882F857}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vault.Shared.Authentication.Pocket", "Vault.Shared.Authentication.Pocket\Vault.Shared.Authentication.Pocket.csproj", "{142BE9B6-1B9B-4844-B47A-46A977242A98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vault.Shared.Authentication.Pocket", "src\Vault.Shared.Authentication.Pocket\Vault.Shared.Authentication.Pocket.csproj", "{142BE9B6-1B9B-4844-B47A-46A977242A98}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vault.Shared.Search", "Vault.Shared.Search\Vault.Shared.Search.csproj", "{5BCCC5C0-F3E1-4083-97FA-6218DA6155D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vault.Shared.Search", "src\Vault.Shared.Search\Vault.Shared.Search.csproj", "{5BCCC5C0-F3E1-4083-97FA-6218DA6155D4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vault.Shared.Search.Lucene", "Vault.Shared.Search.Lucene\Vault.Shared.Search.Lucene.csproj", "{ABE8D330-B1B2-42F7-AABD-B90F84BC71D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vault.Shared.Search.Lucene", "src\Vault.Shared.Search.Lucene\Vault.Shared.Search.Lucene.csproj", "{ABE8D330-B1B2-42F7-AABD-B90F84BC71D5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vault.Shared.Connectors.Pocket", "Vault.Shared.Connectors.Pocket\Vault.Shared.Connectors.Pocket.csproj", "{5E3FA1D5-3EB0-4FC2-B35F-0C338BFC728F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vault.Shared.Connectors.Pocket", "src\Vault.Shared.Connectors.Pocket\Vault.Shared.Connectors.Pocket.csproj", "{5E3FA1D5-3EB0-4FC2-B35F-0C338BFC728F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vault.Shared.Identity", "Vault.Shared.Identity\Vault.Shared.Identity.csproj", "{5AC759A8-DCF4-4DF7-A0BB-6C973E298D74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vault.Shared.Identity", "src\Vault.Shared.Identity\Vault.Shared.Identity.csproj", "{5AC759A8-DCF4-4DF7-A0BB-6C973E298D74}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vault.Shared.TransientFaultHandling", "Vault.Shared.TransientFaultHandling\Vault.Shared.TransientFaultHandling.csproj", "{78A91B7D-7652-4CF8-811F-125090A4F83C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vault.Shared.TransientFaultHandling", "src\Vault.Shared.TransientFaultHandling\Vault.Shared.TransientFaultHandling.csproj", "{78A91B7D-7652-4CF8-811F-125090A4F83C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vault.Activity", "Vault.Activity\Vault.Activity.csproj", "{40E8E113-173B-48A2-9FF6-605CE957FEA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vault.Activity", "src\Vault.Activity\Vault.Activity.csproj", "{40E8E113-173B-48A2-9FF6-605CE957FEA0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vault.Web", "Vault.Web\Vault.Web.csproj", "{C4223588-A8F2-4F72-AAC3-A4BE30900C9F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vault.Web", "src\Vault.Web\Vault.Web.csproj", "{C4223588-A8F2-4F72-AAC3-A4BE30900C9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vault.Activity.Api", "Vault.Activity.Api\Vault.Activity.Api.csproj", "{27A839D5-6940-4C09-8FBB-4E2A3FB5DFA9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vault.Activity.Api", "src\Vault.Activity.Api\Vault.Activity.Api.csproj", "{27A839D5-6940-4C09-8FBB-4E2A3FB5DFA9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vault.Shared.Activity", "Vault.Shared.Activity\Vault.Shared.Activity.csproj", "{CAB8DC1F-1194-47F0-A904-94334CC12308}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vault.Shared.Activity", "src\Vault.Shared.Activity\Vault.Shared.Activity.csproj", "{CAB8DC1F-1194-47F0-A904-94334CC12308}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
