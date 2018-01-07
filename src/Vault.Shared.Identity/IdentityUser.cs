@@ -10,8 +10,8 @@ namespace Vault.Shared.Identity
     /// <typeparam name="TKey">The type used for the primary key for the user.</typeparam>
     public class IdentityUser : IEntity, IUser
     {
-        private List<IdentityUserClaim> _claims;
-        private List<IdentityUserLogin> _logins;
+        private ICollection<IdentityUserClaim> _claims;
+        private ICollection<IdentityUserLogin> _logins;
 
         /// <summary>
         /// Initializes a new instance of <see cref="T:Vault.App.Authentication.IdentityUser`1" />.

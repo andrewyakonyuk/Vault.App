@@ -3,7 +3,8 @@
   <PropertyGroup>
     <Description>Vault.Activity</Description>
     <Authors>Andrew Yakonyuk</Authors>
-    <TargetFramework>net451</TargetFramework>
+    <TargetFramework>net461</TargetFramework>
+    <DebugType>portable</DebugType>
     <AssemblyName>Vault.Activity</AssemblyName>
     <PackageId>Vault.Activity</PackageId>
     <PackageProjectUrl>https://github.com/andrewyakonyuk/Vault.App/</PackageProjectUrl>
@@ -21,12 +22,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="1.50.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="1.1.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="1.1.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
-    <PackageReference Include="Npgsql" Version="3.2.2" />
+    <PackageReference Include="Dapper" Version="1.50.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Npgsql" Version="3.2.6" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">

@@ -50,7 +50,9 @@
                                 @if (login.HasLogin)
                                 {
                                     <form asp-controller="Account" asp-action="RemoveExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" role="form">
-                                        <button type="submit" name="externalLoginId" value="@login.ExternalLoginId" class="btn btn-action btn-default form-control">
+                                        <input type="hidden" name="LoginProvider" value="@login.AuthenticationScheme" />
+                                        <input type="hidden" name="ProviderKey" value="@login.ProviderKey" />
+                                        <button type="submit" class="btn btn-action btn-default form-control">
                                             <svg class="icon"><use xlink:href="#icon-plus"></use></svg>
                                             Disconnect
                                         </button>
@@ -59,7 +61,7 @@
                                 else
                                 {
                                     <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" role="form">
-                                        <button type="submit" name="provider" value="@login.AuthenticationScheme" class="btn btn-default form-control">
+                                        <button type="submit" name="LoginProvider" value="@login.AuthenticationScheme" class="btn btn-default form-control">
                                             <svg class="icon"><use xlink:href="#icon-plus"></use></svg>
                                             Connect
                                         </button>

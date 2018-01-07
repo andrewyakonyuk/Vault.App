@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http.Authentication;
 using System;
 using System.IO;
 
@@ -65,7 +64,7 @@ namespace Vault.Shared.Authentication.Pocket
 
             string token = reader.ReadString();
             bool callbackConfirmed = reader.ReadBoolean();
-            AuthenticationProperties properties = PropertiesSerializer.Default.Read(reader);
+            var properties = PropertiesSerializer.Default.Read(reader);
             if (properties == null)
             {
                 return null;

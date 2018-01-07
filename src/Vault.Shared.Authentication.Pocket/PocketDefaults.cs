@@ -4,6 +4,8 @@
     {
         public const string AuthenticationScheme = "Pocket";
 
+        public const string DisplayName = "Pocket";
+
         public const string AuthorizationEndpoint = "https://getpocket.com/auth/authorize";
 
         public const string AccessTokenEndpoint = "https://getpocket.com/v3/oauth/authorize";

@@ -3,7 +3,8 @@
   <PropertyGroup>
     <Description>Vault.Shared.Connectors.Pocket</Description>
     <Authors>Andrew Yakonyuk</Authors>
-    <TargetFramework>net451</TargetFramework>
+    <TargetFramework>net461</TargetFramework>
+    <DebugType>portable</DebugType>
     <AssemblyName>Vault.Shared.Connectors.Pocket</AssemblyName>
     <PackageId>Vault.Shared.Connectors.Pocket</PackageId>
     <PackageProjectUrl>https://github.com/andrewyakonyuk/Vault.App/</PackageProjectUrl>
@@ -21,11 +22,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="1.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="1.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="2.0.0" />
     <PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
-    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">

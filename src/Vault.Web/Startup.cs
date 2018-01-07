@@ -4,8 +4,10 @@ using System.Threading;
 using FluentNHibernate.Automapping;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
@@ -31,23 +33,18 @@ using Vault.WebHost.Services.Security;
 using Vault.Activity;
 using Vault.Activity.Persistence;
 using Vault.Shared.Activity;
+using Vault.Shared.Authentication.Pocket;
 using Vault.WebHost.Services.Activities;
 
 namespace Vault.WebHost
 {
     public class Startup
     {
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration Configuration { get; }
 
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("config.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"config.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -61,15 +58,20 @@ namespace Vault.WebHost
 
             services.AddTransient<WorkContextAwareFilter, WorkContextAwareFilter>();
 
+            //authentication and authorization
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie()
+                .AddTwitter(options => { options.ConsumerKey = Configuration["authentication:pocket:consumerKey"]; });
+
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
                 options.User.RequireUniqueEmail = true;
-                options.Cookies.ApplicationCookie.LoginPath = "/account/signIn";
-                options.Cookies.ApplicationCookie.ExpireTimeSpan = new TimeSpan(0, 20, 0);
             })
             .AddUserStore<UserStore>()
             .AddRoleStore<RoleStore>()
             .AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(options => options.LoginPath = "/account/login");
 
             services.AddSingleton<IAuthorizationService, DefaultAuthorizationService>();
             services.AddScoped<IAuthorizer, DefaultAuthorizer>();
@@ -126,7 +128,6 @@ namespace Vault.WebHost
             IConfiguration configuration)
         {
             app.UseStaticFiles();
-            loggerFactory.AddConsole();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -136,11 +137,7 @@ namespace Vault.WebHost
                 app.UseExceptionHandler("/Home/Error");
             }
             // Add cookie-based authentication to the request pipeline.
-            app.UseIdentity();
-            app.UsePocketAuthentication(options =>
-            {
-                options.ConsumerKey = Configuration["authentication:pocket:consumerKey"];
-            });
+            app.UseAuthentication();
 
             app.UseStatusCodePages();
 
@@ -207,19 +204,6 @@ namespace Vault.WebHost
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-        }
-
-        // Entry point for the application.
-        public static void Main(string[] args)
-        {
-            var host = new WebHostBuilder()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
-                .UseKestrel()
-                .UseStartup<Startup>()
-                .Build();
-
-            host.Run();
         }
     }
 

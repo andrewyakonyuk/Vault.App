@@ -3,6 +3,8 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using Vault.Shared.Identity;
+using Vault.Shared.Identity.Query;
 using Vault.Shared.Queries;
 
 namespace Vault.WebHost
@@ -11,9 +13,9 @@ namespace Vault.WebHost
     {
         public static void AddQueries(this IServiceCollection services, Func<Assembly, bool> ignoredAssemblies = null)
         {
-            services.AddSingleton<IQueryBuilder, QueryBuilder>();
-            services.AddSingleton<IQueryFactory>(s => new DefaultQueryFactory(s));
-
+            services.AddTransient<IQueryBuilder, QueryBuilder>();
+            services.AddTransient<IQueryFactory>(s => new DefaultQueryFactory(s));
+ 
             ignoredAssemblies = ignoredAssemblies ?? (_ => false);
             var query = typeof(IQuery<,>);
 

@@ -3,7 +3,8 @@
   <PropertyGroup>
     <Description>Vault.Shared.TransientFaultHandling</Description>
     <Authors>Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling</Authors>
-    <TargetFramework>net451</TargetFramework>
+    <TargetFramework>net461</TargetFramework>
+    <DebugType>portable</DebugType>
     <AssemblyName>Vault.Shared.TransientFaultHandling</AssemblyName>
     <PackageId>Vault.Shared.TransientFaultHandling</PackageId>
     <PackageProjectUrl>https://github.com/andrewyakonyuk/Vault.App/</PackageProjectUrl>

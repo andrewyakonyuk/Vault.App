@@ -1,20 +1,21 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Authentication;
+using Microsoft.AspNetCore.Authentication;
 using Newtonsoft.Json.Linq;
 using System.Security.Claims;
 
 namespace Vault.Shared.Authentication.Pocket
 {
-    public class PocketCreatingTicketContext : BasePocketContext
+    public class PocketCreatingTicketContext : BaseContext<PocketOptions>
     {
         public PocketCreatingTicketContext(
             HttpContext context,
+            AuthenticationScheme scheme,
             PocketOptions options,
             string userId,
             string screenName,
             string accessToken,
             JObject user)
-            : base(context, options)
+            : base(context, scheme, options)
         {
             UserId = userId;
             ScreenName = screenName;

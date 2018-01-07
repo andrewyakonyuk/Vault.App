@@ -20,7 +20,7 @@
                             }
                             else
                             {
-                                <li class="@When(IsCurrentPage("SignIn", "Account"), "active")"><a asp-controller="Account" asp-action="SignIn">Sign in</a></li>
+                                <li class="@When(IsCurrentPage("Login", "Account"), "active")"><a asp-controller="Account" asp-action="Login">Sign in</a></li>
                             }
                             <li class="@When(IsCurrentPage("About", "Home"), "active")"><a asp-controller="Home" asp-action="About">Features</a></li>
                         </ul>

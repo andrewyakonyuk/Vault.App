@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Sign in | Vault.app";
 }
-<form asp-controller="Account" asp-action="SignIn" asp-route-returnurl="@ViewData["ReturnUrl"]" class="form-signin form-horizontal" role="form" method="post">
+<form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" class="form-signin form-horizontal" role="form" method="post">
     <div class="panel-body">
         <h2>Please sign-in</h2>
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>

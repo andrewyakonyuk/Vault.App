@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -24,24 +25,27 @@ namespace Vault.WebHost.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly IWorkContextAccessor _workContextAccessor;
+        private readonly IAuthenticationService _authenticationService;
 
         public AccountController(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            IWorkContextAccessor workContextAccessor)
+            IWorkContextAccessor workContextAccessor,
+            IAuthenticationService authenticationService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _workContextAccessor = workContextAccessor;
+            _authenticationService = authenticationService;
         }
 
         [AllowAnonymous]
         [HttpGet]
-        public IActionResult SignIn(string returnUrl = null)
+        public IActionResult Login(string returnUrl = null)
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -55,7 +59,7 @@ namespace Vault.WebHost.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> SignIn(SignInModel model, string returnUrl = null)
+        public async Task<IActionResult> Login(SignInModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
@@ -150,16 +154,28 @@ namespace Vault.WebHost.Controllers
             model.Username = user.UserName;
             model.Email = user.Email;
 
-            foreach (var item in HttpContext.Authentication.GetAuthenticationSchemes())
+            var userLogins = await _userManager.GetLoginsAsync(user);
+            var otherLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).Where(auth => userLogins.All(ul => auth.Name != ul.LoginProvider)).ToList();
+
+            foreach (var item in await _signInManager.GetExternalAuthenticationSchemesAsync())
             {
-                var userLogin = user.Logins.FirstOrDefault(t => string.Equals(t.LoginProvider, item.AuthenticationScheme, StringComparison.OrdinalIgnoreCase));
+                var logins = userLogins.Where(t => string.Equals(t.LoginProvider, item.Name));
+                foreach (var l in logins)
+                {
+                    model.Logins.Add(new ExternalLoginModel
+                    {
+                        AuthenticationScheme = item.Name,
+                        DisplayName = item.DisplayName,
+                        HasLogin = true,
+                        ProviderKey = l.ProviderKey
+                    });
+                }
 
                 model.Logins.Add(new ExternalLoginModel
                 {
-                    AuthenticationScheme = item.AuthenticationScheme,
+                    AuthenticationScheme = item.Name,
                     DisplayName = item.DisplayName,
-                    HasLogin = userLogin != null,
-                    ExternalLoginId = userLogin?.Id
+                    HasLogin = false
                 });
             }
 
@@ -169,12 +185,12 @@ namespace Vault.WebHost.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public IActionResult ExternalLogin(string provider, string returnUrl = null)
+        public IActionResult ExternalLogin(string loginProvider, string returnUrl = null)
         {
             // Request a redirect to the external login provider.
             var redirectUrl = Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl });
-            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
-            return new ChallengeResult(provider, properties);
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(loginProvider, redirectUrl);
+            return new ChallengeResult(loginProvider, properties);
         }
 
         [HttpGet]
@@ -184,7 +200,7 @@ namespace Vault.WebHost.Controllers
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
-                return RedirectToAction(nameof(SignIn));
+                return RedirectToAction(nameof(Login));
             }
 
             // Sign in the user with this external login provider if the user already has a login.
@@ -228,16 +244,12 @@ namespace Vault.WebHost.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveExternalLogin(int externalLoginId)
+        public async Task<IActionResult> RemoveExternalLogin(string loginProvider, string providerKey)
         {
             var user = await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
             if (user != null)
             {
-                var userLogin = user.Logins.FirstOrDefault(t => t.Id == externalLoginId);
-                if (userLogin != null)
-                {
-                    await _userManager.RemoveLoginAsync(user, userLogin.LoginProvider, userLogin.ProviderKey);
-                }
+                await _userManager.RemoveLoginAsync(user, loginProvider, providerKey);
             }
 
             return RedirectToAction(nameof(AccountController.Index));

@@ -3,7 +3,8 @@
   <PropertyGroup>
     <Description>Vault.Shared.Search</Description>
     <Authors>Andrew Yakonyuk</Authors>
-    <TargetFramework>net451</TargetFramework>
+    <TargetFramework>net461</TargetFramework>
+    <DebugType>portable</DebugType>
     <AssemblyName>Vault.Shared.Search</AssemblyName>
     <PackageId>Vault.Shared.Search</PackageId>
     <PackageProjectUrl>https://github.com/andrewyakonyuk/Vault.App/</PackageProjectUrl>

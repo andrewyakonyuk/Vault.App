@@ -1,16 +1,17 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Authentication;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Vault.Shared.Authentication.Pocket
 {
-    public class PocketRedirectToAuthorizationEndpointContext : BasePocketContext
+    public class PocketRedirectToAuthorizationEndpointContext : BaseContext<PocketOptions>
     {
         public PocketRedirectToAuthorizationEndpointContext(
             HttpContext context,
+            AuthenticationScheme scheme,
             PocketOptions options,
             AuthenticationProperties properties,
             string redirectUri)
-            : base(context, options)
+            : base(context, scheme, options)
         {
             RedirectUri = redirectUri;
             Properties = properties;

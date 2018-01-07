@@ -2,34 +2,43 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Security.Claims;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.AspNetCore.Http.Features.Authentication;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
+using AuthenticationProperties = Microsoft.AspNetCore.Authentication.AuthenticationProperties;
 
 namespace Vault.Shared.Authentication.Pocket
 {
     public class PocketAuthenticationHandler : RemoteAuthenticationHandler<PocketOptions>
     {
-        private readonly HttpClient _httpClient;
         private const string StateCookie = "__PocketState";
 
-        public PocketAuthenticationHandler(HttpClient httpClient)
+        public PocketAuthenticationHandler(
+            IOptionsMonitor<PocketOptions> options, 
+            ILoggerFactory logger, 
+            UrlEncoder encoder, 
+            ISystemClock clock) 
+            : base(options, logger, encoder, clock)
         {
-            _httpClient = httpClient;
         }
 
-        protected override async Task<bool> HandleUnauthorizedAsync(ChallengeContext context)
-        {
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
+        private HttpClient Backchannel => Options.Backchannel;
 
-            var properties = new AuthenticationProperties(context.Properties);
+        protected override Task<object> CreateEventsAsync()
+        {
+            return Task.FromResult<object>(new PocketEvents());
+        }
+
+        protected override async Task HandleChallengeAsync(AuthenticationProperties properties)
+        {
+            if (properties == null)
+                throw new ArgumentNullException(nameof(properties));
 
             if (string.IsNullOrEmpty(properties.RedirectUri))
             {
@@ -48,26 +57,24 @@ namespace Vault.Shared.Authentication.Pocket
 
             Response.Cookies.Append(StateCookie, Options.StateDataFormat.Protect(requestToken), cookieOptions);
 
-            var redirectContext = new PocketRedirectToAuthorizationEndpointContext(Context, Options, properties, challengeUrl);
+            var redirectContext = new PocketRedirectToAuthorizationEndpointContext(Context, Scheme, Options, properties, challengeUrl);
             await Options.Events.RedirectToAuthorizationEndpoint(redirectContext);
-
-            return true;
         }
 
-        protected override async Task<AuthenticateResult> HandleRemoteAuthenticateAsync()
+        protected override async Task<HandleRequestResult> HandleRemoteAuthenticateAsync()
         {
             var protectedRequestToken = Request.Cookies[StateCookie];
 
             var cookieRequestToken = Options.StateDataFormat.Unprotect(protectedRequestToken);
             if (cookieRequestToken == null)
             {
-                return AuthenticateResult.Fail("Invalid state cookie.");
+                return HandleRequestResult.Fail("Invalid state cookie.");
             }
 
             var returnedRequestToken = Options.StateDataFormat.Unprotect(Request.Query["state"]);
 
             if (!string.Equals(returnedRequestToken.Token, cookieRequestToken.Token, StringComparison.Ordinal))
-                return AuthenticateResult.Fail("Unmatched token");
+                return HandleRequestResult.Fail("Unmatched token");
 
             var cookieOptions = new CookieOptions
             {
@@ -89,7 +96,7 @@ namespace Vault.Shared.Authentication.Pocket
                 claimsIdentity.AddClaim(new Claim("access_token", accessToken.Token, ClaimValueTypes.String, Options.ClaimsIssuer));
             }
 
-            return AuthenticateResult.Success(await CreateTicketAsync(claimsIdentity, cookieRequestToken.Properties, accessToken, null));
+            return HandleRequestResult.Success(await CreateTicketAsync(claimsIdentity, cookieRequestToken.Properties, accessToken, null));
         }
 
         protected virtual string BuildChallengeUrl(RequestToken requestToken, string redirectUri)
@@ -104,12 +111,12 @@ namespace Vault.Shared.Authentication.Pocket
             redirectQueryBuilder.Add("state", state);
             redirectQueryBuilder.Add("request_token", requestToken.Token);
 
-            queryBuilder.Add("redirect_uri", redirectUri + redirectQueryBuilder.ToString());
+            queryBuilder.Add("redirect_uri", redirectUri + redirectQueryBuilder);
             queryBuilder.Add("webauthenticationbroker", "0");
-            return PocketDefaults.AuthorizationEndpoint + queryBuilder.ToString();
+            return PocketDefaults.AuthorizationEndpoint + queryBuilder;
         }
 
-        protected virtual async Task<RequestToken> ObtainRequestTokenAsync(string redirectUrl, AuthenticationProperties properties)
+        protected virtual async Task<RequestToken> ObtainRequestTokenAsync(string redirectUrl, Microsoft.AspNetCore.Authentication.AuthenticationProperties properties)
         {
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, PocketDefaults.RequestTokenEndpoint);
 
@@ -120,7 +127,7 @@ namespace Vault.Shared.Authentication.Pocket
                         { "consumer_key", Options.ConsumerKey },
                         { "redirect_uri", redirectUrl }
                     });
-            var response = await _httpClient.SendAsync(request, Context.RequestAborted);
+            var response = await Backchannel.SendAsync(request, Context.RequestAborted);
             response.EnsureSuccessStatusCode();
             var formCollection = new FormCollection(new FormReader(await response.Content.ReadAsStringAsync()).ReadForm());
             var requestToken = formCollection["code"];
@@ -133,10 +140,10 @@ namespace Vault.Shared.Authentication.Pocket
             };
         }
 
-        protected virtual async Task<AuthenticationTicket> CreateTicketAsync(
+        protected virtual Task<AuthenticationTicket> CreateTicketAsync(
            ClaimsIdentity identity, AuthenticationProperties properties, AccessToken token, JObject user)
         {
-            var context = new PocketCreatingTicketContext(Context, Options, token.UserId, token.ScreenName, token.Token, user)
+            var context = new PocketCreatingTicketContext(Context, Scheme, Options, token.UserId, token.ScreenName, token.Token, user)
             {
                 Principal = new ClaimsPrincipal(identity),
                 Properties = properties
@@ -149,7 +156,8 @@ namespace Vault.Shared.Authentication.Pocket
                 return null;
             }
 
-            return new AuthenticationTicket(context.Principal, context.Properties, Options.AuthenticationScheme);
+            return Task.FromResult(
+                new AuthenticationTicket(context.Principal, context.Properties, Scheme.Name));
         }
 
         protected virtual async Task<AccessToken> ObtainAccessTokenAsync(RequestToken requestToken, string redirectUri)
@@ -172,7 +180,7 @@ namespace Vault.Shared.Authentication.Pocket
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, PocketDefaults.AccessTokenEndpoint);
             request.Headers.Add("X-Accept", "application/json");
             request.Content = content;
-            HttpResponseMessage response = await _httpClient.SendAsync(request, this.Context.RequestAborted);
+            HttpResponseMessage response = await Backchannel.SendAsync(request, this.Context.RequestAborted);
             response.EnsureSuccessStatusCode();
             var result = JObject.Parse(await response.Content.ReadAsStringAsync());
             return new AccessToken

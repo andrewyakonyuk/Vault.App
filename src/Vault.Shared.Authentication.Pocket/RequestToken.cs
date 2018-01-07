@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 
 namespace Vault.Shared.Authentication.Pocket
 {
