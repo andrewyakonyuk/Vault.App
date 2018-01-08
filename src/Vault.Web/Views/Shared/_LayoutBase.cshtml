@@ -1,49 +1,33 @@
-<!DOCTYPE html>
-<!--[if IEMobile 7 ]>    <html class="no-js iem7"> <![endif]-->
-<!--[if (gt IEMobile 7)|!(IEMobile)]><!-->
-<html class="no-js">
-<!--<![endif]-->
-
+﻿<!doctype html>
+<html class="no-js" lang="">
 <head>
     <meta charset="utf-8">
-    <title>@ViewBag.Title</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title></title>
     <meta name="description" content="">
-    <meta name="HandheldFriendly" content="True">
-    <meta name="MobileOptimized" content="320">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
-    <meta http-equiv="cleartype" content="on">
-
-    <meta name="mobile-web-app-capable" content="yes">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="apple-touch-icon" href="icon.png">
+    <!-- Place favicon.ico in the root directory -->
     <!-- build:css -->
-    <environment names="Development">
-        <link href="@Url.Content("~/styles/main.css")" rel="stylesheet">
-    </environment>
-    <environment names="Staging,Production">
-        <link href="@Url.Content("~/styles/main.min.css")" rel="stylesheet">
-    </environment>
+    <link rel="stylesheet" href="~/styles/main.css" asp-append-version="true">
     <!-- endbuild -->
 </head>
-
 <body class="draw-menu-media @ViewBag.BodyClass">
+    <!--[if lte IE 9]>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+    <![endif]-->
     @RenderBody()
+
     <!-- build:js -->
-    <environment names="Development">
-        <script src="@Url.Content("~/require.config.js")" async></script>
-        <script data-main="@Url.Content("~/app/startup.js")" src="@Url.Content("~/bower_modules/requirejs/require.js")" async></script>
-    </environment>
-    <environment names="Staging,Production">
-        <script src="@Url.Content("~/app/app-bundle.min.js")" async></script>
-    </environment>
+    <script src="@Url.Content("~/require.config.js")" async></script>
+    <script data-main="@Url.Content("~/app/startup.js")" src="@Url.Content("~/bower_modules/requirejs/require.js")" async></script>
     <!-- endbuild -->
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-    <!-- <script>
-        var _gaq = [["_setAccount", "UA-XXXXX-X"], ["_trackPageview"]];
-        (function (d, t) {
-            var g = d.createElement(t), s = d.getElementsByTagName(t)[0]; g.async = 1;
-            g.src = ("https:" == location.protocol ? "//ssl" : "//www") + ".google-analytics.com/ga.js";
-            s.parentNode.insertBefore(g, s)
-        }(document, "script"));
-    </script>-->
+    <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
+    <script>
+        window.ga = function () { ga.q.push(arguments) }; ga.q = []; ga.l = +new Date;
+        ga('create', 'UA-XXXXX-Y', 'auto'); ga('send', 'pageview')
+    </script>
+    <script src="https://www.google-analytics.com/analytics.js" async defer></script>
 </body>
 </html>

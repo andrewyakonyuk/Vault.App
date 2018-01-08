@@ -1,0 +1,92 @@
+﻿
+.login-page {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+
+    .content {
+        flex: 1;
+        display: flex;
+        -ms-flex-align: center;
+        align-items: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        overflow: hidden;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        text-align: center;
+    }
+
+    .logo{
+        width: 100px;
+    }
+
+    .footer {
+        text-align: center;
+        border-top: 1px solid rgba(0,0,0,.15);
+        color: rgba(0,0,0,.3);
+        font-size: 14px;
+
+        a {
+            display: inline-block;
+            padding: 10px 5px;
+        }
+    }
+}
+
+.login-form {
+    width: 350px;
+    max-width: 100%;
+    z-index: 2;
+    padding: 20px;
+
+    .label {
+        display: block;
+        width: 100%;
+        text-align: left;
+    }
+
+    .input {
+        border-radius: 0.2rem;
+        color: #5f6c72;
+        font-size: 1em;
+        font-weight: 500;
+        line-height: 1.5em;
+        padding: 0.5em 1em;
+        border: 1px solid #ccc;
+        display: block;
+        width: 100%;
+
+        &:focus, &:active {
+            box-shadow: 0 0 0 0.2rem #12b4b1;
+            border-color: transparent;
+        }
+    }
+
+    .btn {
+        &:focus, &:active {
+            box-shadow: 0 0 0 0.2rem #12b4b1;
+            border-color: transparent;
+        }
+    }
+
+    .form-row {
+        margin-bottom: 10px;
+    }
+
+    .validation-message {
+        display: inline-block;
+        width: 100%;
+        color: #e91e63;
+        margin: 2px 0;
+        text-align: left;
+    }
+
+    .field-validation-valid {
+        display: none;
+    }
+}

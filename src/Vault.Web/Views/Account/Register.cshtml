@@ -1,19 +1,20 @@
-﻿@using System.Collections.Generic
-@using System.Linq
-@using Microsoft.AspNetCore.Http
-@using Microsoft.AspNetCore.Http.Authentication
-@using Vault.WebHost.Models.Account
-@model SignInModel
-
+﻿@using Vault.WebHost.Models.Account
+@model SignUpModel
 @{
-    ViewData["Title"] = "Log in";
+    ViewBag.Title = "Sign up | Vault.app";
 }
+
 <div class="login-page">
     <div class="content">
         <form class="login-form" method="post" asp-route-returnurl="@ViewData["ReturnUrl"]">
             <img class="logo" alt="Vault" src="~/img/WlUW4ThE50.svg" />
             <div>
                 <div asp-validation-summary="ModelOnly"></div>
+                <div class="form-row">
+                    <label asp-for="Name" class="label">Username</label>
+                    <input type="text" asp-for="@Model.Name" class="input" />
+                    <span asp-validation-for="Email" class="validation-message"></span>
+                </div>
                 <div class="form-row">
                     <label asp-for="Email" class="label">Email</label>
                     <input type="email" asp-for="@Model.Email" class="input" />
@@ -26,13 +27,12 @@
                 </div>
             </div>
             <div class="form-row">
-                <button type="submit" class="btn btn-default">Log in</button>
+                <button type="submit" class="btn btn-default">Join us</button>
             </div>
         </form>
     </div>
     <div class="footer">
         <a asp-action="ForgotPassword">Forgot your password?</a>
-        <a asp-action="Register" asp-controller="Account">Sign up!</a>
+        <a asp-action="Login" asp-controller="Account">Login!</a>
     </div>
 </div>
-

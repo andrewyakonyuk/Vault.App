@@ -202,7 +202,7 @@ namespace Vault.WebHost
 
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Boards}/{action=Index}/{id?}");
             });
         }
     }

@@ -104,7 +104,7 @@ namespace Vault.WebHost.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult SignUp()
+        public IActionResult Register()
         {
             if (User.Identity.IsAuthenticated)
                 return RedirectToAction("Index", "Boards");
@@ -114,7 +114,7 @@ namespace Vault.WebHost.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> SignUp(SignUpModel model)
+        public async Task<IActionResult> Register(SignUpModel model)
         {
             if (ModelState.IsValid)
             {
@@ -129,7 +129,7 @@ namespace Vault.WebHost.Controllers
                     //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
                     //    "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction(nameof(HomeController.Index), "Home");
+                    return RedirectToAction(nameof(BoardsController.Index), "Boards");
                 }
                 AddErrors(result);
             }
@@ -143,7 +143,7 @@ namespace Vault.WebHost.Controllers
         public async Task<IActionResult> SignOut()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction(nameof(HomeController.Index), "Home");
+            return RedirectToAction(nameof(BoardsController.Index), "Boards");
         }
 
         public async Task<IActionResult> Index()
@@ -511,7 +511,7 @@ namespace Vault.WebHost.Controllers
             }
             else
             {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
+                return RedirectToAction(nameof(BoardsController.Index), "Boards");
             }
         }
     }
