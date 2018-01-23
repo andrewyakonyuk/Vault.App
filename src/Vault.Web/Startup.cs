@@ -35,6 +35,7 @@ using Vault.Activity.Persistence;
 using Vault.Shared.Activity;
 using Vault.Shared.Authentication.Pocket;
 using Vault.WebHost.Services.Activities;
+using System.Threading.Tasks;
 
 namespace Vault.WebHost
 {
@@ -71,7 +72,10 @@ namespace Vault.WebHost
             .AddRoleStore<RoleStore>()
             .AddDefaultTokenProviders();
 
-            services.ConfigureApplicationCookie(options => options.LoginPath = "/account/login");
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/account/login";
+            });
 
             services.AddSingleton<IAuthorizationService, DefaultAuthorizationService>();
             services.AddScoped<IAuthorizer, DefaultAuthorizer>();
@@ -114,6 +118,7 @@ namespace Vault.WebHost
             });
 
             services.AddTransient<UsernameRouteConstraint>();
+            services.AddTransient<UsernameRouteProjection>();
 
             services.AddSingleton<IAppendOnlyStore, SqlAppendOnlyStore>();
             services.AddSingleton<ISqlConnectionFactory, PostgreSqlConnectionFactory>(_ => new PostgreSqlConnectionFactory(Configuration["connectionStrings:db"]));
@@ -149,6 +154,10 @@ namespace Vault.WebHost
                     constraints: new
                     {
                         username = routes.ServiceProvider.GetRequiredService<UsernameRouteConstraint>()
+                    }, 
+                    projections: new
+                    {
+                        username = routes.ServiceProvider.GetRequiredService<UsernameRouteProjection>()
                     },
                     defaults: new
                     {
@@ -164,14 +173,15 @@ namespace Vault.WebHost
                     {
                         username = routes.ServiceProvider.GetRequiredService<UsernameRouteConstraint>()
                     },
+                    projections: new
+                    {
+                        title = new DashedRouteProjection(false),
+                        username = routes.ServiceProvider.GetRequiredService<UsernameRouteProjection>()
+                    },
                     defaults: new
                     {
                         controller = "Boards",
                         action = "Detail"
-                    },
-                    projections: new
-                    {
-                        title = new DashedRouteProjection(false)
                     }
                 );
                 routes.MapRoute("board-search",
@@ -179,6 +189,10 @@ namespace Vault.WebHost
                     constraints: new
                     {
                         username = routes.ServiceProvider.GetRequiredService<UsernameRouteConstraint>()
+                    },
+                    projections: new
+                    {
+                        username = routes.ServiceProvider.GetRequiredService<UsernameRouteProjection>()
                     },
                     defaults: new
                     {
@@ -192,6 +206,10 @@ namespace Vault.WebHost
                     constraints: new
                     {
                         username = routes.ServiceProvider.GetRequiredService<UsernameRouteConstraint>()
+                    },
+                    projections: new
+                    {
+                        username = routes.ServiceProvider.GetRequiredService<UsernameRouteProjection>()
                     },
                     defaults: new
                     {

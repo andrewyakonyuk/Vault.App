@@ -30,7 +30,7 @@ namespace Vault.WebHost.Components
             {
                 model.Boards.Add(new NavigationItem
                 {
-                    Url = Url.Board(item.Id, item.Name ?? string.Empty, HttpContext.User.Identity.Name),
+                    Url = Url.RouteUrl("board-detail", new { boardId = item.Id, title = item.Name ?? string.Empty }),
                     Text = item.Name ?? item.Id + ""
                 });
             }

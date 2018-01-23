@@ -42,7 +42,7 @@
                 var board = await _boardsApi.CreateBoardAsync(model.Name, model.Query);
                 if (board != null)
                 {
-                    return Redirect(Url.Board(board.Id, board.Name, HttpContext.User.Identity.Name));
+                    return RedirectToAction(nameof(Detail), new { boardId = board.Id, title = board.Name });
                 }
             }
 
@@ -84,7 +84,7 @@
             if (board == null)
                 return new NotFoundResult();
 
-            return Redirect(Url.Board(board.Id, board.Name, HttpContext.User.Identity.Name));
+            return RedirectToAction(nameof(Detail), new { boardId = board.Id, title = board.Name });
         }
 
         public async Task<IActionResult> Delete([Required] int boardId)
