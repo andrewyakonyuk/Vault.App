@@ -22,10 +22,6 @@ using Vault.Shared.Identity;
 using Vault.Shared.Identity.Overrides;
 using Vault.Shared.NHibernate;
 using Vault.Shared.NHibernate.Conventions;
-using Vault.WebHost.Mvc;
-using Vault.WebHost.Mvc.Routing;
-using Vault.WebHost.Mvc.Routing.Constraints;
-using Vault.WebHost.Mvc.Routing.Projections;
 using Vault.WebHost.Services;
 using Vault.WebHost.Services.Boards;
 using Vault.WebHost.Services.Boards.Overrides;
@@ -36,6 +32,10 @@ using Vault.Shared.Activity;
 using Vault.Shared.Authentication.Pocket;
 using Vault.WebHost.Services.Activities;
 using System.Threading.Tasks;
+using Vault.WebHost.Infrastructure.Mvc;
+using Vault.WebHost.Infrastructure.Mvc.Routing;
+using Vault.WebHost.Infrastructure.Mvc.Routing.Constraints;
+using Vault.WebHost.Infrastructure.Mvc.Routing.Projections;
 
 namespace Vault.WebHost
 {
@@ -75,6 +75,26 @@ namespace Vault.WebHost
             services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = "/account/login";
+                options.Events.OnRedirectToLogin = context =>
+                {
+                    if (context.Request.IsAjaxRequest())
+                    {
+                        context.Response.Headers["Location"] = context.RedirectUri;
+                        context.Response.StatusCode = 401;
+                    }
+                    else if (string.Equals(context.Request.Method, "get", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        context.Response.Redirect(context.RedirectUri);
+                    }
+                    else
+                    {
+                        string BuildRedirectUri(string targetPath)
+                            => context.Request.Scheme + "://" + context.Request.Host + context.Request.PathBase + targetPath;
+
+                        context.Response.Redirect(BuildRedirectUri(context.Options.LoginPath));
+                    }
+                    return Task.CompletedTask;
+                };
             });
 
             services.AddSingleton<IAuthorizationService, DefaultAuthorizationService>();

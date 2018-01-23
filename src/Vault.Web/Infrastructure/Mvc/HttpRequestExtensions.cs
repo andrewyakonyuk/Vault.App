@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Http;
 
-namespace Vault.WebHost.Mvc
+namespace Vault.WebHost.Infrastructure.Mvc
 {
     public static class HttpRequestExtensions
     {

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Vault.Shared;
 using Vault.Shared.Queries;
 
-namespace Vault.WebHost
+namespace Vault.WebHost.Infrastructure
 {
     public sealed class CachedQuery<TCriterion, TResult> : IQuery<TCriterion, TResult>
         where TCriterion : ICriterion

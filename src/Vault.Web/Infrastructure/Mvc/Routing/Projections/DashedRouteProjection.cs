@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace Vault.WebHost.Mvc.Routing.Projections
+namespace Vault.WebHost.Infrastructure.Mvc.Routing.Projections
 {
     public class DashedRouteProjection : IRouteProjection
     {

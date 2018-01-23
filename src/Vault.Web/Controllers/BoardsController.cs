@@ -6,10 +6,10 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Models.Boards;
-    using Mvc;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
     using Services.Boards;
+    using Vault.WebHost.Infrastructure.Mvc;
 
     [Authorize]
     public class BoardsController : Controller
