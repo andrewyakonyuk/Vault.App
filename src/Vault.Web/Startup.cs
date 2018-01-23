@@ -36,6 +36,7 @@ using Vault.WebHost.Infrastructure.Mvc;
 using Vault.WebHost.Infrastructure.Mvc.Routing;
 using Vault.WebHost.Infrastructure.Mvc.Routing.Constraints;
 using Vault.WebHost.Infrastructure.Mvc.Routing.Projections;
+using Vault.WebHost.Infrastructure.Authentication.Cookies;
 
 namespace Vault.WebHost
 {
@@ -75,26 +76,7 @@ namespace Vault.WebHost
             services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = "/account/login";
-                options.Events.OnRedirectToLogin = context =>
-                {
-                    if (context.Request.IsAjaxRequest())
-                    {
-                        context.Response.Headers["Location"] = context.RedirectUri;
-                        context.Response.StatusCode = 401;
-                    }
-                    else if (string.Equals(context.Request.Method, "get", StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        context.Response.Redirect(context.RedirectUri);
-                    }
-                    else
-                    {
-                        string BuildRedirectUri(string targetPath)
-                            => context.Request.Scheme + "://" + context.Request.Host + context.Request.PathBase + targetPath;
-
-                        context.Response.Redirect(BuildRedirectUri(context.Options.LoginPath));
-                    }
-                    return Task.CompletedTask;
-                };
+                options.Events = new ExtendedCookieAuthenticationEvents();
             });
 
             services.AddSingleton<IAuthorizationService, DefaultAuthorizationService>();
