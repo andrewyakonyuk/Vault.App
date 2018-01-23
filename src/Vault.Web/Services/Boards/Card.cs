@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Vault.Shared;
 
-namespace Vault.WebHost.Services.Boards
+namespace Vault.WebApp.Services.Boards
 {
     public abstract class Card : IContent
     {

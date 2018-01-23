@@ -5,9 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Vault.WebHost.Infrastructure.Mvc;
+using Vault.WebApp.Infrastructure.Mvc;
 
-namespace Vault.WebHost.Infrastructure.Authentication.Cookies
+namespace Vault.WebApp.Infrastructure.Authentication.Cookies
 {
     public class ExtendedCookieAuthenticationEvents : CookieAuthenticationEvents
     {

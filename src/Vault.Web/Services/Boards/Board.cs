@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 using Vault.Shared;
 using Vault.Shared.Domain;
 
-namespace Vault.WebHost.Services.Boards
+namespace Vault.WebApp.Services.Boards
 {
     [DataContract]
     public class Board : IContent, IEntity, ICloneable

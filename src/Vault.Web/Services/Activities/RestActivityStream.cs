@@ -7,7 +7,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Vault.Shared.Activity;
 
-namespace Vault.WebHost.Services.Activities
+namespace Vault.WebApp.Services.Activities
 {
     public class RestActivityStream : IActivityStream
     {

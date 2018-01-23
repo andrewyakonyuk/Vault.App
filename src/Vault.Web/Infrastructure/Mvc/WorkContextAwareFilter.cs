@@ -4,7 +4,7 @@ using Vault.Shared.Identity;
 using Vault.Shared.Identity.Query;
 using Vault.Shared.Queries;
 
-namespace Vault.WebHost.Infrastructure.Mvc
+namespace Vault.WebApp.Infrastructure.Mvc
 {
     public class WorkContextAwareFilter : IActionFilter
     {

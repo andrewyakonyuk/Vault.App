@@ -7,7 +7,7 @@ using Vault.Shared.Identity;
 using Vault.Shared.Identity.Query;
 using Vault.Shared.Queries;
 
-namespace Vault.WebHost
+namespace Vault.WebApp
 {
     public static class ServiceCollectionExtensions
     {

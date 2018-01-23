@@ -1,4 +1,4 @@
-﻿namespace Vault.WebHost.Infrastructure.Mvc.Routing
+﻿namespace Vault.WebApp.Infrastructure.Mvc.Routing
 {
     public class UrlOptions
     {

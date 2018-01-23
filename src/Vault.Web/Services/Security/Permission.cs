@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Vault.WebHost.Services.Security
+namespace Vault.WebApp.Services.Security
 {
     public class Permission
     {

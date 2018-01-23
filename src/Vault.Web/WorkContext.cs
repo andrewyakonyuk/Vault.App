@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Vault.Shared.Identity;
 
-namespace Vault.WebHost
+namespace Vault.WebApp
 {
     public class WorkContext
     {

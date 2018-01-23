@@ -1,7 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
-using Vault.WebHost.Infrastructure.Mvc.Routing;
+using Vault.WebApp.Infrastructure.Mvc.Routing;
 
 namespace Microsoft.AspNetCore.Builder
 {

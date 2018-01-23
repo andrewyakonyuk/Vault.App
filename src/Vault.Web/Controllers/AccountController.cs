@@ -9,9 +9,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Vault.Shared.Identity;
-using Vault.WebHost.Models.Account;
+using Vault.WebApp.Models.Account;
 
-namespace Vault.WebHost.Controllers
+namespace Vault.WebApp.Controllers
 {
     using Activity.Services.Connectors;
     using Services;

@@ -1,6 +1,6 @@
-﻿using Vault.WebHost.Services.Security;
+﻿using Vault.WebApp.Services.Security;
 
-namespace Vault.WebHost.Services.Boards
+namespace Vault.WebApp.Services.Boards
 {
     public class Permissions
     {

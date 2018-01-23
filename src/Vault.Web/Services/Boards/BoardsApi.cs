@@ -12,9 +12,9 @@ using Vault.Shared.Queries;
 using Vault.Shared.Search;
 using Vault.Shared.Search.Criteria;
 using Vault.Shared.Search.Parsing;
-using Vault.WebHost.Services.Security;
+using Vault.WebApp.Services.Security;
 
-namespace Vault.WebHost.Services.Boards
+namespace Vault.WebApp.Services.Boards
 {
     public class BoardsApi : IBoardsApi
     {

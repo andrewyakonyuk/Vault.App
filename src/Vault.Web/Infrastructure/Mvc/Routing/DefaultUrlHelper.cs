@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Options;
 
-namespace Vault.WebHost.Infrastructure.Mvc.Routing
+namespace Vault.WebApp.Infrastructure.Mvc.Routing
 {
     public class DefaultUrlHelper : UrlHelper
     {

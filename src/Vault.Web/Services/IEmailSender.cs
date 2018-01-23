@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Vault.WebHost.Services
+namespace Vault.WebApp.Services
 {
     public interface IEmailSender
     {

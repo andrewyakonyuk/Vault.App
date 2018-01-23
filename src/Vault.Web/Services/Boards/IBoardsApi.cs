@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Vault.WebHost.Services.Boards
+namespace Vault.WebApp.Services.Boards
 {
     public interface IBoardsApi
     {

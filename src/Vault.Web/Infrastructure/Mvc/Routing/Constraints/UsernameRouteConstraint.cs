@@ -9,7 +9,7 @@ using Vault.Shared.Identity;
 using Vault.Shared.Identity.Query;
 using Vault.Shared.Queries;
 
-namespace Vault.WebHost.Infrastructure.Mvc.Routing.Constraints
+namespace Vault.WebApp.Infrastructure.Mvc.Routing.Constraints
 {
     public class UsernameRouteConstraint : IRouteConstraint
     {

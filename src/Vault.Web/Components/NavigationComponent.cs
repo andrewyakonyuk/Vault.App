@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Vault.WebHost.Models.Navigation;
-using Vault.WebHost.Services.Boards;
+using Vault.WebApp.Models.Navigation;
+using Vault.WebApp.Services.Boards;
 
-namespace Vault.WebHost.Components
+namespace Vault.WebApp.Components
 {
     [ViewComponent(Name = "Navigation")]
     public class NavigationComponent : ViewComponent

@@ -1,4 +1,4 @@
-﻿namespace Vault.WebHost.Services.Security
+﻿namespace Vault.WebApp.Services.Security
 {
     public interface IAuthorizationHandler
     {

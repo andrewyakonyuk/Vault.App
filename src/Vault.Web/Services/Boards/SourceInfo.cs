@@ -1,6 +1,6 @@
 ﻿using Vault.Shared.Domain;
 
-namespace Vault.WebHost.Services.Boards
+namespace Vault.WebApp.Services.Boards
 {
     public class SourceInfo : IEntityComponent
     {

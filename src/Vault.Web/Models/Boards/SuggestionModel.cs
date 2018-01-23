@@ -1,6 +1,6 @@
-﻿using Vault.WebHost.Services.Boards;
+﻿using Vault.WebApp.Services.Boards;
 
-namespace Vault.WebHost.Models.Boards
+namespace Vault.WebApp.Models.Boards
 {
     public class SuggestionModel
     {

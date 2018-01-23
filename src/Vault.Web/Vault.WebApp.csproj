@@ -4,10 +4,10 @@
     <TargetFramework>net461</TargetFramework>
     <DebugType>portable</DebugType>
     <PreserveCompilationContext>true</PreserveCompilationContext>
-    <AssemblyName>Vault.Web</AssemblyName>
+    <AssemblyName>Vault.WebApp</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>Vault.Web</PackageId>
-    <RootNamespace>Vault.WebHost</RootNamespace>
+    <RootNamespace>Vault.WebApp</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

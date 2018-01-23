@@ -1,7 +1,7 @@
 ﻿using Vault.Shared;
 using Vault.Shared.Identity;
 
-namespace Vault.WebHost.Services.Security
+namespace Vault.WebApp.Services.Security
 {
     /// <summary>
     /// Entry-point for configured authorization scheme.

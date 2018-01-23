@@ -1,7 +1,7 @@
 ﻿using Vault.Shared;
 using Microsoft.Extensions.Logging;
 
-namespace Vault.WebHost.Services.Security
+namespace Vault.WebApp.Services.Security
 {
     public class DefaultAuthorizer : IAuthorizer
     {

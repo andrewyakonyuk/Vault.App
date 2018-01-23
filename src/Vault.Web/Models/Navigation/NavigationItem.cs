@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 
-namespace Vault.WebHost.Models.Navigation
+namespace Vault.WebApp.Models.Navigation
 {
     public class NavigationItem
     {

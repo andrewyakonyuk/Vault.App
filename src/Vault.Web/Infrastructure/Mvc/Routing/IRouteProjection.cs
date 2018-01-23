@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Vault.WebHost.Infrastructure.Mvc.Routing
+namespace Vault.WebApp.Infrastructure.Mvc.Routing
 {
     public interface IRouteProjection
     {

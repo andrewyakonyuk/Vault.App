@@ -22,23 +22,23 @@ using Vault.Shared.Identity;
 using Vault.Shared.Identity.Overrides;
 using Vault.Shared.NHibernate;
 using Vault.Shared.NHibernate.Conventions;
-using Vault.WebHost.Services;
-using Vault.WebHost.Services.Boards;
-using Vault.WebHost.Services.Boards.Overrides;
-using Vault.WebHost.Services.Security;
+using Vault.WebApp.Services;
+using Vault.WebApp.Services.Boards;
+using Vault.WebApp.Services.Boards.Overrides;
+using Vault.WebApp.Services.Security;
 using Vault.Activity;
 using Vault.Activity.Persistence;
 using Vault.Shared.Activity;
 using Vault.Shared.Authentication.Pocket;
-using Vault.WebHost.Services.Activities;
+using Vault.WebApp.Services.Activities;
 using System.Threading.Tasks;
-using Vault.WebHost.Infrastructure.Mvc;
-using Vault.WebHost.Infrastructure.Mvc.Routing;
-using Vault.WebHost.Infrastructure.Mvc.Routing.Constraints;
-using Vault.WebHost.Infrastructure.Mvc.Routing.Projections;
-using Vault.WebHost.Infrastructure.Authentication.Cookies;
+using Vault.WebApp.Infrastructure.Mvc;
+using Vault.WebApp.Infrastructure.Mvc.Routing;
+using Vault.WebApp.Infrastructure.Mvc.Routing.Constraints;
+using Vault.WebApp.Infrastructure.Mvc.Routing.Projections;
+using Vault.WebApp.Infrastructure.Authentication.Cookies;
 
-namespace Vault.WebHost
+namespace Vault.WebApp
 {
     public class Startup
     {

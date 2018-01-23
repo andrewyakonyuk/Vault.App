@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Vault.WebHost.Services.Boards
+namespace Vault.WebApp.Services.Boards
 {
     public class ArticleCard : Card
     {

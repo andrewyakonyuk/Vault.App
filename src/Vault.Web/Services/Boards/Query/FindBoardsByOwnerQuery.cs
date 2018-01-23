@@ -5,7 +5,7 @@ using Vault.Shared;
 using Vault.Shared.Domain;
 using Vault.Shared.NHibernate;
 
-namespace Vault.WebHost.Services.Boards.Query
+namespace Vault.WebApp.Services.Boards.Query
 {
     public class FindBoardsByOwnerQuery : LinqQueryBase<OwnerKey, List<Board>>
     {

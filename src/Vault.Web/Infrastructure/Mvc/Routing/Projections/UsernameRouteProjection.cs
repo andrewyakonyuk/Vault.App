@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 
-namespace Vault.WebHost.Infrastructure.Mvc.Routing.Projections
+namespace Vault.WebApp.Infrastructure.Mvc.Routing.Projections
 {
     public class UsernameRouteProjection : IRouteProjection
     {

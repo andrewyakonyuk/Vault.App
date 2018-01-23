@@ -1,4 +1,4 @@
-﻿namespace Vault.WebHost.Controllers
+﻿namespace Vault.WebApp.Controllers
 {
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
@@ -9,7 +9,7 @@
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
     using Services.Boards;
-    using Vault.WebHost.Infrastructure.Mvc;
+    using Vault.WebApp.Infrastructure.Mvc;
 
     [Authorize]
     public class BoardsController : Controller

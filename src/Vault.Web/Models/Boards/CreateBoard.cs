@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Vault.WebHost.Models.Boards
+namespace Vault.WebApp.Models.Boards
 {
     public class CreateBoard
     {

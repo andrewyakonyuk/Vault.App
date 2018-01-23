@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Vault.WebHost.Models.Account
+namespace Vault.WebApp.Models.Account
 {
     public class VerifyCodeModel
     {

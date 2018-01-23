@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Template;
 
-namespace Vault.WebHost.Infrastructure.Mvc.Routing
+namespace Vault.WebApp.Infrastructure.Mvc.Routing
 {
     public class ProjectionRoute : Route
     {

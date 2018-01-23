@@ -1,6 +1,6 @@
 ﻿using Vault.Shared;
 
-namespace Vault.WebHost.Services.Security
+namespace Vault.WebApp.Services.Security
 {
     /// <summary>
     /// Authorization services for the current user

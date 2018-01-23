@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Vault.WebHost.Services.Activities
+namespace Vault.WebApp.Services.Activities
 {
     public class ActivityClientOptions
     {

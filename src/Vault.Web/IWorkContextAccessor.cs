@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace Vault.WebHost
+namespace Vault.WebApp
 {
     public interface IWorkContextAccessor
     {
