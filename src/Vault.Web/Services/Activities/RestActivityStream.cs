@@ -36,6 +36,8 @@ namespace Vault.WebApp.Services.Activities
 
         public async Task<IReadOnlyCollection<CommitedActivityEvent>> ReadEventsAsync(string query, long checkpointToken, int maxCount)
         {
+            return new List<CommitedActivityEvent>();
+
             string uri = $"{_options.WebserviceUri}/streams/{_bucket}/{_streamId}?checkpointToken={checkpointToken}&maxCount={maxCount}&query={query}";
 
             var dataString = await _httpClient.GetStringAsync(uri);
