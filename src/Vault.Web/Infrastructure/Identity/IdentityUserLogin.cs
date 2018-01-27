@@ -1,6 +1,6 @@
 ﻿using Vault.Shared.Domain;
 
-namespace Vault.Shared.Identity
+namespace Vault.WebApp.Infrastructure.Identity
 {
     /// <summary>
     /// Represents a login and its associated provider for a user.

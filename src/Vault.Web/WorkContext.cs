@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Http;
-using Vault.Shared.Identity;
+using Vault.WebApp.Infrastructure.Identity;
 
 namespace Vault.WebApp
 {

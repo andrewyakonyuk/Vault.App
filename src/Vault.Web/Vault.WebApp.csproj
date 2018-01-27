@@ -30,7 +30,6 @@
     <ProjectReference Include="..\Vault.Shared\Vault.Shared.csproj" />
     <ProjectReference Include="..\Vault.Shared.Authentication.Pocket\Vault.Shared.Authentication.Pocket.csproj" />
     <ProjectReference Include="..\Vault.Shared.Connectors.Pocket\Vault.Shared.Connectors.Pocket.csproj" />
-    <ProjectReference Include="..\Vault.Shared.Identity\Vault.Shared.Identity.csproj" />
     <ProjectReference Include="..\Vault.Shared.NHibernate\Vault.Shared.NHibernate.csproj" />
     <ProjectReference Include="..\Vault.Shared.Search\Vault.Shared.Search.csproj" />
     <ProjectReference Include="..\Vault.Shared.Search.Lucene\Vault.Shared.Search.Lucene.csproj" />

@@ -18,8 +18,7 @@ using NHibernate.Cfg;
 using NHibernate.Context;
 using NHibernate.Tool.hbm2ddl;
 using Vault.Shared.Domain;
-using Vault.Shared.Identity;
-using Vault.Shared.Identity.Overrides;
+using Vault.WebApp.Infrastructure.Identity;
 using Vault.Shared.NHibernate;
 using Vault.Shared.NHibernate.Conventions;
 using Vault.WebApp.Services;
@@ -37,6 +36,7 @@ using Vault.WebApp.Infrastructure.Mvc.Routing;
 using Vault.WebApp.Infrastructure.Mvc.Routing.Constraints;
 using Vault.WebApp.Infrastructure.Mvc.Routing.Projections;
 using Vault.WebApp.Infrastructure.Authentication.Cookies;
+using Vault.WebApp.Infrastructure.Persistence;
 
 namespace Vault.WebApp
 {
@@ -55,10 +55,10 @@ namespace Vault.WebApp
         {
             services.AddMvc(options =>
             {
-                options.Filters.AddService(typeof(WorkContextAwareFilter));
+                options.Filters.AddService(typeof(WorkContextAuthorizationFilter));
             });
 
-            services.AddTransient<WorkContextAwareFilter, WorkContextAwareFilter>();
+            services.AddTransient<WorkContextAuthorizationFilter, WorkContextAuthorizationFilter>();
 
             //authentication and authorization
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -109,6 +109,11 @@ namespace Vault.WebApp
                 options.CDNServerBaseUrl = Configuration["CDN_URL"];
             });
 
+            services.Configure<SqlConnectionFactoryOptions>(options =>
+            {
+                options.ConnectionString = Configuration["connectionStrings:db"];
+            });
+
             services.Configure<RouteOptions>(options =>
             {
                 options.LowercaseUrls = true;
@@ -122,8 +127,10 @@ namespace Vault.WebApp
             services.AddTransient<UsernameRouteConstraint>();
             services.AddTransient<UsernameRouteProjection>();
 
-            services.AddSingleton<IAppendOnlyStore, SqlAppendOnlyStore>();
-            services.AddSingleton<ISqlConnectionFactory, PostgreSqlConnectionFactory>(_ => new PostgreSqlConnectionFactory(Configuration["connectionStrings:db"]));
+            services.AddSingleton<IDbConnectionFactory, Infrastructure.Persistence.PostgreSqlConnectionFactory>();
+
+            //services.AddSingleton<IAppendOnlyStore, SqlAppendOnlyStore>();
+            //services.AddSingleton<ISqlConnectionFactory, PostgreSqlConnectionFactory>(_ => new PostgreSqlConnectionFactory(Configuration["connectionStrings:db"]));
             services.AddSingleton<IActivityClient, RestActivityClient>();
         }
 
@@ -240,11 +247,9 @@ namespace Vault.WebApp
 
         public Configuration GetConfiguration()
         {
-            var persistenceModel = AutoMap.AssemblyOf<IdentityUser>(new AutomappingConfiguration())
-                .AddEntityAssembly(typeof(BoardMapping).Assembly)
+            var persistenceModel = AutoMap.AssemblyOf<BoardMapping>(new AutomappingConfiguration())
                 .UseOverridesFromAssemblyOf<NHibernateInitializer>()
                 .UseOverridesFromAssemblyOf<BoardMapping>()
-                .UseOverridesFromAssemblyOf<IdentityUserClaimOverride>()
                 .Conventions.AddFromAssemblyOf<EntityMapConvention>();
 
             return Fluently

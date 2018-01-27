@@ -1,5 +1,5 @@
 ﻿using Vault.Shared;
-using Vault.Shared.Identity;
+using Vault.WebApp.Infrastructure.Identity;
 
 namespace Vault.WebApp.Services.Security
 {

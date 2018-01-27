@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Vault.Shared.Identity;
+using Vault.WebApp.Infrastructure.Identity;
 using Vault.WebApp.Models.Account;
 
 namespace Vault.WebApp.Controllers
@@ -150,7 +150,9 @@ namespace Vault.WebApp.Controllers
         {
             var model = new ProfileModel();
 
-            var user = await _userManager.FindByIdAsync(_workContextAccessor.WorkContext.User.Id.ToString());
+            var workContext = _workContextAccessor.WorkContext;
+
+            var user = await _userManager.FindByIdAsync(workContext.User.Id.ToString());
             model.Username = user.UserName;
             model.Email = user.Email;
 

@@ -3,7 +3,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Vault.Shared.Identity
+namespace Vault.WebApp.Infrastructure.Identity
 {
     public class RoleStore : IRoleStore<IdentityRole>
     {
