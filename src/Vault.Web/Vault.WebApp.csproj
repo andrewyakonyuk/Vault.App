@@ -33,7 +33,6 @@
     <ProjectReference Include="..\Vault.Shared.NHibernate\Vault.Shared.NHibernate.csproj" />
     <ProjectReference Include="..\Vault.Shared.Search\Vault.Shared.Search.csproj" />
     <ProjectReference Include="..\Vault.Shared.Search.Lucene\Vault.Shared.Search.Lucene.csproj" />
-    <ProjectReference Include="..\Vault.Shared.TransientFaultHandling\Vault.Shared.TransientFaultHandling.csproj" />
     <ProjectReference Include="..\Vault.Spouts.Abstractions\Vault.Spouts.Abstractions.csproj" />
     <ProjectReference Include="..\Vault.Spouts.Pocket\Vault.Spouts.Pocket.csproj" />
   </ItemGroup>
