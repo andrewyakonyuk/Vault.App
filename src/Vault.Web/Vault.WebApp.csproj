@@ -26,14 +26,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Vault.Shared.Activity\Vault.Shared.Activity.csproj" />
+    <ProjectReference Include="..\StreamInsights.Abstractions\StreamInsights.Abstractions.csproj" />
+    <ProjectReference Include="..\StreamInsights\StreamInsights.csproj" />
     <ProjectReference Include="..\Vault.Shared\Vault.Shared.csproj" />
     <ProjectReference Include="..\Vault.Shared.Authentication.Pocket\Vault.Shared.Authentication.Pocket.csproj" />
-    <ProjectReference Include="..\Vault.Shared.Connectors.Pocket\Vault.Shared.Connectors.Pocket.csproj" />
     <ProjectReference Include="..\Vault.Shared.NHibernate\Vault.Shared.NHibernate.csproj" />
     <ProjectReference Include="..\Vault.Shared.Search\Vault.Shared.Search.csproj" />
     <ProjectReference Include="..\Vault.Shared.Search.Lucene\Vault.Shared.Search.Lucene.csproj" />
     <ProjectReference Include="..\Vault.Shared.TransientFaultHandling\Vault.Shared.TransientFaultHandling.csproj" />
+    <ProjectReference Include="..\Vault.Spouts.Abstractions\Vault.Spouts.Abstractions.csproj" />
+    <ProjectReference Include="..\Vault.Spouts.Pocket\Vault.Spouts.Pocket.csproj" />
   </ItemGroup>
 
   <ItemGroup>

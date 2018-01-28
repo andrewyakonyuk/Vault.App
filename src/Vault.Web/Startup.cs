@@ -25,11 +25,7 @@ using Vault.WebApp.Services;
 using Vault.WebApp.Services.Boards;
 using Vault.WebApp.Services.Boards.Overrides;
 using Vault.WebApp.Services.Security;
-using Vault.Activity;
-using Vault.Activity.Persistence;
-using Vault.Shared.Activity;
 using Vault.Shared.Authentication.Pocket;
-using Vault.WebApp.Services.Activities;
 using System.Threading.Tasks;
 using Vault.WebApp.Infrastructure.Mvc;
 using Vault.WebApp.Infrastructure.Mvc.Routing;
@@ -37,6 +33,9 @@ using Vault.WebApp.Infrastructure.Mvc.Routing.Constraints;
 using Vault.WebApp.Infrastructure.Mvc.Routing.Projections;
 using Vault.WebApp.Infrastructure.Authentication.Cookies;
 using Vault.WebApp.Infrastructure.Persistence;
+using StreamInsights;
+using Vault.WebApp.Infrastructure.Spouts;
+using Vault.Spouts.Pocket;
 
 namespace Vault.WebApp
 {
@@ -72,6 +71,11 @@ namespace Vault.WebApp
             .AddUserStore<UserStore>()
             .AddRoleStore<RoleStore>()
             .AddDefaultTokenProviders();
+
+            services.AddStreamInsights(options=>
+            {
+                options.ConnectionString = Configuration["connectionStrings:db"];
+            });
 
             services.ConfigureApplicationCookie(options =>
             {
@@ -119,19 +123,22 @@ namespace Vault.WebApp
                 options.LowercaseUrls = true;
             });
 
-            services.Configure<ActivityClientOptions>(options =>
-            {
-                options.WebserviceUri = Configuration["connectionStrings:webserviceUri"];
-            });
-
             services.AddTransient<UsernameRouteConstraint>();
             services.AddTransient<UsernameRouteProjection>();
 
             services.AddSingleton<IDbConnectionFactory, Infrastructure.Persistence.PostgreSqlConnectionFactory>();
 
-            //services.AddSingleton<IAppendOnlyStore, SqlAppendOnlyStore>();
-            //services.AddSingleton<ISqlConnectionFactory, PostgreSqlConnectionFactory>(_ => new PostgreSqlConnectionFactory(Configuration["connectionStrings:db"]));
-            services.AddSingleton<IActivityClient, RestActivityClient>();
+            services.Configure<SpoutOptions>(options =>
+            {
+                options.Services.Add("pocket", typeof(PocketSpout));
+            });
+
+            services.Configure<PocketSpoutOptions>(options =>
+            {
+                options.ConsumerKey = Configuration["authentication:pocket:consumerKey"];
+            });
+
+            services.AddSingleton<SpoutManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

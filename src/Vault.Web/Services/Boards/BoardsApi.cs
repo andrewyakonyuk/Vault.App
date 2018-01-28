@@ -1,17 +1,13 @@
-﻿using System;
+﻿using StreamInsights.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
-using Vault.Activity;
 using Vault.Shared;
-using Vault.Shared.Activity;
 using Vault.Shared.Domain;
 using Vault.Shared.Queries;
-using Vault.Shared.Search;
-using Vault.Shared.Search.Criteria;
-using Vault.Shared.Search.Parsing;
 using Vault.WebApp.Services.Security;
 
 namespace Vault.WebApp.Services.Boards
@@ -90,8 +86,8 @@ namespace Vault.WebApp.Services.Boards
             if (board == null || !_authorizer.Authorize(Permissions.ViewBoard, board))
                 return null;
 
-            var stream = await _activityClient.GetStreamAsync(Buckets.Timeline, board.OwnerId.ToString());
-            var response = await stream.ReadEventsAsync(board.RawQuery, 0, count);
+            var stream = _activityClient.GetStream("default", board.OwnerId.ToString());
+            var response = await stream.ReadActivityAsync(0, count);
 
             board.Cards = CreateCards(PagedEnumerable.Create(response, count, count));
 
@@ -111,8 +107,8 @@ namespace Vault.WebApp.Services.Boards
             if (!_authorizer.Authorize(Permissions.ViewBoard, board))
                 return null;
 
-            var stream = await _activityClient.GetStreamAsync(Buckets.Timeline, board.OwnerId.ToString());
-            var response = await stream.ReadEventsAsync(query, 0, count);
+            var stream = _activityClient.GetStream("default", board.OwnerId.ToString());
+            var response = await stream.ReadActivityAsync(0, count);
 
             board.Cards = CreateCards(PagedEnumerable.Create(response, count, count));
 
@@ -170,27 +166,24 @@ namespace Vault.WebApp.Services.Boards
             return hasChanges;
         }
 
-        private IPagedEnumerable<Card> CreateCards(IPagedEnumerable<CommitedActivityEvent> searchResults)
+        private IPagedEnumerable<Card> CreateCards(IPagedEnumerable<CommitedActivity> searchResults)
         {
             var result = new List<Card>(searchResults.Count);
 
             foreach (var item in searchResults)
             {
-                if (item.Verb == ActivityVerbs.Read)
+                var articleCard = new ArticleCard
                 {
-                    var articleCard = new ArticleCard
-                    {
-                        Published = item.Published.UtcDateTime,
-                        Name = item.Title,
-                        Description = item.Content,
-                        Body = item.Content,
-                        Summary = item.Content,
-                        Thumbnail = item.MetaBag.Thumbnail,
-                        Url = item.Uri,
-                        Tags = item.MetaBag.Tags.ToObject<IEnumerable<string>>()
-                    };
-                    result.Add(articleCard);
-                }
+                    Published = item.Published?.UtcDateTime ?? DateTime.UtcNow,
+                    Name = item.Name,
+                    Description = item.Summary,
+                    Body = item.Content,
+                    Summary = item.Content,
+                    Thumbnail = item.Image.HasValue ? (string)((ASObject) item.Image).Url : null,
+                    Url = (string)item.Url,
+                    Tags = (List<string>)item.Tag
+                };
+                result.Add(articleCard);
             }
 
             return PagedEnumerable.Create(result, searchResults.Count, searchResults.TotalCount);

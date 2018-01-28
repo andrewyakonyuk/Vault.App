@@ -9,13 +9,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Vault.WebApp.Infrastructure.Identity;
+using Vault.WebApp.Infrastructure.Spouts;
 using Vault.WebApp.Models.Account;
+using Vault.WebApp.Services;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace Vault.WebApp.Controllers
 {
-    using Activity.Services.Connectors;
-    using Services;
-    using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
     [Authorize]
     public class AccountController : Controller
@@ -26,6 +26,7 @@ namespace Vault.WebApp.Controllers
         private readonly ISmsSender _smsSender;
         private readonly IWorkContextAccessor _workContextAccessor;
         private readonly IAuthenticationService _authenticationService;
+        private readonly SpoutManager _spoutManager;
 
         public AccountController(
             UserManager<IdentityUser> userManager,
@@ -33,7 +34,8 @@ namespace Vault.WebApp.Controllers
             IEmailSender emailSender,
             ISmsSender smsSender,
             IWorkContextAccessor workContextAccessor,
-            IAuthenticationService authenticationService)
+            IAuthenticationService authenticationService,
+            SpoutManager spoutManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -41,6 +43,7 @@ namespace Vault.WebApp.Controllers
             _smsSender = smsSender;
             _workContextAccessor = workContextAccessor;
             _authenticationService = authenticationService;
+            _spoutManager = spoutManager;
         }
 
         [AllowAnonymous]
@@ -229,7 +232,7 @@ namespace Vault.WebApp.Controllers
                     {
                         var userByLogin = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
 
-                        //todo: connect external login
+                        await _spoutManager.ConsumeAsync(info.LoginProvider, info.ProviderKey);
 
                         if (Url.IsLocalUrl(returnUrl))
                             return LocalRedirect(returnUrl);

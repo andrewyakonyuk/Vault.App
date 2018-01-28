@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Vault.Activity.Services.Connectors;
 using Vault.Activity.Sinks;
-using Vault.Shared.Connectors.Pocket;
 using Vault.Shared.Search;
 using Vault.Shared.Search.Lucene;
 using Vault.Shared.Search.Parsing;
@@ -60,11 +59,6 @@ namespace Vault.Activity.Api
             });
 
             services.AddSingleton<IConfiguration>(Configuration);
-
-            services.Configure<PocketConnectionOptions>(options =>
-                options.ConsumerKey = Configuration["authentication:pocket:consumerKey"]
-            );
-            services.AddTransient<IPullConnectionProvider, PocketConnectionProvider>();
 
             services.AddSingleton<IConnectionPool<IPullConnectionProvider>, DefaultConnectionPool<IPullConnectionProvider>>();
             services.AddSingleton<IConnectionPool<ICatchConnectionProvider>, DefaultConnectionPool<ICatchConnectionProvider>>();

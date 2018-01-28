@@ -21,7 +21,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Vault.Activity\Vault.Activity.csproj" />
     <ProjectReference Include="..\Vault.Shared.Authentication.Pocket\Vault.Shared.Authentication.Pocket.csproj" />
-    <ProjectReference Include="..\Vault.Shared.Connectors.Pocket\Vault.Shared.Connectors.Pocket.csproj" />
     <ProjectReference Include="..\Vault.Shared.Search.Lucene\Vault.Shared.Search.Lucene.csproj" />
     <ProjectReference Include="..\Vault.Shared.Search\Vault.Shared.Search.csproj" />
     <ProjectReference Include="..\Vault.Shared.TransientFaultHandling\Vault.Shared.TransientFaultHandling.csproj" />
