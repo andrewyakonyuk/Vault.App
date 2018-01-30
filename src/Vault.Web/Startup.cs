@@ -62,7 +62,7 @@ namespace Vault.WebApp
             //authentication and authorization
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie()
-                .AddTwitter(options => { options.ConsumerKey = Configuration["authentication:pocket:consumerKey"]; });
+                .AddPocket(options => { options.ConsumerKey = Configuration["authentication:pocket:consumerKey"]; });
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
