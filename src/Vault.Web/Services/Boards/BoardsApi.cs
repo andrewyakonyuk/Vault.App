@@ -172,18 +172,21 @@ namespace Vault.WebApp.Services.Boards
 
             foreach (var item in searchResults)
             {
-                var articleCard = new ArticleCard
+                if (string.Equals((string)item.Type, "read", StringComparison.OrdinalIgnoreCase))
                 {
-                    Published = item.Published?.UtcDateTime ?? DateTime.UtcNow,
-                    Name = item.Name,
-                    Description = item.Summary,
-                    Body = item.Content,
-                    Summary = item.Content,
-                    Thumbnail = item.Image.HasValue ? (string)((ASObject) item.Image).Url : null,
-                    Url = (string)item.Url,
-                    Tags = (List<string>)item.Tag
-                };
-                result.Add(articleCard);
+                    var articleCard = new ArticleCard
+                    {
+                        Published = item.Published?.UtcDateTime ?? DateTime.UtcNow,
+                        Name = item.Name,
+                        Description = item.Summary,
+                        Body = item.Content,
+                        Summary = item.Content,
+                        Thumbnail = item.Image.HasValue ? (string)((ASObject)item.Image).Url : null,
+                        Url = (string)item.Url,
+                        Tags = (List<string>)item.Tag
+                    };
+                    result.Add(articleCard);
+                }
             }
 
             return PagedEnumerable.Create(result, searchResults.Count, searchResults.TotalCount);

@@ -113,6 +113,10 @@ namespace StreamInsights.Abstractions
         {
             if (values._hasItem)
                 return new List<T>(1) { values._item };
+
+            if (values._list == null)
+                return new List<T>(0);
+
             return new List<T>(values._list);
         }
 
@@ -185,7 +189,7 @@ namespace StreamInsights.Abstractions
                 return other.Value.Equals(Value);
             }
 
-            return false;
+            return other.HasValue == HasValue;
         }
 
         public override bool Equals(object obj)
