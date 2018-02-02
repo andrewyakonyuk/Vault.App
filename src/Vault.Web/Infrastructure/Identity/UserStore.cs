@@ -12,7 +12,7 @@ using System.Data;
 
 namespace Vault.WebApp.Infrastructure.Identity
 {
-    public class UserStore : IUserStore<IdentityUser>, IUserPasswordStore<IdentityUser>, IUserEmailStore<IdentityUser>, IUserLoginStore<IdentityUser>
+    public class UserStore : IUserStore<IdentityUser>, IUserPasswordStore<IdentityUser>, IUserEmailStore<IdentityUser>, IUserLoginStore<IdentityUser>, IUserAuthenticationTokenStore<IdentityUser>
     {
         private readonly IDbConnectionFactory _dbConnectionFactory;
 
@@ -411,6 +411,95 @@ namespace Vault.WebApp.Infrastructure.Identity
                         WHERE login_provider = @loginProvider
                             AND provider_key = @providerKey",
                         new { loginProvider, providerKey },
+                        cancellationToken: cancellationToken));
+
+                return result;
+            }
+        }
+        #endregion
+
+        #region IUserAuthenticationTokenStore
+        public async Task SetTokenAsync(IdentityUser user, string loginProvider, string name, string value, CancellationToken cancellationToken)
+        {
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+            if (string.IsNullOrEmpty(loginProvider))
+                throw new ArgumentNullException(nameof(loginProvider));
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentNullException(nameof(value));
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            using (var connection = _dbConnectionFactory.Create())
+            using (var transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
+                await connection.ExecuteAsync(new CommandDefinition(
+                    @"INSERT INTO identity_user_token (login_provider, token_name, token_value, user_id) 
+                        VALUES (@loginProvider, @name, @value, @userId)
+                        ON CONFLICT (login_provider, token_name, user_id) DO UPDATE 
+                            SET token_value = @value;",
+                    new
+                    {
+                        loginProvider,
+                        name,
+                        value,
+                        userId = user.Id
+                    },
+                    transaction,
+                    cancellationToken: cancellationToken
+                    ));
+
+                transaction.Commit();
+            }
+        }
+
+        public async Task RemoveTokenAsync(IdentityUser user, string loginProvider, string name, CancellationToken cancellationToken)
+        {
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+            if (string.IsNullOrEmpty(loginProvider))
+                throw new ArgumentNullException(nameof(loginProvider));
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentNullException(nameof(name));
+            cancellationToken.ThrowIfCancellationRequested();
+
+            using (var connection = _dbConnectionFactory.Create())
+            using (var transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted))
+            {
+                await connection.ExecuteAsync(
+                    new CommandDefinition(
+                        @"DELETE FROM identity_user_token
+	                    WHERE 
+                            login_provider = @loginProvider
+                            AND token_name = @name
+                            AND user_id = @userId",
+                        new { loginProvider, name, userId = user.Id },
+                        transaction,
+                        cancellationToken: cancellationToken));
+                transaction.Commit();
+            }
+        }
+
+        public async Task<string> GetTokenAsync(IdentityUser user, string loginProvider, string name, CancellationToken cancellationToken)
+        {
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+            if (string.IsNullOrEmpty(loginProvider))
+                throw new ArgumentNullException(nameof(loginProvider));
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentNullException(nameof(name));
+            cancellationToken.ThrowIfCancellationRequested();
+
+            using (var connection = _dbConnectionFactory.Create())
+            {
+                var result = await connection.QuerySingleOrDefaultAsync<string>(
+                    new CommandDefinition(
+                        @"SELECT token_value as value
+	                    FROM identity_user_token 
+                        WHERE login_provider = @loginProvider
+                            AND token_name = @name
+                            AND user_id = @userId",
+                        new { loginProvider, name, userId = user.Id },
                         cancellationToken: cancellationToken));
 
                 return result;
