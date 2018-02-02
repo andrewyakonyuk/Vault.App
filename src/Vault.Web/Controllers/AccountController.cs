@@ -228,6 +228,8 @@ namespace Vault.WebApp.Controllers
                 if (user != null)
                 {
                     var loginResult = await _userManager.AddLoginAsync(user, info);
+                    await _signInManager.UpdateExternalAuthenticationTokensAsync(info);
+
                     if (loginResult.Succeeded)
                     {
                         var userByLogin = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
