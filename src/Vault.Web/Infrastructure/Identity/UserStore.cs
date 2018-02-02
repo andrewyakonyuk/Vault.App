@@ -38,7 +38,7 @@ namespace Vault.WebApp.Infrastructure.Identity
                         normalized_email, normalized_user_name, password_hash, user_name) 
                     VALUES (
                         @concurrencyStamp, @email, @emailConfirmed,
-                        @normilizedEmail, @normalizedUserName, @passwordHash, @username);",
+                        @normalizedEmail, @normalizedUserName, @passwordHash, @username);",
                     user,
                     transaction,
                     cancellationToken: cancellationToken));
@@ -106,7 +106,7 @@ namespace Vault.WebApp.Infrastructure.Identity
 
             using (var connection = _dbConnectionFactory.Create())
             {
-                var result = await connection.QueryFirstAsync<IdentityUser>(
+                var result = await connection.QueryFirstOrDefaultAsync<IdentityUser>(
                     new CommandDefinition(
                         @"SELECT identity_user_id as id, 
                             concurrency_stamp as concurrencyStamp, 
@@ -133,7 +133,7 @@ namespace Vault.WebApp.Infrastructure.Identity
 
             using (var connection = _dbConnectionFactory.Create())
             {
-                var result = await connection.QueryFirstAsync<IdentityUser>(
+                var result = await connection.QueryFirstOrDefaultAsync<IdentityUser>(
                     new CommandDefinition(
                        @"SELECT identity_user_id as id, 
                             concurrency_stamp as concurrencyStamp, 
@@ -206,7 +206,7 @@ namespace Vault.WebApp.Infrastructure.Identity
         {
             using (var connection = _dbConnectionFactory.Create())
             {
-                var result = await connection.QueryFirstAsync<IdentityUser>(
+                var result = await connection.QueryFirstOrDefaultAsync<IdentityUser>(
                     new CommandDefinition(
                         @"SELECT identity_user_id as id, 
                             concurrency_stamp as concurrencyStamp, 
