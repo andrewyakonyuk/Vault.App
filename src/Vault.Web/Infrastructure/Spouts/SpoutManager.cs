@@ -35,7 +35,7 @@ namespace Vault.WebApp.Infrastructure.Spouts
         public async Task ConsumeAsync(string providerName, string providerKey)
         {
             if (!_options.Services.TryGetValue(providerName, out Type spoutType))
-                throw new NotSupportedException();
+                return;// throw new NotSupportedException();
 
             var spout = (ISpout<SActivity>)ActivatorUtilities.CreateInstance(_serviceProvider, spoutType);
 

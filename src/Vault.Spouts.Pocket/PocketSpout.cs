@@ -76,15 +76,10 @@ namespace Vault.Spouts.Pocket
             {
                 var published = parsedItem.TimeAdded.ToUniversalTime();
 
-                var readActivity = new Activity
+                var article = new Activity
                 {
-                    Actor = new ASObject
-                    {
-                        Id = context.User.Id
-                    },
+                    Type = ObjectTypes.Page,
                     Id = parsedItem.ResolvedId,
-                    Generator = Name,
-                    Type = "read",
                     Published = published,
                     Url = parsedItem.Uri,
                     Name = parsedItem.Title,
@@ -94,30 +89,31 @@ namespace Vault.Spouts.Pocket
                         Url = parsedItem.Image?.Src,
                         Summary = parsedItem.Image?.Caption
                     } : null,
-                    Tag = parsedItem.Tags?.Select(t=>t.Name).ToArray(),
-                    StartTime = parsedItem.TimeAdded
+                    Tag = parsedItem.Tags?.Select(t => t.Name).ToArray()
+                };
+
+                var readActivity = new Activity
+                {
+                    Actor = new ASObject
+                    {
+                        Id = context.User.Id,
+                        Type = ActorTypes.Person
+                    },
+                    Generator = Name,
+                    Type = ActivityTypes.Read,
+                    Object = article
                 };
 
                 var likeActivity = new Activity
                 {
                     Actor = new ASObject
                     {
-                        Id = context.User.Id
+                        Id = context.User.Id,
+                        Type = ActorTypes.Person
                     },
-                    Id = parsedItem.ResolvedId,
                     Generator = Name,
-                    Type = parsedItem.IsFavorite ? "like" : "unlike",
-                    Published = published,
-                    Url = parsedItem.Uri,
-                    Name = parsedItem.Title,
-                    Summary = parsedItem.Excerpt,
-                    Image = parsedItem.Image != null ? new ASObject
-                    {
-                        Url = parsedItem.Image?.Src,
-                        Summary = parsedItem.Image?.Caption
-                    } : null,
-                    Tag = parsedItem.Tags?.Select(t => t.Name).ToArray(),
-                    StartTime = parsedItem.TimeAdded
+                    Type = parsedItem.IsFavorite ? ActivityTypes.Like : ActivityTypes.Unlike,
+                    Object = article
                 };
 
                 result.Add(readActivity);

@@ -36,6 +36,12 @@ using Vault.WebApp.Infrastructure.Persistence;
 using StreamInsights;
 using Vault.WebApp.Infrastructure.Spouts;
 using Vault.Spouts.Pocket;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
+using StreamInsights.Abstractions;
+using StreamInsights.Persistance;
+using MediatR;
+using Vault.WebApp.Infrastructure.MediatR;
 
 namespace Vault.WebApp
 {
@@ -43,9 +49,14 @@ namespace Vault.WebApp
     {
         public IConfiguration Configuration { get; }
 
+        IApplicationBuilder _app;
+        CancellationTokenSource _environmentTokenSource;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            _environmentTokenSource = new CancellationTokenSource();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -82,6 +93,8 @@ namespace Vault.WebApp
                 options.LoginPath = "/account/login";
                 options.Events = new ExtendedCookieAuthenticationEvents();
             });
+
+            services.AddMediatR();
 
             services.AddSingleton<IAuthorizationService, DefaultAuthorizationService>();
             services.AddScoped<IAuthorizer, DefaultAuthorizer>();
@@ -146,8 +159,11 @@ namespace Vault.WebApp
             IApplicationBuilder app,
             Microsoft.Extensions.Logging.ILoggerFactory loggerFactory,
             IHostingEnvironment env,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IApplicationLifetime applicationLifetime)
         {
+            _app = app;
+
             app.UseStaticFiles();
             if (env.IsDevelopment())
             {
@@ -238,6 +254,26 @@ namespace Vault.WebApp
                     name: "default",
                     template: "{controller=Boards}/{action=Index}/{id?}");
             });
+
+            applicationLifetime.ApplicationStarted.Register(OnApplicationStarted);
+            applicationLifetime.ApplicationStopping.Register(OnApplicationStopping);
+        }
+
+        void OnApplicationStarted()
+        {
+            var appendStore = _app.ApplicationServices.GetRequiredService<IAppendOnlyActivityStore>();
+            var mediator = _app.ApplicationServices.GetRequiredService<IMediator>();
+
+            var subscription = new PollingSubscription<CommitedActivity>(appendStore.ReadAsync,
+                (activity, token) => mediator.Publish(Notification.Create(activity), token), 
+                cancellationToken: _environmentTokenSource.Token);
+
+            subscription.Run();
+        }
+
+        void OnApplicationStopping()
+        {
+            _environmentTokenSource.Dispose();
         }
     }
 
@@ -270,6 +306,15 @@ namespace Vault.WebApp
                     .Mappings(m => m.AutoMappings.Add(persistenceModel))
                     .ExposeConfiguration(cfg => new SchemaUpdate(cfg).Execute(true, true))
                 .BuildConfiguration();
+        }
+    }
+
+    public class CommitedActivityHandler : INotificationHandler<Notification<CommitedActivity>>
+    {
+        public Task Handle(Notification<CommitedActivity> notification, CancellationToken cancellationToken)
+        {
+
+            return Task.CompletedTask;
         }
     }
 }
