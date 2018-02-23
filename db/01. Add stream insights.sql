@@ -45,6 +45,12 @@ CREATE SEQUENCE activity_checkpointtoken_seq
 
 CREATE TABLE activities
 (
+	actor jsonb,
+	instrument jsonb,
+	object jsonb,
+	origin jsonb,
+	result jsonb,
+	target jsonb,
     "streamId" character varying(128) COLLATE pg_catalog."default" NOT NULL,
     bucket character varying(128) COLLATE pg_catalog."default" NOT NULL,
     "checkpointToken" bigint NOT NULL DEFAULT nextval('activity_checkpointtoken_seq'::regclass)

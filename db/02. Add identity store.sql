@@ -36,8 +36,6 @@ CREATE SEQUENCE identity_user_login_seq
     MAXVALUE 9223372036854775807
     CACHE 1;
 
-DROP TABLE identity_user_login;
-
 CREATE TABLE identity_user_login
 (
     identity_user_login_id integer NOT NULL DEFAULT nextval('identity_user_login_seq'::regclass),
@@ -71,7 +69,7 @@ CREATE SEQUENCE identity_user_claim_seq
 
 CREATE TABLE public.identity_user_claim
 (
-    identity_user_claim_id integer NOT NULL nextval('identity_user_claim_seq'::regclass),
+    identity_user_claim_id integer NOT NULL DEFAULT nextval('identity_user_claim_seq'::regclass),
     claim_type character varying(255) COLLATE pg_catalog."default",
     claim_value character varying(255) COLLATE pg_catalog."default",
     user_id integer,
@@ -85,3 +83,4 @@ WITH (
     OIDS = FALSE
 )
 TABLESPACE pg_default;
+
