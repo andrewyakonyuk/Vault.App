@@ -8,7 +8,7 @@ namespace Vault.Shared.Authentication.Pocket
         public virtual Task RedirectToAuthorizationEndpoint(PocketRedirectToAuthorizationEndpointContext context)
         {
             context.Response.Redirect(context.RedirectUri);
-            return Task.FromResult(0);
+            return Task.CompletedTask;
         }
     }
 }

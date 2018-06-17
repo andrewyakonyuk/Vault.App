@@ -17,6 +17,7 @@ namespace StreamInsights
         readonly IClock _clock;
 
         private static readonly IReadOnlyCollection<CommitedActivity> EmptyCommitedList = new List<CommitedActivity>(0).AsReadOnly();
+        private static readonly Task<IReadOnlyCollection<CommitedActivity>> EmptyCommitedListTask = Task.FromResult(EmptyCommitedList);
 
         public ActivityStream(
             string bucket,
@@ -41,7 +42,7 @@ namespace StreamInsights
         {
             token.ThrowIfCancellationRequested();
             if (maxCount <= 0)
-                return Task.FromResult(EmptyCommitedList);
+                return EmptyCommitedListTask;
 
             maxCount = Math.Min(maxCount, 500);
 

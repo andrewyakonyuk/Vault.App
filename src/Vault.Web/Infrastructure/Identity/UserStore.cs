@@ -9,6 +9,7 @@ using Vault.Shared.NHibernate;
 using Vault.WebApp.Infrastructure.Persistence;
 using Dapper;
 using System.Data;
+using Vault.Shared;
 
 namespace Vault.WebApp.Infrastructure.Identity
 {
@@ -186,7 +187,7 @@ namespace Vault.WebApp.Infrastructure.Identity
                 throw new ArgumentNullException(nameof(user));
 
             user.NormalizedUserName = normalizedName;
-            return Task.FromResult(true);
+            return Task.CompletedTask;
         }
 
         public Task SetUserNameAsync(IdentityUser user, string userName, CancellationToken cancellationToken)
@@ -196,7 +197,7 @@ namespace Vault.WebApp.Infrastructure.Identity
                 throw new ArgumentNullException(nameof(user));
 
             user.UserName = userName;
-            return Task.FromResult(true);
+            return Task.CompletedTask;
         }
 
         #endregion
@@ -259,7 +260,7 @@ namespace Vault.WebApp.Infrastructure.Identity
                 throw new ArgumentNullException(nameof(user));
 
             user.Email = email;
-            return Task.FromResult(true);
+            return Task.CompletedTask;
         }
 
         public Task SetEmailConfirmedAsync(IdentityUser user, bool confirmed, CancellationToken cancellationToken)
@@ -269,7 +270,7 @@ namespace Vault.WebApp.Infrastructure.Identity
                 throw new ArgumentNullException(nameof(user));
 
             user.EmailConfirmed = true;
-            return Task.FromResult(true);
+            return Task.CompletedTask;
         }
 
         public Task SetNormalizedEmailAsync(IdentityUser user, string normalizedEmail, CancellationToken cancellationToken)
@@ -279,7 +280,7 @@ namespace Vault.WebApp.Infrastructure.Identity
                 throw new ArgumentNullException(nameof(user));
 
             user.NormalizedEmail = normalizedEmail;
-            return Task.FromResult(true);
+            return Task.CompletedTask;
         }
 
         #endregion
@@ -297,7 +298,8 @@ namespace Vault.WebApp.Infrastructure.Identity
         public Task<bool> HasPasswordAsync(IdentityUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            return Task.FromResult(user.PasswordHash != null);
+
+            return user.PasswordHash != null ? CachedTasks.BooleanTrue : CachedTasks.BooleanFalse;
         }
 
         public Task SetPasswordHashAsync(IdentityUser user, string passwordHash, CancellationToken cancellationToken)
@@ -307,7 +309,7 @@ namespace Vault.WebApp.Infrastructure.Identity
                 throw new ArgumentNullException(nameof(user));
 
             user.PasswordHash = passwordHash;
-            return Task.FromResult(true);
+            return Task.CompletedTask;
         }
         #endregion
 
