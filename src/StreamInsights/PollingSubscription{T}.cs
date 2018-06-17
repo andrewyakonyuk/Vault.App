@@ -99,6 +99,7 @@ namespace StreamInsights
                          else throw; //todo: log bug
                      }
                  }
+                 buffer.Complete();
              }, linkedCancellation.Token, TaskCreationOptions.LongRunning | TaskCreationOptions.DenyChildAttach);
         }
 
