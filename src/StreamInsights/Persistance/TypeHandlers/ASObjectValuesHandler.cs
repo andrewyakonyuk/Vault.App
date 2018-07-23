@@ -46,14 +46,14 @@ namespace StreamInsights.Persistance.TypeHandlers
                 npgsqlParameter.NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Jsonb;
             }
 
-            if (value.HasValue)
+            if (Values.IsNullOrEmpty(value))
             {
-                var list = (List<ASObject>)value;
-                parameter.Value = JsonConvert.SerializeObject(list, Formatting.None, _jsonSerializerSettings);
+                parameter.Value = DBNull.Value;
             }
             else
             {
-                parameter.Value = DBNull.Value;
+                var list = (List<ASObject>)value;
+                parameter.Value = JsonConvert.SerializeObject(list, Formatting.None, _jsonSerializerSettings);
             }
         }
     }

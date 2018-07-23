@@ -25,7 +25,7 @@ namespace StreamInsights.Abstractions
         /// </returns>
         public override bool CanConvert(Type objectType)
         {
-            var result = objectType == typeof(IValue);
+            var result = objectType == typeof(IValues);
             return result;
         }
 
@@ -134,15 +134,18 @@ namespace StreamInsights.Abstractions
         /// <param name="serializer">The JSON serializer.</param>
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            var values = (IValue)value;
-            var obj = values.Value;
-            if (obj == null)
+            var values = (IValues)value;
+            if (values == null || values.Count == 0)
             {
                 writer.WriteNull();
             }
+            else if (values.Count == 1)
+            {
+                WriteObject(writer, values[0], serializer);
+            }
             else
             {
-                WriteObject(writer, obj, serializer);
+                WriteObject(writer, values, serializer);
             }
         }
 

@@ -66,7 +66,7 @@ namespace StreamInsights
             if (string.IsNullOrEmpty(activity.Id))
                 uncommitedEvent.Id = $"_:0-{Guid.NewGuid():N}";
 
-            if (!uncommitedEvent.Type.HasValue)
+            if (Values.IsNullOrEmpty(uncommitedEvent.Type))
                 uncommitedEvent.Type = "Post";
 
             if (!uncommitedEvent.Published.HasValue)

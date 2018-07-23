@@ -11,13 +11,16 @@ namespace StreamInsights.Abstractions
     /// </summary>
     /// <typeparam name="T">The type of the values.</typeparam>
     /// <seealso cref="T:StreamInsights.IValue" />
-    public struct Values<T> : IValue, IEquatable<Values<T>>
+    public class Values<T> : Values, IValues, IEnumerable<T>, IEquatable<Values<T>>, IReadOnlyCollection<T>
     {
-        private readonly T _item;
-        private readonly List<T> _list;
-        private readonly bool _hasItem;
+        private readonly T[] _array;
 
         public static readonly Values<T> Empty = new Values<T>();
+
+        private Values()
+        {
+            _array = Array.Empty<T>();
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Values{T}"/> struct.
@@ -25,9 +28,7 @@ namespace StreamInsights.Abstractions
         /// <param name="item">The single item value.</param>
         public Values(T item)
         {
-            _item = item;
-            _list = null;
-            _hasItem = !EqualityComparer<T>.Default.Equals(_item, default(T));
+            _array = new T[] { item };
         }
 
         /// <summary>
@@ -36,47 +37,43 @@ namespace StreamInsights.Abstractions
         /// <param name="list">The list of values.</param>
         public Values(List<T> list)
         {
-            _item = default(T);
-            _list = list;
-            _hasItem = !EqualityComparer<T>.Default.Equals(_item, default(T));
+            _array = new T[list.Count];
+            list.CopyTo(_array);
         }
 
-        /// <summary>
-        /// Gets a value indicating whether this instance has a single or list of values.
-        /// </summary>
-        /// <value><c>true</c> if this instance has at least one value; otherwise, <c>false</c>.</value>
-        public bool HasValue => (_list != null && _list.Count > 0) || _hasItem;
-
-        /// <summary>
-        /// Gets the single item value.
-        /// </summary>
-        /// <value>The single item value.</value>
-        public T Item => _item;
-
-        /// <summary>
-        /// Gets the list of values.
-        /// </summary>
-        /// <value>The list of values.</value>
-        public List<T> List => _list;
-
-        /// <summary>
-        /// Gets the non-null object representing the instance.
-        /// </summary>
-        public object Value
+        public Values(T[] array)
         {
-            get
-            {
-                if (_list != null)
-                {
-                    return _list;
-                }
-                else if (_hasItem)
-                {
-                    return _item;
-                }
+            _array = new T[array.Length];
+            array.CopyTo(_array, 0);
+        }
 
-                return null;
-            }
+        public int Count => _array.Length;
+
+        int IValues.Count { get; }
+
+        object IValues.this[int index] { get { return _array[index]; } }
+
+        public T this[int index]
+        {
+            get { return _array[index]; }
+        }
+
+        public bool Any()
+        {
+            return _array.Length > 0;
+        }
+
+        public T[] ToArray()
+        {
+            var newArray = new T[Count];
+            _array.CopyTo(newArray, 0);
+
+            return newArray;
+        }
+
+        public List<T> ToList()
+        {
+            return new List<T>(_array);
         }
 
         /// <summary>
@@ -84,112 +81,80 @@ namespace StreamInsights.Abstractions
         /// </summary>
         /// <param name="item">The single item value.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator Values<T>(T item)
+        public static implicit operator Values<T>(T item) => Values.New(item);
+
+        public static explicit operator T(Values<T> values)
         {
-            if (EqualityComparer<T>.Default.Equals(item, default(T)))
-                return Empty;
+            if (IsNullOrEmpty(values))
+                return default(T);
 
-            return new Values<T>(item);
+            // values.FirstOrDefault();
+            return values._array[0];
         }
-
-        public static explicit operator T(Values<T> values) => values._item;
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="List{T}"/> to <see cref="Values{T}"/>.
         /// </summary>
         /// <param name="list">The list of values.</param>
         /// <returns>The result of the conversion.</returns>
-        public static implicit operator Values<T>(List<T> list)
-        {
-            if (list == null)
-                return Empty;
-
-            return new Values<T>(list);
-        }
-
-        public static implicit operator Values<T>(T[] array) => new Values<T>(new List<T>(array));
+        public static implicit operator Values<T>(List<T> list) => Values.New(list);
 
         public static explicit operator List<T>(Values<T> values)
         {
-            if (values._hasItem)
-                return new List<T>(1) { values._item };
+            if (Values.IsNullOrEmpty(values))
+                return new List<T>();
 
-            if (values._list == null)
-                return new List<T>(0);
-
-            return new List<T>(values._list);
+            return values.ToList();
         }
 
-        public override string ToString()
+        public static implicit operator Values<T>(T[] array) => Values.New(array);
+
+        public static explicit operator T[] (Values<T> values)
         {
-            if (HasValue)
-                return Value.ToString();
+            if (Values.IsNullOrEmpty(values))
+                return Array.Empty<T>();
 
-            return "<empty>";
-        }
-
-        public bool Any()
-        {
-            return HasValue;
-        }
-
-        public IEnumerable<TResult> Select<TResult>(Func<T, TResult> selector)
-        {
-            // fast check
-            if (!HasValue)
-                return Enumerable.Empty<TResult>();
-
-            if (_hasItem)
-                return GetSingleEnumerable(selector(_item));
-
-            return _list.Select(selector);
-        }
-
-        public IEnumerable<T> Where(Func<T, bool> predicate)
-        {
-            // fast check
-            if (!HasValue)
-                return Enumerable.Empty<T>();
-
-            if (_hasItem && predicate(_item))
-                return GetSingleEnumerable(_item);
-
-            if (_list != null && _list.Count > 0)
-                return _list.Where(predicate);
-
-            return Enumerable.Empty<T>();
-        }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            // fast check
-            if (!HasValue)
-                return EmptyEnumerator<T>.Default;
-
-            if (_hasItem)
-                return GetSingleEnumerator(_item);
-
-            return _list.GetEnumerator();
+            return values.ToArray();
         }
 
         public static bool operator ==(Values<T> left, Values<T> right)
         {
+            if (left == null)
+                return false;
+
             return left.Equals(right);
         }
 
         public static bool operator !=(Values<T> left, Values<T> right)
         {
+            if (left == null)
+                return true;
+
             return !left.Equals(right);
         }
 
         public bool Equals(Values<T> other)
         {
-            if (other.HasValue && HasValue)
+            if (ReferenceEquals(this, other))
+                return true;
+
+            if (_array == other._array)
+                return true;
+
+            if (_array.Length == 0 && other._array.Length == 0)
+                return true;
+
+            var comparer = EqualityComparer<T>.Default;
+            var hashSet = new HashSet<T>(other, comparer);
+
+            foreach (var item in _array)
             {
-                return other.Value.Equals(Value);
+                hashSet.Remove(item);
+                if (hashSet.Count == 0)
+                    break;
             }
 
-            return other.HasValue == HasValue;
+            return hashSet.Count == 0;
         }
 
         public override bool Equals(object obj)
@@ -207,46 +172,17 @@ namespace StreamInsights.Abstractions
 
         public override int GetHashCode()
         {
-            if (!HasValue)
-                return 0;
-
-            return Value.GetHashCode() ^ 12 + 7;
+            return _array.GetHashCode() ^ 12 + 7;
         }
 
-        static IEnumerator<TResult> GetSingleEnumerator<TResult>(TResult item)
+        public IEnumerator<T> GetEnumerator()
         {
-            yield return item;
+            return ((IEnumerable<T>)_array).GetEnumerator();
         }
 
-        static IEnumerable<TResult> GetSingleEnumerable<TResult>(TResult item)
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            yield return item;
-        }
-
-        class EmptyEnumerator<TValue> : IEnumerator<TValue>
-        {
-            public static readonly IEnumerator<TValue> Default = new EmptyEnumerator<TValue>();
-
-            private EmptyEnumerator() { }
-
-            public TValue Current => default(TValue);
-
-            object IEnumerator.Current => null;
-
-            public void Dispose()
-            {
-               
-            }
-
-            public bool MoveNext()
-            {
-                return false;
-            }
-
-            public void Reset()
-            {
-                
-            }
+            return ((IEnumerable<T>)_array).GetEnumerator();
         }
     }
 }

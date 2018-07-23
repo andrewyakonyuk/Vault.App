@@ -21,10 +21,7 @@ namespace StreamInsights.Persistance.TypeHandlers
             if (array.Length == 0)
                 return Values<string>.Empty;
 
-            if (array.Length == 1)
-                return array[0];
-
-            return (string[])value;
+            return array;
         }
 
         public override void SetValue(IDbDataParameter parameter, Values<string> value)
@@ -34,10 +31,10 @@ namespace StreamInsights.Persistance.TypeHandlers
                 npgsqlParameter.NpgsqlDbType = NpgsqlTypes.NpgsqlDbType.Text | NpgsqlTypes.NpgsqlDbType.Array;
             }
 
-            if (value.HasValue)
-                parameter.Value = (List<string>)value;
-            else
+            if (Values.IsNullOrEmpty(value))
                 parameter.Value = Array.Empty<string>();
+            else
+                parameter.Value = (List<string>)value;
         }
     }
 }

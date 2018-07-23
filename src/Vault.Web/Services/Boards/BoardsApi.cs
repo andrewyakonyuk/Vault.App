@@ -181,7 +181,7 @@ namespace Vault.WebApp.Services.Boards
                         Description = item.Summary,
                         Body = item.Content,
                         Summary = item.Content,
-                        Thumbnail = item.Image.HasValue ? (string)((ASObject)item.Image).Url : null,
+                        Thumbnail = Values.IsNullOrEmpty(item.Image) ? null : (string)((ASObject)item.Image).Url,
                         Url = (string)item.Url,
                         Tags = (List<string>)item.Tag
                     };
