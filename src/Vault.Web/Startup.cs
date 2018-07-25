@@ -42,6 +42,7 @@ using StreamInsights.Abstractions;
 using StreamInsights.Persistance;
 using MediatR;
 using Vault.WebApp.Infrastructure.MediatR;
+using System.Collections.Generic;
 
 namespace Vault.WebApp
 {
@@ -262,13 +263,16 @@ namespace Vault.WebApp
         void OnApplicationStarted()
         {
             var appendStore = _app.ApplicationServices.GetRequiredService<IAppendOnlyActivityStore>();
-            var mediator = _app.ApplicationServices.GetRequiredService<IMediator>();
+            var logger = _app.ApplicationServices.GetRequiredService<ILogger<StreamAppRuntime>>();
 
-            var subscription = new PollingSubscription<CommitedActivity>(appendStore.ReadAsync,
-                (activity, token) => mediator.Publish(Notification.Create(activity), token), 
-                cancellationToken: _environmentTokenSource.Token);
+            var handlers = new List<IStreamHandler>
+            {
+                new DefaultStreamHandler(),
+                new SecondStreamHandler(),
+                new ThirdStreamHandler()
+            };
 
-            subscription.Run();
+            var runtime = new StreamAppRuntime("default", appendStore, handlers, logger, _environmentTokenSource.Token);
         }
 
         void OnApplicationStopping()
@@ -309,12 +313,31 @@ namespace Vault.WebApp
         }
     }
 
-    public class CommitedActivityHandler : INotificationHandler<Notification<CommitedActivity>>
+    public class DefaultStreamHandler : IStreamHandler
     {
-        public Task Handle(Notification<CommitedActivity> notification, CancellationToken cancellationToken)
-        {
+        readonly IDictionary<string, CommitedActivity> map = new Dictionary<string, CommitedActivity>();
 
-            return Task.CompletedTask;
+        public Task Handle(CommitedActivity activity, CancellationToken token, NextStreamHandler next)
+        {
+            map[activity.Id] = activity;
+
+            return next(activity, token);
+        }
+    }
+
+    public class SecondStreamHandler : IStreamHandler
+    {
+        public Task Handle(CommitedActivity activity, CancellationToken token, NextStreamHandler next)
+        {
+            return next(activity, token);
+        }
+    }
+
+    public class ThirdStreamHandler : IStreamHandler
+    {
+        public Task Handle(CommitedActivity activity, CancellationToken token, NextStreamHandler next)
+        {
+            return next(activity, token);
         }
     }
 }
