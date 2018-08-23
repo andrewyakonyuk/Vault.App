@@ -174,16 +174,17 @@ namespace Vault.WebApp.Services.Boards
             {
                 if (string.Equals((string)item.Type, "read", StringComparison.OrdinalIgnoreCase))
                 {
+                    var article = (ASObject)item.Object;
                     var articleCard = new ArticleCard
                     {
                         Published = item.Published?.UtcDateTime ?? DateTime.UtcNow,
-                        Name = item.Name,
-                        Description = item.Summary,
-                        Body = item.Content,
-                        Summary = item.Content,
-                        Thumbnail = Values.IsNullOrEmpty(item.Image) ? null : (string)((ASObject)item.Image).Url,
-                        Url = (string)item.Url,
-                        Tags = (List<string>)item.Tag
+                        Name = article.Name,
+                        Description = article.Summary,
+                        Body = article.Content,
+                        Summary = article.Summary,
+                        Thumbnail = Values.IsNullOrEmpty(article.Image) ? null : (string)article.Image.First().Url,
+                        Url = (string)article.Url,
+                        Tags = (List<string>)article.Tag
                     };
                     result.Add(articleCard);
                 }
