@@ -11,7 +11,7 @@ using System.Linq;
 namespace StreamInsights.Abstractions
 {
     /// <summary>
-    /// Converts an <see cref="IValue"/> object to JSON.
+    /// Converts an <see cref="IValues"/> object to JSON.
     /// </summary>
     /// <seealso cref="JsonConverter" />
     public class ValuesConverter : JsonConverter
@@ -25,8 +25,7 @@ namespace StreamInsights.Abstractions
         /// </returns>
         public override bool CanConvert(Type objectType)
         {
-            var result = objectType == typeof(IValues);
-            return result;
+            return objectType == typeof(IValues);
         }
 
         public override bool CanRead => true;
@@ -39,10 +38,7 @@ namespace StreamInsights.Abstractions
             {
                 if (isNullable)
                     return null;
-                else
-                {
-                    throw new InvalidCastException();
-                }
+                throw new InvalidCastException($" The {reader.TokenType} cannot be assigned to non-nullable type.");
             }
 
             var targetType = objectType;
@@ -72,7 +68,7 @@ namespace StreamInsights.Abstractions
                     serializer.Populate(subReader, existingValue);
                 }
 
-                return TypeUtils.Cast(resultType, targetType, existingValue);
+                return Values.New((dynamic)existingValue);
             }
             else if (token.Type == JTokenType.Object)
             {
@@ -93,8 +89,8 @@ namespace StreamInsights.Abstractions
                 {
                     serializer.Populate(subReader, existingValue);
                 }
-                    
-                return TypeUtils.Cast(resultType, targetType, existingValue);
+
+                return Values.New((dynamic)existingValue);
             }
             else
             {
@@ -105,8 +101,7 @@ namespace StreamInsights.Abstractions
                     // simple way. there is at least one a simple type
                     using (var subReader = token.CreateReader())
                     {
-                        var value = serializer.Deserialize(subReader, targetType);
-                        return value;
+                        return serializer.Deserialize(subReader, targetType);
                     }
                 }
                 else
@@ -114,7 +109,7 @@ namespace StreamInsights.Abstractions
                     //todo: bad - special handling
                     if (token.Type == JTokenType.String && complexTypes.Any(t => typeof(ASObject).IsAssignableFrom(t)))
                     {
-                        var idValue = token.ToObject<string>(); 
+                        var idValue = token.ToObject<string>();
                         var value = new ASObject
                         {
                             Id = idValue
@@ -188,13 +183,6 @@ namespace StreamInsights.Abstractions
         public static bool IsNullableType(Type t)
         {
             return (t.GetTypeInfo().IsGenericType && t.GetGenericTypeDefinition() == typeof(Nullable<>));
-        }
-
-        public static object Cast(Type initial, Type target, object value)
-        {
-            MethodInfo castMethodInfo = ImplicitCache.GetOrAdd(Tuple.Create(initial, target),
-                key => key.Item2.GetMethod("op_Implicit", new[] { key.Item1 }));
-            return castMethodInfo.Invoke(null, new[] { value });
         }
 
         public static Type MakeGenericType(Type generic, Type arg0)

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace StreamInsights.Abstractions
 {
@@ -13,6 +14,28 @@ namespace StreamInsights.Abstractions
     /// </summary>
     public class ASLink
     {
+        public ASLink()
+        {
+
+        }
+
+        public ASLink(ASLink other)
+        {
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+
+            Id = other.Id;
+            Type = other.Type?.ToValues();
+            Href = other.Href;
+            Rel = other.Rel?.ToValues();
+            MediaType = other.MediaType;
+            Name = other.Name;
+            HrefLang = other.HrefLang;
+            Height = other.Height;
+            Width = other.Height;
+            Preview = other.Preview?.ToValues();
+        }
+
         /// <summary>
         /// Provides the globally unique identifier 
         /// </summary>

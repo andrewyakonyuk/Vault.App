@@ -14,7 +14,7 @@ CREATE TABLE objects
     tag character varying[] COLLATE pg_catalog."default",
     updated timestamp with time zone,
     url character varying[] COLLATE pg_catalog."default",
-    annotations jsonb,
+    "extensionData" jsonb,
     name character varying COLLATE pg_catalog."default",
     "nameMap" jsonb,
     content character varying COLLATE pg_catalog."default",

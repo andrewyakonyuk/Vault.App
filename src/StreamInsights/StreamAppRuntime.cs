@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using StreamInsights.Abstractions;
+using StreamInsights.Infrastructure;
+using StreamInsights.Infrastructure.Dataflow;
 using StreamInsights.Persistance;
 using System;
 using System.Collections.Generic;
@@ -17,26 +19,26 @@ namespace StreamInsights
         readonly CancellationTokenSource _environmentTokenSource;
         readonly IAppendOnlyActivityStore _appendOnlyStore;
         readonly ILogger<StreamAppRuntime> _logger;
-        readonly NextStreamHandler _nextHandler;
+        readonly NextStreamProcessor _nextProcessor;
 
         public StreamAppRuntime(string appId,
             IAppendOnlyActivityStore appendOnlyStore,
-            IEnumerable<IStreamHandler> streamHandlers,
+            IEnumerable<IStreamProcessor> streamProcessors,
             ILogger<StreamAppRuntime> logger,
             CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(appId))
                 throw new ArgumentNullException(nameof(appId));
-            if (streamHandlers == null)
-                throw new ArgumentNullException(nameof(streamHandlers));
+            if (streamProcessors == null)
+                throw new ArgumentNullException(nameof(streamProcessors));
 
             AppId = appId;
             _appendOnlyStore = appendOnlyStore ?? throw new ArgumentNullException(nameof(appendOnlyStore));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _environmentTokenSource = new CancellationTokenSource();
 
-            _nextHandler = BuildNextMethod(streamHandlers.ToList());
-            if (_nextHandler == null)
+            _nextProcessor = BuildNextMethod(streamProcessors.ToList());
+            if (_nextProcessor == null)
                 return;
 
             var partionedOptions = new ExecutionDataflowBlockOptions
@@ -45,7 +47,7 @@ namespace StreamInsights
                 CancellationToken = _environmentTokenSource.Token
             };
             var partionedBlock = new PartitionedActionBlock<CommitedActivity>(
-                entry => HandleNotification(entry.Source, _environmentTokenSource.Token), GetPartitionKey, partionedOptions);
+                entry => ProcessActivity(entry.Source, _environmentTokenSource.Token), GetPartitionKey, partionedOptions);
 
             var subscription = new PollingSubscription<CommitedActivity>(_appendOnlyStore.ReadAsync,
                 (activity, token) => partionedBlock.SendAsync(activity, token),
@@ -56,35 +58,41 @@ namespace StreamInsights
 
         public string AppId { get; }
 
-        async Task HandleNotification(CommitedActivity commited, CancellationToken token)
+        async Task ProcessActivity(CommitedActivity activity, CancellationToken token)
         {
+            var watch = ValueStopwatch.StartNew();
             try
             {
-                await _nextHandler(commited, token);
+                await _nextProcessor(activity, token).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 var exception = ex.Demystify();
-                _logger.LogError(exception, exception.ToString());
+                _logger.LogError(exception, "Could not to process the activity with checkout token: {0}", activity.CheckpointToken);
+            }
+            finally
+            {
+                var elapsedMs = watch.Stop();
+                _logger.LogInformation("Process activity with checkout token '{0}' in '{1}'ms", activity.CheckpointToken, elapsedMs);
             }
         }
 
-        static NextStreamHandler BuildNextMethod(IReadOnlyList<IStreamHandler> handlers)
+        static NextStreamProcessor BuildNextMethod(IReadOnlyList<IStreamProcessor> processors)
         {
-            var queue = new Queue<NextStreamHandler>();
-            for (int i = handlers.Count - 1; i >= 0; i--)
+            var queue = new Queue<NextStreamProcessor>();
+            for (int i = processors.Count - 1; i >= 0; i--)
             {
-                var isLast = i == handlers.Count - 1;
-                NextStreamHandler next = (activity, token) => Task.CompletedTask;
+                var isLast = i == processors.Count - 1;
+                NextStreamProcessor next = (activity, token) => Task.CompletedTask;
                 if (!isLast)
                 {
                     next = queue.Dequeue();
                 }
 
-                var handler = handlers[i];
+                var processor = processors[i];
                 queue.Enqueue((activity, token) =>
                 {
-                    return handler.Handle(activity, token, next);
+                    return processor.Process(activity, next, token);
                 });
             }
 

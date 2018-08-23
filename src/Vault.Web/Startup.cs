@@ -265,7 +265,7 @@ namespace Vault.WebApp
             var appendStore = _app.ApplicationServices.GetRequiredService<IAppendOnlyActivityStore>();
             var logger = _app.ApplicationServices.GetRequiredService<ILogger<StreamAppRuntime>>();
 
-            var handlers = new List<IStreamHandler>
+            var handlers = new List<IStreamProcessor>
             {
                 new DefaultStreamHandler(),
                 new SecondStreamHandler(),
@@ -313,11 +313,11 @@ namespace Vault.WebApp
         }
     }
 
-    public class DefaultStreamHandler : IStreamHandler
+    public class DefaultStreamHandler : IStreamProcessor
     {
         readonly IDictionary<string, CommitedActivity> map = new Dictionary<string, CommitedActivity>();
 
-        public Task Handle(CommitedActivity activity, CancellationToken token, NextStreamHandler next)
+        public Task Process(CommitedActivity activity, NextStreamProcessor next, CancellationToken token)
         {
             map[activity.Id] = activity;
 
@@ -325,17 +325,17 @@ namespace Vault.WebApp
         }
     }
 
-    public class SecondStreamHandler : IStreamHandler
+    public class SecondStreamHandler : IStreamProcessor
     {
-        public Task Handle(CommitedActivity activity, CancellationToken token, NextStreamHandler next)
+        public Task Process(CommitedActivity activity, NextStreamProcessor next, CancellationToken token)
         {
             return next(activity, token);
         }
     }
 
-    public class ThirdStreamHandler : IStreamHandler
+    public class ThirdStreamHandler : IStreamProcessor
     {
-        public Task Handle(CommitedActivity activity, CancellationToken token, NextStreamHandler next)
+        public Task Process(CommitedActivity activity, NextStreamProcessor next, CancellationToken token)
         {
             return next(activity, token);
         }

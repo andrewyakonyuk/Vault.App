@@ -11,7 +11,7 @@ namespace StreamInsights.Abstractions
     /// </summary>
     /// <typeparam name="T">The type of the values.</typeparam>
     /// <seealso cref="T:StreamInsights.IValue" />
-    public class Values<T> : Values, IValues, IEnumerable<T>, IEquatable<Values<T>>, IReadOnlyCollection<T>
+    public sealed class Values<T> : Values, IValues, IEquatable<Values<T>>, IEnumerable<T>, IReadOnlyCollection<T>, IReadOnlyList<T>
     {
         private readonly T[] _array;
 
@@ -23,44 +23,78 @@ namespace StreamInsights.Abstractions
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Values{T}"/> struct.
+        /// Initializes a new instance of the <see cref="Values{T}"/> class.
         /// </summary>
         /// <param name="item">The single item value.</param>
         public Values(T item)
         {
-            _array = new T[] { item };
+            if (item == null)
+                throw new ArgumentNullException(nameof(item));
+
+            _array = new[] { item };
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Values{T}"/> struct.
+        /// Initializes a new instance of the <see cref="Values{T}"/> class.
         /// </summary>
         /// <param name="list">The list of values.</param>
         public Values(List<T> list)
         {
+            if (list == null)
+                throw new ArgumentNullException(nameof(list));
+
             _array = new T[list.Count];
             list.CopyTo(_array);
         }
 
         public Values(T[] array)
         {
+            if (array == null)
+                throw new ArgumentNullException(nameof(array));
+
             _array = new T[array.Length];
             array.CopyTo(_array, 0);
         }
 
+        public Values(Values<T> other)
+        {
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+
+            _array = new T[other.Count];
+            other._array.CopyTo(_array, 0);
+        }
+
         public int Count => _array.Length;
 
-        int IValues.Count { get; }
+        object IValues.this[int index] => _array[index];
 
-        object IValues.this[int index] { get { return _array[index]; } }
+        public T this[int index] => _array[index];
 
-        public T this[int index]
+        public T First()
         {
-            get { return _array[index]; }
+            if (!Any())
+                throw new InvalidOperationException();
+
+            return _array[0];
+        }
+
+        public T FirstOfDefault()
+        {
+            if (Any())
+                return _array[0];
+
+            return default(T);
         }
 
         public bool Any()
         {
             return _array.Length > 0;
+        }
+
+        public bool None()
+        {
+            return _array.Length == 0;
         }
 
         public T[] ToArray()
@@ -76,6 +110,14 @@ namespace StreamInsights.Abstractions
             return new List<T>(_array);
         }
 
+        public Values<T> ToValues()
+        {
+            if (IsNullOrEmpty(this))
+                return Empty;
+
+            return new Values<T>(this);
+        }
+
         /// <summary>
         /// Performs an implicit conversion from <typeparamref name="T"/> to <see cref="Values{T}"/>.
         /// </summary>
@@ -88,7 +130,6 @@ namespace StreamInsights.Abstractions
             if (IsNullOrEmpty(values))
                 return default(T);
 
-            // values.FirstOrDefault();
             return values._array[0];
         }
 
@@ -101,7 +142,7 @@ namespace StreamInsights.Abstractions
 
         public static explicit operator List<T>(Values<T> values)
         {
-            if (Values.IsNullOrEmpty(values))
+            if (IsNullOrEmpty(values))
                 return new List<T>();
 
             return values.ToList();
@@ -111,7 +152,7 @@ namespace StreamInsights.Abstractions
 
         public static explicit operator T[] (Values<T> values)
         {
-            if (Values.IsNullOrEmpty(values))
+            if (IsNullOrEmpty(values))
                 return Array.Empty<T>();
 
             return values.ToArray();
@@ -119,7 +160,10 @@ namespace StreamInsights.Abstractions
 
         public static bool operator ==(Values<T> left, Values<T> right)
         {
-            if (left == null)
+            if (ReferenceEquals(left, right))
+                return true;
+
+            if (ReferenceEquals(left, null))
                 return false;
 
             return left.Equals(right);
@@ -127,7 +171,10 @@ namespace StreamInsights.Abstractions
 
         public static bool operator !=(Values<T> left, Values<T> right)
         {
-            if (left == null)
+            if (ReferenceEquals(left, right))
+                return false;
+
+            if (ReferenceEquals(left, null))
                 return true;
 
             return !left.Equals(right);
@@ -135,21 +182,26 @@ namespace StreamInsights.Abstractions
 
         public bool Equals(Values<T> other)
         {
+            if (other is null)
+                return false;
+
             if (ReferenceEquals(this, other))
                 return true;
 
-            if (_array == other._array)
+            if (Count == 0 && other.Count == 0)
                 return true;
 
-            if (_array.Length == 0 && other._array.Length == 0)
-                return true;
+            if (Count != other.Count)
+                return false;
 
-            var comparer = EqualityComparer<T>.Default;
-            var hashSet = new HashSet<T>(other, comparer);
+            var hashSet = new HashSet<T>(other, EqualityComparer<T>.Default);
 
-            foreach (var item in _array)
+            for (int i = 0; i < _array.Length; i++)
             {
-                hashSet.Remove(item);
+                var item = _array[i];
+                if (!hashSet.Remove(item))
+                    return false;
+
                 if (hashSet.Count == 0)
                     break;
             }
@@ -172,17 +224,49 @@ namespace StreamInsights.Abstractions
 
         public override int GetHashCode()
         {
-            return _array.GetHashCode() ^ 12 + 7;
-        }
+            if (_array.Length == 0)
+                return 0;
 
-        public IEnumerator<T> GetEnumerator()
-        {
-            return ((IEnumerable<T>)_array).GetEnumerator();
+            return _array.GetHashCode() ^ 12 + 7;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return ((IEnumerable<T>)_array).GetEnumerator();
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            if (_array.Length == 0)
+                return EmptyEnumerator<T>.Default;
+
+            return ((IEnumerable<T>)_array).GetEnumerator();
+        }
+
+        class EmptyEnumerator<TValue> : IEnumerator<TValue>
+        {
+            public static readonly IEnumerator<TValue> Default = new EmptyEnumerator<TValue>();
+
+            private EmptyEnumerator() { }
+
+            public TValue Current => default(TValue);
+
+            object IEnumerator.Current => null;
+
+            public void Dispose()
+            {
+
+            }
+
+            public bool MoveNext()
+            {
+                return false;
+            }
+
+            public void Reset()
+            {
+
+            }
         }
     }
 }

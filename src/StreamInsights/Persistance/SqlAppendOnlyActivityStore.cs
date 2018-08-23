@@ -25,11 +25,11 @@ namespace StreamInsights.Persistance
                 await connection.ExecuteAsync(new CommandDefinition(
                     string.Intern(@"INSERT INTO activities
                             (bucket, ""streamId"", id, type, attachment, ""attributedTo"", audience, context, generator, 
-                            ""inReplyTo"", location, tag, updated, url, annotations, name, ""nameMap"", content, ""contentMap"",
+                            ""inReplyTo"", location, tag, updated, url, ""extensionData"", name, ""nameMap"", content, ""contentMap"",
                             ""endTime"", image, preview, ""startTime"", summary, ""summaryMap"", ""mediaType"", actor, 
                             instrument, object, origin, result, target, published)
                             VALUES (@bucket, @streamId, @id, @type, @attachment, @attributedTo, @audience, 
-                            @context, @generator, @inReplyTo, @location, @tag, @updated, @url, @annotations, @name, @nameMap, 
+                            @context, @generator, @inReplyTo, @location, @tag, @updated, @url, @extensionData, @name, @nameMap, 
                             @content, @contentMap, @endTime, @image, @preview, @startTime, @summary, @summaryMap,
                             @mediaType, @actor, @instrument, @object, @origin, @result, @target, @published); ")
                     , events.ToArray()
@@ -55,7 +55,7 @@ namespace StreamInsights.Persistance
             {
                 var results = await connection.QueryAsync<CommitedActivity>(new CommandDefinition(
                     string.Intern(@"SELECT bucket, ""streamId"", id, type, attachment, ""attributedTo"", 
-                        audience, context, generator, ""inReplyTo"", location, tag, updated, url, annotations,
+                        audience, context, generator, ""inReplyTo"", location, tag, updated, url, ""extensionData"",
                         name, ""nameMap"", content, ""contentMap"", ""endTime"", image, preview, 
                         ""startTime"", summary, ""summaryMap"", ""mediaType"",
                         actor, instrument, object, origin, result, target, published, ""checkpointToken""
@@ -81,7 +81,7 @@ namespace StreamInsights.Persistance
             {
                 var results = await connection.QueryAsync<CommitedActivity>(new CommandDefinition(
                     string.Intern(@"SELECT bucket, ""streamId"", id, type, attachment, ""attributedTo"", 
-                        audience, context, generator, ""inReplyTo"", location, tag, updated, url, annotations,
+                        audience, context, generator, ""inReplyTo"", location, tag, updated, url, ""extensionData"",
                         name, ""nameMap"", content, ""contentMap"", ""endTime"", image, preview, 
                         ""startTime"", summary, ""summaryMap"", ""mediaType"",
                         actor, instrument, object, origin, result, target, published, ""checkpointToken""

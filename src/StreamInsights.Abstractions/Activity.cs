@@ -13,19 +13,19 @@ namespace StreamInsights.Abstractions
         public Activity(Activity other)
             : base(other)
         {
-            Actor = other.Actor;
-            Instrument = other.Instrument;
-            Object = other.Object;
-            Origin = other.Origin;
-            Result = other.Result;
-            Target = other.Target;
+            Actor = other.Actor?.ToValues();
+            Instrument = other.Instrument?.ToValues();
+            Object = other.Object?.ToValues();
+            Origin = other.Origin?.ToValues();
+            Result = other.Result?.ToValues();
+            Target = other.Target?.ToValues();
         }
 
         /// <summary>
         /// Describes the entity that performed the activity
         /// </summary>
         [JsonConverter(typeof(ValuesConverter))]
-        [JsonProperty(PropertyName = "actor", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "actor", NullValueHandling = NullValueHandling.Ignore)]
         public Values<ASObject> Actor { get; set; }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace StreamInsights.Abstractions
         /// is the movie added.
         /// </summary>
         [JsonConverter(typeof(ValuesConverter))]
-        [JsonProperty(PropertyName = "object", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "object", NullValueHandling = NullValueHandling.Ignore)]
         public Values<ASObject> Object { get; set; }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace StreamInsights.Abstractions
         /// John's wishlist. An activity can have more than one target.
         /// </summary>
         [JsonConverter(typeof(ValuesConverter))]
-        [JsonProperty(PropertyName = "target", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "target", NullValueHandling = NullValueHandling.Ignore)]
         public Values<ASObject> Target { get; set; }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace StreamInsights.Abstractions
         /// the origin of the activity is "List A".
         /// </summary>
         [JsonConverter(typeof(ValuesConverter))]
-        [JsonProperty(PropertyName = "origin", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "origin", NullValueHandling = NullValueHandling.Ignore)]
         public Values<ASObject> Origin { get; set; }
 
         /// <summary>
@@ -65,14 +65,14 @@ namespace StreamInsights.Abstractions
         /// the result property can be used to describe that new resource.
         /// </summary>
         [JsonConverter(typeof(ValuesConverter))]
-        [JsonProperty(PropertyName = "result", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "result", NullValueHandling = NullValueHandling.Ignore)]
         public Values<ASObject> Result { get; set; }
 
         /// <summary>
         /// Identifies one or more objects used (or to be used) in the completion of an Activity.
         /// </summary>
         [JsonConverter(typeof(ValuesConverter))]
-        [JsonProperty(PropertyName = "instrument", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "instrument", NullValueHandling = NullValueHandling.Ignore)]
         public Values<ASObject> Instrument { get; set; }
     }
 }

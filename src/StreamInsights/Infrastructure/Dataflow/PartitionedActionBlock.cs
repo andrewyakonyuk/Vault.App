@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 
-namespace StreamInsights
+namespace StreamInsights.Infrastructure.Dataflow
 {
     public class PartitionedActionBlock<TInput> : ITargetBlock<TInput>
     {

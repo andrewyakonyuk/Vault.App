@@ -6,7 +6,7 @@ using System.Threading.Tasks.Dataflow;
 using System.Linq;
 using StreamInsights.Abstractions;
 
-namespace StreamInsights
+namespace StreamInsights.Infrastructure
 {
     public delegate Task<IReadOnlyCollection<T>> PollingDataAccessor< T>(long checkpoint, int maxCount, CancellationToken token)
         where T : ICommittable;

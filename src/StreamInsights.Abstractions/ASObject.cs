@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace StreamInsights.Abstractions
 {
@@ -9,7 +10,7 @@ namespace StreamInsights.Abstractions
     {
         public ASObject()
         {
-            Annotations = new JObject();
+            ExtensionData = new JObject();
         }
 
         public ASObject(ASObject other)
@@ -17,38 +18,38 @@ namespace StreamInsights.Abstractions
             if (other == null)
                 throw new ArgumentNullException(nameof(other));
 
-            if (other.Annotations == null)
-                Annotations = new JObject();
+            if (other.ExtensionData == null)
+                ExtensionData = new JObject();
             else
-                Annotations = new JObject(other.Annotations);
+                ExtensionData = new JObject(other.ExtensionData);
             Id = other.Id;
-            Attachment = other.Attachment;
-            AttributedTo = other.AttributedTo;
-            Audience = other.Audience;
-            Bcc = other.Bcc;
-            Bto = other.Bto;
-            Cc = other.Cc;
+            Attachment = other.Attachment?.ToValues();
+            AttributedTo = other.AttributedTo?.ToValues();
+            Audience = other.Audience?.ToValues();
+            Bcc = other.Bcc?.ToValues();
+            Bto = other.Bto?.ToValues();
+            Cc = other.Cc?.ToValues();
             Content = other.Content;
-            ContentMap = other.ContentMap;
+            ContentMap = other.ContentMap?.ToDictionary(p => p.Key, p => p.Value);
             EndTime = other.EndTime;
             Generator = other.Generator;
             Icon = other.Icon;
-            Image = other.Image;
-            InReplyTo = other.InReplyTo;
-            Location = other.Location;
+            Image = other.Image?.ToValues();
+            InReplyTo = other.InReplyTo?.ToValues();
+            Location = other.Location?.ToValues();
             MediaType = other.MediaType;
             Name = other.Name;
-            NameMap = other.NameMap;
-            Preview = other.Preview;
+            NameMap = other.NameMap?.ToDictionary(p => p.Key, p => p.Value);
+            Preview = other.Preview?.ToValues();
             Published = other.Published;
             StartTime = other.StartTime;
             Summary = other.Summary;
-            SummaryMap = other.SummaryMap;
-            Tag = other.Tag;
-            To = other.To;
-            Type = other.Type;
+            SummaryMap = other.SummaryMap?.ToDictionary(p => p.Key, p => p.Value);
+            Tag = other.Tag?.ToValues();
+            To = other.To?.ToValues();
+            Type = other.Type?.ToValues();
             Updated = other.Updated;
-            Url = other.Url;
+            Url = other.Url?.ToValues();
         }
 
         /// <summary>
@@ -61,7 +62,7 @@ namespace StreamInsights.Abstractions
         /// Identifies the action that the activity describes.
         /// </summary>
         [JsonConverter(typeof(ValuesConverter))]
-        [JsonProperty(PropertyName = "type", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "type", NullValueHandling = NullValueHandling.Ignore)]
         public Values<string> Type { get; set; }
 
         /// <summary>
@@ -70,7 +71,7 @@ namespace StreamInsights.Abstractions
         /// semantically similar to attachments in email.
         /// </summary>
         [JsonConverter(typeof(ValuesConverter))]
-        [JsonProperty(PropertyName = "attachment", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "attachment", NullValueHandling = NullValueHandling.Ignore)]
         public Values<ASObject> Attachment { get; set; }
 
         /// <summary>
@@ -79,7 +80,7 @@ namespace StreamInsights.Abstractions
         /// attributed to the completion of another activity.
         /// </summary>
         [JsonConverter(typeof(ValuesConverter))]
-        [JsonProperty(PropertyName = "attributedTo", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "attributedTo", NullValueHandling = NullValueHandling.Ignore)]
         public Values<ASObject> AttributedTo { get; set; }
 
         /// <summary>
@@ -87,7 +88,7 @@ namespace StreamInsights.Abstractions
         /// for which the object can considered to be relevant.
         /// </summary>
         [JsonConverter(typeof(ValuesConverter))]
-        [JsonProperty(PropertyName = "audience", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "audience", NullValueHandling = NullValueHandling.Ignore)]
         public Values<ASObject> Audience { get; set; }
 
         /// <summary>
@@ -97,7 +98,7 @@ namespace StreamInsights.Abstractions
         /// or purpose.An example could be all activities relating to a common project or event. 
         /// </summary>
         [JsonConverter(typeof(ValuesConverter))]
-        [JsonProperty(PropertyName = "context", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "context", NullValueHandling = NullValueHandling.Ignore)]
         public Values<ASObject> Context { get; set; }
 
         /// <summary>
@@ -145,28 +146,28 @@ namespace StreamInsights.Abstractions
         /// size limitations assumed.
         /// </summary>
         [JsonConverter(typeof(ValuesConverter))]
-        [JsonProperty(PropertyName = "image", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "image", NullValueHandling = NullValueHandling.Ignore)]
         public Values<ASObject> Image { get; set; }
 
         /// <summary>
         /// Indicates one or more entities for which this object is considered a response.
         /// </summary>
         [JsonConverter(typeof(ValuesConverter))]
-        [JsonProperty(PropertyName = "inReplyTo", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "inReplyTo", NullValueHandling = NullValueHandling.Ignore)]
         public Values<ASObject> InReplyTo { get; set; }
 
         /// <summary>
         /// Indicates one or more physical or logical locations associated with the object.
         /// </summary>
         [JsonConverter(typeof(ValuesConverter))]
-        [JsonProperty(PropertyName = "location", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "location", NullValueHandling = NullValueHandling.Ignore)]
         public Values<ASObject> Location { get; set; }
 
         /// <summary>
         /// Identifies an entity that provides a preview of this object.
         /// </summary>
         [JsonConverter(typeof(ValuesConverter))]
-        [JsonProperty(PropertyName = "preview", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "preview", NullValueHandling = NullValueHandling.Ignore)]
         public Values<ASObject> Preview { get; set; }
 
         /// <summary>
@@ -200,7 +201,7 @@ namespace StreamInsights.Abstractions
         /// associated by reference.
         /// </summary>
         [JsonConverter(typeof(ValuesConverter))]
-        [JsonProperty(PropertyName = "tag", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "tag", NullValueHandling = NullValueHandling.Ignore)]
         public Values<string> Tag { get; set; }
 
         /// <summary>
@@ -213,28 +214,28 @@ namespace StreamInsights.Abstractions
         /// Identifies one or more links to representations of the object
         /// </summary>
         [JsonConverter(typeof(ValuesConverter))]
-        [JsonProperty(PropertyName = "url", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "url", NullValueHandling = NullValueHandling.Ignore)]
         public Values<string> Url { get; set; }
 
         /// <summary>
         /// Identifies an entity considered to be part of the public primary audience of an Object
         /// </summary>
         [JsonConverter(typeof(ValuesConverter))]
-        [JsonProperty(PropertyName = "to", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "to", NullValueHandling = NullValueHandling.Ignore)]
         public Values<string> To { get; set; }
 
         /// <summary>
         /// Identifies an Object that is part of the private primary audience of this Object.
         /// </summary>
         [JsonConverter(typeof(ValuesConverter))]
-        [JsonProperty(PropertyName = "bto", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "bto", NullValueHandling = NullValueHandling.Ignore)]
         public Values<string> Bto { get; set; }
 
         /// <summary>
         /// Identifies an Object that is part of the public secondary audience of this Object.
         /// </summary>
         [JsonConverter(typeof(ValuesConverter))]
-        [JsonProperty(PropertyName = "cc", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "cc", NullValueHandling = NullValueHandling.Ignore)]
         public Values<string> Cc { get; set; }
 
         /// <summary>
@@ -242,7 +243,7 @@ namespace StreamInsights.Abstractions
         /// the private secondary audience of this Object.
         /// </summary>
         [JsonConverter(typeof(ValuesConverter))]
-        [JsonProperty(PropertyName = "bcc", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "bcc", NullValueHandling = NullValueHandling.Ignore)]
         public Values<string> Bcc { get; set; }
 
         /// <summary>
@@ -256,6 +257,6 @@ namespace StreamInsights.Abstractions
         /// Additional data for activity
         /// </summary>
         [JsonExtensionData]
-        public JObject Annotations { get; set; }
+        public JObject ExtensionData { get; set; }
     }
 }
