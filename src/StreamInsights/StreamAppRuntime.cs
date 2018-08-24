@@ -41,16 +41,23 @@ namespace StreamInsights
             if (_nextProcessor == null)
                 return;
 
-            var partionedOptions = new ExecutionDataflowBlockOptions
+            var buffer = new BufferBlock<CommitedActivity>(new DataflowBlockOptions
             {
-                MaxDegreeOfParallelism = Environment.ProcessorCount,
+                BoundedCapacity = 1000,
                 CancellationToken = _environmentTokenSource.Token
-            };
+            });
             var partionedBlock = new PartitionedActionBlock<CommitedActivity>(
-                entry => ProcessActivity(entry.Source, _environmentTokenSource.Token), GetPartitionKey, partionedOptions);
+                entry => ProcessActivity(entry.Source, _environmentTokenSource.Token),
+                GetPartitionKey,
+                new ExecutionDataflowBlockOptions
+                {
+                    MaxDegreeOfParallelism = Environment.ProcessorCount * 10,
+                    CancellationToken = _environmentTokenSource.Token
+                });
+            buffer.LinkTo(partionedBlock, new DataflowLinkOptions { PropagateCompletion = true });
 
             var subscription = new PollingSubscription<CommitedActivity>(_appendOnlyStore.ReadAsync,
-                (activity, token) => partionedBlock.SendAsync(activity, token),
+                (activity, token) => buffer.SendAsync(activity, token),
                 cancellationToken: _environmentTokenSource.Token);
 
             subscription.Run();
@@ -63,7 +70,7 @@ namespace StreamInsights
             var watch = ValueStopwatch.StartNew();
             try
             {
-                await _nextProcessor(activity, token).ConfigureAwait(false);
+                await _nextProcessor(activity, token);
             }
             catch (Exception ex)
             {
@@ -73,7 +80,8 @@ namespace StreamInsights
             finally
             {
                 var elapsedMs = watch.Stop();
-                _logger.LogInformation("Process activity with checkout token '{0}' in '{1}'ms", activity.CheckpointToken, elapsedMs);
+                if (_logger.IsEnabled(LogLevel.Information))
+                    _logger.LogInformation("Processed activity '{0}' in {1}ms", activity.CheckpointToken, elapsedMs);
             }
         }
 
