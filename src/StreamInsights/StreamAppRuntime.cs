@@ -19,7 +19,7 @@ namespace StreamInsights
         readonly CancellationTokenSource _environmentTokenSource;
         readonly IAppendOnlyActivityStore _appendOnlyStore;
         readonly ILogger<StreamAppRuntime> _logger;
-        readonly NextStreamProcessor _nextProcessor;
+        readonly StreamPipeline _streamPipeline;
 
         public StreamAppRuntime(string appId,
             IAppendOnlyActivityStore appendOnlyStore,
@@ -37,8 +37,8 @@ namespace StreamInsights
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _environmentTokenSource = new CancellationTokenSource();
 
-            _nextProcessor = BuildNextMethod(streamProcessors.ToList());
-            if (_nextProcessor == null)
+            _streamPipeline = BuildPipeline(streamProcessors.ToList());
+            if (_streamPipeline == null)
                 return;
 
             var buffer = new BufferBlock<CommitedActivity>(new DataflowBlockOptions
@@ -70,7 +70,7 @@ namespace StreamInsights
             var watch = ValueStopwatch.StartNew();
             try
             {
-                await _nextProcessor(activity, token);
+                await _streamPipeline(activity, token).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -85,22 +85,22 @@ namespace StreamInsights
             }
         }
 
-        static NextStreamProcessor BuildNextMethod(IReadOnlyList<IStreamProcessor> processors)
+        static StreamPipeline BuildPipeline(IReadOnlyList<IStreamProcessor> processors)
         {
-            var queue = new Queue<NextStreamProcessor>();
+            var queue = new Queue<StreamPipeline>();
             for (int i = processors.Count - 1; i >= 0; i--)
             {
                 var isLast = i == processors.Count - 1;
-                NextStreamProcessor next = (activity, token) => Task.CompletedTask;
+                StreamPipeline pipe = (activity, token) => Task.CompletedTask;
                 if (!isLast)
                 {
-                    next = queue.Dequeue();
+                    pipe = queue.Dequeue();
                 }
 
                 var processor = processors[i];
                 queue.Enqueue((activity, token) =>
                 {
-                    return processor.Process(activity, next, token);
+                    return processor.Process(activity, pipe, token);
                 });
             }
 

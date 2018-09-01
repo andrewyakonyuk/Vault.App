@@ -43,6 +43,7 @@ using StreamInsights.Persistance;
 using MediatR;
 using Vault.WebApp.Infrastructure.MediatR;
 using System.Collections.Generic;
+using Npgsql.Logging;
 
 namespace Vault.WebApp
 {
@@ -256,6 +257,12 @@ namespace Vault.WebApp
                     template: "{controller=Boards}/{action=Index}/{id?}");
             });
 
+            if (env.IsDevelopment())
+            {
+                NpgsqlLogManager.Provider = new ConsoleLoggingProvider(NpgsqlLogLevel.Debug);
+                NpgsqlLogManager.IsParameterLoggingEnabled = true;
+            }
+
             applicationLifetime.ApplicationStarted.Register(OnApplicationStarted);
             applicationLifetime.ApplicationStopping.Register(OnApplicationStopping);
         }
@@ -317,7 +324,7 @@ namespace Vault.WebApp
     {
         readonly IDictionary<string, CommitedActivity> map = new Dictionary<string, CommitedActivity>();
 
-        public Task Process(CommitedActivity activity, NextStreamProcessor next, CancellationToken token)
+        public Task Process(CommitedActivity activity, StreamPipeline next, CancellationToken token)
         {
             map[activity.Id] = activity;
 
@@ -327,7 +334,7 @@ namespace Vault.WebApp
 
     public class SecondStreamHandler : IStreamProcessor
     {
-        public Task Process(CommitedActivity activity, NextStreamProcessor next, CancellationToken token)
+        public Task Process(CommitedActivity activity, StreamPipeline next, CancellationToken token)
         {
             return next(activity, token);
         }
@@ -335,7 +342,7 @@ namespace Vault.WebApp
 
     public class ThirdStreamHandler : IStreamProcessor
     {
-        public Task Process(CommitedActivity activity, NextStreamProcessor next, CancellationToken token)
+        public Task Process(CommitedActivity activity, StreamPipeline next, CancellationToken token)
         {
             return next(activity, token);
         }
