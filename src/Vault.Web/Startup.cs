@@ -44,6 +44,7 @@ using MediatR;
 using Vault.WebApp.Infrastructure.MediatR;
 using System.Collections.Generic;
 using Npgsql.Logging;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 
 namespace Vault.WebApp
 {
@@ -68,6 +69,12 @@ namespace Vault.WebApp
             services.AddMvc(options =>
             {
                 options.Filters.AddService(typeof(WorkContextAuthorizationFilter));
+            });
+
+            // In production, the React files will be served from this directory
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/build";
             });
 
             services.AddTransient<WorkContextAuthorizationFilter, WorkContextAuthorizationFilter>();
@@ -166,7 +173,6 @@ namespace Vault.WebApp
         {
             _app = app;
 
-            app.UseStaticFiles();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -177,6 +183,8 @@ namespace Vault.WebApp
             }
             // Add cookie-based authentication to the request pipeline.
             app.UseAuthentication();
+            app.UseStaticFiles();
+            app.UseSpaStaticFiles();
 
             app.UseStatusCodePages();
 
@@ -255,6 +263,16 @@ namespace Vault.WebApp
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Boards}/{action=Index}/{id?}");
+            });
+
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
+                }
             });
 
             if (env.IsDevelopment())
