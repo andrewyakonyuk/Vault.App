@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.SpaServices;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -71,6 +72,12 @@ namespace Vault.WebApp
             });
 
             services.AddTransient<WorkContextAuthorizationFilter, WorkContextAuthorizationFilter>();
+
+            // In production, the Vue files will be served from this directory
+            services.AddSpaStaticFiles(configuration => 
+            {
+                configuration.RootPath = "ClientApp/dist";
+            });
 
             //authentication and authorization
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -165,8 +172,7 @@ namespace Vault.WebApp
             IApplicationLifetime applicationLifetime)
         {
             _app = app;
-
-            app.UseStaticFiles();
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -175,6 +181,9 @@ namespace Vault.WebApp
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            app.UseStaticFiles();
+            app.UseSpaStaticFiles();
             // Add cookie-based authentication to the request pipeline.
             app.UseAuthentication();
 
@@ -255,6 +264,19 @@ namespace Vault.WebApp
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Boards}/{action=Index}/{id?}");
+
+                routes.MapSpaFallbackRoute(
+                    name: "spa-fallback",
+                    defaults: new { controller = "Home", action = "Index" });
+            });
+
+            app.UseSpa(spa => 
+            {
+                spa.Options.SourcePath = "ClientApp";
+                if(env.IsDevelopment())
+                {
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:8080");
+                }
             });
 
             if (env.IsDevelopment())
