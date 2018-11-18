@@ -2,10 +2,7 @@
   <div id="app">
     <drawer>
       <template slot="menu">
-        <nav>
-          <router-link to="/">Home</router-link> |
-          <router-link to="/about">About</router-link>
-        </nav>
+        <aside-menu />
       </template>
       <template>
         <template slot="content">
@@ -18,11 +15,13 @@
 
 <script>
 import Drawer from '@/components/Drawer.vue';
+import AsideMenu from '@/components/AsideMenu.vue';
 
 export default {
   name: 'App',
   components: {
     Drawer,
+    AsideMenu,
   },
 };
 </script>

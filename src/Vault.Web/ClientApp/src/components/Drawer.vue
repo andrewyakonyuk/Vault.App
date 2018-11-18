@@ -6,7 +6,6 @@
     @touchend="onTouchEnd"
   >
     <aside class="drawer-menu">
-      <hamburger-button @hamburger-click="toggleDrawer" />
       <slot name="menu" />
     </aside>
     <div
@@ -69,7 +68,6 @@ export default {
     text-align: left;
     position: fixed;
     width: $drawerMenuWidth;
-    background-color: hsl(0, 0%, 96%);
     z-index: 100;
     top: 0;
     border-right: 1px solid #eaecef;
@@ -113,8 +111,6 @@ export default {
 
     .drawer-menu {
       z-index: inherit;
-      padding-top: 0.8rem;
-      border-right: none;
       transform: translateX(0);
     }
 
